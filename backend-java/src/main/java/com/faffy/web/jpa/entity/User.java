@@ -1,6 +1,6 @@
-package com.faffy.jpa.entity;
+package com.faffy.web.jpa.entity;
 
-import com.faffy.jpa.type.Gender;
+import com.faffy.web.jpa.type.Gender;
 import lombok.Data;
 
 import javax.persistence.*;

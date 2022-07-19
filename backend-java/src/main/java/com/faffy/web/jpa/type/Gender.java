@@ -1,4 +1,4 @@
-package com.faffy.jpa.type;
+package com.faffy.web.jpa.type;
 
 
 /*
