@@ -2,6 +2,7 @@ package com.faffy.web.jpa.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Data
 @Table(name = "fashion_category")
 public class FashionCategory extends BaseEntity {
+    @Column(nullable = false)
     private String name;
 
 }
