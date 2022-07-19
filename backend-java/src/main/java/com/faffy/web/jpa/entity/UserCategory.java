@@ -3,8 +3,11 @@ package com.faffy.web.jpa.entity;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import static javax.persistence.FetchType.LAZY;
 
 /*
 작성자 : 이준성
@@ -14,10 +17,10 @@ import javax.persistence.ManyToOne;
 @Entity(name = "User_Category")
 @Data
 public class UserCategory extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_no")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_no")
     private FashionCategory category;
 }

@@ -7,12 +7,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Data
 @Table(name = "consulting_file")
 public class ConsultingFile extends BaseEntity {
-    @ManyToOne @JoinColumn(name = "consulting_no")
+    @ManyToOne(fetch = LAZY) @JoinColumn(name = "consulting_no")
     private Consulting consulting;
-    @ManyToOne @JoinColumn(name = "file_no")
+    @ManyToOne(fetch = LAZY) @JoinColumn(name = "file_no")
     private UploadFile file;
 }

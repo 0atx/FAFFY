@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Data
 public class Board extends BaseEntity {
@@ -15,7 +17,7 @@ public class Board extends BaseEntity {
     @Lob
     @Column(length=2000)
     private String content;
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "writer_no")
     private User user;
     @Enumerated(EnumType.STRING)
