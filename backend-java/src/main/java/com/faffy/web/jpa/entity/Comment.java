@@ -1,4 +1,4 @@
-package com.faffy.jpa.entity;
+package com.faffy.web.jpa.entity;
 
 import lombok.Data;
 
