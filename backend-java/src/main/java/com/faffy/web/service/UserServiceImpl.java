@@ -7,8 +7,10 @@ import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.mapping.PublicUserInfo;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,16 +21,17 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public Optional<User> findUserByNo(int no) {
+    public Optional<User> getUserByNo(int no) {
         return userRepository.findByNo(no);
     }
+
     @Override
-    public Optional<PublicUserInfo> findUserByNickname(String nickname) {
+    public Optional<PublicUserInfo> getUserByNickname(String nickname) {
         return userRepository.findByNickname(nickname);
     }
 
     @Override
-    public Optional<PublicUserInfo> findUserByEmail(String email) {
+    public Optional<PublicUserInfo> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -39,27 +42,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<User> updateUser(UserDto userDto) throws IllegalInputException {
-        Optional<User> byNo = userRepository.findByNo(userDto.getNo());
-        if (byNo.isPresent()) {
-            User user = byNo.get();
-            if (user.updateUser(userDto)) {
-                userRepository.save(user);
-                return Optional.of(user);
-            } else
-                throw new IllegalInputException("올바른 값을 입력해 주세요.");
-        }
-
-        return Optional.of(null);
-
-    }
-
-    @Override
-    public void deleteUser(int no) throws DataNotFoundException{
+    public void deleteUser(int no) throws DataNotFoundException {
         try {
             userRepository.deleteById(no);
         } catch (Exception e) {
-            throw new DataNotFoundException("회원 정보를 찾을 수 없습니다.");
+            throw e;
+//            throw new DataNotFoundException("회원 정보를 찾을 수 없습니다.");
         }
     }
 
@@ -71,13 +59,22 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public User addUser(UserDto userDto) throws DataIntegrityException {
-            try {
-                return userRepository.save(userDto.toEntity());
-            } catch (Exception e) {
-                throw new DataIntegrityException("중복된 값이 있는지 확인해 주세요.");
-            }
+        try {
+            return userRepository.save(userDto.toEntity());
+        } catch (Exception e) {
+            throw new DataIntegrityException("이미 사용중인 이메일이나 닉네임입니다. 확인해 주세요.");
+        }
 
+    }
+
+    @Override
+    @Transactional
+    public int updateUser(UserDto userDto) {
+        User user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+        user.updateUser(userDto);
+        return userDto.getNo();
     }
 
 

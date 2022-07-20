@@ -31,7 +31,7 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     @Override
     public List<FashionCategory> getUserCategory(UserDto userDto) {
         // 사용자
-        Optional<User> user = userService.findUserByNo(userDto.getNo());
+        Optional<User> user = userService.getUserByNo(userDto.getNo());
         List<FashionCategory> categories = new ArrayList<>();
         if (user.isPresent()) {
             categories = userCategoryRepository.findCategoriesByUser(user.get());
@@ -42,7 +42,7 @@ public class UserCategoryServiceImpl implements UserCategoryService {
 
     @Override
     public boolean addUserCategory(UserDto userDto, String categoryName) {
-        Optional<User> userResult = userService.findUserByNo(userDto.getNo());
+        Optional<User> userResult = userService.getUserByNo(userDto.getNo());
         Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
         if (userResult.isPresent() && categoryResult.isPresent()) {
             UserCategory userCategory = UserCategory.builder().user(userResult.get()).category(categoryResult.get()).build();
@@ -55,7 +55,7 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     @Override
     public boolean deleteUserCategory(UserDto userDto, String categoryName) {
         Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
-        Optional<User> userResult = userService.findUserByNo(userDto.getNo());
+        Optional<User> userResult = userService.getUserByNo(userDto.getNo());
         if (userResult.isPresent() && categoryResult.isPresent()) {
             UserCategory userCategory = UserCategory.builder().user(userResult.get()).category(categoryResult.get()).build();
             userCategoryRepository.delete(userCategory);

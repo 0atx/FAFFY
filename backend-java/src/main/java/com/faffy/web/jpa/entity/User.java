@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +35,8 @@ public class User extends BaseEntity {
     private String nickname;
     @Column(nullable = false)
     private String password;
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+
+    private LocalDate birthday;
     @Enumerated(EnumType.STRING) @Column(nullable = false)
     private Gender gender;
     /**
@@ -48,12 +49,14 @@ public class User extends BaseEntity {
     private UploadFile profileImage;
 
 
-    public User() {
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = LAZY,mappedBy = "user")
+    List<Board> writeBoards = new ArrayList<>();
 
-    }
+    public User() {}
 
     @Builder
-    public User(String email, String name, String nickname, String password, Date birthday, Gender gender, String info) {
+    public User(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info) {
+        this.no = no;
         this.email = email;
         this.name = name;
         this.nickname = nickname;

@@ -17,31 +17,24 @@ public interface UserService {
      * @param no
      * @return 모든 정보가 담긴 User 객체, 해당 값 없을 시 null
      */
-    public Optional<User> findUserByNo(int no);
+    public Optional<User> getUserByNo(int no);
 
     /**
      * 닉네임으로 유저 정보를 조회합니다.
      * @param nickname
      * @return 해당 유저의 공개 정보, 없다면 null 반환
      */
-    public Optional<PublicUserInfo> findUserByNickname(String nickname);
+    public Optional<PublicUserInfo> getUserByNickname(String nickname);
 
     /**
      * 이메일로 유저 정보를 조회합니다.
      * @param email
      * @return 해당 유저의 공개 정보, 없다면 null 반환
      */
-    public Optional<PublicUserInfo> findUserByEmail(String email);
+    public Optional<PublicUserInfo> getUserByEmail(String email);
     public List<PublicUserInfo> findAllUsers();
 
-    /**
-     * user_no가 포함된 UserDto로 회원 정보를 수정
-     * @param userDto
-     * @return 수정된 User 객체
-     * @throws IllegalInputException user_no로 회원 정보를 찾을 수 없는 경우
-     * @throws DataNotFoundException 수정하려는 일부 값이 유효하지 않을 경우
-     */
-    public Optional<User> updateUser(UserDto userDto) throws IllegalInputException;
+
     public void deleteUser(int no) throws DataNotFoundException;
 
     /**
@@ -60,4 +53,12 @@ public interface UserService {
      */
     public User addUser(UserDto userDto) throws DataIntegrityException;
 
+    /**
+     * user_no가 포함된 UserDto로 회원 정보를 수정
+     * @param userDto
+     * @return 수정된 User 객체
+     * @throws IllegalInputException 수정하려는 일부 값이 유효하지 않을 경우
+     * @throws DataNotFoundException user_no로 회원 정보를 찾을 수 없는 경우
+     */
+    public int updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException;
 }

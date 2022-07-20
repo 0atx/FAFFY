@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserDto {
     private String name;
     private String nickname;
     private String password;
-    private Date birthday;
+    private LocalDate birthday;
     private Gender gender;
     /**
      * 자기소개 문구
@@ -29,7 +30,7 @@ public class UserDto {
     public UserDto(){};
 
     @Builder
-    public UserDto(int no, String email, String name, String nickname, String password, Date birthday, Gender gender, String info) {
+    public UserDto(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info) {
         this.no = no;
         this.email = email;
         this.name = name;
