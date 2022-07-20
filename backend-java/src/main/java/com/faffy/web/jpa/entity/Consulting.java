@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static javax.persistence.FetchType.LAZY;
@@ -21,9 +22,7 @@ public class Consulting extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_no")
     private FashionCategory category;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startTime;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 }
 

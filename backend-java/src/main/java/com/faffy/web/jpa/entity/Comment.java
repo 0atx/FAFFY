@@ -1,9 +1,11 @@
 package com.faffy.web.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static javax.persistence.FetchType.LAZY;
@@ -19,6 +21,14 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_no")
     private Board board;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datetime;
+    private LocalDateTime datetime;
+    public Comment() {}
+
+    @Builder
+    public Comment(String content, User writer, Board board, LocalDateTime datetime) {
+        this.content = content;
+        this.writer = writer;
+        this.board = board;
+        this.datetime = datetime;
+    }
 }
