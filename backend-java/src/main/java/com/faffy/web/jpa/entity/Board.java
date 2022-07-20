@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.entity;
 
-import lombok.Data;
+import com.faffy.web.jpa.type.BoardCategory;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.Date;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Data
+@Getter
 public class Board extends BaseEntity {
     @Column(nullable = false)
     private String title;

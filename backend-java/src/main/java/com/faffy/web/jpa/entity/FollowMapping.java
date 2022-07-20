@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.entity;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 설명 : follow_mapping table entity
 */
 @Entity
-@Data
+@Getter
 @Table(name = "follow_mapping")
 public class FollowMapping extends BaseEntity {
     @ManyToOne(fetch = LAZY)
