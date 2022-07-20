@@ -6,9 +6,8 @@
   <v-card id="header" class="overflow-hidden">
     <v-app-bar
       color="white"
-      dense
     >
-      <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo.png">
+      <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png">
 
       <v-spacer></v-spacer>
 
@@ -67,11 +66,11 @@
         </v-list>
 
         <v-list v-else>
-          <v-list-item to="/auth/sign-in">
+          <v-list-item to="/signin">
             <v-list-item-title>로그인</v-list-item-title>
           </v-list-item>
 
-          <v-list-item to="/auth/sign-up">
+          <v-list-item to="/signup">
             <v-list-item-title>회원가입</v-list-item-title>
           </v-list-item>
 

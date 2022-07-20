@@ -5,16 +5,14 @@
 <template>
   <div>
     <v-text-field
-      v-model="query"
-      :label="label"
+      hide-details
+      label="Filled"
+      placeholder="Search"
       filled
       rounded
       dense
-      solo
-      :class="{ 'search-bar': isDetail, 'mx-3': isDetail, 'mx-4': !isDetail }"
-      class="mt-5"
-      prepend-inner-icon="mdi-magnify"
-      type="text"
+      single-line
+      append-icon="mdi-magnify" class="shrink mx-4"
       @keydown.enter="onInputKeyword"
       @keyup.tab="onInputKeyword"
     />
