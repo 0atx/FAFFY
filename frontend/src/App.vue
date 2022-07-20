@@ -1,25 +1,26 @@
 <template>
-  <div id="app">
+  <div id="faffy">
     <Header />
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!--<HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Footer />-->
   </div>
 </template>
 
 <script>
-import Header from './components/common/HeaderNav.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/common/Header.vue'
+//import HelloWorld from './components/HelloWorld.vue'
+//import Footer from './components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    Header,
-    HelloWorld
+    Header
 }
 }
 </script>
 
 <style>
-#app {
+#faffy {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
