@@ -4,16 +4,20 @@ import com.faffy.web.dto.UserDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.repository.FashionCategoryRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.Gender;
 import com.faffy.web.mapping.PublicUserInfo;
+import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.SecondaryTable;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +35,8 @@ public class JpaTest {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserCategoryService userCategoryService;
 
 
     @Test
@@ -138,7 +144,7 @@ public class JpaTest {
     @Order(40)
     void loginUser() {
         UserDto userDto = UserDto.builder().email("js727r@ssafy.com").password("444100").build();
-       
+
         Optional<PublicUserInfo> loginedUser = userService.login(userDto);
         if (loginedUser.isPresent()) {
             System.out.println(loginedUser.get().getNickname());
@@ -146,53 +152,93 @@ public class JpaTest {
             System.out.println("로그인 실패");
         }
     }
-//    @Test
-//    @Order(20)
-//    void addCategories() {
-//        System.out.println("카테고리 생성---------");
-//        FashionCategory category = new FashionCategory();
-//        category.setName("hip-hop");
-//        fashionCategoryRepository.save(category);
-//
-//        category = new FashionCategory();
-//        category.setName("daily");
-//        fashionCategoryRepository.save(category);
-//        System.out.println("카테고리 생성--------- END");
-//
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Order(21)
-//    void addUserCategory() {
-//        System.out.println("유저카테고리 추가 -------------");
-//        UserDto userDto = new UserDto();
-//        userDto.setNickname("jun");
-//
-//        FashionCategory category = fashionCategoryRepository.findFashionCategoryByName("hip-hop");
-//
-//        System.out.println("유저카테고리 추가 -------------END");
-//
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Order(30)
-//    void select() {
-//
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Order(40)
-//    void findAllUsers() {
-//        List<User> users = userRepository.findAll();
-//        System.out.println("모든 유저 목록 조회 ----------");
-//        for (User user :
-//                users) {
-//            System.out.println("user.getNickname() = " + user.getNickname());
-//        }
-//        System.out.println("모든 유저 목록 조회 END----------");
-//
-//    }
+
+    @Test
+    @DisplayName("카테고리 추가 - 더미 데이터")
+    @Order(45)
+    void addCategory() {
+        FashionCategory category = FashionCategory.builder().name("hip-hop").build();
+        fashionCategoryRepository.save(category);
+
+        category = FashionCategory.builder().name("daily").build();
+        fashionCategoryRepository.save(category);
+
+        category = FashionCategory.builder().name("sports").build();
+        fashionCategoryRepository.save(category);
+    }
+
+    @Test
+    @DisplayName("관심 목록 추가")
+    @Order(50)
+    void addUserCategories() {
+        UserDto userDto = UserDto.builder().no(1).build();
+        System.out.println("추가결과 : "+userCategoryService.addUserCategory(userDto,"hip-hop"));
+        userCategoryService.addUserCategory(userDto,"daily");
+        userCategoryService.addUserCategory(userDto,"beach");
+    }
+
+    @Test
+    @DisplayName("회원 카테고리 삭제")
+    @Order(51)
+    void deleteCategory() {
+        UserDto userDto = UserDto.builder().no(1).build();
+        System.out.println("삭제결과 : "+ userCategoryService.deleteUserCategory(userDto,"sports"));
+
+    }
+
+    @Test
+    @DisplayName("회원의 카테고리 검색")
+    @Order(55)
+    void searchCategories() {
+        UserDto userDto = UserDto.builder().no(1).build();
+        List<FashionCategory> categories = userCategoryService.getUserCategory(userDto);
+        for (FashionCategory category : categories
+        ) {
+            System.out.println("category = " + category.getName());
+        }
+    }
+
+    @Test
+    @DisplayName("게시판 카테고리 추가 - 더미데이터")
+    @Order(58)
+    void createBoardCategory() {
+    }
+
+    @Test
+    @DisplayName("게시글 등록")
+    @Order(60)
+    void writeBoard() {
+
+    }
+
+
+    @Test
+    @DisplayName("게시글 목록 보기")
+    @Order(65)
+    void showAllBoard() {
+
+    }
+
+
+    @Test
+    @DisplayName("게시글 상세보기")
+    @Order(70)
+    void boardDetail() {
+
+    }
+
+    @Test
+    @DisplayName("댓글 작성")
+    @Order(80)
+    void writeComments() {
+
+    }
+    @Test
+    @DisplayName("게시글 삭제")
+    @Order(80)
+    void deleteBoard() {
+
+    }
+
+
 }

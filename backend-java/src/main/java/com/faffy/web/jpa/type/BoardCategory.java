@@ -1,4 +1,4 @@
-package com.faffy.web.jpa.entity;
+package com.faffy.web.jpa.type;
 
 public enum BoardCategory {
     QnA,Free

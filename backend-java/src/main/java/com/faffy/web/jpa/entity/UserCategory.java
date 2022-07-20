@@ -1,11 +1,11 @@
 package com.faffy.web.jpa.entity;
 
+import com.faffy.web.jpa.type.UserCategoryMapper;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -15,12 +15,20 @@ import static javax.persistence.FetchType.LAZY;
 설명 : user_category entity
 */
 @Entity(name = "User_Category")
-@Data
-public class UserCategory extends BaseEntity {
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_no")
-    private User user;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_no")
-    private FashionCategory category;
+@Getter
+public class UserCategory {
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "user_no", nullable = false)
+//    private User user;
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "category_no", nullable = false)
+//    private FashionCategory category;
+    @EmbeddedId
+    UserCategoryMapper userCategoryMapper;
+
+    public UserCategory() {}
+    @Builder
+    public UserCategory(User user, FashionCategory category) {
+        this.userCategoryMapper = UserCategoryMapper.builder().user(user).category(category).build();
+    }
 }

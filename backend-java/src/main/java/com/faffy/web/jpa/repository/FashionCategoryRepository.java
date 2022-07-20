@@ -4,7 +4,9 @@ import com.faffy.web.jpa.entity.FashionCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FashionCategoryRepository extends JpaRepository<FashionCategory, Integer> {
-    FashionCategory findFashionCategoryByName(String name);
+    Optional<FashionCategory> findByName(String name);
 }
