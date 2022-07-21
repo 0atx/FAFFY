@@ -36,7 +36,7 @@ public interface UserService {
      * @return 해당 유저
      * @throws Exception 해당하는 유저가 없을 시 예외 발생
      */
-    public User getUserByEmail(String email);
+    public User getUserByEmail(String email) throws Exception;
     public List<PublicUserInfo> findAllUsers();
 
 
