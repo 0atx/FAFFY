@@ -5,6 +5,8 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.BoardCategory;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +14,10 @@ import java.time.LocalDateTime;
 @Data
 public class BoardDto {
     int no;
+    @NonNull
     private String title;
     private LocalDateTime datetime;
+    @NonNull
     private String content;
     private User user;
     private BoardCategory category;
@@ -22,6 +26,7 @@ public class BoardDto {
 
     @Builder
     public BoardDto(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category) {
+        if (StringUtils.hasLength(title))
         this.no = no;
         this.title = title;
         this.datetime = datetime;

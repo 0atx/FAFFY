@@ -1,18 +1,13 @@
-package com.faffy.web.mapping;
+package com.faffy.web.jpa.type;
 
-import com.faffy.web.jpa.type.Gender;
-import lombok.ToString;
-
-import java.util.Date;
-
+import java.time.LocalDate;
 
 public interface PublicUserInfo {
     int getNo();
     String getName();
     String getEmail();
     String getNickname();
-    Date getBirthday();
+    LocalDate getBirthday();
     String getInfo();
     Gender getGender();
-
 }
