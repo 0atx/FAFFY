@@ -1,12 +1,13 @@
-package com.faffy.jpa.entity;
+package com.faffy.web.jpa.entity;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-@Data
+@Getter
 public class UploadFile extends BaseEntity {
     @Column(name = "file_name")
     private String fileName;
