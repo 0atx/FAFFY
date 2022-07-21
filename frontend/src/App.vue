@@ -17,8 +17,8 @@ export default {
   name: 'App',
   components: {
     Header,
-    Footer,
-    AuthView
+    AuthView,
+    Footer
   }
 }
 </script>
