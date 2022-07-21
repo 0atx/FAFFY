@@ -1,11 +1,14 @@
-package com.faffy.jpa.entity;
+package com.faffy.web.jpa.entity;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import static javax.persistence.FetchType.LAZY;
 
 /*
 작성자 : 이준성
@@ -13,12 +16,13 @@ import javax.persistence.Table;
 설명 : follow_mapping table entity
 */
 @Entity
-@Data
+@Getter
 @Table(name = "follow_mapping")
 public class FollowMapping extends BaseEntity {
-    @ManyToOne @JoinColumn(name="follow_user_no")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name="follow_user_no")
     private User followUser;
-    @ManyToOne @JoinColumn(name="followed_user_no")
+    @ManyToOne(fetch = LAZY) @JoinColumn(name="followed_user_no")
     private User followedUser;
 
     public void setMapping(User from, User to) {

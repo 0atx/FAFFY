@@ -1,7 +1,10 @@
-package com.faffy.jpa.entity;
+package com.faffy.web.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,9 +15,14 @@ import javax.persistence.Table;
 최종 수정일 : 2022.07.18
 */
 @Entity
-@Data
+@Getter
 @Table(name = "fashion_category")
 public class FashionCategory extends BaseEntity {
+    @Column(nullable = false)
     private String name;
-
+    public FashionCategory() {}
+    @Builder
+    public FashionCategory(String name) {
+        this.name = name;
+    }
 }
