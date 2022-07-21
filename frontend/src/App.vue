@@ -1,21 +1,26 @@
 <template>
-  <div id="faffy">
+  <v-app id="faffy">
     <Header />
-    <!--<HelloWorld msg="Welcome to Your Vue.js App"/>
-    <Footer />-->
-  </div>
+    <sign-in />
+    <!--
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Footer />
+    -->
+  </v-app>
 </template>
 
 <script>
 import Header from './components/common/Header.vue'
+import SignIn from './components/user/SignIn.vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Footer from './components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    Header
-}
+    Header,
+    SignIn
+  }
 }
 </script>
 
@@ -26,6 +31,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
