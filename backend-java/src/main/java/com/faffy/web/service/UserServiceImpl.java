@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws Exception{
         return userRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException(USER_NOT_FOUND_MSG));
     }
 
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user;
             if (userDto.getNo() == 0) {
-                user = userRepository.findByNickname(userDto.getNickname()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
+                user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             } else {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
