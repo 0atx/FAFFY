@@ -1,5 +1,7 @@
 package com.faffy.web.jpa.entity;
 
+import com.faffy.web.dto.CommentUpdateDto;
+import com.faffy.web.exception.IllegalInputException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -30,5 +32,10 @@ public class Comment extends BaseEntity {
         this.writer = writer;
         this.board = board;
         this.datetime = datetime;
+    }
+
+    public void updateComment(CommentUpdateDto commentUpdateDto) {
+        this.content = commentUpdateDto.getContent();
+        this.datetime = LocalDateTime.now();
     }
 }

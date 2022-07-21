@@ -29,39 +29,53 @@ public class UserCategoryServiceImpl implements UserCategoryService {
      * @return 유저가 설정한 패션 카테고리 리스트
      */
     @Override
-    public List<FashionCategory> getUserCategory(UserDto userDto) {
+    public List<FashionCategory> getUserCategory(int user_no) {
         // 사용자
-        Optional<User> user = userService.getUserByNo(userDto.getNo());
+//        Optional<User> user = userService.getUserByNo(userDto.getNo());
         List<FashionCategory> categories = new ArrayList<>();
-        if (user.isPresent()) {
-            categories = userCategoryRepository.findCategoriesByUser(user.get());
+        try {
+            User user = userService.getUserByNo(user_no);
+
+            categories = userCategoryRepository.findCategoriesByUser(user);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
             return categories;
         }
-        return categories;
     }
 
     @Override
-    public boolean addUserCategory(UserDto userDto, String categoryName) {
-        Optional<User> userResult = userService.getUserByNo(userDto.getNo());
-        Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
-        if (userResult.isPresent() && categoryResult.isPresent()) {
-            UserCategory userCategory = UserCategory.builder().user(userResult.get()).category(categoryResult.get()).build();
-            userCategoryRepository.save(userCategory);
-            return true;
+    public boolean addUserCategory(int user_no, String categoryName) {
+        try {
+            User user = userService.getUserByNo(user_no);
+            Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
+            if ( categoryResult.isPresent()) {
+                UserCategory userCategory = UserCategory.builder().user(user).category(categoryResult.get()).build();
+                userCategoryRepository.save(userCategory);
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            return false;
         }
-        return false;
     }
 
     @Override
-    public boolean deleteUserCategory(UserDto userDto, String categoryName) {
+    public boolean deleteUserCategory(int user_no, String categoryName) {
         Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
-        Optional<User> userResult = userService.getUserByNo(userDto.getNo());
-        if (userResult.isPresent() && categoryResult.isPresent()) {
-            UserCategory userCategory = UserCategory.builder().user(userResult.get()).category(categoryResult.get()).build();
-            userCategoryRepository.delete(userCategory);
-            return true;
+        try {
+            User userResult = userService.getUserByNo(user_no);
+            if (categoryResult.isPresent()){
+                UserCategory userCategory = UserCategory.builder().user(userResult).category(categoryResult.get()).build();
+                userCategoryRepository.delete(userCategory);
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally {
+            return false;
         }
-        return false;
     }
 
 
