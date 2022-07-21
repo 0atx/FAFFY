@@ -28,6 +28,12 @@
                 type="password"
                 required></v-text-field>
             </v-flex>
+
+            <!-- 비밀번호 찾기  -->
+            <v-flex>
+              비밀번호를 잊으셨나요?
+            </v-flex>
+
             <v-flex class="text-xs-center" mt-5>
               <v-btn color="primary" type="submit">로그인</v-btn>
             </v-flex>
@@ -54,7 +60,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "SignIn",
+};
 </script>
 
 <style>

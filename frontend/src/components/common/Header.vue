@@ -8,7 +8,7 @@
       color="white"
       dense
     >
-      <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo_1.png">
+      <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo.png">
 
       <v-spacer></v-spacer>
 
