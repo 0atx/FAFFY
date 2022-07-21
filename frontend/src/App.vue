@@ -1,7 +1,7 @@
 <template>
   <v-app id="faffy">
     <Header />
-    <sign-in />
+    <sign-up />
     <!--
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <Footer />
@@ -11,7 +11,8 @@
 
 <script>
 import Header from './components/common/Header.vue'
-import SignIn from './components/user/SignIn.vue'
+//import SignIn from './components/user/SignIn.vue'
+import SignUp from './components/user/SignUp.vue'
 //import HelloWorld from './components/HelloWorld.vue'
 //import Footer from './components/common/Footer.vue'
 
@@ -19,7 +20,7 @@ export default {
   name: 'App',
   components: {
     Header,
-    SignIn
+    SignUp
   }
 }
 </script>
