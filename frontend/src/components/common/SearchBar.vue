@@ -1,11 +1,24 @@
+<!--
+작성자 : 박윤하
+검색 바
+ -->
 <template>
-  <b-form class="searchBar">
-    <b-form-input
-      id="inline-form-input-name"
-      placeholder="검색"
-    ></b-form-input>
-    <b-button type="submit">검색</b-button>
-  </b-form>
+  <div>
+    <v-text-field
+      v-model="query"
+      :label="label"
+      filled
+      rounded
+      dense
+      solo
+      :class="{ 'search-bar': isDetail, 'mx-3': isDetail, 'mx-4': !isDetail }"
+      class="mt-5"
+      prepend-inner-icon="mdi-magnify"
+      type="text"
+      @keydown.enter="onInputKeyword"
+      @keyup.tab="onInputKeyword"
+    />
+  </div>
 </template>
 
 <script>
@@ -14,15 +27,8 @@ export default {
 }
 </script>
 
-<style>
-.searchBar {
-  margin : 0 auto;
-  display: flex;
-  height: 38px;
-}
-
-button {
-  margin-left: 2px;
-  width: 80px;
-}
+<style scoped>
+.search-bar {
+    width: 84vw !important;
+  }
 </style>

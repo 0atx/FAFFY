@@ -1,53 +1,103 @@
+<!--
+작성자 : 박윤하
+헤더 - 상단 네비게이션 바
+ -->
 <template>
-  <div class="header">
-    <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo_1.png">
+  <v-card class="header overflow-hidden">
+    <v-app-bar
+      color="white"
+      dense
+    >
+      <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo_1.png">
 
-    <search-bar />
+      <v-spacer></v-spacer>
 
-    <b-nav class="nav" v-if="userInfo">
-      <b-nav-item disabled>@@@님 환영합니다 나올 자리</b-nav-item>
-      <b-nav-item-dropdown id="my-nav-dropdown" text="Dropdown" toggle-class="nav-link-custom" right>
-        <b-dropdown-item>내 프로필</b-dropdown-item>
-        <b-dropdown-item>방송 시작</b-dropdown-item>
-        <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item>로그아웃</b-dropdown-item>
-      </b-nav-item-dropdown>
-    </b-nav>
+      <v-form
+        class="searchBar"
+        ref="form"
+      >
+        <v-text-field
+          v-model="search"
+          label="검색"
+          required
+        ></v-text-field>
 
-    <b-nav class="nav" v-else>
-      <b-nav-item to="/some/route/" exact exact-active-class="active">회원가입</b-nav-item>
-      <b-nav-item to="/some/route/" exact exact-active-class="active">로그인</b-nav-item>
-    </b-nav>
-  </div>
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </v-form>
 
+      <v-spacer></v-spacer>
 
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-menu
+        bottom
+        left
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="black"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list v-if="userInfo">
+          <v-list-item>
+            <v-list-item-title>내 프로필</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>방송 시작</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>로그아웃</v-list-item-title>
+          </v-list-item>
+        </v-list>
+
+        <v-list v-else>
+          <v-list-item>
+            <v-list-item-title>로그인</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>회원가입</v-list-item-title>
+          </v-list-item>
+
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+  </v-card>
 </template>
 
 <script>
-import SearchBar from './SearchBar.vue'
+//import HelloWorld from "./components/HelloWorld";
+
 export default {
-    // eslint-disable-next-line vue/multi-word-component-names
-    name: 'Header',
-    components: { SearchBar },
-    data() {
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Header",
+  data() {
       return {
+        // 임시, 나중에 computed mapState로 userStore에서 userInfo 받아와야 함
         userInfo: false,
       }
-    }
-}
+  }
+};
 </script>
 
-<style>
-.header {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  float: left;
-}
-
-.nav {
-  float: right;
+<style scoped>
+.searchBar {
+    display: flex;
 }
 </style>
