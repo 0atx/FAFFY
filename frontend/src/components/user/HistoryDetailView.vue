@@ -1,12 +1,12 @@
 <template>
-  <div class="footer">
-
+  <div>
+    히스토리 상세보기 뷰 입니다.
   </div>
 </template>
 
 <script>
 export default {
-  name: 'FooterrNav',
+
 }
 </script>
 

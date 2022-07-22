@@ -1,30 +1,34 @@
 <template>
-  <div id="app">
+  <v-app id="faffy">
     <Header />
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <!-- <profile-view /> -->
+    <router-view></router-view>?
+    <Footer />
+  </v-app>
 </template>
 
 <script>
-import Header from './components/common/HeaderNav.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/common/Header.vue'
+// import ProfileView from './views/ProfileView.vue'
+import Footer from './components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
-    HelloWorld
-}
+    Footer,
+    // ProfileView
+  }
 }
 </script>
 
 <style>
-#app {
+#faffy {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: calc(100vw - (100vw - 100%))px;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background-color: #2c3e50;
 }
 </style>
