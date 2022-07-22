@@ -1,9 +1,9 @@
 <!--
 작성자 : 박윤하
 헤더 - 상단 네비게이션 바
- -->
+-->
 <template>
-  <v-card class="header overflow-hidden">
+  <v-card id="header" class="overflow-hidden">
     <v-app-bar
       color="white"
       dense
@@ -13,7 +13,7 @@
       <v-spacer></v-spacer>
 
       <v-form
-        class="searchBar"
+        id="searchBar"
         ref="form"
       >
         <v-text-field
@@ -67,11 +67,11 @@
         </v-list>
 
         <v-list v-else>
-          <v-list-item>
+          <v-list-item to="/signin">
             <v-list-item-title>로그인</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item to="/signup">
             <v-list-item-title>회원가입</v-list-item-title>
           </v-list-item>
 
@@ -82,8 +82,6 @@
 </template>
 
 <script>
-//import HelloWorld from "./components/HelloWorld";
-
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
@@ -97,7 +95,11 @@ export default {
 </script>
 
 <style scoped>
-.searchBar {
+#header {
+  border-radius: 0px;
+}
+
+#searchBar {
     display: flex;
 }
 </style>
