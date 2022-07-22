@@ -1,15 +1,15 @@
 <template>
   <v-app id="faffy">
     <Header />
-    <profile-view />
-    <!--<router-view></router-view>-->
+    <!-- <profile-view /> -->
+    <router-view></router-view>?
     <Footer />
   </v-app>
 </template>
 
 <script>
 import Header from './components/common/Header.vue'
-import ProfileView from './views/ProfileView.vue'
+// import ProfileView from './views/ProfileView.vue'
 import Footer from './components/common/Footer.vue'
 
 export default {
@@ -17,7 +17,7 @@ export default {
   components: {
     Header,
     Footer,
-    ProfileView
+    // ProfileView
   }
 }
 </script>
