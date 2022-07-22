@@ -3,6 +3,7 @@
 로그인 페이지
 -->
 <template>
+<v-container fluid>
   <v-row wrap>
     <v-col xs12 class="text-xs-center" mt-5>
       <h1>로그인</h1>
@@ -55,6 +56,7 @@
 
     </v-col>
   </v-row>
+  </v-container>
 </template>
 
 <script>
