@@ -1,10 +1,16 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import MainView from "@/views/MainView.vue";
 
 Vue.use(VueRouter);
 
 
 const routes = [
+  {
+    path:"/",
+    name:"main",
+    component:MainView
+  },
   {
     path:"/auth",
     name:"auth",
@@ -20,6 +26,46 @@ const routes = [
         path:"sign-up",
         name:"sign-up",
         component:()=>import("@/components/auth/SignUpView.vue")
+      }
+    ]
+  },
+  {
+    path:"/profile/:id",
+    name:"profile",
+    component:()=>import("@/views/ProfileView.vue"),
+    children: [
+      {
+        path:"/",
+        name:"user-detail",
+        component:()=>import("@/components/user/ProfileDetailView.vue"),
+      },
+      {
+        path:"history",
+        name:"user-history",
+        component:()=>import("@/components/user/HistoryView.vue"),
+      },
+      {
+        path:"history-detail",
+        name:"user-history-detail",
+        component:()=>import("@/components/user/HistoryDetailView.vue"),
+      }
+    ]
+  },
+  {
+    path:"/edit-profile",
+    name:"profile-edit",
+    component:()=>import("@/components/user/ProfileDetailView.vue"),
+  },
+  {
+    path:"/consulting",
+    name:"consulting",
+    redirect:"/consulting/ready",
+    component:()=>import("@/views/ProfileView.vue"),
+    children:[
+      {
+        path:"ready",
+        name:"consulting-ready",
+        component:()=>import("@/components/user/ProfileDetailView.vue"),
       }
     ]
   }

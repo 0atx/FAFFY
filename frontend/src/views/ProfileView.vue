@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
       <div></div>
-      <!--<router-view></router-view>-->
+      <router-view></router-view>
       </v-col>
     </v-row>
   </v-container>
