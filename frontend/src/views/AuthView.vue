@@ -1,11 +1,14 @@
 <template>
-  <v-container fluid>
-      <router-view></router-view>
-  </v-container>
+  <div class="view">
+    <sign-in />
+      <!--<router-view></router-view>-->
+  </div>
 </template>
 
 <script>
+import SignIn from '@/components/auth/SignInView.vue';
 export default {
+  components: { SignIn },
 	name: "AuthView",
 };
 </script>

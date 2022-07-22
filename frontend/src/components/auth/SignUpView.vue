@@ -3,15 +3,15 @@
 회원가입 페이지
 -->
 <template>
-  <v-row wrap>
-    <v-col xs12 class="text-xs-center" mt-5>
+  <v-layout row wrap>
+    <v-flex xs12 class="text-xs-center" mt-5>
       <h1>회원가입</h1>
-    </v-col>
+    </v-flex>
     <!-- css 임시 -->
-    <v-col xs12 sm6 offset-sm3 mt-3>
+    <v-flex xs12 sm6 offset-sm3 mt-3>
       <form>
-        <v-row column>
-          <v-col class="form">
+        <v-layout column>
+          <v-flex class="form">
             <v-text-field
               name="email"
               label="이메일"
@@ -19,32 +19,32 @@
               type="email"
               required></v-text-field>
               <v-btn class="check" color="primary" type="submit">중복 확인</v-btn>
-          </v-col>
-          <v-col>
+          </v-flex>
+          <v-flex>
             <v-text-field
               name="password"
               label="비밀번호"
               id="password"
               type="password"
               required></v-text-field>
-          </v-col>
-          <v-col>
+          </v-flex>
+          <v-flex>
             <v-text-field
               name="confirmPassword"
               label="비밀번호"
               id="confirmPassword"
               type="password"
               required></v-text-field>
-          </v-col>
-          <v-col>
+          </v-flex>
+          <v-flex>
             <v-text-field
               name="name"
               label="이름"
               id="name"
               type="text"
               required></v-text-field>
-          </v-col>
-          <v-col class="form">
+          </v-flex>
+          <v-flex class="form">
             <v-text-field
               name="nickname"
               label="별명"
@@ -52,8 +52,8 @@
               type="text"
               required></v-text-field>
               <v-btn color="primary" type="submit">중복 확인</v-btn>
-          </v-col>
-          <v-col class="form">
+          </v-flex>
+          <v-flex class="form">
             <v-menu
               ref="menu"
               v-model="menu"
@@ -79,17 +79,17 @@
                 @change="save"
               ></v-date-picker>
             </v-menu>
-          </v-col>
-          <v-col>
+          </v-flex>
+          <v-flex>
             <v-text-field
               name="age"
               label="나이"
               id="age"
               type="number"
               required></v-text-field>
-          </v-col>
+          </v-flex>
 
-          <v-col class="justify-center">
+          <v-flex class="justify-center">
             <v-radio-group
               row
             >
@@ -109,9 +109,9 @@
                 value="3"
               ></v-radio>
             </v-radio-group>
-          </v-col>
+          </v-flex>
 
-          <v-col>
+          <v-flex>
             이용약관, 개인정보 취급 방침 등 내용 들어갈 자리
             <v-checkbox v-model="checkbox">
               <template v-slot:label>
@@ -120,15 +120,15 @@
                 </div>
               </template>
             </v-checkbox>
-          </v-col>
+          </v-flex>
 
-          <v-col class="text-xs-center" mt-5>
+          <v-flex class="text-xs-center" mt-5>
             <v-btn color="primary" type="submit">회원가입</v-btn>
-          </v-col>
-        </v-row>
+          </v-flex>
+        </v-layout>
       </form>
-    </v-col>
-  </v-row>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

@@ -5,6 +5,7 @@
 <template>
   <v-card id="header" class="overflow-hidden">
     <v-app-bar
+    dense
       color="white"
     >
       <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png">

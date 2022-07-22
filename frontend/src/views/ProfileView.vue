@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row wrap>
+    <v-row wrap id="block">
       <v-col cols="4">
         <profile-card />
       </v-col>
@@ -27,10 +27,6 @@ export default {
 * {
   height: 100%;
   padding: 0px;
-}
-
-v-container {
-  width: 100%;
 }
 
 div {
