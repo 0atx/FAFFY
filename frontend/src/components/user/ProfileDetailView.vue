@@ -4,7 +4,7 @@
 -->
 <template>
   <v-card>
-
+    안녕하세요 디테일 뷰입니다.
   </v-card>
 </template>
 

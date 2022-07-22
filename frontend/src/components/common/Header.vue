@@ -67,11 +67,11 @@
         </v-list>
 
         <v-list v-else>
-          <v-list-item to="/signin">
+          <v-list-item to="/auth/sign-in">
             <v-list-item-title>로그인</v-list-item-title>
           </v-list-item>
 
-          <v-list-item to="/signup">
+          <v-list-item to="/auth/sign-up">
             <v-list-item-title>회원가입</v-list-item-title>
           </v-list-item>
 
