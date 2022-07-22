@@ -1,7 +1,7 @@
 <template>
-  <div class="footer">
-    <h1>footer</h1>
-  </div>
+  <v-card id="footer">
+    <h6>FAFFY 소개</h6>
+  </v-card>
 </template>
 
 <script>
