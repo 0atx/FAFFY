@@ -62,7 +62,7 @@ public interface UserService {
      * @return 추가된 User 객체 반환
      * @throws DataIntegrityException 이메일 중복, 닉네임 중복시 발생
      */
-    public User addUser(UserDto userDto) throws DataIntegrityException;
+    public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException;
 
     /**
      * 회원 정보를 수정합니다.
@@ -71,5 +71,5 @@ public interface UserService {
      * @throws DataNotFoundException user_no로 회원 정보를 찾을 수 없는 경우
      * @throws Exception DataIntegrity를 위배한 경우(Unique 위배)
      */
-    public void updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException ,Exception;
+    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException ,Exception;
 }

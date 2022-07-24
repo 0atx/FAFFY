@@ -17,12 +17,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity(name = "User_Category")
 @Getter
 public class UserCategory {
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "user_no", nullable = false)
-//    private User user;
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "category_no", nullable = false)
-//    private FashionCategory category;
     @EmbeddedId
     UserCategoryMapper userCategoryMapper;
 

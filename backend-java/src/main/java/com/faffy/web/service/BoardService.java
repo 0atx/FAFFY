@@ -5,6 +5,7 @@ import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.BoardUpdateDto;
 import com.faffy.web.dto.UserDto;
 import com.faffy.web.jpa.entity.Board;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

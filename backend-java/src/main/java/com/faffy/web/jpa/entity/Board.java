@@ -4,6 +4,7 @@ import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.BoardUpdateDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.BoardCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
