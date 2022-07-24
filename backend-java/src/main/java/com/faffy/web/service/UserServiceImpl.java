@@ -62,9 +62,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addUser(UserDto userDto) throws DataIntegrityException {
+    public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException {
         try {
             return userRepository.save(userDto.toEntity());
+        } catch (IllegalInputException e) {
+            throw new IllegalInputException(ILLEGAL_INPUT_MSG);
         } catch (Exception e) {
             throw new DataIntegrityException("이미 사용중인 이메일이나 닉네임입니다. 확인해 주세요.");
         }
@@ -73,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
+    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
         try {
             User user;
             if (userDto.getNo() == 0) {
@@ -83,6 +85,7 @@ public class UserServiceImpl implements UserService {
             }
 
             user.updateUser(userDto);
+            return user;
         } catch (IllegalArgumentException e) {
             throw new DataNotFoundException(e.getMessage());
         } catch (Exception e) {

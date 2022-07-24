@@ -1,10 +1,13 @@
 package com.faffy.web.dto;
 
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.Gender;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 비밀번호가 없는 공개 정보만 담은 객체

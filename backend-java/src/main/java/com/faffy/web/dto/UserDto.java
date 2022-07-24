@@ -28,7 +28,7 @@ public class UserDto {
     @NonNull
     private String password;
     @NonNull
-    private LocalDate birthday;
+    private String birthday;
     @NonNull
     private Gender gender;
     /**
@@ -39,7 +39,7 @@ public class UserDto {
     public UserDto(){};
 
     @Builder
-    public UserDto(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info) throws IllegalInputException{
+    public UserDto(int no, String email, String name, String nickname, String password, String birthday, Gender gender, String info) throws IllegalInputException{
         if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
         && StringUtils.hasLength(password)) {
             this.no = no;
@@ -55,19 +55,32 @@ public class UserDto {
         }
     }
 
-    public User toEntity() {
+    public User toEntity() throws IllegalInputException {
+        if (!isValid())
+            throw new IllegalInputException("필수 입력란을 확인해 주세요.");
+        System.out.println("toENtity");
         User user = User.builder()
                 .email(email)
                 .name(name)
                 .nickname(nickname)
                 .password(password)
-                .birthday(birthday)
+                .birthday(LocalDate.parse(birthday))
                 .gender(gender)
                 .info(info)
                 .build();
 
         return user;
     }
+
+    public boolean isValid() {
+        if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
+                && StringUtils.hasLength(password) && StringUtils.hasLength(nickname)
+                && StringUtils.hasLength(birthday) && gender != null) {
+            return true;
+        }
+        return false;
+    }
+
 
 
 }

@@ -12,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @RequestMapping("/users")
-public class UserApiController {
+public class UserController {
 
     @Autowired
     UserServiceImpl userService;
@@ -27,13 +29,12 @@ public class UserApiController {
      * @return 회원정보 리스트
      */
     @GetMapping
-    public ResponseEntity findAllUsers() {
-        List<PublicUserInfo> lst = userService.findAllUsers();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("msg","모든 회원 리스트");
-        jsonObject.put("result",lst);
+    public ResponseEntity<Map<String,Object>> findAllUsers() {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<PublicUserInfo> allUsers = userService.findAllUsers();
+        resultMap.put("users",allUsers);
 
-        return ResponseEntity.ok().body(jsonObject);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
     /**
      * no로 회원 찾기
