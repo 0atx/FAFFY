@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserPublicDto login(UserLoginDto userDto) throws Exception {
+    public UserPublicDto login(UserLoginDto userDto) throws IllegalArgumentException {
         User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(()->new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
         if(!passwordEncoder.matches(userDto.getPassword(),user.getPassword())) {
