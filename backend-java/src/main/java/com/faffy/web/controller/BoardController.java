@@ -22,6 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/boards")
+@CrossOrigin("*")
 public class BoardController {
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
