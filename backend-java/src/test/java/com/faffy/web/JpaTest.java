@@ -220,7 +220,7 @@ public class JpaTest {
     void loginUser() {
         try {
             UserLoginDto userDto = UserLoginDto.builder().email("js727r@ssafy.com").password("44332").build();
-            PublicUserInfo loginedUser = userService.login(userDto);
+            UserPublicDto loginedUser = userService.login(userDto);
             System.out.println(loginedUser.getNickname());
         } catch (Exception e) {
             System.out.println(e.getMessage());
