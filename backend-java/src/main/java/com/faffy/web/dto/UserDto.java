@@ -31,6 +31,8 @@ public class UserDto {
     private String birthday;
     @NonNull
     private Gender gender;
+
+    private List<String> roles = new ArrayList<>();
     /**
      * 자기소개 문구
      */
@@ -67,6 +69,7 @@ public class UserDto {
                 .birthday(LocalDate.parse(birthday))
                 .gender(gender)
                 .info(info)
+                .roles(roles)
                 .build();
 
         return user;
