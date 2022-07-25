@@ -5,76 +5,93 @@
 <template>
   <v-container>
     <img
+      class="mt-10"
       src="@/assets/images/faffy_logo_big.png"
       alt="faffy logo"
     >
-    <v-form ref="form" id="signUp">
+    <v-form
+      ref="form"
+      id="signUp"
+      @submit.prevent="requestSignUp"
+    >
       <div id="check">
         <div id="checkInput">
+          <!-- 이메일 입력 -->
           <v-text-field
-            v-model="account.email"
+            v-model="form.email"
             type="email"
-            :rules="emailRules"
+            :rules="rules.email()"
             label="이메일"
             required
             @keydown.enter="onInputKeyword"
           />
         </div>
+
+        <!-- 이메일 중복 확인 -->
         <v-btn
-          id="checkBtn"
-          class="mt-2"
-          block
-          elevation="0"
-          type="submit"
+          icon
           @click="checkEmail"
-        >중복 확인</v-btn>
+        >
+          <v-icon id="checkEmailBtn">mdi-check</v-icon>
+        </v-btn>
       </div>
 
+      <!-- 비밀번호 입력 -->
       <v-text-field
-        v-model="account.password"
+        v-model="form.password"
         type="password"
-        :rules="[passwordRules.min]"
+        :rules="rules.password()"
+        hint="8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요."
+        persistent-hint
         label="비밀번호"
         required
         @keydown.enter="onInputKeyword"
       />
 
+      <!-- 비밀번호 확인 -->
       <v-text-field
-        v-model="account.password2"
+        v-model="confirmPw"
         type="password"
-        :rules="[passwordRules.min]"
-        label="비밀번호"
+        :rules="[rules.matchValue(form.password)]"
+        label="비밀번호 확인"
         required
         @keydown.enter="onInputKeyword"
       />
 
+      <!-- 이름 입력 -->
       <v-text-field
-        name="name"
-        label="이름"
-        id="name"
+        v-model="form.name"
         type="text"
+        :rules="rules.name()"
+        hint="한글 이름을 입력하세요."
+        persistent-hint
+        label="이름"
         required
+        @keydown.enter="onInputKeyword"
       />
 
       <div id="check">
         <div id="checkInput">
+          <!-- 별명 입력 -->
           <v-text-field
-            name="nickname"
-            label="별명"
-            id="nickname"
+            v-model="form.nickname"
             type="text"
+            :rules="rules.nickname()"
+            hint="2~10자 특수문자를 제외한 별명을 입력하세요."
+          persistent-hint
+            label="별명"
             required
+            @keydown.enter="onInputKeyword"
           />
         </div>
 
+        <!-- 별명 중복 확인 -->
         <v-btn
-          id="checkBtn"
-          class="mt-2"
-          block
-          elevation="0"
-          type="submit"
+          icon
           @click="checkNickname"
-        >중복 확인</v-btn>
+        >
+          <v-icon id="checkNicknameBtn">mdi-check</v-icon>
+        </v-btn>
       </div>
 
       <v-menu
@@ -86,105 +103,97 @@
         min-width="auto"
       >
         <template v-slot:activator="{ on, attrs }">
+          <!-- 생년월일 입력 -->
           <v-text-field
-            v-model="birth"
+            v-model="form.birth"
+            :rules="rules.birth()"
             label="생년월일"
             append-icon="mdi-calendar"
             readonly
+            hide-details
             v-bind="attrs"
             v-on="on"
           ></v-text-field>
         </template>
         <v-date-picker
-          v-model="birth"
+          v-model="form.birth"
           color="#0c0f66"
           :active-picker.sync="activePicker"
+          locale="ko=KR"
           :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
           min="1922-01-01"
           @change="save"
         ></v-date-picker>
       </v-menu>
 
+      <!-- 성별 입력 -->
       <v-radio-group
-        v-model="account.gender"
         row
+        v-model="form.gender"
         label="성별"
+        :rules="rules.gender()"
       >
         <v-radio
           label="남자"
           value="1"
+          color="#0c0f66"
         ></v-radio>
         <v-radio
           label="여자"
           value="2"
+          color="#0c0f66"
         ></v-radio>
       </v-radio-group>
 
-      <v-select
-        v-model="account.gender"
-        :items="genders"
-        label="성별"
-        required
-        @change="$v.select.$touch()"
-        @blur="$v.select.$touch()"
-      />
+      <!-- 이용약관 -->
+      <div
+        id="terms"
+        class="mb-4"
+      >
+        회원가입 시 FAFFY(패피)가 제공하는 서비스를 모두 이용하실 수 있습니다.
+        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및 <router-link to="/auth/service-terms">개인정보 취급 방침</router-link>에 동의합니다.
+      </div>
 
-      이용약관, 개인정보 취급 방침 등 내용 들어갈 자리
-      <v-checkbox v-model="checkbox">
-        <template v-slot:label>
-          <div>
-            이용 약관에 동의합니다.
-          </div>
-        </template>
-      </v-checkbox>
-
-      <v-btn
-        id="signUpBtn"
-        class="mt-2"
-        block
-        elevation="0"
-        type="submit"
+      <dark-button
+        :btnValue="signUpValue"
         @click="requestSignUp"
-      >회원가입</v-btn>
-
+      />
     </v-form>
   </v-container>
 </template>
 
 <script>
+import DarkButton from '@/components/common/DarkButton.vue'
+import validateRules from '@/utils/validateRules.js'
+
 export default {
-  name: "SignIn",
+  name: "SignUp",
+  components: {
+    DarkButton
+  },
   data() {
       return {
         activePicker: null,
         birth: null,
         menu: false,
         checkbox: false,
-        account: {
+        form: {
             email: '',
             password: '',
+            name: '',
+            nickname: '',
+            birth: '',
             gender: '',
         },
+
+        confirmPw: '',
 
         genders: [
           '남자',
           '여자',
         ],
-        valid: false,
 
-        row: null,
-
-        email: '',
-        emailRules: [
-          v => !!v || '이메일을 입력해주세요.',
-          v => /.+@.+\..+/.test(v) || '올바른 형식의 이메일을 입력해주세요.',
-        ],
-
-        password: '',
-        showPassword: false,
-        passwordRules: {
-          min: v => v.length >= 4 || '올바른 비밀번호를 입력해주세요.',
-        }
+        signUpValue: '회원가입',
       }
   },
   watch: {
@@ -192,10 +201,22 @@ export default {
       val && setTimeout(() => (this.activePicker = 'YEAR'))
     },
   },
+    computed: {
+    rules: () => validateRules,
+  },
   methods: {
     save (birth) {
       this.$refs.menu.save(birth)
     },
+    checkEmail() {
+      console.log("이메일 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다ㅎㅎ..");
+    },
+    checkNickname() {
+      console.log("별명 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다22..");
+    },
+    requestSignUp() {
+      console.log("회원가입 기능 구현해야 합니다.");
+    }
   },
   metaInfo () {
     return {
@@ -235,9 +256,27 @@ export default {
   border: 1px solid #fff;
 }
 
+#checkEmailBtn {
+  color: #ff7451;
+}
+
+#checkNicknameBtn {
+  color: #0c0f66;
+}
+
 #signUpBtn {
   background-color: #0c0f66;
   color: #fff;
   border: 1px solid #fff;
+}
+
+#terms {
+  color: #757575;
+  font-size:12px;
+  text-align: left;
+}
+
+a {
+  color: #0c0f66;
 }
 </style>
