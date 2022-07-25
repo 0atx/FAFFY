@@ -10,6 +10,7 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class UserController {
      * 모든 회원 정보 받아오기
      * @return 회원정보 리스트
      */
+    @ApiOperation(value="모든 회원 정보 받기",notes="공개정보를 리스트로 받아옵니다.")
     @GetMapping
     public ResponseEntity<Map<String,Object>> findAllUsers() {
         Map<String, Object> resultMap = new HashMap<>();
@@ -48,25 +50,26 @@ public class UserController {
      * @param userDto
      * @return 성공 시 User, 실패시 msg
      */
+    @ApiOperation(value="회원 가입",notes="유저 정보를 받아 db에 유저를 추가합니다.")
     @PostMapping
     public ResponseEntity addUser(@RequestBody UserDto userDto) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             User user = userService.addUser(userDto);
-            HashMap<String, User> hashmap = new HashMap<>();
             hashmap.put("content",user);
+            status = HttpStatus.OK;
 
-            return ResponseEntity.ok().body(hashmap);
         }
         catch (DataIntegrityException e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
         catch (IllegalInputException e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
 
@@ -75,19 +78,21 @@ public class UserController {
      * @param no
      * @return 성공시 User, 실패시 msg
      */
+    @ApiOperation(value="no로 회원 찾기",notes="no에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/{no}")
     public ResponseEntity findUserByNo(@PathVariable("no") int no) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             User user = userService.getUserByNo(no);
-            HashMap<String, User> hashmap = new HashMap<>();
             hashmap.put("content",user);
-            return ResponseEntity.ok().body(hashmap);
+            status = HttpStatus.OK;
 
         }catch(Exception e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
     /**
@@ -95,18 +100,21 @@ public class UserController {
      * @param email
      * @return 성공시 회원 정보, 실패시 []
      */
+    @ApiOperation(value="email로 회원 찾기",notes="email에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/email/{email}")
     public ResponseEntity findUserByEmail(@PathVariable("email") String email) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             User user = userService.getUserByEmail(email);
-            HashMap<String, User> hashmap = new HashMap<>();
             hashmap.put("content",user);
-            return ResponseEntity.ok().body(hashmap);
+            status = HttpStatus.OK;
+
         }catch(Exception e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
     /**
@@ -114,18 +122,20 @@ public class UserController {
      * @param nickname
      * @return 성공시 User, 실패시 msg
      */
+    @ApiOperation(value="nickname으로 회원 찾기",notes="nickname에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity findUserByNickname(@PathVariable("nickname") String nickname) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             User user = userService.getUserByNickname(nickname);
-            HashMap<String, User> hashmap = new HashMap<>();
             hashmap.put("content",user);
-            return ResponseEntity.ok().body(user);
+            status = HttpStatus.OK;
         }catch (Exception e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
     /**
@@ -133,23 +143,25 @@ public class UserController {
      * @param userDto
      * @return 성공시 User, 실패시 msg
      */
+    @ApiOperation(value="회원정보 수장",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
     @PutMapping
     public ResponseEntity updateUser(@RequestBody UserDto userDto) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             User user = userService.updateUser(userDto);
-            HashMap<String, User> hashmap = new HashMap<>();
             hashmap.put("content",user);
-            return ResponseEntity.ok().body(hashmap);
+            status = HttpStatus.OK;
 
         }catch (IllegalInputException e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
+
         } catch (DataNotFoundException e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
     /**
@@ -158,18 +170,20 @@ public class UserController {
      * @return 성공시 no, 실패시 msg
      * @throws DataNotFoundException 수정하려는 일부 값이 유효하지 않을 경우
      */
+    @ApiOperation(value="회원 탈퇴",notes="no에 해당하는 유저가 탈퇴됩니다.")
     @DeleteMapping("/{no}")
     public ResponseEntity deleteUser(@PathVariable int no) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             userService.deleteUser(no);
-            HashMap<String, Integer> hashmap = new HashMap<>();
             hashmap.put("content",no);
-            return ResponseEntity.ok().body(hashmap);
+            status = HttpStatus.OK;
         }catch (Exception e){
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
 
     /**
@@ -178,20 +192,19 @@ public class UserController {
      * @return 성공시 토큰값(String), 실패시 msg
      * 토큰의 유효기간은 30분이고 request header에 'X-AUTH-TOKEN' : '토큰값' 형식으로 전송
      */
+    @ApiOperation(value="로그인",notes="로그인시 토큰값(String)이 반환되고 이후 request header에 ‘X-AUTH-TOKEN’ : ‘토큰값’ 형식으로 전송 필요합니다.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserLoginDto userDto) {
+        HashMap<String, Object> hashmap = new HashMap<>();
+        HttpStatus status = null;
         try {
             UserPublicDto user = userService.login(userDto);
-            HashMap<String, String> hashmap = new HashMap<>();
-            hashmap.put("content", jwtTokenProvider.createToken(user.getEmail(), user.getRoles()));
-            return ResponseEntity.ok().body(hashmap);
+            hashmap.put("content", jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
+            status = HttpStatus.OK;
         } catch(IllegalArgumentException e) {
-            HashMap<String, String> hashmap = new HashMap<>();
             hashmap.put("msg",e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            status = HttpStatus.BAD_REQUEST;
         }
+        return ResponseEntity.status(status).body(hashmap);
     }
-
 }
