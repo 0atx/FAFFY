@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ProfileCard from '../components/user/ProfileCard.vue'
+import ProfileCard from '@/components/user/ProfileCard.vue'
 
 export default {
 	name: "ProfileView",
