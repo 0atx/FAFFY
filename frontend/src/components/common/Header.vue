@@ -5,14 +5,17 @@
 <template>
   <v-card id="header" class="overflow-hidden">
     <v-app-bar
+      elevate-on-scroll
       color="white"
-      dense
     >
-      <img class="logo" alt="Vue logo" src="../../assets/images/faffy_logo.png">
+    <!--scroll-target="#" 이거 줘야할 거 같은데...라우터 뷰 어디인지 받아와서 넣을 수 있나 이거?-->
+      <v-spacer></v-spacer>
+
+      <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png">
 
       <v-spacer></v-spacer>
 
-      <v-form
+      <!--<v-form
         id="searchBar"
         ref="form"
       >
@@ -25,21 +28,18 @@
         <v-btn icon>
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
-      </v-form>
+      </v-form>-->
+
+      <search-bar
+        class="ml-12 pl-6"
+      />
 
       <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
 
       <v-menu
         bottom
         left
+        v-if="userInfo"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -52,7 +52,7 @@
           </v-btn>
         </template>
 
-        <v-list v-if="userInfo">
+        <v-list>
           <v-list-item>
             <v-list-item-title>내 프로필</v-list-item-title>
           </v-list-item>
@@ -66,25 +66,43 @@
           </v-list-item>
         </v-list>
 
-        <v-list v-else>
-          <v-list-item to="/auth/sign-in">
-            <v-list-item-title>로그인</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item to="/auth/sign-up">
-            <v-list-item-title>회원가입</v-list-item-title>
-          </v-list-item>
-
-        </v-list>
       </v-menu>
+
+      <div v-else>
+        <v-btn
+          id="signInBtn"
+          class="mr-1"
+          elevation="0"
+          to="/auth/sign-in"
+        >
+          로그인
+        </v-btn>
+
+        <v-btn
+          id="signUpBtn"
+          class="ml-1"
+          elevation="0"
+          to="/auth/sign-up"
+        >
+          회원가입
+        </v-btn>
+      </div>
+
+      <v-spacer></v-spacer>
+
     </v-app-bar>
   </v-card>
 </template>
 
 <script>
+import SearchBar from '@/components/common/SearchBar.vue'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
+  components: {
+    SearchBar
+  },
   data() {
       return {
         // 임시, 나중에 computed mapState로 userStore에서 userInfo 받아와야 함
@@ -96,10 +114,21 @@ export default {
 
 <style scoped>
 #header {
+  position: fixed;
+  top: 0;
+  width: 100%;
   border-radius: 0px;
 }
 
-#searchBar {
-    display: flex;
+#signInBtn {
+  background-color: #fff;
+  color: #0c0f66;
+  border: 1px solid #0c0f66;
+}
+
+#signUpBtn {
+  background-color: #0c0f66;
+  color: #fff;
+  border: 1px solid #fff;
 }
 </style>

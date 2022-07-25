@@ -1,19 +1,19 @@
 <template>
   <v-container fluid>
-    <v-row wrap>
+    <v-row wrap id="block">
       <v-col cols="4">
         <profile-card />
       </v-col>
       <v-col cols="8">
       <div></div>
-      <router-view></router-view>
+      <!--<router-view></router-view>-->
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import ProfileCard from '../components/user/ProfileCard.vue'
+import ProfileCard from '@/components/user/ProfileCard.vue'
 
 export default {
 	name: "ProfileView",
@@ -27,10 +27,6 @@ export default {
 * {
   height: 100%;
   padding: 0px;
-}
-
-v-container {
-  width: 100%;
 }
 
 div {
