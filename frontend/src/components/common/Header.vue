@@ -10,7 +10,7 @@
       <v-spacer></v-spacer>
 
       <!-- 로고 -->
-      <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png">
+      <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png" @click="goTo">
 
       <v-spacer></v-spacer>
 
@@ -95,6 +95,11 @@ export default {
         // 임시, 나중에 computed mapState로 userStore에서 userInfo 받아와야 함
         userInfo: false,
       }
+  },
+  methods: {
+    goTo() {
+      this.$router.push({ name: "main" });
+    }
   }
 };
 </script>
@@ -109,9 +114,9 @@ export default {
 }
 
 #signInBtn {
-  background-color: #fff;
-  color: #0c0f66;
-  border: 1px solid #0c0f66;
+  background-color: #ff4c20;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
 #signUpBtn {
