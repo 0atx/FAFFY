@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.entity;
 
 import com.faffy.web.dto.BoardDto;
+import com.faffy.web.dto.BoardGetDto;
 import com.faffy.web.dto.BoardUpdateDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.BoardCategory;
@@ -31,6 +32,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "writer_no")
     private User user;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY)
+    @JsonIgnore
     List<Comment> comments = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private BoardCategory category;
@@ -53,5 +55,17 @@ public class Board extends BaseEntity {
         this.content = boardDto.getContent();
         this.category = boardDto.getCategory();
         this.datetime = LocalDateTime.now();
+    }
+
+    public BoardGetDto toBoardGetDto() {
+        BoardGetDto boardGetDto = BoardGetDto.builder()
+                .no(getNo())
+                .title(getTitle())
+                .content(getContent())
+                .dateTime(getDatetime().toString())
+                .user(getUser().toPublicDto())
+                .build();
+
+        return boardGetDto;
     }
 }

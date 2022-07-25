@@ -13,5 +13,4 @@ public interface PublicUserInfo {
     LocalDate getBirthday();
     String getInfo();
     Gender getGender();
-    List<String> getRolesList();
 }
