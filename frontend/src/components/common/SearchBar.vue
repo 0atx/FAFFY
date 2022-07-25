@@ -3,18 +3,17 @@
 검색 바
 -->
 <template>
-  <div>
+  <div id="searchBar">
     <v-text-field
-      v-model="query"
-      :label="label"
+      hide-details
+      label="검색"
+      placeholder="검색"
+      color="#0c0f66"
       filled
       rounded
       dense
-      solo
-      :class="{ 'search-bar': isDetail, 'mx-3': isDetail, 'mx-4': !isDetail }"
-      class="mt-5"
-      prepend-inner-icon="mdi-magnify"
-      type="text"
+      single-line
+      append-icon="mdi-magnify" class="shrink mx-4"
       @keydown.enter="onInputKeyword"
       @keyup.tab="onInputKeyword"
     />
@@ -28,7 +27,7 @@ export default {
 </script>
 
 <style scoped>
-.search-bar {
-    width: 84vw !important;
+#searchBar {
+    width: 30vw;
   }
 </style>
