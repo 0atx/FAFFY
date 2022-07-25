@@ -15,6 +15,8 @@ public class BoardUpdateDto {
     @NonNull
     int no;
     @NonNull
+    private int writer_no;
+    @NonNull
     private String title;
     @NonNull
     private String content;
@@ -25,9 +27,10 @@ public class BoardUpdateDto {
     }
 
     @Builder
-    public BoardUpdateDto(@NonNull int no, @NonNull String title, @NonNull String content, @NonNull BoardCategory category) throws IllegalInputException{
+    public BoardUpdateDto(@NonNull int no,@NonNull int writer_no, @NonNull String title, @NonNull String content, @NonNull BoardCategory category) throws IllegalInputException{
         if (StringUtils.hasLength(title) && StringUtils.hasLength(content)) {
             this.no = no;
+            this.writer_no = writer_no;
             this.title = title;
             this.content = content;
             this.category = category;

@@ -27,7 +27,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getAllBoard() {
-        return boardRepository.findAll();
+        return boardRepository.findAllWithUser();
     }
 
     @Override
@@ -51,13 +51,13 @@ public class BoardServiceImpl implements BoardService {
         try {
             boardRepository.deleteById(no);
         } catch (Exception e) {
-            throw new Exception("게시글 삭제 실패! :" + e.getMessage());
+            throw new Exception(BOARD_NOT_FOUND_MSG);
         }
     }
 
     @Override
     public Board getBoard(int boardNo) {
-        return boardRepository.findById(boardNo).orElseThrow(()->new IllegalArgumentException(BOARD_NOT_FOUND_MSG));
+        return boardRepository.findByNoWithUser(boardNo).orElseThrow(()->new IllegalArgumentException(BOARD_NOT_FOUND_MSG));
     }
 
 }
