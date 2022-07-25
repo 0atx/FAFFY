@@ -24,12 +24,19 @@ const authStore = {
   },
   actions: {
     async userConfirm({commit},user) {
-      await auth.login(user,
+      await auth.login(
+        user,
         (response)=> {
-          console.log(response);
+          console.log("로그인 요청 성공!");
+          const access_token = response.data["content"];
+          sessionStorage.setItem("X-AUTH-TOKEN", access_token);
           commit("SET_USER_INFO",response.data);
+          commit("SET_IS_LOGIN",true);
         },
         (response)=> {
+          console.log("로그인 요청 실패!");
+          commit("SET_IS_LOGIN",false);
+          commit("SET_IS_LOGIN_ERROR",true);
           console.log(response);
         });
     }

@@ -1,17 +1,16 @@
 import { apiInstance } from "./index.js";
 
 const api = apiInstance();
-const member = {
+const auth = {
   login: async function (user, success, fail) {
     await api
       .post(
-        `/users`,
-        null,
-        {params:JSON.stringify(user)}
+        `/users/login`,
+        JSON.stringify(user)
       )
       .then(success)
       .catch(fail);
   },
 };
 
-export { member };
+export { auth };
