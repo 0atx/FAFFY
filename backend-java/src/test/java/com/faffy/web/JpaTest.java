@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @SpringBootTest
@@ -76,6 +78,8 @@ public class JpaTest {
                     .nickname("jun1")
                     .gender(Gender.Male)
                     .password("1234")
+                    .birthday("1996-07-27")
+                    .info("이준성입니다")
                     .build();
             userService.addUser(user);
 
@@ -85,6 +89,7 @@ public class JpaTest {
                     .nickname("jun2")
                     .gender(Gender.Male)
                     .password("1234")
+                    .birthday("1995-01-01")
                     .build();
             userService.addUser(user);
 
@@ -94,6 +99,7 @@ public class JpaTest {
                     .nickname("mskim")
                     .gender(Gender.Male)
                     .password("12341112")
+                    .birthday("1997-01-01")
                     .build();
             userService.addUser(user);
 
@@ -305,7 +311,10 @@ public class JpaTest {
     @DisplayName("게시글 목록 보기")
     @Order(65)
     void showAllBoard() {
+        Map<String,Object> resultMap = new HashMap<>();
         List<Board> allBoard = boardService.getAllBoard();
+        resultMap.put("content",allBoard);
+        System.out.println(resultMap);
         System.out.println("게시판 목록---------");
         for (Board board :
                 allBoard) {
