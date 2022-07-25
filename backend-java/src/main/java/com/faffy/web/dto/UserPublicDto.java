@@ -20,12 +20,14 @@ public class UserPublicDto {
     private String nickname;
     private LocalDate birthday;
     private Gender gender;
+
+    private List<String> roles;
     /**
      * 자기소개 문구
      */
     private String info;
     @Builder
-    public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info) {
+    public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -33,5 +35,6 @@ public class UserPublicDto {
         this.birthday = birthday;
         this.gender = gender;
         this.info = info;
+        this.roles = roles;
     }
 }

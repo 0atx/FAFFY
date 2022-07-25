@@ -34,7 +34,7 @@ public class TestController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         try {
-            PublicUserInfo login = userService.login(userLoginDto);
+            UserPublicDto login = userService.login(userLoginDto);
             System.out.println(login);
             resultMap.put("content", login);
             status = HttpStatus.OK;

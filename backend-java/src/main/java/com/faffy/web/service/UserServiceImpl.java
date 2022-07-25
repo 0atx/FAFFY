@@ -2,24 +2,30 @@ package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserLoginDto;
+import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.faffy.web.exception.ExceptionMsg.*;
-
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
 
 
@@ -55,20 +61,26 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public PublicUserInfo login(UserLoginDto userDto) throws Exception {
-        return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
-                .orElseThrow(() -> new IllegalArgumentException(LOGIN_FAILED_MSG));
+    public UserPublicDto login(UserLoginDto userDto) throws Exception {
+        User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(()->new IllegalArgumentException(USER_NOT_FOUND_MSG));
+
+        if(!passwordEncoder.matches(userDto.getPassword(),user.getPassword())) {
+            throw new IllegalArgumentException(LOGIN_FAILED_MSG);
+        }
+        return user.toPublicDto();
     }
 
 
     @Override
     public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException {
         try {
+            userDto.setRoles(Collections.singletonList("ROLE_USER"));
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             return userRepository.save(userDto.toEntity());
         } catch (IllegalInputException e) {
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);
         } catch (Exception e) {
-            throw new DataIntegrityException("이미 사용중인 이메일이나 닉네임입니다. 확인해 주세요.");
+            throw new DataIntegrityException(DUPLICATED_MSG);
         }
 
     }

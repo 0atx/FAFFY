@@ -2,6 +2,7 @@ package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserLoginDto;
+import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
@@ -9,7 +10,6 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface UserService {
@@ -49,11 +49,12 @@ public interface UserService {
 
     /**
      * 이메일, 패스워드로 유저 객체를 조회합니다.
+     *
      * @param userDto
      * @return 로그인한 유저의 공개 정보 객체 반환
      * @throws Exception 이메일, 패스워드 오류 시 예외 발생
      */
-    public PublicUserInfo login(UserLoginDto userDto) throws Exception;
+    public UserPublicDto login(UserLoginDto userDto) throws Exception;
 
     /**
      * 새로운 유저를 DB에 등록합니다.

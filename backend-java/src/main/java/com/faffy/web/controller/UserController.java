@@ -1,11 +1,16 @@
 package com.faffy.web.controller;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserLoginDto;
+import com.faffy.web.dto.UserPublicDto;
+import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.UserServiceImpl;
+import com.faffy.web.service.token.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,13 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
     UserServiceImpl userService;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 모든 회원 정보 받아오기
@@ -37,23 +44,49 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
     /**
+     * 회원가입
+     * @param userDto
+     * @return 성공 시 User, 실패시 msg
+     */
+    @PostMapping
+    public ResponseEntity addUser(@RequestBody UserDto userDto) {
+        try {
+            User user = userService.addUser(userDto);
+            HashMap<String, User> hashmap = new HashMap<>();
+            hashmap.put("content",user);
+
+            return ResponseEntity.ok().body(hashmap);
+        }
+        catch (DataIntegrityException e) {
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+        }
+        catch (IllegalInputException e) {
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+        }
+    }
+
+
+    /**
      * no로 회원 찾기
      * @param no
-     * @return 성공시 회원 정보, 실패시 []
+     * @return 성공시 User, 실패시 msg
      */
     @GetMapping("/{no}")
     public ResponseEntity findUserByNo(@PathVariable("no") int no) {
-        JSONObject jsonObject = new JSONObject();
         try {
             User user = userService.getUserByNo(no);
-            jsonObject.put("msg","회원이 존재합니다.");
-            jsonObject.put("result",user);
-            return ResponseEntity.ok().body(jsonObject);
+            HashMap<String, User> hashmap = new HashMap<>();
+            hashmap.put("content",user);
+            return ResponseEntity.ok().body(hashmap);
 
         }catch(Exception e) {
-            jsonObject.put("msg",e.getMessage());
-            jsonObject.put("result","[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
         }
     }
 
@@ -64,86 +97,100 @@ public class UserController {
      */
     @GetMapping("/email/{email}")
     public ResponseEntity findUserByEmail(@PathVariable("email") String email) {
-        JSONObject jsonObject = new JSONObject();
         try {
             User user = userService.getUserByEmail(email);
-            jsonObject.put("msg","회원이 존재합니다.");
-            jsonObject.put("result",user);
-            return ResponseEntity.ok().body(jsonObject);
+            HashMap<String, User> hashmap = new HashMap<>();
+            hashmap.put("content",user);
+            return ResponseEntity.ok().body(hashmap);
         }catch(Exception e) {
-            jsonObject.put("msg",e.getMessage());
-            jsonObject.put("result","[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
         }
     }
 
     /**
      * nickname으로 유저 찾기
      * @param nickname
-     * @return 성공시 회원 정보, 실패시 []
+     * @return 성공시 User, 실패시 msg
      */
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity findUserByNickname(@PathVariable("nickname") String nickname) {
-        JSONObject jsonObject = new JSONObject();
         try {
             User user = userService.getUserByNickname(nickname);
-            jsonObject.put("msg","회원이 존재합니다.");
-            jsonObject.put("result",user);
-            return ResponseEntity.ok().body(jsonObject);
+            HashMap<String, User> hashmap = new HashMap<>();
+            hashmap.put("content",user);
+            return ResponseEntity.ok().body(user);
         }catch (Exception e) {
-            jsonObject.put("msg",e.getMessage());
-            jsonObject.put("result","[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
         }
     }
 
     /**
      * 회원정보 수정
      * @param userDto
-     * @return 성공시 회원 정보, 실패시 []
+     * @return 성공시 User, 실패시 msg
      */
     @PutMapping
     public ResponseEntity updateUser(@RequestBody UserDto userDto) {
         try {
-            userService.updateUser(userDto);
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg","정보 수정 완료");
-            jsonObject.put("result","[]");
-            return ResponseEntity.ok().body(jsonObject);
+            User user = userService.updateUser(userDto);
+            HashMap<String, User> hashmap = new HashMap<>();
+            hashmap.put("content",user);
+            return ResponseEntity.ok().body(hashmap);
 
         }catch (IllegalInputException e) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg",e.getMessage());
-            jsonObject.put("result","[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
         } catch (DataNotFoundException e) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg", e.getMessage());
-            jsonObject.put("result", "[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
         }
     }
 
     /**
      * 회원 탈퇴
      * @param no
-     * @return 성공시 no, 실패시 []
+     * @return 성공시 no, 실패시 msg
      * @throws DataNotFoundException 수정하려는 일부 값이 유효하지 않을 경우
      */
     @DeleteMapping("/{no}")
     public ResponseEntity deleteUser(@PathVariable int no) {
         try {
             userService.deleteUser(no);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg","회원 삭제 완료");
-            jsonObject.put("result",no);
-            return ResponseEntity.ok().body(jsonObject);
+            HashMap<String, Integer> hashmap = new HashMap<>();
+            hashmap.put("content",no);
+            return ResponseEntity.ok().body(hashmap);
         }catch (Exception e){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg", e.getMessage());
-            jsonObject.put("result","[]");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonObject);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+        }
+    }
+
+    /**
+     * 로그인
+     * @param userDto
+     * @return 성공시 토큰값(String), 실패시 msg
+     * 토큰의 유효기간은 30분이고 request header에 'X-AUTH-TOKEN' : '토큰값' 형식으로 전송
+     */
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserLoginDto userDto) {
+        try {
+            UserPublicDto user = userService.login(userDto);
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("content", jwtTokenProvider.createToken(user.getEmail(), user.getRoles()));
+            return ResponseEntity.ok().body(hashmap);
+        } catch(IllegalArgumentException e) {
+            HashMap<String, String> hashmap = new HashMap<>();
+            hashmap.put("msg",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hashmap);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
