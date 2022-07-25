@@ -45,7 +45,7 @@ const routes = [
     component:()=>import("@/views/ProfileView.vue"),
     children: [
       {
-        path:"/",
+        path:"user-detail",
         name:"user-detail",
         component:()=>import("@/components/user/ProfileDetailView.vue"),
       },

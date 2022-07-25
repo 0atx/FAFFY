@@ -23,6 +23,7 @@
             :rules="rules.email()"
             label="이메일"
             required
+            hide-details
             @keydown.enter="onInputKeyword"
           />
         </div>
@@ -53,6 +54,8 @@
         v-model="confirmPw"
         type="password"
         :rules="[rules.matchValue(form.password)]"
+        hint="비밀번호를 재입력해주세요."
+        persistent-hint
         label="비밀번호 확인"
         required
         @keydown.enter="onInputKeyword"
@@ -151,7 +154,7 @@
         class="mb-4"
       >
         회원가입 시 FAFFY(패피)가 제공하는 서비스를 모두 이용하실 수 있습니다.
-        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및 <router-link to="/auth/service-terms">개인정보 취급 방침</router-link>에 동의합니다.
+        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및 <router-link to="/auth/private-terms">개인정보 취급 방침</router-link>에 동의합니다.
       </div>
 
       <dark-button
@@ -257,7 +260,7 @@ export default {
 }
 
 #checkEmailBtn {
-  color: #ff7451;
+  color: #ff4c20;
 }
 
 #checkNicknameBtn {

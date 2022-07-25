@@ -20,8 +20,12 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: 'SUIT-Medium';
+  src: url(@/assets/fonts/SUIT-Medium.ttf);
+}
 #faffy {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: SUIT-Medium, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: calc(100vw - (100vw - 100%));
