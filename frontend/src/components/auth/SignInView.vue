@@ -5,58 +5,61 @@
 <template>
   <v-container>
     <img
+      class="mt-10"
       src="@/assets/images/faffy_logo_big.png"
       alt="faffy logo"
     >
-    <v-form ref="form" id="signIn">
+    <v-form
+      ref="form"
+      id="signIn"
+      @submit.prevent="requestSignIn"
+    >
+      <!-- 이메일 입력 -->
       <v-text-field
-        v-model="credentials.email"
+        v-model="form.email"
         type="email"
-        :rules="emailRules"
         label="이메일"
         required
         @keydown.enter="onInputKeyword"
         />
 
+      <!-- 비밀번호 입력 -->
       <v-text-field
-        v-model="credentials.password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text' : 'password'"
-        :rules="[passwordRules.min]"
+        v-model="form.password"
+        :append-icon="type ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="type ? 'text' : 'password'"
         label="비밀번호"
         required
-        @click:append="showPassword = !showPassword"
+        @click:append="type = !type"
         @keydown.enter="onInputKeyword"
       />
 
-      <v-btn
-        id="signInBtn"
-        class="mt-2"
-        block
-        elevation="0"
-        type="submit"
+      <dark-button
+        :btnValue="signInValue"
         @click="requestSignIn"
-      >로그인</v-btn>
+      />
 
       <!-- 회원가입 및 비밀번호 찾기  -->
       <div id="route" class="mt-4">
         <div
           type="button"
-          @click="moveRegist"
+          @click="goTo"
         >
           회원가입
         </div>
         <div
           type="button"
-          @click="moveRegist"
+          @click="findPassword"
         >
           비밀번호 찾기
         </div>
       </div>
 
+      <!-- 소셜 로그인 -->
       <hr>
 
       <div id="social">
+        <!-- 네이버 로그인 -->
         <v-btn
           fab
           elevation="0"
@@ -69,6 +72,7 @@
           >
         </v-btn>
 
+        <!-- 구글 로그인 -->
         <v-btn
           fab
           elevation="0"
@@ -86,29 +90,42 @@
 </template>
 
 <script>
+import DarkButton from '@/components/common/DarkButton.vue'
+
 export default {
   name: "SignIn",
+  components: {
+    DarkButton
+  },
   data() {
       return {
-        credentials: {
+        form: {
           email: '',
           password: '',
         },
 
-        valid: false,
+        type: false,
 
-        email: '',
-        emailRules: [
-          v => !!v || '이메일을 입력해주세요.',
-          v => /.+@.+\..+/.test(v) || '올바른 형식의 이메일을 입력해주세요.',
-        ],
-
-        password: '',
-        showPassword: false,
-        passwordRules: {
-          min: v => v.length >= 4 || '올바른 비밀번호를 입력해주세요.',
-        }
+        signInValue: '로그인'
       }
+  },
+
+  methods: {
+    async save() {
+    this.$refs.form.validate();
+    await this.$nextTick();
+    if(!this.valid) return;
+    console.log(this.form);
+    },
+    goTo() {
+      this.$router.push({ name: "sign-up" })
+    },
+    requestSignIn() {
+      console.log("로그인 기능 구현해야 합니다.");
+    },
+    findPassword() {
+      console.log("모달 나와야합니다.");
+    }
   },
   metaInfo () {
     return {
