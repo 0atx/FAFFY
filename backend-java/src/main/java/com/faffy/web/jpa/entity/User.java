@@ -10,14 +10,15 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -30,7 +31,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @ToString
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
@@ -44,6 +45,10 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
     /**
      * 자기소개 문구
      */
@@ -67,7 +72,7 @@ public class User extends BaseEntity {
     }
 
     @Builder
-    public User(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info) {
+    public User(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info, List<String> roles) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -76,6 +81,7 @@ public class User extends BaseEntity {
         this.birthday = birthday;
         this.gender = gender;
         this.info = info;
+        this.roles = roles;
     }
 
     /**
@@ -106,4 +112,35 @@ public class User extends BaseEntity {
         return userPublicDto;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
