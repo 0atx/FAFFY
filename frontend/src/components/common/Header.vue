@@ -5,37 +5,23 @@
 <template>
   <v-card id="header" class="overflow-hidden">
     <v-app-bar
-      elevate-on-scroll
       color="white"
     >
-    <!--scroll-target="#" 이거 줘야할 거 같은데...라우터 뷰 어디인지 받아와서 넣을 수 있나 이거?-->
       <v-spacer></v-spacer>
 
+      <!-- 로고 -->
       <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png">
 
       <v-spacer></v-spacer>
 
-      <!--<v-form
-        id="searchBar"
-        ref="form"
-      >
-        <v-text-field
-          v-model="search"
-          label="검색"
-          required
-        ></v-text-field>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </v-form>-->
-
+      <!-- 검색 바 -->
       <search-bar
         class="ml-12 pl-6"
       />
 
       <v-spacer></v-spacer>
 
+      <!-- 로그인 후 메뉴 바 -->
       <v-menu
         bottom
         left
@@ -43,7 +29,6 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            icon
             color="black"
             v-bind="attrs"
             v-on="on"
@@ -65,13 +50,14 @@
             <v-list-item-title>로그아웃</v-list-item-title>
           </v-list-item>
         </v-list>
-
       </v-menu>
 
+      <!-- 로그인 전 메뉴 바 -->
       <div v-else>
         <v-btn
           id="signInBtn"
           class="mr-1"
+          rounded
           elevation="0"
           to="/auth/sign-in"
         >
@@ -81,6 +67,7 @@
         <v-btn
           id="signUpBtn"
           class="ml-1"
+          rounded
           elevation="0"
           to="/auth/sign-up"
         >
@@ -118,6 +105,7 @@ export default {
   top: 0;
   width: 100%;
   border-radius: 0px;
+  z-index: 2;
 }
 
 #signInBtn {

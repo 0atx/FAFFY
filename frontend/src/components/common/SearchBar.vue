@@ -6,8 +6,8 @@
   <div id="searchBar">
     <v-text-field
       hide-details
-      label="검색"
       placeholder="검색"
+      v-model="keyword"
       color="#0c0f66"
       filled
       rounded
@@ -23,11 +23,24 @@
 <script>
 export default {
     name: 'SearchBar',
+    data() {
+      return {
+        keyword: "",
+      }
+    },
+    methods: {
+      onInputKeyword(e) {
+        this.keyword = e.target.value;
+        console.log(this.keyword);
+        e.target.value = '';
+        // 키워드랑 같이 검색 결과 페이지로 이동
+      }
+    }
 }
 </script>
 
 <style scoped>
 #searchBar {
-    width: 30vw;
+    width: 30vw !important;
   }
 </style>
