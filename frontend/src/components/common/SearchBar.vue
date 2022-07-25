@@ -3,11 +3,12 @@
 검색 바
 -->
 <template>
-  <div>
+  <div id="searchBar">
     <v-text-field
       hide-details
-      label="Filled"
-      placeholder="Search"
+      label="검색"
+      placeholder="검색"
+      color="#0c0f66"
       filled
       rounded
       dense
@@ -26,7 +27,7 @@ export default {
 </script>
 
 <style scoped>
-.search-bar {
-    width: 84vw !important;
+#searchBar {
+    width: 30vw;
   }
 </style>

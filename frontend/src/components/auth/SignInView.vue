@@ -13,7 +13,7 @@
         v-model="credentials.email"
         type="email"
         :rules="emailRules"
-        label="이메일을 입력해주세요."
+        label="이메일"
         required
         @keydown.enter="onInputKeyword"
         />
@@ -23,7 +23,7 @@
         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
         :type="showPassword ? 'text' : 'password'"
         :rules="[passwordRules.min]"
-        label="비밀번호를 입력해주세요."
+        label="비밀번호"
         required
         @click:append="showPassword = !showPassword"
         @keydown.enter="onInputKeyword"
