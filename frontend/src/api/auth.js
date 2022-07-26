@@ -11,6 +11,14 @@ const auth = {
       .then(success)
       .catch(fail);
   },
+  signUp: async function (user, success, fail) {
+    await api
+    .post(`/users`,
+    JSON.stringify(user)
+    )
+    .then(success)
+    .catch(fail);
+  }
 };
 
 export { auth };

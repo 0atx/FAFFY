@@ -11,6 +11,9 @@ import lombok.NonNull;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,12 +23,14 @@ import java.util.List;
 public class UserDto {
     private int no;
     @NonNull
+    @Email(message="이메일 형식이 올바르지 않습니다.ex)***@***.***")
     private String email;
     @NonNull
     private String name;
     @NonNull
     private String nickname;
     @NonNull
+    @Pattern(regexp = "(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,15}$)",message = "비밀번호는 영문 대문자, 소문자, 숫자, 특수문자를 1개이상 포함한 8자 ~ 15자여야 합니다.")
     private String password;
     @NonNull
     private String birthday;
@@ -60,7 +65,7 @@ public class UserDto {
     public User toEntity() throws IllegalInputException {
         if (!isValid())
             throw new IllegalInputException("필수 입력란을 확인해 주세요.");
-        System.out.println("toENtity");
+        System.out.println("toEntity");
         User user = User.builder()
                 .email(email)
                 .name(name)

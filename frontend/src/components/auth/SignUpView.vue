@@ -108,7 +108,7 @@
         <template v-slot:activator="{ on, attrs }">
           <!-- 생년월일 입력 -->
           <v-text-field
-            v-model="form.birth"
+            v-model="form.birthday"
             :rules="rules.birth()"
             label="생년월일"
             append-icon="mdi-calendar"
@@ -119,7 +119,7 @@
           ></v-text-field>
         </template>
         <v-date-picker
-          v-model="form.birth"
+          v-model="form.birthday"
           color="#0c0f66"
           :active-picker.sync="activePicker"
           locale="ko=KR"
@@ -168,6 +168,7 @@
 <script>
 import DarkButton from '@/components/common/DarkButton.vue'
 import validateRules from '@/utils/validateRules.js'
+import { auth } from "@/api/auth.js";
 
 export default {
   name: "SignUp",
@@ -185,7 +186,7 @@ export default {
             password: '',
             name: '',
             nickname: '',
-            birth: '',
+            birthday: '',
             gender: '',
         },
 
@@ -218,8 +219,20 @@ export default {
       console.log("별명 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다22..");
     },
     requestSignUp() {
-      console.log("회원가입 기능 구현해야 합니다.");
+      console.log("모든 빈칸이 입력되어야함 + 이메일, 비밀번호 유효성 통과시 요청 전송해야함");
+      auth.signUp(this.form,
+      (response)=>{
+        console.log("요청 성공");
+        alert(`${response.data["content"].nickname}님, 환영합니다!`);
+        this.$router.push("/");
+
+      },
+      (response)=> {
+        console.log("요청 실패");
+        console.log(response);
+      })
     }
+
   },
   metaInfo () {
     return {
