@@ -108,6 +108,7 @@ public class User extends BaseEntity implements UserDetails {
                 .gender(this.gender)
                 .birthday(this.birthday)
                 .info(this.info)
+                .roles(this.roles)
                 .build();
         return userPublicDto;
     }
