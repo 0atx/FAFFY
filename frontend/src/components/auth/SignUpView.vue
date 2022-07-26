@@ -138,12 +138,12 @@
       >
         <v-radio
           label="남자"
-          value="1"
+          value="0"
           color="#0c0f66"
         ></v-radio>
         <v-radio
           label="여자"
-          value="2"
+          value="1"
           color="#0c0f66"
         ></v-radio>
       </v-radio-group>

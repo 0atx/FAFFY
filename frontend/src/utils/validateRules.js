@@ -7,7 +7,7 @@ const rules = {
     return v => !!v ? v.length >= len || `${len}자 이상 입력하세요.`: true;
   },
   maxlen({maxlen=16}) {
-    return v => !!v ? v.length < maxlen || `${maxlen}자 미만으로 입력하세요.`: true;
+    return v => !!v ? v.length <= maxlen || `${maxlen}자 이하로 입력하세요.`: true;
   },
   pattern({label, pattern}) {
     return v => !!v ? pattern.test(v) || `${label} 형식에 맞게 입력하세요.` : true;
@@ -19,6 +19,7 @@ const rules = {
     const defaultOptions = {
       label: '이메일',
       required: true,
+      maxlen: 320,
       pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/,
     };
     const opt = Object.assign(defaultOptions, options);
@@ -26,6 +27,7 @@ const rules = {
     if(opt.required) {
       arr.push(rules.require(opt));
     }
+    arr.push(rules.maxlen(opt));
     arr.push(rules.pattern(opt));
     return arr;
   },
@@ -52,6 +54,7 @@ const rules = {
       label: '이름',
       required: true,
       len:2,
+      maxlen: 30,
       pattern: /^[가-힣]+$/,
     };
     const opt = Object.assign(defaultOptions, options);
@@ -60,6 +63,7 @@ const rules = {
       arr.push(rules.require(opt));
     }
     arr.push(rules.min(opt));
+    arr.push(rules.maxlen(opt));
     arr.push(rules.pattern(opt));
     return arr;
   },
