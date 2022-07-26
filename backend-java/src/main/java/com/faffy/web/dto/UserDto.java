@@ -65,7 +65,7 @@ public class UserDto {
     public User toEntity() throws IllegalInputException {
         if (!isValid())
             throw new IllegalInputException("필수 입력란을 확인해 주세요.");
-        System.out.println("toENtity");
+        System.out.println("toEntity");
         User user = User.builder()
                 .email(email)
                 .name(name)

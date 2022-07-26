@@ -91,7 +91,8 @@
 
 <script>
 import DarkButton from '@/components/common/DarkButton.vue'
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
+import { auth } from "@/api/auth.js";
 const authStore ="authStore";
 
 export default {
@@ -112,10 +113,8 @@ export default {
       }
   },
   computed:{
-    ...mapState(authStore,["isLogin","isLoginError"]),
   },
   methods: {
-    ...mapActions(authStore,["userConfirm"]),
     ...mapMutations(authStore,["SET_IS_LOGIN","SET_USER_INFO","SET_IS_LOGIN_ERROR"]),
     async save() {
     this.$refs.form.validate();
@@ -127,13 +126,13 @@ export default {
       this.$router.push({ name: "sign-up" })
     },
     async requestSignIn() {
-      await this.userConfirm(this.form);
-      if (this.isLogin) {
-        alert("로그인 성공! 나중에 이거 좀 바꿔주세연 ㅎ");
-        this.$router.push({ name: "home" });
-      } else {
-        console.log("안됐는디");
-      }
+      auth.login(this.form,
+      ()=>{
+        this.$router.push({ name: "main" });
+      },
+      ()=>{
+        alert("로그인 실패. 나중에 바꿔야함");
+      })
 
     },
     findPassword() {
