@@ -22,25 +22,25 @@
 
 <script>
 export default {
-    name: 'SearchBar',
-    data() {
-      return {
-        keyword: "",
-      }
-    },
-    methods: {
-      onInputKeyword(e) {
-        this.keyword = e.target.value;
-        console.log(this.keyword);
-        e.target.value = '';
-        // 키워드랑 같이 검색 결과 페이지로 이동
-      }
+  name: 'SearchBar',
+  data() {
+    return {
+      keyword: "",
     }
+  },
+  methods: {
+    onInputKeyword(e) {
+      this.keyword = e.target.value;
+      console.log(this.keyword);
+      e.target.value = '';
+      // 키워드랑 같이 검색 결과 페이지로 이동
+    }
+  }
 }
 </script>
 
 <style scoped>
 #searchBar {
-    width: 30vw !important;
-  }
+  width: 30vw !important;
+}
 </style>

@@ -1,10 +1,10 @@
 <!--
 작성자 : 박윤하
-어두운 버튼
+밝은 버튼
 -->
 <template>
   <v-btn
-    id="darkBtn"
+    id="lightBtn"
     class="mt-2"
     block
     rounded
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: 'DarkButton',
+    name: 'LightButton',
     props: {
       btnValue: {
         type: String
@@ -25,8 +25,8 @@ export default {
 </script>
 
 <style scoped>
-#darkBtn {
-  background-color: #0c0f66;
+#lightBtn {
+  background-color: #ff7451;
   color: #fff;
 }
 </style>
