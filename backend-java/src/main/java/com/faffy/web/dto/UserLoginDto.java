@@ -1,6 +1,7 @@
 package com.faffy.web.dto;
 
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.type.LoginType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -12,6 +13,9 @@ public class UserLoginDto {
     private String email;
     @NonNull
     private String password;
+    @NonNull
+    private LoginType loginType;
+
 
     public UserLoginDto() {
     }
@@ -23,10 +27,11 @@ public class UserLoginDto {
      * @throws IllegalInputException 입력값에 빈 칸이 있거나 null일경우 발생
      */
     @Builder
-    public UserLoginDto(String email, String password) throws IllegalInputException {
-        if (StringUtils.hasLength(email) && StringUtils.hasLength(password)) {
+    public UserLoginDto(String email, String password,LoginType loginType) throws IllegalInputException {
+        if (StringUtils.hasLength(email) && StringUtils.hasLength(password) && loginType != null) {
             setEmail(email);
             setPassword(password);
+            setLoginType(loginType);
         } else {
             throw new IllegalInputException("입력값을 확인해 주세요.");
         }
