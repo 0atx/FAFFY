@@ -63,8 +63,8 @@ const routes = [
   },
   {
     path:"/edit-profile",
-    name:"profile-edit",
-    component:()=>import("@/components/user/ProfileDetailView.vue"),
+    name:"edit-profile",
+    component:()=>import("@/views/EditProfileView.vue"),
   },
   {
     path:"/consulting",
