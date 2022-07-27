@@ -31,7 +31,57 @@
       <!-- 회원가입 및 비밀번호 찾기  -->
       <div id="route" class="mt-4">
         <div type="button" @click="goTo">회원가입</div>
-        <div type="button" @click="findPassword">비밀번호 찾기</div>
+
+        <v-dialog
+          v-model="dialog"
+          width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <div type="button"
+              v-bind="attrs"
+              v-on="on"
+            >
+              비밀번호 찾기
+            </div>
+          </template>
+          <v-card>
+            <v-card-title id="dialogTitle">
+              <img class="ml-5" src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
+            </v-card-title>
+
+            <v-card-text>
+              <v-form ref="form" @submit.prevent="findPassword">
+                <!-- 이메일 입력 -->
+                <v-text-field
+                  v-model="find.email"
+                  type="email"
+                  label="이메일"
+                  required
+                  @keydown.enter="onInputKeyword"
+                />
+
+                <!-- 이름 입력 -->
+                <v-text-field
+                  v-model="find.name"
+                  type="text"
+                  label="이름"
+                  required
+                  @keydown.enter="onInputKeyword"
+                />
+
+                <dark-button :btnValue="findValue" @click="findPassword" />
+              </v-form>
+              <v-btn
+                id="closeBtn"
+                class="mt-4 mb-2"
+                block
+                rounded
+                elevation="0"
+                @click="dialog = false"
+              >닫기</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
       </div>
 
       <!-- 소셜 로그인 -->
@@ -78,9 +128,17 @@ export default {
         password: "",
       },
 
+      find: {
+        email: "",
+        name: "",
+      },
+
       type: false,
 
+      dialog: false,
+
       signInValue: "로그인",
+      findValue: "비밀번호 찾기",
     };
   },
   computed: {},
@@ -99,6 +157,14 @@ export default {
     goTo() {
       this.$router.push({ name: "sign-up" });
     },
+    findPassword() {
+      alert("기능 미구현");
+      // 이메일 존재하는지 확인
+      // 존재한다면 계정 정보(이름) 가져와서 폼에 입력된 이름이랑 맞는지 확인
+      // 이름도 같다면 변경된 비밀번호 이메일로 전송
+      // 존재하지 않거나 이름이 다르다면 오류 메세지
+      this.dialog = false;
+    },
     async requestSignIn() {
       auth.login(
         this.form,
@@ -109,9 +175,6 @@ export default {
           alert("로그인 실패. 나중에 바꿔야함");
         }
       );
-    },
-    findPassword() {
-      console.log("모달 나와야합니다.");
     },
   },
   metaInfo() {
@@ -167,7 +230,15 @@ hr:after {
 #signInBtn {
   background-color: #0c0f66;
   color: #fff;
-  border: 1px solid #fff;
+}
+
+#dialogTitle {
+  justify-content : center;
+}
+
+#closeBtn {
+  background-color: #ff7451;
+  color: #fff;
 }
 
 #social {
