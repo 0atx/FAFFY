@@ -133,9 +133,72 @@
       <!-- 이용약관 -->
       <div id="terms" class="mb-4">
         회원가입 시 FAFFY(패피)가 제공하는 서비스를 모두 이용하실 수 있습니다.
-        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및
-        <router-link to="/auth/private-terms">개인정보 취급 방침</router-link>에
-        동의합니다.
+        <v-dialog
+          v-model="serviceDialog"
+          width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <div
+              id="termsDialog"
+              type="button"
+              v-bind="attrs"
+              v-on="on"
+            >
+              서비스 이용약관
+            </div>
+          </template>
+          <v-card>
+            <v-card-title id="dialogTitle">
+              <img class="ml-5" src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
+            </v-card-title>
+
+            <v-card-text>
+              <service-terms-text />
+              <v-btn
+                id="closeBtn"
+                class="mt-4 mb-2"
+                block
+                rounded
+                elevation="0"
+                @click="serviceDialog = false"
+              >닫기</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+         및
+        <v-dialog
+          v-model="privateDialog"
+          width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <div
+              id="termsDialog"
+              type="button"
+              v-bind="attrs"
+              v-on="on"
+            >
+              개인정보 취급 방침
+            </div>
+          </template>
+          <v-card>
+            <v-card-title id="dialogTitle">
+              <img class="ml-5" src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
+            </v-card-title>
+
+            <v-card-text>
+              <private-terms-text />
+              <v-btn
+                id="closeBtn"
+                class="mt-4 mb-2"
+                block
+                rounded
+                elevation="0"
+                @click="privateDialog = false"
+              >닫기</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        에 동의합니다.
       </div>
 
       <dark-button :btnValue="signUpValue" @click="requestSignUp" />
@@ -146,12 +209,16 @@
 <script>
 import DarkButton from "@/components/common/DarkButton.vue";
 import validateRules from "@/utils/validateRules.js";
+import ServiceTermsText from './ServiceTermsText.vue';
+import PrivateTermsText from './PrivateTermsText.vue';
 import { auth } from "@/api/auth.js";
 
 export default {
   name: "SignUp",
   components: {
     DarkButton,
+    ServiceTermsText,
+    PrivateTermsText
   },
   data() {
     return {
@@ -171,6 +238,9 @@ export default {
       confirmPw: "",
 
       genders: ["남자", "여자"],
+
+      serviceDialog: false,
+      privateDialog: false,
 
       signUpValue: "회원가입",
     };
@@ -273,7 +343,18 @@ export default {
   text-align: left;
 }
 
-a {
+#termsDialog {
   color: #0c0f66;
+  text-decoration: underline;
+  display: inline;
+}
+
+#dialogTitle {
+  justify-content : center;
+}
+
+#closeBtn {
+  background-color: #0c0f66;
+  color: #fff;
 }
 </style>
