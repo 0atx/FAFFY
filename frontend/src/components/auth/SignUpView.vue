@@ -4,16 +4,8 @@
 -->
 <template>
   <v-container>
-    <img
-      class="mt-10"
-      src="@/assets/images/faffy_logo_big.png"
-      alt="faffy logo"
-    >
-    <v-form
-      ref="form"
-      id="signUp"
-      @submit.prevent="requestSignUp"
-    >
+    <v-form ref="form" id="signUp" @submit.prevent="requestSignUp">
+      <img src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
       <div id="check">
         <div id="checkInput">
           <!-- 이메일 입력 -->
@@ -29,10 +21,7 @@
         </div>
 
         <!-- 이메일 중복 확인 -->
-        <v-btn
-          icon
-          @click="checkEmail"
-        >
+        <v-btn icon @click="checkEmail">
           <v-icon id="checkEmailBtn">mdi-check</v-icon>
         </v-btn>
       </div>
@@ -81,7 +70,7 @@
             type="text"
             :rules="rules.nickname()"
             hint="2~10자 특수문자를 제외한 별명을 입력하세요."
-          persistent-hint
+            persistent-hint
             label="별명"
             required
             @keydown.enter="onInputKeyword"
@@ -89,10 +78,7 @@
         </div>
 
         <!-- 별명 중복 확인 -->
-        <v-btn
-          icon
-          @click="checkNickname"
-        >
+        <v-btn icon @click="checkNickname">
           <v-icon id="checkNicknameBtn">mdi-check</v-icon>
         </v-btn>
       </div>
@@ -123,7 +109,11 @@
           color="#0c0f66"
           :active-picker.sync="activePicker"
           locale="ko=KR"
-          :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+          :max="
+            new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+              .toISOString()
+              .substr(0, 10)
+          "
           min="1922-01-01"
           @change="save"
         ></v-date-picker>
@@ -136,81 +126,66 @@
         label="성별"
         :rules="rules.gender()"
       >
-        <v-radio
-          label="남자"
-          value="0"
-          color="#0c0f66"
-        ></v-radio>
-        <v-radio
-          label="여자"
-          value="1"
-          color="#0c0f66"
-        ></v-radio>
+        <v-radio label="남자" value="0" color="#0c0f66"></v-radio>
+        <v-radio label="여자" value="1" color="#0c0f66"></v-radio>
       </v-radio-group>
 
       <!-- 이용약관 -->
-      <div
-        id="terms"
-        class="mb-4"
-      >
+      <div id="terms" class="mb-4">
         회원가입 시 FAFFY(패피)가 제공하는 서비스를 모두 이용하실 수 있습니다.
-        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및 <router-link to="/auth/private-terms">개인정보 취급 방침</router-link>에 동의합니다.
+        <router-link to="/auth/service-terms">서비스 이용 약관</router-link> 및
+        <router-link to="/auth/private-terms">개인정보 취급 방침</router-link>에
+        동의합니다.
       </div>
 
-      <dark-button
-        :btnValue="signUpValue"
-        @click="requestSignUp"
-      />
+      <dark-button :btnValue="signUpValue" @click="requestSignUp" />
     </v-form>
   </v-container>
 </template>
 
 <script>
-import DarkButton from '@/components/common/DarkButton.vue'
-import validateRules from '@/utils/validateRules.js'
+import DarkButton from "@/components/common/DarkButton.vue";
+import validateRules from "@/utils/validateRules.js";
 import { auth } from "@/api/auth.js";
 
 export default {
   name: "SignUp",
   components: {
-    DarkButton
+    DarkButton,
   },
   data() {
-      return {
-        activePicker: null,
-        birth: null,
-        menu: false,
-        checkbox: false,
-        form: {
-            email: '',
-            password: '',
-            name: '',
-            nickname: '',
-            birthday: '',
-            gender: '',
-        },
+    return {
+      activePicker: null,
+      birth: null,
+      menu: false,
+      checkbox: false,
+      form: {
+        email: "",
+        password: "",
+        name: "",
+        nickname: "",
+        birthday: "",
+        gender: "",
+      },
 
-        confirmPw: '',
+      confirmPw: "",
 
-        genders: [
-          '남자',
-          '여자',
-        ],
+      genders: ["남자", "여자"],
 
-        signUpValue: '회원가입',
-      }
+      signUpValue: "회원가입",
+    };
   },
   watch: {
-    menu (val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'))
+    menu(val) {
+      val && setTimeout(() => (this.activePicker = "YEAR"));
     },
   },
-    computed: {
+  computed: {
     rules: () => validateRules,
   },
   methods: {
-    save (birth) {
-      this.$refs.menu.save(birth)
+    save(birth) {
+      this.$refs.menu.save(birth);
     },
     checkEmail() {
       console.log("이메일 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다ㅎㅎ..");
@@ -219,28 +194,30 @@ export default {
       console.log("별명 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다22..");
     },
     requestSignUp() {
-      console.log("모든 빈칸이 입력되어야함 + 이메일, 비밀번호 유효성 통과시 요청 전송해야함");
-      auth.signUp(this.form,
-      (response)=>{
-        console.log("요청 성공");
-        alert(`${response.data["content"].nickname}님, 환영합니다!`);
-        this.$router.push("/");
-
-      },
-      (response)=> {
-        console.log("요청 실패");
-        console.log(response);
-      })
-    }
-
+      console.log(
+        "모든 빈칸이 입력되어야함 + 이메일, 비밀번호 유효성 통과시 요청 전송해야함"
+      );
+      auth.signUp(
+        this.form,
+        (response) => {
+          console.log("요청 성공");
+          alert(`${response.data["content"].nickname}님, 환영합니다!`);
+          this.$router.push("/");
+        },
+        (response) => {
+          console.log("요청 실패");
+          console.log(response);
+        }
+      );
+    },
   },
-  metaInfo () {
+  metaInfo() {
     return {
       meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ]
-    }
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
+    };
   },
 };
 </script>
@@ -249,6 +226,10 @@ export default {
 .container {
   background-color: white;
   padding: 5%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #signUp {
@@ -288,7 +269,7 @@ export default {
 
 #terms {
   color: #757575;
-  font-size:12px;
+  font-size: 12px;
   text-align: left;
 }
 
