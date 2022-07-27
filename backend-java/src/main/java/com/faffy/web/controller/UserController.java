@@ -56,7 +56,7 @@ public class UserController {
     public ResponseEntity addUser(@Valid @RequestBody UserDto userDto) throws DataIntegrityException, IllegalInputException {
         User user = userService.addUser(userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user);
+        hashmap.put("content",user.toPublicDto());
         return ResponseEntity.ok().body(hashmap);
     }
 
@@ -149,5 +149,6 @@ public class UserController {
         hashmap.put("content", hashmapIn);
         return ResponseEntity.ok().body(hashmap);
     }
+
 
 }
