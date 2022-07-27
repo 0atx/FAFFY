@@ -1,24 +1,24 @@
 <template>
   <div id="view">
-      <v-row
-        id="ProfileView"
-        class="pt-10"
+    <v-row
+      id="ProfileView"
+      class="pt-10"
+    >
+      <v-col
+      class="pl-0 pr-0"
+        cols="6"
+        md="4"
       >
-        <v-col
+        <profile-card />
+      </v-col>
+      <v-col
         class="pl-0 pr-0"
-          cols="6"
-          md="4"
-        >
-          <profile-card />
-        </v-col>
-        <v-col
-          class="pl-0 pr-0"
-          cols="12"
-          md="8"
-        >
-          <router-view></router-view>
-        </v-col>
-      </v-row>
+        cols="12"
+        md="8"
+      >
+        <router-view></router-view>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -46,6 +46,4 @@ export default {
 #profileCard {
   padding-right: 0;
 }
-
-
 </style>
