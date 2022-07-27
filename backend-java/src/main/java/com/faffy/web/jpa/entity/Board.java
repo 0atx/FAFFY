@@ -1,21 +1,19 @@
 package com.faffy.web.jpa.entity;
 
-import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.BoardGetDto;
 import com.faffy.web.dto.BoardUpdateDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.BoardCategory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -52,7 +50,7 @@ public class Board extends BaseEntity {
         this.content = content;
         this.user = user;
         this.category = category;
-        this.hit=hit;
+        this.hit = hit;
         this.commentCount = commentCount;
     }
 
@@ -81,5 +79,9 @@ public class Board extends BaseEntity {
         this.getComments().add(comment);
         comment.addTo(this);
         this.commentCount = this.getComments().size();
+    }
+
+    public void increaseHit() {
+        this.hit++;
     }
 }

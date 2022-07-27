@@ -2,18 +2,14 @@ package com.faffy.web.service;
 
 import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.BoardUpdateDto;
-import com.faffy.web.dto.UserDto;
-import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.jpa.entity.Board;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.faffy.web.exception.ExceptionMsg.BOARD_NOT_FOUND_MSG;
 
@@ -32,8 +28,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void writeBoard(int user_no, BoardDto boardDto) throws Exception {
-        User u = userService.getUserByNo(user_no);
+    public void writeBoard(BoardDto boardDto) throws Exception {
+        User u = userService.getUserByNo(boardDto.getWriter_no());
         boardRepository.save(boardDto.toEntityWriteBy(u));
 
     }
@@ -56,8 +52,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Board getBoard(int boardNo) {
-        return boardRepository.findByNoWithUser(boardNo).orElseThrow(()->new IllegalArgumentException(BOARD_NOT_FOUND_MSG));
+        Board board = boardRepository.findByNoWithUser(boardNo).orElseThrow(() -> new IllegalArgumentException(BOARD_NOT_FOUND_MSG));
+        board.increaseHit();
+        return board;
     }
 
 }

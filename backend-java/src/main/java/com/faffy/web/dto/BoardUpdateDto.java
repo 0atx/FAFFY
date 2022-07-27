@@ -41,4 +41,6 @@ public class BoardUpdateDto {
             throw new IllegalInputException("유효하지 않은 값이 존재합니다.");
         }
     }
+
+
 }
