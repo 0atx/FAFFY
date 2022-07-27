@@ -4,18 +4,14 @@ import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.Gender;
+import com.faffy.web.jpa.type.LoginType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
-import org.springframework.dao.DataIntegrityViolationException;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,6 +45,10 @@ public class User extends BaseEntity implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    // 한 줄 자기소개
+    @Column(length = 200)
+    private String introduce;
     /**
      * 자기소개 문구
      */
@@ -60,6 +60,13 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "file_no")
     private UploadFile profileImage;
 
+    @Enumerated(EnumType.STRING)
+    @NonNull
+    private LoginType loginType;
+
+    private String instaLink;
+    private String facebookLink;
+    private String youtubeLink;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "user")
     @JsonIgnore
@@ -72,7 +79,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Builder
-    public User(int no, String email, String name, String nickname, String password, LocalDate birthday, Gender gender, String info, List<String> roles) {
+    public User(int no, String email, LoginType loginType, String name, String nickname, String password, LocalDate birthday, String introduce, Gender gender, String info, List<String> roles
+    ,String instaLink, String facebookLink, String youtubeLink) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -82,6 +90,11 @@ public class User extends BaseEntity implements UserDetails {
         this.gender = gender;
         this.info = info;
         this.roles = roles;
+        this.loginType = loginType;
+        this.introduce = introduce;
+        this.instaLink = instaLink;
+        this.facebookLink = facebookLink;
+        this.youtubeLink = youtubeLink;
     }
 
     /**
@@ -97,8 +110,13 @@ public class User extends BaseEntity implements UserDetails {
         this.password = userDto.getPassword();
         this.info = userDto.getInfo();
         this.birthday = LocalDate.parse(userDto.getBirthday());
+        this.introduce = userDto.getIntroduce();
+        this.instaLink = userDto.getInstaLink();
+        this.facebookLink = userDto.getFacebookLink();
+        this.youtubeLink =  userDto.getYoutubeLink();
     }
 
+    @JsonIgnore
     public UserPublicDto toPublicDto() {
         UserPublicDto userPublicDto = UserPublicDto.builder()
                 .no(this.no)
@@ -108,11 +126,17 @@ public class User extends BaseEntity implements UserDetails {
                 .gender(this.gender)
                 .birthday(this.birthday)
                 .info(this.info)
+                .loginType(loginType)
+                .introduce(introduce)
+                .instaLink(instaLink)
+                .facebookLink(facebookLink)
+                .youtubeLink(youtubeLink)
                 .build();
         return userPublicDto;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
                 .map(SimpleGrantedAuthority::new)
@@ -120,26 +144,31 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }
