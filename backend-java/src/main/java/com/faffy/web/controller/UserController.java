@@ -144,8 +144,8 @@ public class UserController {
         UserPublicDto user = userService.login(userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         HashMap<String, Object> hashmapIn = new HashMap<>();
-        hashmapIn.put("UserPublicDto",user);
-        hashmapIn.put("Token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
+        hashmapIn.put("user",user);
+        hashmapIn.put("token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
         hashmap.put("content", hashmapIn);
         return ResponseEntity.ok().body(hashmap);
     }

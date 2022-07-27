@@ -1,22 +1,18 @@
 package com.faffy.web.dto;
 
 import com.faffy.web.exception.IllegalInputException;
-import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
-import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.Gender;
+import com.faffy.web.jpa.type.LoginType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -38,15 +34,24 @@ public class UserDto {
     private Gender gender;
 
     private List<String> roles = new ArrayList<>();
+
+    private String introduce;
     /**
      * 자기소개 문구
      */
     private String info;
+    @NonNull
+    private LoginType loginType;
+
+    private String instaLink;
+    private String facebookLink;
+    private String youtubeLink;
 
     public UserDto(){};
 
     @Builder
-    public UserDto(int no, String email, String name, String nickname, String password, String birthday, Gender gender, String info) throws IllegalInputException{
+    public UserDto(int no, String email, String name, String nickname, String password, String birthday, Gender gender, String info,
+                   String introduce, LoginType loginType, String instaLink,String facebookLink,String youtubeLink) throws IllegalInputException{
         if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
         && StringUtils.hasLength(password)) {
             this.no = no;
@@ -57,6 +62,11 @@ public class UserDto {
             this.birthday = birthday;
             this.gender = gender;
             this.info = info;
+            this.introduce = introduce;
+            this.loginType = loginType;
+            this.instaLink = instaLink;
+            this.facebookLink = facebookLink;
+            this.youtubeLink = youtubeLink;
         } else {
             throw new IllegalInputException("빈 값이 존재합니다.");
         }
@@ -75,6 +85,11 @@ public class UserDto {
                 .gender(gender)
                 .info(info)
                 .roles(roles)
+                .loginType(loginType)
+                .introduce(introduce)
+                .instaLink(instaLink)
+                .facebookLink(facebookLink)
+                .youtubeLink(youtubeLink)
                 .build();
 
         return user;
@@ -83,7 +98,7 @@ public class UserDto {
     public boolean isValid() {
         if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
                 && StringUtils.hasLength(password) && StringUtils.hasLength(nickname)
-                && StringUtils.hasLength(birthday) && gender != null) {
+                && StringUtils.hasLength(birthday) && gender != null && loginType != null) {
             return true;
         }
         return false;
