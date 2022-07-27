@@ -37,17 +37,23 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardCategory category;
 
+    private int hit;
+    private int commentCount;
+
     public Board() {
     }
 
     @Builder
-    public Board(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category) {
+    public Board(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category,
+                 int hit, int commentCount) {
         this.no = no;
         this.title = title;
         this.datetime = datetime;
         this.content = content;
         this.user = user;
         this.category = category;
+        this.hit=hit;
+        this.commentCount = commentCount;
     }
 
     public void updateBoard(BoardUpdateDto boardDto) throws IllegalInputException {
@@ -64,8 +70,16 @@ public class Board extends BaseEntity {
                 .content(getContent())
                 .dateTime(getDatetime().toString())
                 .user(getUser().toPublicDto())
+                .hit(getHit())
+                .commentCount(getCommentCount())
                 .build();
 
         return boardGetDto;
+    }
+
+    public void addComment(Comment comment) {
+        this.getComments().add(comment);
+        comment.addTo(this);
+        this.commentCount = this.getComments().size();
     }
 }
