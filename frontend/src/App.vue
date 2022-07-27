@@ -24,6 +24,7 @@ export default {
   font-family: 'SUIT-Medium';
   src: url(@/assets/fonts/SUIT-Medium.ttf);
 }
+
 #faffy {
   font-family: SUIT-Medium, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
