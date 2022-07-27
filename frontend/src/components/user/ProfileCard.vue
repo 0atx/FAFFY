@@ -25,6 +25,41 @@
       <!-- 별명 -->
       <div id="name" class="text-h6 mb-2">
         별명짓기귀찮다
+
+        <!-- 정보 수정 버튼
+          v-if로 본인일 경우에만 보여지게
+          클릭 시 정보 수정 페이지로 이동
+        -->
+        <v-btn
+          v-if="userInfo"
+          class="mx-2 pb-1"
+          elevation="0"
+          icon
+          small
+          color="gray"
+        >
+          <v-icon>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+
+        <!-- 팔로우 버튼
+          v-if로 본인이 아닐 경우에만 보여지게
+          팔로우 중이 아니라면 기본 회색 아이콘(gray),
+          팔로우 중이라면 다른 색 아이콘(임시 : #ff7451)
+        -->
+        <v-btn
+          v-else
+          class="mx-2 pb-1"
+          elevation="0"
+          icon
+          small
+          :color=" follow ? '#ff7451' : 'gray'"
+        >
+          <v-icon>
+            mdi-heart
+          </v-icon>
+        </v-btn>
       </div>
 
       <!-- 팔로잉 팔로워 -->
@@ -110,6 +145,8 @@ export default {
       // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
       categorys: ["워크웨어", "히피", "페미닌", "캐주얼", "모던", "시크", "댄디", "빈티지", "미니멀", "스트릿" ],
       readonly: { type: Boolean, default: true },
+      userInfo: true,
+      follow: true,
     }
   },
   metaInfo () {
@@ -128,6 +165,7 @@ export default {
   background-color: #8b8fda9f;
   padding: 5%;
   position:sticky;
+  top: 40px;
 }
 
 #profile {
