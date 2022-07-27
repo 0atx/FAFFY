@@ -10,7 +10,13 @@
       <v-spacer></v-spacer>
 
       <!-- 로고 -->
-      <img class="logo" alt="faffy logo" src="@/assets/images/faffy_logo.png" @click="goTo">
+      <img
+        class="logo"
+        alt="faffy logo"
+        style="cursor:pointer;"
+        src="@/assets/images/faffy_logo.png"
+        @click="goTo"
+      >
 
       <v-spacer></v-spacer>
 
@@ -23,17 +29,16 @@
 
       <!-- 로그인 후 메뉴 바 -->
       <v-menu
-        bottom
-        left
+        offset-y
         v-if="userInfo"
       >
+
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="black"
+          <v-btn icon
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>mdi-dots-vertical</v-icon>
+            <profile-icon-avatar />
           </v-btn>
         </template>
 
@@ -83,12 +88,14 @@
 
 <script>
 import SearchBar from '@/components/common/SearchBar.vue'
+import ProfileIconAvatar from '@/components/common/ProfileIconAvatar.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
   components: {
-    SearchBar
+    SearchBar,
+    ProfileIconAvatar
   },
   data() {
       return {
@@ -116,12 +123,10 @@ export default {
 #signInBtn {
   background-color: #ff4c20;
   color: #fff;
-  border: 1px solid #fff;
 }
 
 #signUpBtn {
   background-color: #0c0f66;
   color: #fff;
-  border: 1px solid #fff;
 }
 </style>
