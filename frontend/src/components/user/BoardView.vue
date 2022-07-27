@@ -1,21 +1,17 @@
 <template>
-  <div id="history">
+  <div id="board">
     <div>
       <div id="route">
         <p class="text-h6" style="font-weight: 600">
           <router-link to="/profile/1/user-detail"> Profile </router-link>
         </p>
         <v-icon color="black" class="mb-3"> mdi-chevron-right </v-icon>
-        <p class="text-h6" style="font-weight: 600">History</p>
+        <p class="text-h6" style="font-weight: 600">Board</p>
       </div>
       <div id="content" class="mt-4">
-        <p class="text-h6" style="font-weight: 600">
-          방송 기록 참여 | 진행 버튼 들어올 자리
-        </p>
+        <p class="text-h6" style="font-weight: 600">작성 게시글</p>
         <hr />
-        <div id="info">
-          방송 참여 또는 진행 목록 컴포넌트가 들어올 자리입니다.
-        </div>
+        <div id="info">게시글 목록 컴포넌트가 들어올 자리입니다.</div>
       </div>
     </div>
   </div>
@@ -26,7 +22,7 @@ export default {};
 </script>
 
 <style scoped>
-#history {
+#board {
   background-color: #fff;
   padding: 5%;
   text-align: left;
@@ -47,7 +43,7 @@ a {
   text-decoration: none;
 }
 
-#history div {
+#board div {
   width: 100%;
 }
 
