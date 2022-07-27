@@ -69,7 +69,7 @@
                   @keydown.enter="onInputKeyword"
                 />
 
-                <dark-button :btnValue="findValue" @click="findPassword" />
+                <dark-button class="mt-4" :btnValue="findValue" @click="findPassword" />
               </v-form>
               <v-btn
                 id="closeBtn"
