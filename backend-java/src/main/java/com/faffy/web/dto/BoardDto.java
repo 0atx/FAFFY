@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class BoardDto {
-    int no;
+    private int no;
+    private int writer_no;
     @NonNull
     private String title;
     private LocalDateTime datetime;
