@@ -1,12 +1,12 @@
 <template>
-	<div id="container">
-
+	<div id="">
+    메인 페이지 입니다.
 	</div>
 </template>
 
 <script>
 export default {
-	name: "HomeView",
+	name: "MainView",
 
 	data() {
 		return {};
