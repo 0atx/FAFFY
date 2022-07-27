@@ -22,10 +22,14 @@ public class BoardDto {
     private User user;
     private BoardCategory category;
 
+    private int hit;
+    private int commentCount;
+
     public BoardDto(){}
 
     @Builder
-    public BoardDto(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category) {
+    public BoardDto(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category,
+                    int hit, int commentCount) {
         if (StringUtils.hasLength(title))
         this.no = no;
         this.title = title;
@@ -33,6 +37,8 @@ public class BoardDto {
         this.content = content;
         this.user = user;
         this.category = category;
+        this.hit=hit;
+        this.commentCount = commentCount;
     }
 
     public Board toEntityWriteBy(User user) {
@@ -48,6 +54,8 @@ public class BoardDto {
                 .content(content)
                 .user(user)
                 .category(category)
+                .hit(hit)
+                .commentCount(commentCount)
                 .build();
 
         return board;

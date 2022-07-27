@@ -38,4 +38,8 @@ public class Comment extends BaseEntity {
         this.content = commentUpdateDto.getContent();
         this.datetime = LocalDateTime.now();
     }
+
+    public void addTo(Board board) {
+        this.board = board;
+    }
 }
