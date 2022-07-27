@@ -43,8 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 비사용
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크(roles에따라 접근 제한)
-                .antMatchers("/user/**").hasRole("ADMIN")
-                .antMatchers("/users/1").hasRole("USER")
+                .antMatchers("/api/user/**").hasRole("ADMIN")
+                .antMatchers("/api/users/1").hasRole("USER")
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
