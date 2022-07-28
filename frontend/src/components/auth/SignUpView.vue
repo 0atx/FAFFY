@@ -21,8 +21,8 @@
         </div>
 
         <!-- 이메일 중복 확인 -->
-        <v-btn icon @click="checkEmail">
-          <v-icon id="checkEmailBtn">mdi-check</v-icon>
+        <v-btn id="checkEmailBtn" class="mt-2" icon @click="checkEmail">
+          <v-icon :color="checkEmailIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
         </v-btn>
       </div>
 
@@ -78,8 +78,8 @@
         </div>
 
         <!-- 별명 중복 확인 -->
-        <v-btn icon @click="checkNickname">
-          <v-icon id="checkNicknameBtn">mdi-check</v-icon>
+        <v-btn id="checkNicknameBtn" class="mt-2" icon @click="checkNickname">
+          <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
         </v-btn>
       </div>
 
@@ -237,6 +237,9 @@ export default {
 
       confirmPw: "",
 
+      checkEmailIcon: false,
+      checkNicknameIcon: false,
+
       genders: ["남자", "여자"],
 
       serviceDialog: false,
@@ -258,10 +261,10 @@ export default {
       this.$refs.menu.save(birth);
     },
     checkEmail() {
-      console.log("이메일 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다ㅎㅎ..");
+      console.log("이메일 중복 확인 함수 입니다. 중복 없으면 checkEmailIcon true로 변경");
     },
     checkNickname() {
-      console.log("별명 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다22..");
+      console.log("별명 중복 확인 함수 입니다. 중복 없으면 checkNicknameIcon true로 변경");
     },
     requestSignUp() {
       console.log(
@@ -323,12 +326,28 @@ export default {
   border: 1px solid #fff;
 }
 
-#checkEmailBtn {
+#checkEmailBtn::before {
+  background-color: transparent;
+}
+
+#checkEmailBtn i {
   color: #ff4c20;
 }
 
-#checkNicknameBtn {
+#checkEmailBtn i:hover {
+  transform: scale(1.15);
+}
+
+#checkNicknameBtn::before {
+  background-color: transparent;
+}
+
+#checkNicknameBtn i {
   color: #0c0f66;
+}
+
+#checkNicknameBtn i:hover {
+  transform: scale(1.15);
 }
 
 #signUpBtn {
