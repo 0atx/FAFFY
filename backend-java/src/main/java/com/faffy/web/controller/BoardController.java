@@ -9,6 +9,8 @@ import com.faffy.web.jpa.entity.Comment;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.service.BoardService;
 import com.faffy.web.service.CommentService;
+import com.faffy.web.service.token.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/boards")
 @CrossOrigin("*")
@@ -32,6 +34,7 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    private final JwtTokenProvider jwtTokenProvider;
     @Autowired
     CommentService commentService;
 
@@ -81,12 +84,13 @@ public class BoardController {
     }
 
     @PostMapping("")
-    ResponseEntity writeBoard(@RequestBody BoardDto boardDto) {
-        // user_no 는 나중에 jwt 헤더에서 추출해야함
+    ResponseEntity writeBoard(@RequestBody BoardDto boardDto, @RequestHeader(value = "X-AUTH-TOKEN") String token) {
+
+        int user_no = Integer.parseInt(jwtTokenProvider.getUserPk(token));
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            boardService.writeBoard(boardDto);
+            boardService.writeBoard(boardDto,user_no);
         } catch (Exception e) {
             logger.error("게시글 쓰기 실패 {}", e.toString());
             resultMap.put("msg", e.getMessage());
@@ -96,12 +100,12 @@ public class BoardController {
     }
 
     @PutMapping("")
-    ResponseEntity updateBoard(@RequestBody BoardUpdateDto boardUpdateDto) {
-        // writer_no가 jwt 헤더에 있는 user_no와 일치하는지 검증 필요
+    ResponseEntity updateBoard(@RequestBody BoardUpdateDto boardUpdateDto, @RequestHeader(value = "X-AUTH-TOKEN") String token) {
+        int user_no = Integer.parseInt(jwtTokenProvider.getUserPk(token));
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            boardService.updateBoard(boardUpdateDto);
+            boardService.updateBoard(boardUpdateDto,user_no);
         } catch (Exception e) {
             logger.error("게시글 수정 실패 {}", e.toString());
             resultMap.put("msg", e.getMessage());
@@ -111,12 +115,12 @@ public class BoardController {
     }
 
     @DeleteMapping("")
-    ResponseEntity deleteBoard(@RequestBody BoardUpdateDto boardDto) {
-        // writer_no가 jwt 헤더에 있는 user_no와 일치하는지 검증 필요
+    ResponseEntity deleteBoard(@RequestBody BoardUpdateDto boardDto, @RequestHeader(value = "X-AUTH-TOKEN") String token) {
+        int user_no = Integer.parseInt(jwtTokenProvider.getUserPk(token));
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            boardService.deleteBoard(boardDto.getNo());
+            boardService.deleteBoard(boardDto.getNo(), user_no);
         } catch (Exception e) {
             logger.error("게시글 삭제 실패 {}", e.toString());
             resultMap.put("msg", e.getMessage());

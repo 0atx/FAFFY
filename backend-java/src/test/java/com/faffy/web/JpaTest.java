@@ -280,13 +280,13 @@ public class JpaTest {
     void writeBoard() {
         try {
             BoardDto boardDto = BoardDto.builder().title("첫 글이에요").content("내용입니다").category(BoardCategory.QnA).build();
-            boardService.writeBoard(1, boardDto);
+            boardService.writeBoard( boardDto,1);
 
             boardDto = BoardDto.builder().title("두 번째 글").content("내용2").category(BoardCategory.Free).build();
-            boardService.writeBoard(2, boardDto);
+            boardService.writeBoard(boardDto,2);
 
             boardDto = BoardDto.builder().title("세 번째 글").content("내용3").category(BoardCategory.Free).build();
-            boardService.writeBoard(3, boardDto);
+            boardService.writeBoard(boardDto,3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -297,6 +297,7 @@ public class JpaTest {
     @DisplayName("게시글 수정")
     @Order(61)
     void updateBoard() {
+        int user_no=2;
         try {
             BoardUpdateDto boardUpdateDto = BoardUpdateDto.builder()
                     .no(1)
@@ -304,7 +305,7 @@ public class JpaTest {
                     .content("수정내용")
                     .category(BoardCategory.Free)
                     .build();
-            boardService.updateBoard(boardUpdateDto);
+            boardService.updateBoard(boardUpdateDto,user_no);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -431,8 +432,9 @@ public class JpaTest {
     @DisplayName("게시글 삭제")
     @Order(85)
     void deleteBoard() {
+        int user_no=2;
         try {
-            boardService.deleteBoard(2);
+            boardService.deleteBoard(2,user_no);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
