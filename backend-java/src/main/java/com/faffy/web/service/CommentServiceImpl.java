@@ -1,10 +1,7 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.CommentAddDto;
-import com.faffy.web.dto.CommentDto;
 import com.faffy.web.dto.CommentUpdateDto;
-import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.jpa.entity.Board;
 import com.faffy.web.jpa.entity.Comment;
 import com.faffy.web.jpa.entity.User;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.faffy.web.exception.ExceptionMsg.COMMENT_NOT_FOUND_MSG;
 
