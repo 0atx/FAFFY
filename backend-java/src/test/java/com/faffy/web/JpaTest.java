@@ -11,6 +11,7 @@ import com.faffy.web.jpa.repository.FashionCategoryRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.BoardCategory;
 import com.faffy.web.jpa.type.Gender;
+import com.faffy.web.jpa.type.LoginType;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.BoardService;
 import com.faffy.web.service.CommentService;
@@ -80,6 +81,7 @@ public class JpaTest {
                     .password("1234")
                     .birthday("1996-07-27")
                     .info("이준성입니다")
+                    .loginType(LoginType.valueOf("SITE"))
                     .build();
             userService.addUser(user);
 
@@ -90,6 +92,7 @@ public class JpaTest {
                     .gender(Gender.Male)
                     .password("1234")
                     .birthday("1995-01-01")
+                    .loginType(LoginType.valueOf("SITE"))
                     .build();
             userService.addUser(user);
 
@@ -100,6 +103,7 @@ public class JpaTest {
                     .gender(Gender.Male)
                     .password("12341112")
                     .birthday("1997-01-01")
+                    .loginType(LoginType.valueOf("SITE"))
                     .build();
             userService.addUser(user);
 

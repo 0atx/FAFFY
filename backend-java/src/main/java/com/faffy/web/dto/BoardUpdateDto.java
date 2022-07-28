@@ -10,6 +10,9 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
+/**
+ * 게시글 수정 요청 시 request로 받는 객체
+ */
 @Data
 public class BoardUpdateDto {
     @NonNull
@@ -38,4 +41,6 @@ public class BoardUpdateDto {
             throw new IllegalInputException("유효하지 않은 값이 존재합니다.");
         }
     }
+
+
 }
