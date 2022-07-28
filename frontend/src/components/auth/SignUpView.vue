@@ -233,6 +233,7 @@ export default {
         nickname: "",
         birthday: "",
         gender: "",
+        loginType:"SITE"
       },
 
       confirmPw: "",

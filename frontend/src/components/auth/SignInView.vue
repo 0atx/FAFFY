@@ -168,7 +168,9 @@ export default {
     async requestSignIn() {
       auth.login(
         this.form,
-        () => {
+        (response) => {
+          console.log("로그인 성공");
+          console.log(response.data);
           this.$router.push({ name: "main" });
         },
         () => {
