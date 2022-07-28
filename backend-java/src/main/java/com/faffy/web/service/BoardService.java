@@ -19,11 +19,10 @@ public interface BoardService {
 
     /**
      * 게시글 작성
-     * @param user_no 글쓴이 번호
      * @param boardDto 게시글 내용을 담은 객체
      * @throws Exception 글쓴이 번호에 해당하는 유저를 찾을 수 없거나 입력값이 잘못된 경우 예외 발생
      */
-    public void writeBoard(int user_no, BoardDto boardDto) throws Exception;
+    public void writeBoard(BoardDto boardDto) throws Exception;
 
     /**
      * 게시글 수정
