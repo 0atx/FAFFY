@@ -120,6 +120,6 @@ export default {
 }
 
 #moreBtn i:hover {
-  transform: scale(1.15);
+  transform: scale(1.5);
 }
 </style>
