@@ -1,5 +1,6 @@
 package com.faffy.web.controller;
 
+import com.faffy.web.dto.UserCategoryRequestDto;
 import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
@@ -8,6 +9,7 @@ import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +34,8 @@ public class UserController {
 
     @Autowired
     UserServiceImpl userService;
-
+    @Autowired
+    UserCategoryService userCategoryService;
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -152,6 +155,36 @@ public class UserController {
         hashmapIn.put("Token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
         hashmap.put("content", hashmapIn);
         return ResponseEntity.ok().body(hashmap);
+    }
+
+    @PostMapping("/category")
+    public ResponseEntity addCategory(@RequestBody UserCategoryRequestDto userCategoryAddDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            String result = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
+            resultMap.put("content", result);
+        } catch (Exception e) {
+            logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+        }
+
+        return new ResponseEntity(resultMap,status);
+    }
+
+    @DeleteMapping("/category")
+    public ResponseEntity deleteCategory(@RequestBody UserCategoryRequestDto userCategoryRequestDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            String result = userCategoryService.deleteUserCategory(userCategoryRequestDto.getUser_no(), userCategoryRequestDto.getCategory_name());
+            resultMap.put("content", result);
+        } catch (Exception e) {
+            logger.error("카테고리 삭제 에러 발생 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+        }
+
+        return new ResponseEntity(resultMap,status);
     }
 
 }
