@@ -82,7 +82,6 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new DataIntegrityException(DUPLICATED_MSG);
         }
-
     }
 
     @Override
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
-
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             user.updateUser(userDto);
             return user;
         } catch (IllegalArgumentException e) {
