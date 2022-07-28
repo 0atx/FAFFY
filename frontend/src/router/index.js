@@ -26,16 +26,6 @@ const routes = [
         name: "sign-up",
         component: () => import("@/components/auth/SignUpView.vue"),
       },
-      {
-        path: "service-terms",
-        name: "service-terms",
-        component: () => import("@/components/auth/ServiceTermsView.vue"),
-      },
-      {
-        path: "private-terms",
-        name: "private-terms",
-        component: () => import("@/components/auth/PrivateTermsView.vue"),
-      },
     ],
   },
   {
