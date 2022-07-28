@@ -155,7 +155,7 @@ export default {
   background-color: #8b8fda9f;
   padding: 5%;
   position: sticky;
-  top: 40px;
+  top: 0px;
   height: 100vh;
   display: flex;
   justify-content: center;
