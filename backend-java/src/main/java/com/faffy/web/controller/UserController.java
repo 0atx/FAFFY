@@ -12,6 +12,8 @@ import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin("*")
 public class UserController {
 
@@ -32,6 +34,7 @@ public class UserController {
     UserServiceImpl userService;
 
     private final JwtTokenProvider jwtTokenProvider;
+    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
     /**
      * 모든 회원 정보 받아오기
@@ -54,6 +57,7 @@ public class UserController {
     @ApiOperation(value="회원 가입",notes="유저 정보를 받아 db에 유저를 추가합니다.")
     @PostMapping
     public ResponseEntity addUser(@Valid @RequestBody UserDto userDto) throws DataIntegrityException, IllegalInputException {
+        logger.info("dto : {}",userDto);
         User user = userService.addUser(userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         hashmap.put("content",user.toPublicDto());
@@ -144,11 +148,10 @@ public class UserController {
         UserPublicDto user = userService.login(userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         HashMap<String, Object> hashmapIn = new HashMap<>();
-        hashmapIn.put("user",user);
-        hashmapIn.put("token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
+        hashmapIn.put("UserPublicDto",user);
+        hashmapIn.put("Token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
         hashmap.put("content", hashmapIn);
         return ResponseEntity.ok().body(hashmap);
     }
-
 
 }

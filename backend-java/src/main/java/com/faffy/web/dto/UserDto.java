@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NonNull;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class UserDto {
     public User toEntity() throws IllegalInputException {
         if (!isValid())
             throw new IllegalInputException("필수 입력란을 확인해 주세요.");
-        System.out.println("toENtity");
+        System.out.println("toEntity");
         User user = User.builder()
                 .email(email)
                 .name(name)

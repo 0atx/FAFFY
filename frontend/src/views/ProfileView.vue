@@ -1,15 +1,25 @@
 <template>
-  <v-container fluid>
-    <v-row wrap id="block">
-      <v-col cols="4">
+  <div id="view">
+    <v-row
+      id="ProfileView"
+      class="pt-10"
+    >
+      <v-col
+      class="pl-0 pr-0"
+        cols="6"
+        md="4"
+      >
         <profile-card />
       </v-col>
-      <v-col cols="8">
-      <div></div>
-      <!--<router-view></router-view>-->
+      <v-col
+        class="pl-0 pr-0"
+        cols="12"
+        md="8"
+      >
+        <router-view></router-view>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -24,12 +34,16 @@ export default {
 </script>
 
 <style scoped>
-* {
-  height: 100%;
-  padding: 0px;
+#view {
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
-div {
-  background-color: gray;
+#profileView {
+  display: flex;
+}
+
+#profileCard {
+  padding-right: 0;
 }
 </style>
