@@ -1,6 +1,8 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.exception.DataNotFoundException;
+import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.entity.UserCategory;
@@ -25,7 +27,7 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     /**
      * 사용자의 카테고리 목록을 반환
      *
-     * @param userDto
+     * @param user_no
      * @return 유저가 설정한 패션 카테고리 리스트
      */
     @Override
@@ -45,36 +47,29 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
-    public boolean addUserCategory(int user_no, String categoryName) {
+    public String addUserCategory(int user_no, String categoryName) throws Exception {
         try {
             User user = userService.getUserByNo(user_no);
-            Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
-            if ( categoryResult.isPresent()) {
-                UserCategory userCategory = UserCategory.builder().user(user).category(categoryResult.get()).build();
-                userCategoryRepository.save(userCategory);
-                return true;
-            }
+            FashionCategory fashionCategory = fashionCategoryRepository.findByName(categoryName).orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.CATEGORY_NOT_FOUND_MSG));
+
+            UserCategory userCategory = UserCategory.builder().user(user).category(fashionCategory).build();
+            userCategoryRepository.save(userCategory);
+            return categoryName;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            return false;
+            throw new DataNotFoundException(e.getMessage());
         }
     }
 
     @Override
-    public boolean deleteUserCategory(int user_no, String categoryName) {
-        Optional<FashionCategory> categoryResult = fashionCategoryRepository.findByName(categoryName);
+    public String deleteUserCategory(int user_no, String categoryName) throws Exception {
         try {
+            FashionCategory fashionCategory = fashionCategoryRepository.findByName(categoryName).orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.CATEGORY_NOT_FOUND_MSG));
             User userResult = userService.getUserByNo(user_no);
-            if (categoryResult.isPresent()){
-                UserCategory userCategory = UserCategory.builder().user(userResult).category(categoryResult.get()).build();
-                userCategoryRepository.delete(userCategory);
-                return true;
-            }
+            UserCategory userCategory = UserCategory.builder().user(userResult).category(fashionCategory).build();
+            userCategoryRepository.delete(userCategory);
+            return categoryName;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }finally {
-            return false;
+            throw new DataNotFoundException(e.getMessage());
         }
     }
 
