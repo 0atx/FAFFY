@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,6 +34,8 @@ public class JwtTokenProvider {
     private long tokenValidTime = 30 * 60 * 1000L;
 
     private final CustomUserDetailService userDetailsService;
+
+    private final RedisTemplate redisTemplate;
 
     // 객체 초기화, secretKey를 Base64로 인코딩
     @PostConstruct
@@ -78,5 +81,13 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean isLogout(String jwtToken) {
+        final String PREFIX = "logout";
+        if(redisTemplate.opsForValue().get(PREFIX+jwtToken)==null) {
+            return false;
+        }
+        return true;
     }
 }

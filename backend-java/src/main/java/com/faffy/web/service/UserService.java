@@ -9,6 +9,7 @@ import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
 
+import javax.servlet.http.HttpServlet;
 import java.util.List;
 
 
@@ -73,4 +74,6 @@ public interface UserService {
      * @throws Exception DataIntegrity를 위배한 경우(Unique 위배)
      */
     public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException ,Exception;
+
+    void logout(String token);
 }
