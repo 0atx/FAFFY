@@ -2,7 +2,6 @@
   <div id="view">
     <v-row
       id="ProfileView"
-      class="pt-10"
     >
       <v-col
       class="pl-0 pr-0"
