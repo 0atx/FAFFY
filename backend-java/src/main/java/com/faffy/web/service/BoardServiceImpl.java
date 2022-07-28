@@ -6,6 +6,7 @@ import com.faffy.web.jpa.entity.Board;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void writeBoard(BoardDto boardDto) throws Exception {
+    public void writeBoard(BoardDto boardDto,int user_no) throws Exception {
+        boardDto.setWriter_no(user_no);
         User u = userService.getUserByNo(boardDto.getWriter_no());
         boardRepository.save(boardDto.toEntityWriteBy(u));
 
@@ -36,14 +38,21 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void updateBoard(BoardUpdateDto boardDto) throws Exception {
-            Board board = getBoard(boardDto.getNo());
-            board.updateBoard(boardDto);
+    public void updateBoard(BoardUpdateDto boardDto, int user_no) throws Exception {
+        Board board = getBoard(boardDto.getNo());
+        if(!(user_no==board.getUser().getNo())){
+            throw new Exception("글쓴이와 로그인 정보가 일치하지 않습니다.");
+        }
+        board.updateBoard(boardDto);
     }
 
     @Override
     @Transactional
-    public void deleteBoard(int no) throws Exception {
+    public void deleteBoard(int no, int user_no) throws Exception {
+        Board board = getBoard(no);
+        if(!(user_no==board.getUser().getNo())){
+            throw new Exception("글쓴이와 로그인 정보가 일치하지 않습니다.");
+        }
         try {
             boardRepository.deleteById(no);
         } catch (Exception e) {
