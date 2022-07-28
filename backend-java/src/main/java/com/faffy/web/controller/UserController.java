@@ -28,7 +28,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 @CrossOrigin("*")
 public class UserController {
 
@@ -117,7 +117,7 @@ public class UserController {
      */
     @ApiOperation(value="회원정보 수장",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
     @PutMapping
-    public ResponseEntity updateUser(@RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
+    public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
         User user = userService.updateUser(userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         hashmap.put("content",user);
