@@ -1,23 +1,20 @@
 <!--
 작성자 : 박윤하
-어두운 버튼
+카테고리 칩
 -->
 <template>
-  <v-btn
-    id="darkBtn"
-    class="mt-2"
-    block
-    rounded
-    elevation="0"
-    type="submit"
-  >{{ btnValue }}</v-btn>
+  <v-chip
+    id="categoryChips"
+  >
+    {{ category }}
+  </v-chip>
 </template>
 
 <script>
 export default {
-    name: 'DarkButton',
+    name: 'CategoryChips',
     props: {
-      btnValue: {
+      category: {
         type: String
       }
     },
@@ -25,8 +22,9 @@ export default {
 </script>
 
 <style scoped>
-#darkBtn {
+#categoryChips {
   background-color: #0c0f66;
   color: #fff;
+  pointer-events: none;
 }
 </style>

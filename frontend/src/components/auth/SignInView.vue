@@ -4,16 +4,8 @@
 -->
 <template>
   <v-container>
-    <img
-      class="mt-10"
-      src="@/assets/images/faffy_logo_big.png"
-      alt="faffy logo"
-    >
-    <v-form
-      ref="form"
-      id="signIn"
-      @submit.prevent="requestSignIn"
-    >
+    <v-form ref="form" id="signIn" @submit.prevent="requestSignIn">
+      <img src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
       <!-- 이메일 입력 -->
       <v-text-field
         v-model="form.email"
@@ -21,7 +13,7 @@
         label="이메일"
         required
         @keydown.enter="onInputKeyword"
-        />
+      />
 
       <!-- 비밀번호 입력 -->
       <v-text-field
@@ -34,55 +26,84 @@
         @keydown.enter="onInputKeyword"
       />
 
-      <dark-button
-        :btnValue="signInValue"
-        @click="requestSignIn"
-      />
+      <dark-button :btnValue="signInValue" @click="requestSignIn" />
 
       <!-- 회원가입 및 비밀번호 찾기  -->
       <div id="route" class="mt-4">
-        <div
-          type="button"
-          @click="goTo"
+        <div type="button" @click="goTo">회원가입</div>
+
+        <v-dialog
+          v-model="dialog"
+          width="500"
         >
-          회원가입
-        </div>
-        <div
-          type="button"
-          @click="findPassword"
-        >
-          비밀번호 찾기
-        </div>
+          <template v-slot:activator="{ on, attrs }">
+            <div type="button"
+              v-bind="attrs"
+              v-on="on"
+            >
+              비밀번호 찾기
+            </div>
+          </template>
+          <v-card>
+            <v-card-title id="dialogTitle">
+              <img class="ml-5" src="@/assets/images/faffy_logo_big.png" alt="faffy logo" />
+            </v-card-title>
+
+            <v-card-text>
+              <v-form ref="form" @submit.prevent="findPassword">
+                <!-- 이메일 입력 -->
+                <v-text-field
+                  v-model="find.email"
+                  type="email"
+                  label="이메일"
+                  required
+                  @keydown.enter="onInputKeyword"
+                />
+
+                <!-- 이름 입력 -->
+                <v-text-field
+                  v-model="find.name"
+                  type="text"
+                  label="이름"
+                  required
+                  @keydown.enter="onInputKeyword"
+                />
+
+                <dark-button class="mt-4" :btnValue="findValue" @click="findPassword" />
+              </v-form>
+              <v-btn
+                id="closeBtn"
+                class="mt-4 mb-2"
+                block
+                rounded
+                elevation="0"
+                @click="dialog = false"
+              >닫기</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
       </div>
 
       <!-- 소셜 로그인 -->
-      <hr>
+      <hr />
 
       <div id="social">
         <!-- 네이버 로그인 -->
-        <v-btn
-          fab
-          elevation="0"
-          class="overflow-hidden"
-        >
+        <v-btn fab elevation="0" class="overflow-hidden">
           <img
             src="@/assets/images/naver_login.png"
             alt=""
-            style="width:60px; height:60px;"
-          >
+            style="width: 60px; height: 60px"
+          />
         </v-btn>
 
         <!-- 구글 로그인 -->
-        <v-btn
-          fab
-          elevation="0"
-          class="overflow-hidden"
-        >
+        <v-btn fab elevation="0" class="overflow-hidden">
           <img
             src="@/assets/images/google_login.png"
             alt=""
-            style="width:80px; height:80px;"
-          >
+            style="width: 80px; height: 80px"
+          />
         </v-btn>
       </div>
     </v-form>
@@ -90,63 +111,79 @@
 </template>
 
 <script>
-import DarkButton from '@/components/common/DarkButton.vue'
-import { mapState, mapActions, mapMutations } from "vuex";
-const authStore ="authStore";
+import DarkButton from "@/components/common/DarkButton.vue";
+import { mapMutations } from "vuex";
+import { auth } from "@/api/auth.js";
+const authStore = "authStore";
 
 export default {
   name: "SignIn",
   components: {
-    DarkButton
+    DarkButton,
   },
   data() {
-      return {
-        form: {
-          email: '',
-          password: '',
-        },
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
 
-        type: false,
+      find: {
+        email: "",
+        name: "",
+      },
 
-        signInValue: '로그인'
-      }
+      type: false,
+
+      dialog: false,
+
+      signInValue: "로그인",
+      findValue: "비밀번호 찾기",
+    };
   },
-  computed:{
-    ...mapState(authStore,["isLogin","isLoginError"]),
-  },
+  computed: {},
   methods: {
-    ...mapActions(authStore,["userConfirm"]),
-    ...mapMutations(authStore,["SET_IS_LOGIN","SET_USER_INFO","SET_IS_LOGIN_ERROR"]),
+    ...mapMutations(authStore, [
+      "SET_IS_LOGIN",
+      "SET_USER_INFO",
+      "SET_IS_LOGIN_ERROR",
+    ]),
     async save() {
-    this.$refs.form.validate();
-    await this.$nextTick();
-    if(!this.valid) return;
-    console.log(this.form);
+      this.$refs.form.validate();
+      await this.$nextTick();
+      if (!this.valid) return;
+      console.log(this.form);
     },
     goTo() {
-      this.$router.push({ name: "sign-up" })
-    },
-    async requestSignIn() {
-      await this.userConfirm(this.form);
-      if (this.isLogin) {
-        alert("로그인 성공! 나중에 이거 좀 바꿔주세연 ㅎ");
-        this.$router.push({ name: "home" });
-      } else {
-        console.log("안됐는디");
-      }
-
+      this.$router.push({ name: "sign-up" });
     },
     findPassword() {
-      console.log("모달 나와야합니다.");
-    }
+      alert("기능 미구현");
+      // 이메일 존재하는지 확인
+      // 존재한다면 계정 정보(이름) 가져와서 폼에 입력된 이름이랑 맞는지 확인
+      // 이름도 같다면 변경된 비밀번호 이메일로 전송
+      // 존재하지 않거나 이름이 다르다면 오류 메세지
+      this.dialog = false;
+    },
+    async requestSignIn() {
+      auth.login(
+        this.form,
+        () => {
+          this.$router.push({ name: "main" });
+        },
+        () => {
+          alert("로그인 실패. 나중에 바꿔야함");
+        }
+      );
+    },
   },
-  metaInfo () {
+  metaInfo() {
     return {
       meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ]
-    }
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
+    };
   },
 };
 </script>
@@ -155,6 +192,10 @@ export default {
 .container {
   background-color: white;
   padding: 5%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #signIn {
@@ -176,7 +217,7 @@ hr {
 }
 
 hr:after {
-  content: '소셜 로그인';
+  content: "소셜 로그인";
   display: inline-block;
   position: relative;
   top: -13px;
@@ -189,7 +230,15 @@ hr:after {
 #signInBtn {
   background-color: #0c0f66;
   color: #fff;
-  border: 1px solid #fff;
+}
+
+#dialogTitle {
+  justify-content : center;
+}
+
+#closeBtn {
+  background-color: #ff7451;
+  color: #fff;
 }
 
 #social {
