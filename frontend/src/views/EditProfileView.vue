@@ -13,9 +13,11 @@
           <v-form ref="form" method="post" enctype="multipart/form-data" @submit.prevent="requestEdit">
 
             <!-- 프로필 이미지 src 변수로 받아와서 적용시켜줘야 함 -->
+            <div style="text-align: center">
             <v-avatar id="avatar" color="#fff" class="mt-8 mb-4" size="250" rounded>
               <v-img src="@/assets/images/default_profile.png"></v-img>
             </v-avatar>
+            </div>
 
             <v-file-input
               accept="image/*"
@@ -30,7 +32,6 @@
               v-model="user.email"
               label="이메일"
               readonly
-              disabled
             />
 
             <!-- 이름 -->
@@ -39,7 +40,6 @@
               v-model="user.name"
               label="이름"
               readonly
-              disabled
             />
 
             <div id="check">
@@ -90,7 +90,6 @@
               v-model="user.birthday"
               label="생년월일"
               readonly
-              disabled
             ></v-text-field>
 
             <!-- 성별 -->
@@ -98,7 +97,6 @@
               v-model="user.gender"
               label="성별"
               readonly
-              disabled
             ></v-text-field>
 
             <!-- 한 줄 자기소개 -->
@@ -106,7 +104,6 @@
               v-model="user.gender"
               label="성별"
               readonly
-              disabled
             ></v-text-field>
 
             <!-- 긴 글 자기소개 -->
@@ -114,8 +111,21 @@
               v-model="user.gender"
               label="성별"
               readonly
-              disabled
             ></v-text-field>
+
+            <!-- 관심 카테고리 -->
+            <v-label>관심 분야</v-label>
+            <v-chip-group
+              v-model="user.categorys"
+              column
+              multiple
+            >
+              <v-chip
+                v-for="category in categorys"
+                :key="category"
+                filter
+              > {{ category }}</v-chip>
+            </v-chip-group>
 
             <!-- SNS 링크 instagram -->
             <v-text-field
@@ -140,7 +150,6 @@
               readonly
               disabled
             ></v-text-field>
-
 
             <dark-button :btnValue="editValue" @click="requestEdit" />
             <v-btn
@@ -189,7 +198,22 @@ export default {
         nickname: "별명짓기귀찮다",
         birthday: "1998-11-07",
         gender: "여자",
+        categorys: [],
       },
+
+      // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
+      categorys: [
+        "워크웨어",
+        "히피",
+        "페미닌",
+        "캐주얼",
+        "모던",
+        "시크",
+        "댄디",
+        "빈티지",
+        "미니멀",
+        "스트릿",
+      ],
 
       confirmPw: "",
 
@@ -258,7 +282,6 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
 }
 
 form {

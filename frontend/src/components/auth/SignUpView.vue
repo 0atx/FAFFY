@@ -270,6 +270,13 @@ export default {
       console.log(
         "모든 빈칸이 입력되어야함 + 이메일, 비밀번호 유효성 통과시 요청 전송해야함"
       );
+      const validate = this.$refs.form.validate();
+
+      if(!validate) {
+        alert('회원가입 입력 형식을 맞춰주세요.')
+        return;
+      }
+
       auth.signUp(
         this.form,
         (response) => {
@@ -320,6 +327,10 @@ export default {
   width: 100%;
 }
 
+input:disabled {
+  color: black;
+}
+
 #checkBtn {
   background-color: #0c0f66;
   color: #fff;
@@ -330,24 +341,16 @@ export default {
   background-color: transparent;
 }
 
-#checkEmailBtn i {
-  color: #ff4c20;
-}
-
 #checkEmailBtn i:hover {
-  transform: scale(1.15);
+  transform: scale(1.5);
 }
 
 #checkNicknameBtn::before {
   background-color: transparent;
 }
 
-#checkNicknameBtn i {
-  color: #0c0f66;
-}
-
 #checkNicknameBtn i:hover {
-  transform: scale(1.15);
+  transform: scale(1.5);
 }
 
 #signUpBtn {
