@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/test/users")
 @CrossOrigin("*")
 public class TestController {
     @Autowired

@@ -1,8 +1,6 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.CommentAddDto;
-import com.faffy.web.dto.CommentDto;
 import com.faffy.web.dto.CommentUpdateDto;
 import com.faffy.web.jpa.entity.Comment;
 
