@@ -135,7 +135,7 @@
         회원가입 시 FAFFY(패피)가 제공하는 서비스를 모두 이용하실 수 있습니다.
         <v-dialog
           v-model="serviceDialog"
-          width="500"
+          width="800"
         >
           <template v-slot:activator="{ on, attrs }">
             <div
@@ -168,7 +168,7 @@
          및
         <v-dialog
           v-model="privateDialog"
-          width="500"
+          width="800"
         >
           <template v-slot:activator="{ on, attrs }">
             <div
