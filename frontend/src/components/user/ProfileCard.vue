@@ -197,7 +197,7 @@ export default {
 }
 
 #profileBtn i:hover {
-  transform: scale(1.15);
+  transform: scale(1.5);
 }
 
 a {
