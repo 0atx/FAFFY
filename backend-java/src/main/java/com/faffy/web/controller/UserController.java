@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -115,7 +116,7 @@ public class UserController {
      * @param userDto
      * @return 성공시 User, 실패시 msg
      */
-    @ApiOperation(value="회원정보 수장",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
+    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
     @PutMapping
     public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
         User user = userService.updateUser(userDto);
@@ -155,6 +156,10 @@ public class UserController {
         hashmapIn.put("Token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
         hashmap.put("content", hashmapIn);
         return ResponseEntity.ok().body(hashmap);
+    }
+    @PostMapping("/logout")
+    public void logout(@RequestHeader(value = "X-AUTH-TOKEN") String token) {
+        userService.logout(token);
     }
 
     @PostMapping("/category")
