@@ -1,7 +1,10 @@
 package com.faffy.web.jpa.entity;
 
+import com.faffy.web.dto.CommentGetDto;
 import com.faffy.web.dto.CommentUpdateDto;
 import com.faffy.web.exception.IllegalInputException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -22,6 +25,7 @@ public class Comment extends BaseEntity {
     private User writer;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_no")
+    @JsonIgnore
     private Board board;
     private LocalDateTime datetime;
     public Comment() {}
@@ -37,5 +41,18 @@ public class Comment extends BaseEntity {
     public void updateComment(CommentUpdateDto commentUpdateDto) {
         this.content = commentUpdateDto.getContent();
         this.datetime = LocalDateTime.now();
+    }
+
+    public void addTo(Board board) {
+        this.board = board;
+    }
+
+    public CommentGetDto toCommentGetDto() {
+        CommentGetDto commentGetDto = CommentGetDto.builder()
+                .content(getContent())
+                .writer(getWriter().toPublicDto())
+                .datetime(getDatetime())
+                .build();
+        return commentGetDto;
     }
 }

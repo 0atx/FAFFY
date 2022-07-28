@@ -1,16 +1,17 @@
 package com.faffy.web.dto;
 
-import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.Gender;
+import com.faffy.web.jpa.type.LoginType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 비밀번호가 없는 공개 정보만 담은 객체
+ * 비밀번호가 없는 공개 정보만 담은 Wrapper 클래스
+ * 주로 응답할 때 사용
  */
 @Data
 public class UserPublicDto {
@@ -26,8 +27,17 @@ public class UserPublicDto {
      * 자기소개 문구
      */
     private String info;
+    private String introduce;
+    @NonNull
+    private LoginType loginType;
+
+    private String instaLink;
+    private String facebookLink;
+    private String youtubeLink;
+
     @Builder
-    public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles) {
+    public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
+                         String introduce, LoginType loginType, String instaLink,String facebookLink,String youtubeLink) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -36,5 +46,10 @@ public class UserPublicDto {
         this.gender = gender;
         this.info = info;
         this.roles = roles;
+        this.introduce = introduce;
+        this.loginType = loginType;
+        this.instaLink = instaLink;
+        this.facebookLink = facebookLink;
+        this.youtubeLink = youtubeLink;
     }
 }
