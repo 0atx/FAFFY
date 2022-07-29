@@ -73,6 +73,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/board",
+    name: "board",
+    component: () => import("@/views/BoardView.vue"),
+  },
 ];
 
 const router = new VueRouter({
