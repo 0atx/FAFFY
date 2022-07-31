@@ -25,7 +25,10 @@ const boardStore = {
    ],
   },
   getters: {
-    articleList: state => state.articleList
+    articleList: state => state.articleList,
+    freeArticles: state => state.articleList.filter(article => article.category === '자유'),
+    qnaArticles: state => state.articleList.filter(article => article.category === '질문'),
+    reviewArticles: state => state.articleList.filter(article => article.category === '후기'),
   },
   mutations: {
 
