@@ -52,7 +52,7 @@ export default {
     return {
       items: [
         { title: '자유', icon: 'mdi-view-dashboard' },
-        { title: '질문/답변', icon: 'mdi-help-box' },
+        { title: '질문', icon: 'mdi-help-box' },
         { title: '후기', icon: 'mdi-image' },
       ],
       right: null,
@@ -62,6 +62,7 @@ export default {
     // 세부 게시판 글 조회(추후 수정)
     boardType(type) {
       console.log(`${type} 게시판 보기`)
+      this.$emit('changeBoardType', type)
     }
   }
 }

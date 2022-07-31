@@ -5,7 +5,7 @@
 -->
 <template>
   <div>
-    <h3>article list</h3>
+    <h3>{{ type }} 게시판</h3>
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -64,21 +64,38 @@ export default {
         totalVisible: 7,
       }
     },
+  props: {
+    type: String
+  },
   computed: {
-    ...mapGetters(boardStore, ['articleList']),
+    ...mapGetters(boardStore, ['freeArticles', 'qnaArticles', 'reviewArticles']),
+    nowArticles() {
+      if (this.type === '자유') {
+        return this.freeArticles
+      } else if (this.type === '질문') {
+        return this.qnaArticles
+      } else {
+        return this.reviewArticles
+      }
+    },
     totalPages() {
-      return this.articleList.length % this.itemsPerPage > 0 ? parseInt(this.articleList.length/this.itemsPerPage)+1 : parseInt(this.articleList.length/this.itemsPerPage)
+      return this.nowArticles.length % this.itemsPerPage > 0 ? parseInt(this.nowArticles.length/this.itemsPerPage)+1 : parseInt(this.nowArticles.length/this.itemsPerPage)
     },
     currentPage() {
       const start = (this.page-1)*this.itemsPerPage
       const end = start+this.itemsPerPage
-      return this.articleList.slice(start, end)
+      return this.nowArticles.slice(start, end)
     }
   },
   methods: {
     // 상세조회 페이지 이동(추후 수정)
     articleDetail(article) {
       console.log(`제목: ${article.title} 글로 이동`)
+    }
+  },
+  watch: {
+    type() {
+      this.page = 1
     }
   }
 }
