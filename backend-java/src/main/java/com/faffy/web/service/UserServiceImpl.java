@@ -11,10 +11,13 @@ import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate redisTemplate;
 
 
 
@@ -68,6 +72,16 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException(LOGIN_FAILED_MSG);
         }
         return user.toPublicDto();
+    }
+
+    @Override
+    public void logout(String token) {
+        long duration = 30 * 60 *1000;
+        final String PREFIX = "logout";
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        Duration expireDuration = Duration.ofSeconds(duration);
+        valueOperations.set(PREFIX + token, token, expireDuration);
+
     }
 
 

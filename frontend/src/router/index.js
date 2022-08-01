@@ -64,12 +64,17 @@ const routes = [
     path: "/consulting",
     name: "consulting",
     redirect: "/consulting/ready",
-    component: () => import("@/views/ProfileView.vue"),
+    component: () => import("@/views/ConsultingView.vue"),
     children: [
       {
         path: "ready",
         name: "consulting-ready",
-        component: () => import("@/components/user/ProfileDetailView.vue"),
+        component: () => import("@/views/ConsultingFormView.vue"),
+      },
+      {
+        path: "onair",
+        name: "consulting-onair",
+        component: () => import("@/views/ConsultingView.vue"),
       },
     ],
   },
