@@ -5,7 +5,6 @@ import lombok.ToString;
 
 import java.util.Date;
 
-
 public interface PublicUserInfo {
     int getNo();
     String getName();
@@ -14,5 +13,4 @@ public interface PublicUserInfo {
     Date getBirthday();
     String getInfo();
     Gender getGender();
-
 }

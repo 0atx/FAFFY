@@ -1,9 +1,6 @@
 package com.faffy.web.controller;
 
-import com.faffy.web.dto.UserCategoryRequestDto;
-import com.faffy.web.dto.UserDto;
-import com.faffy.web.dto.UserLoginDto;
-import com.faffy.web.dto.UserPublicDto;
+import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
@@ -18,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
@@ -111,19 +110,48 @@ public class UserController {
         return ResponseEntity.ok().body(hashmap);
     }
 
+//    /**
+//     * 회원정보 수정
+//     * @param userDto
+//     * @return 성공시 User, 실패시 msg
+//     */
+//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
+//    @PutMapping
+//    public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
+//        User user = userService.updateUser(userDto);
+//        HashMap<String, Object> hashmap = new HashMap<>();
+//        hashmap.put("content",user);
+//        return ResponseEntity.ok().body(hashmap);
+//    }
+
     /**
      * 회원정보 수정
      * @param userDto
      * @return 성공시 User, 실패시 msg
      */
-    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
+    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
+    public ResponseEntity updateUser(@Valid @ModelAttribute UserDto userDto) throws DataNotFoundException, IllegalInputException {
         User user = userService.updateUser(userDto);
+        System.out.println("userDto:"+userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         hashmap.put("content",user);
         return ResponseEntity.ok().body(hashmap);
     }
+
+//    /**
+//     * 회원정보 수정 - 프로필 사진 업로드 테스트
+//     * @param file
+//     * @return 성공시 User, 실패시 msg
+//     */
+//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
+//    @PutMapping
+//    public ResponseEntity updateUser(@Valid @RequestParam MultipartFile file) throws DataNotFoundException, IllegalInputException {
+//        User user = userService.updateUserImg(file);
+//        HashMap<String, Object> hashmap = new HashMap<>();
+//        hashmap.put("content",user);
+//        return ResponseEntity.ok().body(hashmap);
+//    }
 
     /**
      * 회원 탈퇴

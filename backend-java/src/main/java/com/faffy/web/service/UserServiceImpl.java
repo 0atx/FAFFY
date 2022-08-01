@@ -6,16 +6,21 @@ import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.service.file.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -27,11 +32,13 @@ import static com.faffy.web.exception.ExceptionMsg.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UploadFileRepository uploadFileRepository;
+    @Autowired
+    FileHandler fileHandler;
 
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
-
-
 
     @Override
     public User getUserByNo(int no) throws Exception {
@@ -98,6 +105,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+//    @Override
+//    @Transactional
+//    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
+//        try {
+//            User user;
+//            if (userDto.getNo() == 0) {
+//                user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
+//            } else {
+//                user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
+//            }
+//            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//            user.updateUser(userDto);
+//            return user;
+//        } catch (IllegalArgumentException e) {
+//            throw new DataNotFoundException(e.getMessage());
+//        } catch (Exception e) {
+//            throw new IllegalInputException(ILLEGAL_INPUT_MSG);
+//        }
+//    }
+
     @Override
     @Transactional
     public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
@@ -109,6 +136,17 @@ public class UserServiceImpl implements UserService {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            //프로필 사진 관련 시작
+            MultipartFile file = userDto.getFile();
+            if(file != null){
+                System.out.println("Profile image upload!!");
+                UploadFile img = fileHandler.parseFileInfo(file);
+                if(img != null){
+                    System.out.println("Profile image upload Complete!!!");
+                    uploadFileRepository.save(img);
+                    user.updateProfileImage(img);
+                }
+            }//끝
             user.updateUser(userDto);
             return user;
         } catch (IllegalArgumentException e) {
@@ -116,6 +154,25 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);
         }
+    }
+
+    @Override
+    @Transactional
+    public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException{
+        User user = userRepository.findByNo(1).orElse(null);
+        if(file == null || user == null)
+            return null;
+
+        try {
+            UploadFile img = fileHandler.parseFileInfo(file);
+            if (img != null) {
+                uploadFileRepository.save(img);
+                user.updateProfileImage(img);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return user;
     }
 
 
