@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const boardStore = {
   namespaced: true,
   state: {
@@ -17,8 +19,6 @@ const boardStore = {
       { articleNo: 12, title: '첫번째 글21', writer: '류경하421', category: '질문', content: '내용1', created_at: '2010-08-10', comments: 27 },
       { articleNo: 13, title: '첫번째 글33', writer: '류경하171', category: '자유', content: '내용1', created_at: '2010-09-10', comments: 47 },
       { articleNo: 14, title: '첫번째 글44', writer: '류경하881', category: '자유', content: '내용1', created_at: '2010-07-01', comments: 57 },
-
-
    ],
   },
   getters: {
@@ -28,10 +28,23 @@ const boardStore = {
     reviewArticles: state => state.articleList.filter(article => article.category === '후기'),
   },
   mutations: {
-
+    SET_ARTICLES: (state, articles) => state.articleList = articles
   },
   actions: {
-
+    fetchArticles({ commit }) {
+      axios({
+        url: 'http://localhost:8888/api/boards/',
+        method: 'get',
+        params: {},
+      })
+        .then(res => {
+          console.log(res)
+          commit('SET_ARTICLES', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
 };
 

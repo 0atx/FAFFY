@@ -18,6 +18,8 @@
 import SideBar from '@/components/board/SideBar.vue'
 import SearchBar from '@/components/board/SearchBar.vue'
 import ArticleList from '@/components/board/ArticleList.vue'
+import { mapActions } from 'vuex'
+const boardStore = "boardStore";
 
 export default {
   name: 'BoardView',
@@ -32,10 +34,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(boardStore, ['fetchArticles']),
     changeType(type) {
       this.boardType = type
       console.log(type)
     }
+  },
+  created() {
+    this.fetchArticles()
   }
 }
 </script>
