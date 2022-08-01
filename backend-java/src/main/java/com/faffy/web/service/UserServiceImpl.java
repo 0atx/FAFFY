@@ -5,12 +5,14 @@ import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
+import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.jpa.type.RegularExpression;
 import com.faffy.web.service.file.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,14 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.faffy.web.exception.ExceptionMsg.*;
 @RequiredArgsConstructor
@@ -128,6 +133,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
+        // 비밀번호 정규 표현식 만족 체크
+        if (!Pattern.matches(RegularExpression.PASSWORD_REG_EX,userDto.getPassword()))
+            throw new IllegalInputException(ILLEGAL_PASSWORD_CONDITION);
+        
         try {
             User user;
             if (userDto.getNo() == 0) {
@@ -135,6 +144,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
+            
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             //프로필 사진 관련 시작
             MultipartFile file = userDto.getFile();
