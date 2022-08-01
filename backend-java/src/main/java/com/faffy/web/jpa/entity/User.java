@@ -10,6 +10,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -88,7 +89,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Builder
     public User(int no, String email, LoginType loginType, String name, String nickname, String password, LocalDate birthday, String introduce, Gender gender, String info, List<String> roles
-    ,String instaLink, String facebookLink, String youtubeLink) {
+    , String instaLink, String facebookLink, String youtubeLink) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -122,6 +123,14 @@ public class User extends BaseEntity implements UserDetails {
         this.instaLink = userDto.getInstaLink();
         this.facebookLink = userDto.getFacebookLink();
         this.youtubeLink =  userDto.getYoutubeLink();
+    }
+
+    /**
+     * 프로필 사진 수정
+     * @param img
+     */
+    public void updateProfileImage(UploadFile img) {
+        this.profileImage = img;
     }
 
     @JsonIgnore
