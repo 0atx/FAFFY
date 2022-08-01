@@ -270,6 +270,15 @@ export default {
       }
       // 유효성 검사 됐으면 수정 처리
 
+      // let formData = new FormData();
+      // axios.put('http://localhost:8888/api/users', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(
+      //   response => {
+      //     if (!!response && response.status === 200) {
+      //       console.log("OK");
+      //     }
+      //   }).catch(error => {
+      //     console.log(error);
+      //   });
 
       console.log("정보 수정 보내야 합니다.");
     },
