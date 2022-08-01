@@ -6,8 +6,10 @@ import com.faffy.web.jpa.type.Gender;
 import com.faffy.web.jpa.type.LoginType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -48,6 +50,11 @@ public class UserDto {
     private String instaLink;
     private String facebookLink;
     private String youtubeLink;
+
+    /**
+     * 프로필 사진
+     */
+    private MultipartFile file;
 
     public UserDto(){};
 
