@@ -7,7 +7,6 @@
       </v-col>
       <v-col
       cols="9">
-        <SearchBar />
         <ArticleList :type="boardType" />
       </v-col>
     </v-row>
@@ -16,7 +15,6 @@
 
 <script>
 import SideBar from '@/components/board/SideBar.vue'
-import SearchBar from '@/components/board/SearchBar.vue'
 import ArticleList from '@/components/board/ArticleList.vue'
 import { mapActions } from 'vuex'
 const boardStore = "boardStore";
@@ -25,12 +23,11 @@ export default {
   name: 'BoardView',
   components: {
     SideBar,
-    SearchBar,
     ArticleList,
   },
   data() {
     return {
-      boardType: '자유'
+      boardType: '자유',
     }
   },
   methods: {
@@ -38,7 +35,7 @@ export default {
     changeType(type) {
       this.boardType = type
       console.log(type)
-    }
+    },
   },
   created() {
     this.fetchArticles()
