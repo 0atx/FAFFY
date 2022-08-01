@@ -57,8 +57,8 @@
 
       <!-- 팔로잉 팔로워 -->
       <div>
-        <router-link to="/auth/sign-up">팔로잉 163</router-link>
-        <router-link to="/auth/sign-up">팔로워 208</router-link>
+        <router-link to="/profile/1/following">팔로잉 163</router-link>
+        <router-link to="/profile/1/follower">팔로워 208</router-link>
       </div>
 
       <!-- 한 줄 자기소개 -->
