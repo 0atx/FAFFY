@@ -124,34 +124,34 @@ public class UserController {
 //        return ResponseEntity.ok().body(hashmap);
 //    }
 
-//    /**
-//     * 회원정보 수정
-//     * @param userDto
-//     * @return 성공시 User, 실패시 msg
-//     */
-//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
-//    @PutMapping
-//    public ResponseEntity updateUser(@Valid @ModelAttribute UserDto userDto) throws DataNotFoundException, IllegalInputException {
-//        User user = userService.updateUser(userDto);
-//        System.out.println("userDto:"+userDto);
-//        HashMap<String, Object> hashmap = new HashMap<>();
-//        hashmap.put("content",user);
-//        return ResponseEntity.ok().body(hashmap);
-//    }
-
     /**
-     * 회원정보 수정 - 프로필 사진 업로드 테스트
-     * @param file
+     * 회원정보 수정
+     * @param userDto
      * @return 성공시 User, 실패시 msg
      */
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity updateUser(@Valid @RequestParam MultipartFile file) throws DataNotFoundException, IllegalInputException {
-        User user = userService.updateUserImg(file);
+    public ResponseEntity updateUser(@Valid @ModelAttribute UserDto userDto) throws DataNotFoundException, IllegalInputException {
+        User user = userService.updateUser(userDto);
+        System.out.println("userDto:"+userDto);
         HashMap<String, Object> hashmap = new HashMap<>();
         hashmap.put("content",user);
         return ResponseEntity.ok().body(hashmap);
     }
+
+//    /**
+//     * 회원정보 수정 - 프로필 사진 업로드 테스트
+//     * @param file
+//     * @return 성공시 User, 실패시 msg
+//     */
+//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
+//    @PutMapping
+//    public ResponseEntity updateUser(@Valid @RequestParam MultipartFile file) throws DataNotFoundException, IllegalInputException {
+//        User user = userService.updateUserImg(file);
+//        HashMap<String, Object> hashmap = new HashMap<>();
+//        hashmap.put("content",user);
+//        return ResponseEntity.ok().body(hashmap);
+//    }
 
     /**
      * 회원 탈퇴
