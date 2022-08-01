@@ -38,7 +38,7 @@ public class FollowServiceImpl implements FollowService{
         List<FollowMapping> follower = followMappingRepository.findFollowMappingsByFollowedUser(user);
         List<UserPublicDto> result = new ArrayList<>();
         for (FollowMapping follow : follower)
-            result.add(follow.getFollowedUser().toPublicDto());
+            result.add(follow.getFollowUser().toPublicDto());
         return result;
     }
 
