@@ -105,7 +105,8 @@ export default {
   },
   methods: {
     goTo() {
-      this.$router.push({ name: "main" });
+      // this.$router.push({ name: "main" });
+      this.$router.push({ name: "consulting-onair" });
     }
   }
 };
