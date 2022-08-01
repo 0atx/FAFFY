@@ -12,6 +12,7 @@
         type="email"
         label="이메일"
         required
+        color="#0c0f66"
         @keydown.enter="onInputKeyword"
       />
 
@@ -22,6 +23,7 @@
         :type="type ? 'text' : 'password'"
         label="비밀번호"
         required
+        color="#0c0f66"
         @click:append="type = !type"
         @keydown.enter="onInputKeyword"
       />
@@ -57,6 +59,7 @@
                   type="email"
                   label="이메일"
                   required
+                  color="#0c0f66"
                   @keydown.enter="onInputKeyword"
                 />
 
@@ -66,6 +69,7 @@
                   type="text"
                   label="이름"
                   required
+                  color="#0c0f66"
                   @keydown.enter="onInputKeyword"
                 />
 
