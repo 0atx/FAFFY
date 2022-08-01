@@ -15,6 +15,7 @@
             :rules="rules.email()"
             label="이메일"
             required
+            color="#0c0f66"
             hide-details
             @keydown.enter="onInputKeyword"
           />
@@ -35,6 +36,7 @@
         persistent-hint
         label="비밀번호"
         required
+        color="#0c0f66"
         @keydown.enter="onInputKeyword"
       />
 
@@ -47,6 +49,7 @@
         persistent-hint
         label="비밀번호 확인"
         required
+        color="#0c0f66"
         @keydown.enter="onInputKeyword"
       />
 
@@ -59,6 +62,7 @@
         persistent-hint
         label="이름"
         required
+        color="#0c0f66"
         @keydown.enter="onInputKeyword"
       />
 
@@ -73,6 +77,7 @@
             persistent-hint
             label="별명"
             required
+            color="#0c0f66"
             @keydown.enter="onInputKeyword"
           />
         </div>
@@ -99,6 +104,7 @@
             label="생년월일"
             append-icon="mdi-calendar"
             readonly
+            color="#0c0f66"
             hide-details
             v-bind="attrs"
             v-on="on"
