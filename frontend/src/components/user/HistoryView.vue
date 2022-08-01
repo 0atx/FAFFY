@@ -52,7 +52,7 @@ export default {
     return {
       headers: [
         { text: '방송 제목', align:'start', value:'title'},
-        { text: '방송 소개', value:'info'},
+        { text: '방송 소개', value:'intro'},
         { text: '방송 진행자', value:'consultant'},
         { text: '방송 일자', value:'date'},
       ],
@@ -60,85 +60,85 @@ export default {
       consults: [
         {
           title: '방송 제목입니다.',
-          info: '카테고리 넣고 상세 페이지에는 그 날 입었던 옷들 기록?',
+          intro: '카테고리 넣고 상세 페이지에는 그 날 입었던 옷들 기록?',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '제목도 10자 제한',
-          info: '30자 출력하게 해야함',
+          intro: '30자 출력하게 해야함',
           consultant: '별명도 10자?',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.3',
-          info: 'if consults.info.length <= 30 그냥 출력',
+          intro: 'if consults.intro.length <= 30 그냥 출력',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.4',
-          info: 'else consult.info.substring(0, 30) + "..." 해서 출력',
+          intro: 'else consult.intro.substring(0, 30) + "..." 해서 출력',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.5',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.6',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.7',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.8',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.9',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.10',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.11',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.12',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.13',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
         {
           title: '방송 제목입니다.14',
-          info: '여기 뭐 넣어야 되냐?;;',
+          intro: '여기 뭐 넣어야 되냐?;;',
           consultant: '별명짓기귀찮다',
           date: '2022-08-01'
         },
