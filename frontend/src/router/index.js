@@ -31,6 +31,7 @@ const routes = [
   {
     path: "/profile/:id",
     name: "profile",
+    redirect: "user-detail",
     component: () => import("@/views/ProfileView.vue"),
     children: [
       {
