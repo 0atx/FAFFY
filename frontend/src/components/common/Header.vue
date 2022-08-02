@@ -51,7 +51,7 @@
             <v-list-item-title>방송 시작</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="requestSignOut">
             <v-list-item-title>로그아웃</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -89,7 +89,10 @@
 <script>
 import SearchBar from '@/components/common/SearchBar.vue'
 import ProfileIconAvatar from '@/components/common/ProfileIconAvatar.vue'
+import { mapState, mapActions } from "vuex";
+// import { auth } from "@/api/auth.js";
 
+const authStore = "authStore";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
@@ -97,16 +100,20 @@ export default {
     SearchBar,
     ProfileIconAvatar
   },
-  data() {
-      return {
-        // 임시, 나중에 computed mapState로 userStore에서 userInfo 받아와야 함
-        userInfo: false,
-      }
+    computed: {
+    ...mapState(authStore, ["userInfo","isLogin"]),
   },
   methods: {
+    ...mapActions(authStore,["logout"]),
     goTo() {
       // this.$router.push({ name: "main" });
       this.$router.push({ name: "consulting-onair" });
+    },
+    async requestSignOut() {
+      await this.logout();
+      if (!this.isLogin) {
+        this.$router.push({name:"main"});
+      }
     }
   }
 };

@@ -174,7 +174,15 @@ export default {
         this.form,
         (response) => {
           console.log("로그인 성공");
-          console.log(response.data);
+          console.log(response.data.content["token"]);
+          console.log(response.data.content["user"]);
+
+          const accessToken = response.data.content["token"];
+          sessionStorage.setItem("X-AUTH-TOKEN", accessToken);
+
+          const user = response.data.content["user"];
+          this.SET_USER_INFO(user);
+
           this.$router.push({ name: "main" });
         },
         () => {
