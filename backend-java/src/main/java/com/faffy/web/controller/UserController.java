@@ -169,10 +169,10 @@ public class UserController {
     public ResponseEntity updateUser(@ModelAttribute UserDto userDto) {
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
+        System.out.println("userDto:" + userDto);
 
         try {
             User user = userService.updateUser(userDto);
-            System.out.println("userDto:" + userDto);
             resultMap.put("content", user);
         } catch(Exception e) {
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
