@@ -25,14 +25,16 @@ public class UserGetDetailDto {
     private String info;
     private String introduce;
     private List<String> categories = new ArrayList<>();
-
+    private int followerCount;
+    private int followingCount;
     private String instaLink;
     private String facebookLink;
     private String youtubeLink;
 
     @Builder
     public UserGetDetailDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
-                         String introduce, List<UserCategory> categories, String instaLink, String facebookLink, String youtubeLink) {
+                         String introduce, List<UserCategory> categories, String instaLink, String facebookLink, String youtubeLink,
+                        int followerCount, int followingCount) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -45,6 +47,8 @@ public class UserGetDetailDto {
         this.instaLink = instaLink;
         this.facebookLink = facebookLink;
         this.youtubeLink = youtubeLink;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
 
         for (UserCategory category:
                 categories) {
