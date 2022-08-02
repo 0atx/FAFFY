@@ -2,21 +2,15 @@ package com.faffy.web.dto;
 
 import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.Gender;
-import com.faffy.web.jpa.type.LoginType;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 비밀번호가 없는 공개 정보만 담은 Wrapper 클래스
- * 주로 간단한 유저 정보만 응답할 때 사용
- */
 @Data
-public class UserPublicDto {
+public class UserGetDetailDto {
     private int no;
     private String email;
     private String name;
@@ -30,14 +24,17 @@ public class UserPublicDto {
      */
     private String info;
     private String introduce;
-
+    private List<String> categories = new ArrayList<>();
+    private int followerCount;
+    private int followingCount;
     private String instaLink;
     private String facebookLink;
     private String youtubeLink;
 
     @Builder
-    public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
-                         String introduce, String instaLink, String facebookLink, String youtubeLink) {
+    public UserGetDetailDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
+                         String introduce, List<UserCategory> categories, String instaLink, String facebookLink, String youtubeLink,
+                        int followerCount, int followingCount) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -50,6 +47,12 @@ public class UserPublicDto {
         this.instaLink = instaLink;
         this.facebookLink = facebookLink;
         this.youtubeLink = youtubeLink;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
 
+        for (UserCategory category:
+                categories) {
+            this.categories.add(category.getUserCategoryMapper().getCategory().getName());
+        }
     }
 }
