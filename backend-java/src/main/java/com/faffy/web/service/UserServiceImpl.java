@@ -146,17 +146,22 @@ public class UserServiceImpl implements UserService {
             }
             
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            //프로필 사진 관련 시작
+            //프로필 사진 관련
             MultipartFile file = userDto.getFile();
+            System.out.println("file:"+file);
             if(file != null){
-                System.out.println("Profile image upload!!");
                 UploadFile img = fileHandler.parseFileInfo(file);
                 if(img != null){
-                    System.out.println("Profile image upload Complete!!!");
                     uploadFileRepository.save(img);
                     user.updateProfileImage(img);
                 }
-            }//끝
+            }
+            else{ //선택한 파일이 없는 경우 기존 프로필 사진과 db 정보 삭제
+                UploadFile img = user.getProfileImage();
+                uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
+                fileHandler.deleteFile(img); //실제 파일 삭제
+            }
+
             user.updateUser(userDto);
             return user;
         } catch (IllegalArgumentException e) {
