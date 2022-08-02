@@ -125,8 +125,8 @@
               clearable
               clear-icon="mdi-close-circle"
               color="#0c0f66"
-              maxlength="200"
-              counter="200"
+              maxlength="300"
+              counter="300"
             ></v-textarea>
 
             <!-- 관심 카테고리 -->
