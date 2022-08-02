@@ -4,7 +4,7 @@
 최종 수정일: 2022.08.02
 -->
 <template>
-  <vue-container>
+  <v-container>
     <!--제목-->
     <v-text-field
       label="제목"
@@ -42,10 +42,14 @@
     </v-text-field>
     <v-btn color="success" @click="submitArticle">작성</v-btn>
     <v-btn color="warning" @click="resetForm">초기화</v-btn>
-  </vue-container>
+    {{ token }}
+  </v-container>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+const boardStore = "boardStore"
+
 export default {
   name: 'CreateArticleForm',
   data() {
@@ -56,15 +60,28 @@ export default {
       content: '',
       img: '',
       hashtag: '',
+      token: localStorage.getItem('token')
     }
   },
   methods: {
+    ...mapActions(boardStore, ['createArticle']),
     resetForm() {
       this.title = ''
       this.category = ''
       this.content = ''
       this.img = ''
       this.hashtag = ''
+    },
+    submitArticle() {
+      const articleForm = {
+        'title': this.title,
+        'category': this.category,
+        'content': this.content,
+        'img': this.img
+      }
+
+      console.log('article', articleForm)
+      this.createArticle(articleForm)
     }
   }
 }

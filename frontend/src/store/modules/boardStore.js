@@ -35,11 +35,25 @@ const boardStore = {
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'get',
-        params: {},
+        headers: { Authorization: localStorage.getItem('token') }
       })
         .then(res => {
           console.log(res)
           commit('SET_ARTICLES', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    createArticle(context, article) {
+      axios({
+        url: 'http://localhost:8888/api/boards/',
+        method: 'post',
+        data: article,
+        headers: { Authorization: localStorage.getItem('token') },
+      })
+        .then(res => {
+          console.log(res)
         })
         .catch(err => {
           console.log(err)
