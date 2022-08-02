@@ -42,7 +42,6 @@
     </v-text-field>
     <v-btn color="success" @click="submitArticle">작성</v-btn>
     <v-btn color="warning" @click="resetForm">초기화</v-btn>
-    {{ token }}
   </v-container>
 </template>
 
@@ -58,7 +57,7 @@ export default {
       title: '',
       category: '',
       content: '',
-      img: '',
+      img: null,
       hashtag: '',
       token: localStorage.getItem('token')
     }
@@ -69,7 +68,7 @@ export default {
       this.title = ''
       this.category = ''
       this.content = ''
-      this.img = ''
+      this.img = null
       this.hashtag = ''
     },
     submitArticle() {
