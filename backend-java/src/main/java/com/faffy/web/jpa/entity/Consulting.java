@@ -24,7 +24,7 @@ public class Consulting extends BaseEntity {
     private int roomSize;
     private int viewCount;
 
-    @Column(length = 100)
+    @Column(length = 300)
     private String intro;
 
 //    @ManyToOne(fetch = LAZY)
