@@ -4,47 +4,36 @@ const authStore = {
   namespaced: true,
   state: {
     isLogin: false,
-    isLoginError: false,
     userInfo: null,
   },
   checkUserInfo: function (state) {
     return state.userInfo;
   },
   mutations: {
-    SET_IS_LOGIN: (state, isLogin) => {
-      state.isLogin = isLogin;
-    },
-    SET_IS_LOGIN_ERROR: (state, isLoginError) => {
-      state.isLoginError = isLoginError;
-    },
     SET_USER_INFO: (state, userInfo) => {
-      state.isLogin = true;
+      state.isLogin = userInfo != null ? true : false;
       state.userInfo = userInfo;
     },
   },
   actions: {
-    // async userConfirm({commit},user) {
-    //   await auth.login(
-    //     user,
-    //     (response)=> {
-    //       console.log("로그인 요청 성공!");
-    //       const access_token = response.data["content"];
-    //       sessionStorage.setItem("X-AUTH-TOKEN", access_token);
-    //       commit("SET_USER_INFO",response.data);
-    //       commit("SET_IS_LOGIN",true);
-    //     },
-    //     (response)=> {
-    //       console.log("로그인 요청 실패!");
-    //       commit("SET_IS_LOGIN",false);
-    //       commit("SET_IS_LOGIN_ERROR",true);
-    //       console.log(response);
-    //     });
-    // },
     async getLoginedUser({ commit }) {
       await auth.getUserById((response) => {
         commit("SET_USER_INFO", response.data.userInfo);
       });
     },
+    async logout({commit}) {
+      await auth.logout((response) => {
+        console.log("로그아웃 성공");
+        console.log(response);
+        commit("SET_USER_INFO",null);
+
+        sessionStorage.removeItem("X-AUTH-TOKEN");
+      },
+      (response)=> {
+        console.log("로그아웃 실패");
+        console.log(response);
+      })
+    }
     // async userModify({ commit }, user) {
     //   await auth.userModify(user, (response) => {
     //     commit("SET_USER_INFO", response.data.userInfo);
