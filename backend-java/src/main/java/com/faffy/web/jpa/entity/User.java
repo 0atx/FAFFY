@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.entity;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.Gender;
@@ -146,6 +147,20 @@ public class User extends BaseEntity implements UserDetails {
                 .roles(this.roles)
                 .build();
         return userPublicDto;
+    }
+    public UserGetDetailDto toDetailDto() {
+        UserGetDetailDto userDetailDto = UserGetDetailDto.builder()
+                .no(this.no)
+                .email(this.email)
+                .nickname(this.nickname)
+                .name(this.name)
+                .gender(this.gender)
+                .birthday(this.birthday)
+                .info(this.info)
+                .roles(this.roles)
+                .categories(this.categories)
+                .build();
+        return userDetailDto;
     }
 
     @Override

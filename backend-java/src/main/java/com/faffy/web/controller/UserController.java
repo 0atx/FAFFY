@@ -4,7 +4,9 @@ import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
@@ -90,7 +92,7 @@ public class UserController {
 
         try {
             User user = userService.getUserByNo(no);
-            resultMap.put("content", user);
+            resultMap.put("content", user.toDetailDto());
         } catch (Exception e) {
             logger.error("유저 찾기 실패 : {}", e.getMessage());
             resultMap.put("msg", e.getMessage());
@@ -113,7 +115,7 @@ public class UserController {
 
         try {
             User user = userService.getUserByEmail(email);
-            resultMap.put("content",user);
+            resultMap.put("content",user.toDetailDto());
         } catch (Exception e) {
             logger.error("회원 정보 찾기 에러 : {}",e.getMessage());
             resultMap.put("msg", e.getMessage());
@@ -136,7 +138,7 @@ public class UserController {
 
         try {
             User user = userService.getUserByNickname(nickname);
-            resultMap.put("content", user);
+            resultMap.put("content", user.toDetailDto());
         } catch (Exception e) {
             resultMap.put("msg", e.getMessage());
             status = HttpStatus.BAD_REQUEST;
