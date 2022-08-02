@@ -1,3 +1,7 @@
+<!--
+작성자 : 박윤하
+프로필 뷰 - 방송 기록 목록 페이지
+-->
 <template>
   <div id="history">
     <div>
@@ -47,7 +51,7 @@
 
 <script>
 export default {
-  name: "EditProfileView",
+  name: "HistoryView",
   data() {
     return {
       headers: [
@@ -65,8 +69,8 @@ export default {
           date: '2022-08-01'
         },
         {
-          title: '제목도 10자 제한',
-          intro: '30자 출력하게 해야함',
+          title: '제목도 10자 제한(최대 50자)',
+          intro: '30자 출력하게 해야함(최대 300자)',
           consultant: '별명도 10자?',
           date: '2022-08-01'
         },
@@ -209,5 +213,4 @@ a {
 button:before {
   background-color: transparent;
 }
-
 </style>
