@@ -159,6 +159,8 @@ public class User extends BaseEntity implements UserDetails {
                 .info(this.info)
                 .roles(this.roles)
                 .categories(this.categories)
+                .followerCount(this.followedMappings.size())
+                .followingCount(this.followMappings.size())
                 .build();
         return userDetailDto;
     }
