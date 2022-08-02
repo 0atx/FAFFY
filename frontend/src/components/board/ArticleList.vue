@@ -34,7 +34,7 @@
     <h3>{{ type }} 게시판</h3>
     <v-btn color="success" @click="sortByDate">최신순</v-btn>
     <v-btn color="primary" @click="sortByComments">답글 많은 순</v-btn>
-    <v-btn color="warning">글 쓰기</v-btn>
+    <v-btn color="warning" @click="createArticle">글 쓰기</v-btn>
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -149,6 +149,9 @@ export default {
       } else {
         return this.now = this.reviewArticles
       }
+    },
+    createArticle() {
+      this.$router.push({ name: 'article' })
     }
   },
   watch: {
