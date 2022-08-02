@@ -93,6 +93,11 @@ const routes = [
     name: "board",
     component: () => import("@/views/BoardView.vue"),
   },
+  {
+    path: "/article",
+    name: "article",
+    component: () => import("@/views/CreateArticleView.vue"),
+  },
 ];
 
 const router = new VueRouter({
