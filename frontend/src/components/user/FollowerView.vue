@@ -1,3 +1,7 @@
+<!--
+작성자 : 박윤하
+프로필 뷰 - 팔로워 목록
+-->
 <template>
   <div id="follower">
     <div>
