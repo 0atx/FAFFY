@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  * 비밀번호가 없는 공개 정보만 담은 Wrapper 클래스
- * 주로 간단한 유저 정보만 응답할 때 사용
  */
 @Data
 public class UserPublicDto {

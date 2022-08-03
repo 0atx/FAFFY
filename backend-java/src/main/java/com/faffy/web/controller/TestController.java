@@ -4,15 +4,13 @@ import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.jpa.entity.User;
-import com.faffy.web.jpa.entity.UserCategory;
-import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -85,7 +83,7 @@ public class TestController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            List<PublicUserInfo> allUsers = userService.findAllUsers();
+            List<UserNoAndNicknameMask> allUsers = userService.findAllUsers();
             resultMap.put("content", allUsers);
         } catch (Exception e) {
             logger.error("회원 목록 찾기 실패 {}",e.toString());
