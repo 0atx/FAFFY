@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Data
 public class CommentGetDto {
     private String content;
-    private UserPublicDto writer;
+    private UserGetSimpleDto writer;
     private LocalDateTime datetime;
 
     public CommentGetDto() {}
     @Builder
-    public CommentGetDto(String content, UserPublicDto writer, LocalDateTime datetime) {
+    public CommentGetDto(String content, UserGetSimpleDto writer, LocalDateTime datetime) {
         this.content = content;
         this.writer = writer;
         this.datetime = datetime;

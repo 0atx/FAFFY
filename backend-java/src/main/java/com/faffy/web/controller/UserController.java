@@ -1,13 +1,9 @@
 package com.faffy.web.controller;
 
 import com.faffy.web.dto.*;
-import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
-import com.faffy.web.exception.IllegalInputException;
-import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.User;
-import com.faffy.web.jpa.entity.UserCategory;
-import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
@@ -18,13 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 import java.io.File;
 import java.nio.file.Files;
@@ -54,7 +47,7 @@ public class UserController {
     public ResponseEntity<Map<String,Object>> findAllUsers() {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
-        List<PublicUserInfo> allUsers = userService.findAllUsers();
+        List<UserNoAndNicknameMask> allUsers = userService.findAllUsers();
         resultMap.put("content",allUsers);
 
         return new ResponseEntity(resultMap,status);
