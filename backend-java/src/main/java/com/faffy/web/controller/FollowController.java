@@ -3,6 +3,7 @@ package com.faffy.web.controller;
 import com.faffy.web.dto.FollowRequestDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.service.FollowService;
+import com.faffy.web.service.FollowServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,34 @@ import java.util.Map;
 public class FollowController {
 
     @Autowired
-    FollowService followService;
+    FollowServiceImpl followService;
 
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/following/{no}")
     public ResponseEntity getFolling(@PathVariable("no") int no) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
             List<UserPublicDto> following = followService.getFollowing(no);
             resultMap.put("content",following);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity(resultMap, status);
+
+    }
+    @GetMapping("/follower/{no}")
+    public ResponseEntity getFollower(@PathVariable("no") int no) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            List<UserPublicDto> follower = followService.getUserFollower(no);
+            resultMap.put("content",follower);
         } catch (Exception e) {
             logger.error(e.getMessage());
             resultMap.put("msg", e.getMessage());

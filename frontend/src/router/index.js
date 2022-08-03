@@ -53,6 +53,16 @@ const routes = [
         name: "user-board",
         component: () => import("@/components/user/BoardView.vue"),
       },
+      {
+        path: "follower",
+        name: "follower",
+        component: () => import("@/components/user/FollowerView.vue"),
+      },
+      {
+        path: "following",
+        name: "following",
+        component: () => import("@/components/user/FollowingView.vue"),
+      }
     ],
   },
   {
@@ -77,6 +87,11 @@ const routes = [
         component: () => import("@/views/ConsultingView.vue"),
       },
     ],
+  },
+  {
+    path: "/board",
+    name: "board",
+    component: () => import("@/views/BoardView.vue"),
   },
 ];
 
