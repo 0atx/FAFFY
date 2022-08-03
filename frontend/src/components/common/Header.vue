@@ -43,7 +43,7 @@
         </template>
 
         <v-list>
-          <v-list-item>
+          <v-list-item @click="toMyProfile">
             <v-list-item-title>내 프로필</v-list-item-title>
           </v-list-item>
 
@@ -114,6 +114,9 @@ export default {
       if (!this.isLogin) {
         this.$router.push({name:"main"});
       }
+    },
+    toMyProfile() {
+      this.$router.push("/profile/"+this.userInfo.no).catch(()=>{});
     }
   }
 };
