@@ -7,14 +7,27 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import ArticleDetail from '@/components/board/ArticleDetail.vue'
 import CommentForm from '@/components/comment/CommentForm.vue'
+const boardStore = "boardStore"
 
 export default {
   name: 'ArticleDeatilView',
   components: {
     ArticleDetail,
     CommentForm,
+  },
+  data() {
+    return {
+      articleNo: this.$route.params.articleNo
+    }
+  },
+  methods: {
+    ...mapActions(boardStore, ['fetchArticle']),
+  },
+  created() {
+    this.fetchArticle(this.articleNo)
   }
 }
 </script>

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
@@ -28,12 +28,6 @@ export default {
   computed: {
     ...mapGetters(boardStore, ['currentArticle']),
   },
-  methods: {
-    ...mapActions(boardStore, ['fetchArticle']),
-  },
-  created() {
-      this.fetchArticle(this.articleNo)
-  }
 }
 </script>
 

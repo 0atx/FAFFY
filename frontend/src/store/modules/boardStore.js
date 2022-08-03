@@ -43,6 +43,7 @@ const boardStore = {
       })
         .then(res => {
           console.log(res)
+          this.$router.push({ name: 'board' })
         })
         .catch(err => {
           console.log(err)
