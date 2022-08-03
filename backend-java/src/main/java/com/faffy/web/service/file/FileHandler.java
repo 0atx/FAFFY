@@ -75,7 +75,8 @@ public class FileHandler {
     }
 
     public boolean deleteFile(UploadFile uf){
-        String path = uf.getUploadPath() + uf.getUuid() + "_" +  uf.getFileName();
+        String path = uf.getUploadPath() + File.separator + uf.getUuid() + "_" +  uf.getFileName();
+//        System.out.println("path:"+path);
         File file = new File(path);
         return file.delete();
     }

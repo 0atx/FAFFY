@@ -186,20 +186,6 @@ public class UserController {
         }
     }
 
-//    /**
-//     * 회원정보 수정
-//     * @param userDto
-//     * @return 성공시 User, 실패시 msg
-//     */
-//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
-//    @PutMapping
-//    public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
-//        User user = userService.updateUser(userDto);
-//        HashMap<String, Object> hashmap = new HashMap<>();
-//        hashmap.put("content",user);
-//        return ResponseEntity.ok().body(hashmap);
-//    }
-
     /**
      * 회원정보 수정
      * @param userDto
