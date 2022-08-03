@@ -145,6 +145,7 @@ public class User extends BaseEntity implements UserDetails {
                 .birthday(this.birthday)
                 .info(this.info)
                 .roles(this.roles)
+                .introduce(this.introduce)
                 .build();
         return userPublicDto;
     }
@@ -161,6 +162,7 @@ public class User extends BaseEntity implements UserDetails {
                 .categories(this.categories)
                 .followerCount(this.followedMappings.size())
                 .followingCount(this.followMappings.size())
+                .introduce(this.introduce)
                 .build();
         return userDetailDto;
     }
