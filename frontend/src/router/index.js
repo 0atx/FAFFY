@@ -98,6 +98,12 @@ const routes = [
     name: "article",
     component: () => import("@/views/CreateArticleView.vue"),
   },
+  {
+    // 확인용 임시 path, 나중에 /article/:articleNo로 수정예정
+    path: "/currentarticle",
+    name: "currentArticle",
+    component: () => import("@/views/ArticleDetailView.vue"),
+  },
 ];
 
 const router = new VueRouter({

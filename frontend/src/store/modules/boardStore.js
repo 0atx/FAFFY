@@ -20,22 +20,26 @@ const boardStore = {
       { articleNo: 13, title: '첫번째 글33', writer: '류경하171', category: '자유', content: '내용1', created_at: '2010-09-10', comments: 47 },
       { articleNo: 14, title: '첫번째 글44', writer: '류경하881', category: '자유', content: '내용1', created_at: '2010-07-01', comments: 57 },
    ],
+    currentArticle: {no: 1, category: '질문', title: 'cors 개빡치네', content: '내용1', hit: '3355', 'writer': '류경하'},
   },
   getters: {
     articleList: state => state.articleList,
     freeArticles: state => state.articleList.filter(article => article.category === '자유'),
     qnaArticles: state => state.articleList.filter(article => article.category === '질문'),
     reviewArticles: state => state.articleList.filter(article => article.category === '후기'),
+    currentArticle: state => state.currentArticle,
   },
   mutations: {
-    SET_ARTICLES: (state, articles) => state.articleList = articles
+    SET_ARTICLES: (state, articles) => state.articleList = articles,
+    SET_ARTICLE: (state, article) => state.currentArticle = article,
   },
   actions: {
     fetchArticles({ commit }) {
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'get',
-        headers: { Authorization: localStorage.getItem('token') }
+        headers: {
+          'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
           console.log(res)
@@ -50,10 +54,24 @@ const boardStore = {
         url: 'http://localhost:8888/api/boards/',
         method: 'post',
         data: article,
-        headers: { Authorization: localStorage.getItem('token') },
+        headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
           console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    fetchArticle({ commit }, articleNo) {
+      axios({
+        url: `http://localhost:8888/api/boards/${articleNo}`,
+        method: 'get',
+        headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
+      })
+        .then(res => {
+          console.log(res)
+          commit('SET_ARTICLE', res.data)
         })
         .catch(err => {
           console.log(err)
