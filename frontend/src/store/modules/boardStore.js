@@ -11,7 +11,7 @@ const boardStore = {
     articleList: state => state.articleList,
     freeArticles: state => state.articleList.filter(article => article.category === 'Free'),
     qnaArticles: state => state.articleList.filter(article => article.category === 'QnA'),
-    reviewArticles: state => state.articleList.filter(article => article.category === 'Review'),
+    infoArticles: state => state.articleList.filter(article => article.category === 'Info'),
     currentArticle: state => state.currentArticle,
   },
   mutations: {

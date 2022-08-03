@@ -101,7 +101,7 @@ export default {
     type: String,
   },
   computed: {
-    ...mapGetters(boardStore, ['freeArticles', 'qnaArticles', 'reviewArticles']),
+    ...mapGetters(boardStore, ['freeArticles', 'qnaArticles', 'infoArticles']),
     totalPages() {
       return this.now.length % this.itemsPerPage > 0 ? parseInt(this.now.length/this.itemsPerPage)+1 : parseInt(this.now.length/this.itemsPerPage)
     },
@@ -149,7 +149,7 @@ export default {
       } else if (this.type === '질문') {
         return this.now = this.qnaArticles
       } else {
-        return this.now = this.reviewArticles
+        return this.now = this.infoArticles
       }
     },
     createArticle() {
@@ -166,7 +166,7 @@ export default {
       } else if (this.type === '질문') {
         return this.now = this.qnaArticles
       } else {
-        return this.now = this.reviewArticles
+        return this.now = this.infoArticles
       }
     },
   },
