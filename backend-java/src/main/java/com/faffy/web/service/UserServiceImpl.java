@@ -1,6 +1,7 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
@@ -26,6 +27,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +98,25 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserGetDetailDto getProfile(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        return user.toDetailDto();
+    }
+
+    @Override
+    public File getProfileImg(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        UploadFile uf = user.getProfileImage();
+        String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
+        return new File(filename);
+    }
 
     @Override
     public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException {
