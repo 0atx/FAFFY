@@ -65,7 +65,7 @@ public class BoardController {
         HttpStatus status = HttpStatus.OK;
         try {
             Board board = boardService.getBoard(board_no);
-            resultMap.put("board", board);
+            resultMap.put("board", board.toBoardGetDto());
             List<Comment> boardComments = commentService.getBoardComments(board.getNo());
             List<CommentGetDto> commentGetDtos = new ArrayList<>();
             for (Comment cmt :
