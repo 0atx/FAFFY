@@ -49,7 +49,6 @@ public class FileHandler {
 
         if(!img.isEmpty()){
             String contentType = img.getContentType();
-            String originalFileExtension;
 
             //확장자 명이 없는 파일은 처리 안함
             if(ObjectUtils.isEmpty(contentType)){
@@ -57,19 +56,11 @@ public class FileHandler {
                 return null;
             }
 
-            if(contentType.contains("image/jpeg")) {
-                originalFileExtension = ".jpg";
-            }
-            else if(contentType.contains("image/png")){
-                originalFileExtension = ".png";
-            }
-            else if(contentType.contains("image/gif")){
-                originalFileExtension = ".gif";
-            }
-            else return null;
+            if(!contentType.contains("image/jpeg") && !contentType.contains("image/png") && !contentType.contains("image/gif"))
+                return null;
 
             String uuid = UUID.randomUUID().toString();
-            String new_file_name = uuid + "_" + img.getOriginalFilename() + originalFileExtension;
+            String new_file_name = uuid + "_" + img.getOriginalFilename();
             file = new File(absPath + path + sep + new_file_name);
             img.transferTo(file);
 

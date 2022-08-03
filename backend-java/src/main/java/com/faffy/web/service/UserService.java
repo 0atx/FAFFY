@@ -1,6 +1,7 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
@@ -10,6 +11,7 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -86,4 +88,8 @@ public interface UserService {
     public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException ,Exception;
 
     void logout(String token);
+
+    UserGetDetailDto getProfile(int no);
+
+    File getProfileImg(int no);
 }
