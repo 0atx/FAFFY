@@ -2,6 +2,7 @@ package com.faffy.web.jpa.entity;
 
 import com.faffy.web.dto.UserDto;
 import com.faffy.web.dto.UserGetDetailDto;
+import com.faffy.web.dto.UserGetSimpleDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.Gender;
@@ -171,6 +172,14 @@ public class User extends BaseEntity implements UserDetails {
                 .youtubeLink(this.youtubeLink)
                 .build();
         return userDetailDto;
+    }
+
+    public UserGetSimpleDto toSimpleDto() {
+        UserGetSimpleDto simpleDto = UserGetSimpleDto.builder()
+                .no(this.no)
+                .nickname(this.nickname)
+                .build();
+        return simpleDto;
     }
 
     @Override
