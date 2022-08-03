@@ -11,8 +11,9 @@ public class BoardGetDto {
     private int no;
     private String title;
     private String content;
+    private String category;
     private String dateTime;
-    private UserPublicDto user;
+    private UserGetSimpleDto user;
     private int hit;
     private int commentCount;
 
@@ -20,11 +21,12 @@ public class BoardGetDto {
     }
 
     @Builder
-    public BoardGetDto(int no, String title, String content, String dateTime, UserPublicDto user,
-                       int hit, int commentCount) {
+    public BoardGetDto(int no, String title, String content, String dateTime, UserGetSimpleDto user,
+                       int hit, int commentCount,String category) {
         this.no = no;
         this.title = title;
         this.content = content;
+        this.category = category;
         this.dateTime = dateTime;
         this.user = user;
         this.hit=hit;
