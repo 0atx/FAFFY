@@ -4,7 +4,9 @@ import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
@@ -14,14 +16,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +53,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Map<String,Object>> findAllUsers() {
         Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
         List<PublicUserInfo> allUsers = userService.findAllUsers();
-        resultMap.put("users",allUsers);
+        resultMap.put("content",allUsers);
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity(resultMap,status);
     }
     /**
      * 회원가입
@@ -58,13 +65,21 @@ public class UserController {
      * @return 성공 시 User, 실패시 msg
      */
     @ApiOperation(value="회원 가입",notes="유저 정보를 받아 db에 유저를 추가합니다.")
-    @PostMapping
-    public ResponseEntity addUser(@Valid @RequestBody UserDto userDto) throws DataIntegrityException, IllegalInputException {
-        logger.info("dto : {}",userDto);
-        User user = userService.addUser(userDto);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user.toPublicDto());
-        return ResponseEntity.ok().body(hashmap);
+    @PostMapping("")
+    public ResponseEntity addUser(@Valid @RequestBody UserDto userDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.addUser(userDto);
+            resultMap.put("content",user.toPublicDto());
+        } catch (Exception e) {
+            logger.error("회원 가입 에러 : {}", e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
     }
 
 
@@ -75,11 +90,20 @@ public class UserController {
      */
     @ApiOperation(value="no로 회원 찾기",notes="no에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/{no}")
-    public ResponseEntity findUserByNo(@PathVariable("no") int no) throws Exception {
-        User user = userService.getUserByNo(no);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user);
-        return ResponseEntity.ok().body(hashmap);
+    public ResponseEntity findUserByNo(@PathVariable("no") int no) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.getUserByNo(no);
+            resultMap.put("content", user.toDetailDto());
+        } catch (Exception e) {
+            logger.error("유저 찾기 실패 : {}", e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
     }
 
     /**
@@ -89,11 +113,20 @@ public class UserController {
      */
     @ApiOperation(value="email로 회원 찾기",notes="email에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/email/{email}")
-    public ResponseEntity findUserByEmail(@PathVariable("email") String email) throws Exception {
-        User user = userService.getUserByEmail(email);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user);
-        return ResponseEntity.ok().body(hashmap);
+    public ResponseEntity findUserByEmail(@PathVariable("email") String email) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.getUserByEmail(email);
+            resultMap.put("content",user.toDetailDto());
+        } catch (Exception e) {
+            logger.error("회원 정보 찾기 에러 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
     }
 
     /**
@@ -103,11 +136,54 @@ public class UserController {
      */
     @ApiOperation(value="nickname으로 회원 찾기",notes="nickname에 해당하는 유저의 정보를 반환합니다.")
     @GetMapping("/nickname/{nickname}")
-    public ResponseEntity findUserByNickname(@PathVariable("nickname") String nickname) throws Exception {
-        User user = userService.getUserByNickname(nickname);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user);
-        return ResponseEntity.ok().body(hashmap);
+    public ResponseEntity findUserByNickname(@PathVariable("nickname") String nickname) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.getUserByNickname(nickname);
+            resultMap.put("content", user.toDetailDto());
+        } catch (Exception e) {
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
+    }
+
+    @ApiOperation(value="회원 프로필 정보 조회", notes="해당 유저의 프로필 사진을 제외한 프로필 정보를 반환합니다.")
+    @GetMapping("/profile/{no}")
+    public ResponseEntity<UserGetDetailDto> getUserProfile(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+
+        UserGetDetailDto dto = userService.getProfile(no);
+        if(dto == null){
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity(dto, status);
+    }
+
+    @ApiOperation(value="회원 프로필 사진 조회", notes="해당 유저의 프로필 사진을 반환합니다.")
+    @GetMapping("/profile/image/{no}")
+    public ResponseEntity<byte[]> getUserProfileImg(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+
+        File file = userService.getProfileImg(no);
+        if(file == null){
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+        else {
+            HttpHeaders header = new HttpHeaders();
+            try {
+                header.add("Content-Type", Files.probeContentType(file.toPath()));
+                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, status);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 
 //    /**
@@ -131,12 +207,21 @@ public class UserController {
      */
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity updateUser(@Valid @ModelAttribute UserDto userDto) throws DataNotFoundException, IllegalInputException {
-        User user = userService.updateUser(userDto);
-        System.out.println("userDto:"+userDto);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",user);
-        return ResponseEntity.ok().body(hashmap);
+    public ResponseEntity updateUser(@ModelAttribute UserDto userDto) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        System.out.println("userDto:" + userDto);
+
+        try {
+            User user = userService.updateUser(userDto);
+            resultMap.put("content", user);
+        } catch(Exception e) {
+            logger.error("정보 수정 에러 발생 : {}",e.getMessage());
+            resultMap.put("msg","입력 값을 확인해 주세요.");
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap,status);
+        }
     }
 
 //    /**
@@ -161,11 +246,20 @@ public class UserController {
      */
     @ApiOperation(value="회원 탈퇴",notes="no에 해당하는 유저가 탈퇴됩니다.")
     @DeleteMapping("/{no}")
-    public ResponseEntity deleteUser(@PathVariable int no) throws Exception {
-        userService.deleteUser(no);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        hashmap.put("content",no);
-        return ResponseEntity.ok().body(hashmap);
+    public ResponseEntity deleteUser(@PathVariable int no) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            userService.deleteUser(no);
+            resultMap.put("content", no);
+        } catch (Exception e) {
+            logger.error("회원 탈퇴 에러 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
     }
 
     /**
@@ -177,13 +271,21 @@ public class UserController {
     @ApiOperation(value="로그인",notes="로그인시 토큰값(String)이 반환되고 이후 request header에 ‘X-AUTH-TOKEN’ : ‘토큰값’ 형식으로 전송 필요합니다.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserLoginDto userDto) {
-        UserPublicDto user = userService.login(userDto);
-        HashMap<String, Object> hashmap = new HashMap<>();
-        HashMap<String, Object> hashmapIn = new HashMap<>();
-        hashmapIn.put("UserPublicDto",user);
-        hashmapIn.put("Token",jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
-        hashmap.put("content", hashmapIn);
-        return ResponseEntity.ok().body(hashmap);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> resultMapIn = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            UserPublicDto user = userService.login(userDto);
+            resultMapIn.put("user", user);
+            resultMapIn.put("token", jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
+            resultMap.put("content", resultMapIn);
+        } catch (Exception e) {
+            logger.error("로그인 에러 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
     }
     @PostMapping("/logout")
     public void logout(@RequestHeader(value = "X-AUTH-TOKEN") String token) {
@@ -200,9 +302,9 @@ public class UserController {
         } catch (Exception e) {
             logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
             resultMap.put("msg", e.getMessage());
+        } finally {
+            return new ResponseEntity(resultMap,status);
         }
-
-        return new ResponseEntity(resultMap,status);
     }
 
     @DeleteMapping("/category")
@@ -215,9 +317,9 @@ public class UserController {
         } catch (Exception e) {
             logger.error("카테고리 삭제 에러 발생 : {}",e.getMessage());
             resultMap.put("msg", e.getMessage());
+        } finally {
+            return new ResponseEntity(resultMap,status);
         }
-
-        return new ResponseEntity(resultMap,status);
     }
 
 }

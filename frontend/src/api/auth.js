@@ -11,6 +11,17 @@ const auth = {
       .then(success)
       .catch(fail);
   },
+  logout: async function(success,fail) {
+    api.defaults.headers["X-AUTH-TOKEN"] =
+      sessionStorage.getItem("X-AUTH-TOKEN");
+    await api
+    .post(
+      `/users/logout`,
+      null
+    )
+    .then(success)
+    .catch(fail);
+  },
   signUp: async function (user, success, fail) {
     await api
     .post(`/users`,

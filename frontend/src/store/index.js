@@ -5,6 +5,7 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 import authStore from "@/store/modules/authStore.js";
+import boardStore from "@/store/modules/boardStore.js";
 
 export default new Vuex.Store({
   plugins: [
@@ -15,5 +16,6 @@ export default new Vuex.Store({
 
   modules: {
     authStore,
+    boardStore,
   },
 });

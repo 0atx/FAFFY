@@ -4,6 +4,7 @@ import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.Gender;
 import com.faffy.web.jpa.type.LoginType;
+import com.faffy.web.jpa.type.RegularExpression;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.faffy.web.exception.ExceptionMsg.ILLEGAL_PASSWORD_CONDITION;
+import static com.faffy.web.jpa.type.RegularExpression.PASSWORD_REG_EX;
+
 @Data
 public class UserDto {
     private int no;
@@ -30,7 +34,7 @@ public class UserDto {
     @NonNull
     private String nickname;
     @NonNull
-    @Pattern(regexp = "(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,15}$)",message = "비밀번호는 영문 대문자, 소문자, 숫자, 특수문자를 1개이상 포함한 8자 ~ 15자여야 합니다.")
+    @Pattern(regexp = PASSWORD_REG_EX,message = ILLEGAL_PASSWORD_CONDITION)
     private String password;
     @NonNull
     private String birthday;

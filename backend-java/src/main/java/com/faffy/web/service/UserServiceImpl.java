@@ -1,16 +1,19 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
+import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.jpa.type.RegularExpression;
 import com.faffy.web.service.file.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +23,15 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.File;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.faffy.web.exception.ExceptionMsg.*;
 @RequiredArgsConstructor
@@ -91,6 +98,25 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserGetDetailDto getProfile(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        return user.toDetailDto();
+    }
+
+    @Override
+    public File getProfileImg(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        UploadFile uf = user.getProfileImage();
+        String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
+        return new File(filename);
+    }
 
     @Override
     public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException {
@@ -128,6 +154,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
+        // 비밀번호 정규 표현식 만족 체크
+        if (!Pattern.matches(RegularExpression.PASSWORD_REG_EX,userDto.getPassword()))
+            throw new IllegalInputException(ILLEGAL_PASSWORD_CONDITION);
+        
         try {
             User user;
             if (userDto.getNo() == 0) {
@@ -135,18 +165,24 @@ public class UserServiceImpl implements UserService {
             } else {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
+            
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            //프로필 사진 관련 시작
+            //프로필 사진 관련
             MultipartFile file = userDto.getFile();
+            System.out.println("file:"+file);
             if(file != null){
-                System.out.println("Profile image upload!!");
                 UploadFile img = fileHandler.parseFileInfo(file);
                 if(img != null){
-                    System.out.println("Profile image upload Complete!!!");
                     uploadFileRepository.save(img);
                     user.updateProfileImage(img);
                 }
-            }//끝
+            }
+            else{ //선택한 파일이 없는 경우 기존 프로필 사진과 db 정보 삭제
+                UploadFile img = user.getProfileImage();
+                uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
+                fileHandler.deleteFile(img); //실제 파일 삭제
+            }
+
             user.updateUser(userDto);
             return user;
         } catch (IllegalArgumentException e) {
