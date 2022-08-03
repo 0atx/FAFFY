@@ -1,7 +1,7 @@
 <!--
 작성자: 류경하
 설명: 게시판 글 목록
-최종 수정일: 2022.08.01
+최종 수정일: 2022.08.03
 -->
 <template>
   <v-container fluid>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
@@ -112,7 +112,8 @@ export default {
     },
   },
   methods: {
-    // 상세조회 페이지 이동(추후 수정)
+    ...mapActions(['fetchArticles']),
+    // 상세조회 페이지 이동
     articleDetail(articleNo) {
       console.log(`${articleNo}번 글로 이동`)
       this.$router.push({ name: 'article-detail', params: { 'articleNo': articleNo }})

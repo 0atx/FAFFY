@@ -99,7 +99,6 @@ const routes = [
     component: () => import("@/views/CreateArticleView.vue"),
   },
   {
-    // 확인용 임시 path, 나중에 /article/:articleNo로 수정예정
     path: "/article/:articleNo",
     name: "article-detail",
     component: () => import("@/views/ArticleDetailView.vue"),

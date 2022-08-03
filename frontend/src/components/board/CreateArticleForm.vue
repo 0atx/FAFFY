@@ -32,6 +32,7 @@
     <v-file-input
       label="File input"
       filled
+      multiple
       v-model="img">
     </v-file-input>
     <v-text-field
@@ -59,7 +60,18 @@ export default {
       content: '',
       img: null,
       hashtag: '',
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token'),
+    }
+  },
+  computed: {
+    boardCategory() {
+      if (this.category === '자유') {
+        return 'Free'
+      } else if (this.category === '질문') {
+        return 'QnA'
+      } else {
+        return 'Review'
+      }
     }
   },
   methods: {
@@ -74,7 +86,7 @@ export default {
     submitArticle() {
       const articleForm = {
         'title': this.title,
-        'category': this.category,
+        'category': this.boardCategory,
         'content': this.content,
         'img': this.img
       }
