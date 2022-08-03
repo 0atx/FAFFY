@@ -1,10 +1,12 @@
 <template>
-  <h3>댓글 목록</h3>
+  <h1>댓글 목록</h1>
 </template>
 
 <script>
 export default {
-
+  name: 'CommentList',
+  components: {
+  },
 }
 </script>
 
