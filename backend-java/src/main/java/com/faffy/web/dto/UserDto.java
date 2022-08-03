@@ -64,7 +64,7 @@ public class UserDto {
 
     @Builder
     public UserDto(int no, String email, String name, String nickname, String password, String birthday, Gender gender, String info,
-                   String introduce, LoginType loginType, String instaLink,String facebookLink,String youtubeLink) throws IllegalInputException{
+                   String introduce, LoginType loginType, String instaLink,String facebookLink,String youtubeLink, MultipartFile file) throws IllegalInputException{
         if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
         && StringUtils.hasLength(password)) {
             this.no = no;
@@ -80,6 +80,7 @@ public class UserDto {
             this.instaLink = instaLink;
             this.facebookLink = facebookLink;
             this.youtubeLink = youtubeLink;
+            this.file = file;
         } else {
             throw new IllegalInputException("빈 값이 존재합니다.");
         }
