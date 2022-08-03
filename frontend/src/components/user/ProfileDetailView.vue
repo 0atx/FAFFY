@@ -12,8 +12,7 @@
         <p class="text-h6" style="font-weight: 600">정보</p>
         <hr />
         <div id="info">
-          긴 글 소개 부분입니다. 개인 정보 수정은 왼쪽 프로필 카드에서 할 수
-          있습니다. 생년월일이나 성별에 대한 정보들은 보여지지 않습니다.
+          {{userProfile.info}}
         </div>
       </div>
       <div id="content">
@@ -65,8 +64,13 @@
 </template>
 
 <script>
+import {mapState} from "vuex"
+const profileStore = "profileStore"
 export default {
   name: "ProfileDetailView",
+    computed: {
+    ...mapState(profileStore,["userProfile"]),
+  },
   data() {
     return {};
   },
