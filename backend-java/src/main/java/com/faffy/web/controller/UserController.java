@@ -16,14 +16,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,19 +151,40 @@ public class UserController {
         }
     }
 
-//    /**
-//     * 회원정보 수정
-//     * @param userDto
-//     * @return 성공시 User, 실패시 msg
-//     */
-//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)")
-//    @PutMapping
-//    public ResponseEntity updateUser(@Valid @RequestBody UserDto userDto) throws DataNotFoundException, IllegalInputException {
-//        User user = userService.updateUser(userDto);
-//        HashMap<String, Object> hashmap = new HashMap<>();
-//        hashmap.put("content",user);
-//        return ResponseEntity.ok().body(hashmap);
-//    }
+    @ApiOperation(value="회원 프로필 정보 조회", notes="해당 유저의 프로필 사진을 제외한 프로필 정보를 반환합니다.")
+    @GetMapping("/profile/{no}")
+    public ResponseEntity<UserGetDetailDto> getUserProfile(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+
+        UserGetDetailDto dto = userService.getProfile(no);
+        if(dto == null){
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity(dto, status);
+    }
+
+    @ApiOperation(value="회원 프로필 사진 조회", notes="해당 유저의 프로필 사진을 반환합니다.")
+    @GetMapping("/profile/image/{no}")
+    public ResponseEntity<byte[]> getUserProfileImg(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+
+        File file = userService.getProfileImg(no);
+        if(file == null){
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+        else {
+            HttpHeaders header = new HttpHeaders();
+            try {
+                header.add("Content-Type", Files.probeContentType(file.toPath()));
+                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, status);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 
     /**
      * 회원정보 수정

@@ -1,6 +1,7 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserLoginDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.exception.DataIntegrityException;
@@ -26,6 +27,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +98,25 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserGetDetailDto getProfile(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        return user.toDetailDto();
+    }
+
+    @Override
+    public File getProfileImg(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        UploadFile uf = user.getProfileImage();
+        String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
+        return new File(filename);
+    }
 
     @Override
     public User addUser(UserDto userDto) throws IllegalInputException, DataIntegrityException {
@@ -109,26 +130,6 @@ public class UserServiceImpl implements UserService {
             throw new DataIntegrityException(DUPLICATED_MSG);
         }
     }
-
-//    @Override
-//    @Transactional
-//    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
-//        try {
-//            User user;
-//            if (userDto.getNo() == 0) {
-//                user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
-//            } else {
-//                user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
-//            }
-//            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//            user.updateUser(userDto);
-//            return user;
-//        } catch (IllegalArgumentException e) {
-//            throw new DataNotFoundException(e.getMessage());
-//        } catch (Exception e) {
-//            throw new IllegalInputException(ILLEGAL_INPUT_MSG);
-//        }
-//    }
 
     @Override
     @Transactional
@@ -148,8 +149,15 @@ public class UserServiceImpl implements UserService {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             //프로필 사진 관련
             MultipartFile file = userDto.getFile();
-            System.out.println("file:"+file);
-            if(file != null){
+            if(file != null){ //선택한 파일이 있으면 이전 프로필 사진 삭제
+                System.out.println("===file is not Null===");
+                UploadFile exImg = user.getProfileImage();
+                if(exImg != null) {
+                    uploadFileRepository.delete(exImg);
+                    if (!fileHandler.deleteFile(exImg))
+                        System.out.println("------파일 삭제 실패------");
+                }
+
                 UploadFile img = fileHandler.parseFileInfo(file);
                 if(img != null){
                     uploadFileRepository.save(img);
@@ -157,9 +165,13 @@ public class UserServiceImpl implements UserService {
                 }
             }
             else{ //선택한 파일이 없는 경우 기존 프로필 사진과 db 정보 삭제
+                System.out.println("===No File selected===");
                 UploadFile img = user.getProfileImage();
-                uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
-                fileHandler.deleteFile(img); //실제 파일 삭제
+                user.updateProfileImage(null);
+                if(img != null) {
+                    uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
+                    fileHandler.deleteFile(img); //실제 파일 삭제
+                }
             }
 
             user.updateUser(userDto);
@@ -171,24 +183,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    @Transactional
-    public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException{
-        User user = userRepository.findByNo(1).orElse(null);
-        if(file == null || user == null)
-            return null;
-
-        try {
-            UploadFile img = fileHandler.parseFileInfo(file);
-            if (img != null) {
-                uploadFileRepository.save(img);
-                user.updateProfileImage(img);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return user;
-    }
+//    @Override
+//    @Transactional
+//    public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException{
+//        User user = userRepository.findByNo(1).orElse(null);
+//        if(file == null || user == null)
+//            return null;
+//
+//        try {
+//            UploadFile img = fileHandler.parseFileInfo(file);
+//            if (img != null) {
+//                uploadFileRepository.save(img);
+//                user.updateProfileImage(img);
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return user;
+//    }
 
 
 }
