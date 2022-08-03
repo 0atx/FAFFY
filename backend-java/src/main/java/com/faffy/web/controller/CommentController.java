@@ -7,6 +7,7 @@ import com.faffy.web.jpa.entity.Comment;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.service.BoardService;
 import com.faffy.web.service.CommentService;
+import com.faffy.web.service.CommentServiceImpl;
 import com.faffy.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import java.util.Map;
 @CrossOrigin("*")
 public class CommentController {
     @Autowired
-    CommentService commentService;
+    CommentServiceImpl commentService;
 
     @Autowired
     UserService userService;

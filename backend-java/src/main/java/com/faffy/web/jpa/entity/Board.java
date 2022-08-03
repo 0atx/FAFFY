@@ -67,7 +67,8 @@ public class Board extends BaseEntity {
                 .title(getTitle())
                 .content(getContent())
                 .dateTime(getDatetime().toString())
-                .user(getUser().toPublicDto())
+                .user(getUser().toSimpleDto())
+                .category(getCategory().toString())
                 .hit(getHit())
                 .commentCount(getCommentCount())
                 .build();
@@ -78,10 +79,18 @@ public class Board extends BaseEntity {
     public void addComment(Comment comment) {
         this.getComments().add(comment);
         comment.addTo(this);
-        this.commentCount = this.getComments().size();
+        updateCommentCount();
+    }
+
+    public void removeComment(Comment comment) {
+        this.getComments().remove(comment);
+        updateCommentCount();
     }
 
     public void increaseHit() {
         this.hit++;
+    }
+    public void updateCommentCount() {
+        this.commentCount = this.getComments().size();
     }
 }
