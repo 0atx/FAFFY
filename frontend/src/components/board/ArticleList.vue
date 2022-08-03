@@ -58,14 +58,14 @@
         <tbody>
           <tr
             v-for="article in currentPage"
-            :key="article.articleNo"
-            @click="articleDetail(article.articleNo)"
+            :key="article.content.no"
+            @click="articleDetail(article.no)"
             style="cursor: pointer"
           >
-            <td>{{ article.writer }}</td>
-            <td>{{ article.comments }}</td>
+            <td>{{ article.user.nickname }}</td>
+            <td>{{ article.commentCount }}</td>
             <td>{{ article.title }}</td>
-            <td>{{ article.created_at }}</td>
+            <td>{{ article.dateTime }}</td>
           </tr>
         </tbody>
       </template>
@@ -116,7 +116,7 @@ export default {
     // 상세조회 페이지 이동
     articleDetail(articleNo) {
       console.log(`${articleNo}번 글로 이동`)
-      this.$router.push({ name: 'article-detail', params: { 'articleNo': articleNo }})
+      this.$router.push({ name: "article-detail", params: { articleNo: articleNo }})
     },
     // 최신순 정렬
     sortByDate() {
@@ -154,7 +154,7 @@ export default {
     },
     createArticle() {
       this.$router.push({ name: 'article' })
-    }
+    },
   },
   watch: {
     type() {
