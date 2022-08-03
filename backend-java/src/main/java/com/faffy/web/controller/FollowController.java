@@ -1,6 +1,7 @@
 package com.faffy.web.controller;
 
 import com.faffy.web.dto.FollowRequestDto;
+import com.faffy.web.dto.UserGetDetailDto;
 import com.faffy.web.dto.UserPublicDto;
 import com.faffy.web.service.FollowService;
 import com.faffy.web.service.FollowServiceImpl;
@@ -27,11 +28,11 @@ public class FollowController {
 
 
     @GetMapping("/following/{no}")
-    public ResponseEntity getFolling(@PathVariable("no") int no) {
+    public ResponseEntity getFollowing(@PathVariable("no") int no) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            List<UserPublicDto> following = followService.getFollowing(no);
+            List<UserGetDetailDto> following = followService.getFollowing(no);
             resultMap.put("content",following);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -47,7 +48,7 @@ public class FollowController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            List<UserPublicDto> follower = followService.getUserFollower(no);
+            List<UserGetDetailDto> follower = followService.getUserFollower(no);
             resultMap.put("content",follower);
         } catch (Exception e) {
             logger.error(e.getMessage());
