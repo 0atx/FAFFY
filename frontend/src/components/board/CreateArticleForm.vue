@@ -70,7 +70,7 @@ export default {
       } else if (this.category === '질문') {
         return 'QnA'
       } else {
-        return 'Review'
+        return 'Info'
       }
     }
   },
