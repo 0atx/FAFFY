@@ -59,7 +59,7 @@
           <tr
             v-for="article in currentPage"
             :key="article.articleNo"
-            @click="articleDetail(article)"
+            @click="articleDetail(article.articleNo)"
             style="cursor: pointer"
           >
             <td>{{ article.writer }}</td>
@@ -113,8 +113,9 @@ export default {
   },
   methods: {
     // 상세조회 페이지 이동(추후 수정)
-    articleDetail(article) {
-      console.log(`제목: ${article.title} 글로 이동`)
+    articleDetail(articleNo) {
+      console.log(`${articleNo}번 글로 이동`)
+      this.$router.push({ name: 'article-detail', params: { 'articleNo': articleNo }})
     },
     // 최신순 정렬
     sortByDate() {

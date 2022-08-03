@@ -100,8 +100,8 @@ const routes = [
   },
   {
     // 확인용 임시 path, 나중에 /article/:articleNo로 수정예정
-    path: "/currentarticle",
-    name: "currentArticle",
+    path: "/article/:articleNo",
+    name: "article-detail",
     component: () => import("@/views/ArticleDetailView.vue"),
   },
 ];
