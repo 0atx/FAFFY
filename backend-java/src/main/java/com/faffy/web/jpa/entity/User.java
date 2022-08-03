@@ -146,6 +146,9 @@ public class User extends BaseEntity implements UserDetails {
                 .info(this.info)
                 .roles(this.roles)
                 .introduce(this.introduce)
+                .facebookLink(this.facebookLink)
+                .instaLink(this.instaLink)
+                .youtubeLink(this.youtubeLink)
                 .build();
         return userPublicDto;
     }
@@ -163,6 +166,9 @@ public class User extends BaseEntity implements UserDetails {
                 .followerCount(this.followedMappings.size())
                 .followingCount(this.followMappings.size())
                 .introduce(this.introduce)
+                .facebookLink(this.facebookLink)
+                .instaLink(this.instaLink)
+                .youtubeLink(this.youtubeLink)
                 .build();
         return userDetailDto;
     }

@@ -18,14 +18,14 @@
 
       <!-- 별명 -->
       <div id="name" class="text-h6 mb-2">
-        별명짓기귀찮다
+        {{userProfile.nickname}}
 
         <!-- 정보 수정 버튼
           v-if로 본인일 경우에만 보여지게
           클릭 시 정보 수정 페이지로 이동
         -->
         <v-btn
-          v-if="userInfo"
+          v-if="userProfile"
           id="profileBtn"
           class="mx-2 pb-1"
           elevation="0"
@@ -57,21 +57,20 @@
 
       <!-- 팔로잉 팔로워 -->
       <div>
-        <router-link to="/profile/1/following">팔로잉 163</router-link>
-        <router-link to="/profile/1/follower">팔로워 208</router-link>
+        <router-link to="/profile/1/following">팔로잉 {{userProfile.followingCount}}</router-link>
+        <router-link to="/profile/1/follower">팔로워 {{userProfile.followerCount}}</router-link>
       </div>
 
       <!-- 한 줄 자기소개 -->
       <div id="introduce">
-        한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로
-        하지 100자? 200자? 이거도 의논해야 함
+        {{userProfile.introduce}}
       </div>
 
       <!-- 관심 카테고리 -->
       <div id="category" class="mb-2">
         <v-chip-group column>
           <category-chips
-            v-for="category in categorys"
+            v-for="category in userProfile.categories"
             :key="category"
             :category="category"
           />
@@ -83,7 +82,7 @@
       -->
       <div id="social" class="mb-2">
         <!-- 인스타그램 -->
-        <v-btn fab elevation="0" class="overflow-hidden">
+        <v-btn v-if="userProfile.instaLink" fab elevation="0" class="overflow-hidden">
           <img
             src="@/assets/images/instagram_logo.png"
             alt=""
@@ -92,7 +91,7 @@
         </v-btn>
 
         <!-- 페이스북 -->
-        <v-btn fab elevation="0" class="overflow-hidden">
+        <v-btn v-if="userProfile.facebookLink" fab elevation="0" class="overflow-hidden">
           <img
             src="@/assets/images/facebook_logo.png"
             alt=""
@@ -101,7 +100,7 @@
         </v-btn>
 
         <!-- 유튜브 -->
-        <v-btn fab elevation="0" class="overflow-hidden">
+        <v-btn v-if="userProfile.youtubeLink" fab elevation="0" class="overflow-hidden">
           <img
             src="@/assets/images/youtube_logo.png"
             alt=""
@@ -115,29 +114,38 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
+import {mapState} from "vuex"
+const profileStore = "profileStore";
 
 export default {
   name: "ProfileCard",
   components: { CategoryChips },
+  computed: {
+    ...mapState(profileStore,["userProfile"]),
+  },
   data() {
     return {
       // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      categorys: [
-        "워크웨어",
-        "히피",
-        "페미닌",
-        "캐주얼",
-        "모던",
-        "시크",
-        "댄디",
-        "빈티지",
-        "미니멀",
-        "스트릿",
-      ],
+      // categorys: [
+      //   "워크웨어",
+      //   "히피",
+      //   "페미닌",
+      //   "캐주얼",
+      //   "모던",
+      //   "시크",
+      //   "댄디",
+      //   "빈티지",
+      //   "미니멀",
+      //   "스트릿",
+      // ],
       readonly: { type: Boolean, default: true },
-      userInfo: true,
+
       follow: true,
     };
+  },
+  beforeUpdate() {
+    console.log("profile card ready");
+    console.log(this.userProfile);
   },
   metaInfo() {
     return {
