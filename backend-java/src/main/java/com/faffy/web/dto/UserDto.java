@@ -33,7 +33,7 @@ public class UserDto {
     private String name;
     @NonNull
     private String nickname;
-    @NonNull
+
     @Pattern(regexp = PASSWORD_REG_EX,message = ILLEGAL_PASSWORD_CONDITION)
     private String password;
     @NonNull
@@ -65,8 +65,7 @@ public class UserDto {
     @Builder
     public UserDto(int no, String email, String name, String nickname, String password, String birthday, Gender gender, String info,
                    String introduce, LoginType loginType, String instaLink,String facebookLink,String youtubeLink, MultipartFile file) throws IllegalInputException{
-        if (StringUtils.hasLength(email) && StringUtils.hasLength(name)
-        && StringUtils.hasLength(password)) {
+        if (StringUtils.hasLength(email) && StringUtils.hasLength(name)) {
             this.no = no;
             this.email = email;
             this.name = name;

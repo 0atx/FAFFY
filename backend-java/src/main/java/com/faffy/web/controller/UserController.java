@@ -3,6 +3,7 @@ package com.faffy.web.controller;
 import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserCategoryServiceImpl;
@@ -38,7 +39,7 @@ public class UserController {
     @Autowired
     UserCategoryServiceImpl categoryService;
     @Autowired
-    UserCategoryService userCategoryService;
+    UserCategoryServiceImpl userCategoryService;
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -197,8 +198,9 @@ public class UserController {
 
         try {
             User user = userService.updateUser(userDto);
-            for(String categoryName:userDto.getCategories())
-                categoryService.addUserCategory(userDto.getNo(),categoryName);
+            userCategoryService.setUserCategories(userDto.getNo(), userDto.getCategories());
+//            for(String categoryName:userDto.getCategories())
+//                categoryService.addUserCategory(userDto.getNo(),categoryName);
 
             resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
@@ -283,8 +285,8 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            String result = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
-            resultMap.put("content", result);
+            UserCategory category = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
+            resultMap.put("content", category.getUserCategoryMapper().getCategory());
         } catch (Exception e) {
             logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
             resultMap.put("msg", e.getMessage());
