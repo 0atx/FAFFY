@@ -1,9 +1,6 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.UserDto;
-import com.faffy.web.dto.UserGetDetailDto;
-import com.faffy.web.dto.UserLoginDto;
-import com.faffy.web.dto.UserPublicDto;
+import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
@@ -91,4 +88,8 @@ public interface UserService {
     UserGetDetailDto getProfile(int no);
 
     File getProfileImg(int no);
+
+    List<BroadCastHistoryDto> getPartiList(int no);
+
+    List<BroadCastHistoryDto> getConsultList(int no);
 }

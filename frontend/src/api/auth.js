@@ -29,6 +29,15 @@ const auth = {
     )
     .then(success)
     .catch(fail);
+  },
+  updateProfile: async function(formData,success,fail) {
+    await api
+    .put(`/users`,
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' }}
+    )
+    .then(success)
+    .catch(fail);
   }
 };
 

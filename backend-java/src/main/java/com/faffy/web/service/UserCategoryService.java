@@ -1,12 +1,9 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.UserDto;
 import com.faffy.web.jpa.entity.FashionCategory;
 import com.faffy.web.jpa.entity.UserCategory;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface UserCategoryService {
@@ -14,11 +11,12 @@ public interface UserCategoryService {
 
     /**
      * user_no에 해당하는 유저의 관심분야을 추가합니다.
-     * @param user_no 유저 번호
+     *
+     * @param user_no      유저 번호
      * @param categoryName 추가할 카테고리 이름
      * @return 정상 추가시 true, 유저 정보나 카테고리를 찾을 수 없을 경우 false
      */
-    public String addUserCategory(int user_no, String categoryName) throws Exception;
+    public UserCategory addUserCategory(int user_no, String categoryName) throws Exception;
 
     /**
      * user_no에 해당하는 유저의 관심분야를 삭제합니다.
@@ -28,4 +26,5 @@ public interface UserCategoryService {
      */
     public String deleteUserCategory(int user_no, String categoryName) throws Exception;
 
+    public List<String> setUserCategories(int user_no, List<String> categoryNames) throws Exception;
 }
