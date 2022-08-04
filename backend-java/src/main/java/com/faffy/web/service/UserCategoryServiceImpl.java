@@ -1,6 +1,5 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.UserDto;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.jpa.entity.FashionCategory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserCategoryServiceImpl implements UserCategoryService {
@@ -47,14 +45,14 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
-    public String addUserCategory(int user_no, String categoryName) throws Exception {
+    public UserCategory addUserCategory(int user_no, String categoryName) throws Exception {
         try {
             User user = userService.getUserByNo(user_no);
             FashionCategory fashionCategory = fashionCategoryRepository.findByName(categoryName).orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.CATEGORY_NOT_FOUND_MSG));
 
             UserCategory userCategory = UserCategory.builder().user(user).category(fashionCategory).build();
             userCategoryRepository.save(userCategory);
-            return categoryName;
+            return userCategory;
         } catch (Exception e) {
             throw new DataNotFoundException(e.getMessage());
         }
@@ -71,6 +69,28 @@ public class UserCategoryServiceImpl implements UserCategoryService {
         } catch (Exception e) {
             throw new DataNotFoundException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<String> setUserCategories(int user_no, List<String> categoryNames) throws Exception {
+        List<String> result = new ArrayList<>();
+
+        try {
+            User user = userService.getUserByNo(user_no);
+            List<UserCategory> userCategories = userCategoryRepository.findByUser(user);
+            for(UserCategory category : userCategories) {
+                userCategoryRepository.delete(category);
+            }
+            for (String categoryName : categoryNames) {
+                addUserCategory(user_no,categoryName);
+            }
+
+
+        } catch (DataNotFoundException e) {
+            throw new DataNotFoundException(ExceptionMsg.USER_NOT_FOUND_MSG);
+        }
+
+        return result;
     }
 
 

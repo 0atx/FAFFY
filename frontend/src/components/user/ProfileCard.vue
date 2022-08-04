@@ -18,14 +18,14 @@
 
       <!-- 별명 -->
       <div id="name" class="text-h6 mb-2">
-        {{userProfile.nickname}}
+        {{ userProfile.nickname }}
 
         <!-- 정보 수정 버튼
           v-if로 본인일 경우에만 보여지게
           클릭 시 정보 수정 페이지로 이동
         -->
         <v-btn
-          v-if="userProfile"
+          v-if="loginUser != null && userProfile.no == loginUser.no"
           id="profileBtn"
           class="mx-2 pb-1"
           elevation="0"
@@ -57,13 +57,17 @@
 
       <!-- 팔로잉 팔로워 -->
       <div>
-        <router-link to="/profile/1/following">팔로잉 {{userProfile.followingCount}}</router-link>
-        <router-link to="/profile/1/follower">팔로워 {{userProfile.followerCount}}</router-link>
+        <router-link to="/profile/1/following"
+          >팔로잉 {{ userProfile.followingCount }}</router-link
+        >
+        <router-link to="/profile/1/follower"
+          >팔로워 {{ userProfile.followerCount }}</router-link
+        >
       </div>
 
       <!-- 한 줄 자기소개 -->
       <div id="introduce">
-        {{userProfile.introduce}}
+        {{ userProfile.introduce }}
       </div>
 
       <!-- 관심 카테고리 -->
@@ -82,7 +86,12 @@
       -->
       <div id="social" class="mb-2">
         <!-- 인스타그램 -->
-        <v-btn v-if="userProfile.instaLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.instaLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/instagram_logo.png"
             alt=""
@@ -91,7 +100,12 @@
         </v-btn>
 
         <!-- 페이스북 -->
-        <v-btn v-if="userProfile.facebookLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.facebookLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/facebook_logo.png"
             alt=""
@@ -100,7 +114,12 @@
         </v-btn>
 
         <!-- 유튜브 -->
-        <v-btn v-if="userProfile.youtubeLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.youtubeLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/youtube_logo.png"
             alt=""
@@ -114,14 +133,18 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
-import {mapState} from "vuex"
+import { mapState } from "vuex";
 const profileStore = "profileStore";
-
+const authStore = "authStore";
 export default {
   name: "ProfileCard",
   components: { CategoryChips },
   computed: {
-    ...mapState(profileStore,["userProfile"]),
+    ...mapState(profileStore, ["userProfile"]),
+    ...mapState(authStore, ["loginUser"]),
+  },
+  mounted() {
+    // 로그인 했다면 이 사람이 내가 팔로우 했는지 아닌지 체크
   },
   data() {
     return {
@@ -142,10 +165,6 @@ export default {
 
       follow: true,
     };
-  },
-  beforeUpdate() {
-    console.log("profile card ready");
-    console.log(this.userProfile);
   },
   metaInfo() {
     return {

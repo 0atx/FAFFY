@@ -4,7 +4,7 @@ const authStore = {
   namespaced: true,
   state: {
     isLogin: false,
-    userInfo: null,
+    loginUser: null,
   },
   checkUserInfo: function (state) {
     return state.userInfo;
@@ -12,15 +12,10 @@ const authStore = {
   mutations: {
     SET_USER_INFO: (state, userInfo) => {
       state.isLogin = userInfo != null ? true : false;
-      state.userInfo = userInfo;
+      state.loginUser = userInfo;
     },
   },
   actions: {
-    async getLoginedUser({ commit }) {
-      await auth.getUserById((response) => {
-        commit("SET_USER_INFO", response.data.userInfo);
-      });
-    },
     async logout({commit}) {
       await auth.logout((response) => {
         console.log("로그아웃 성공");
