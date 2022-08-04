@@ -143,6 +143,7 @@ public class UserServiceImpl implements UserService {
                 Date date = Timestamp.valueOf(consulting.getStartTime());
                 String sdate = date.toString().split(" ")[0].replace(':', '-');
                 BroadCastHistoryDto dto = BroadCastHistoryDto.builder()
+                        .consulting_no(consulting.getNo())
                         .consultant(consulting.getConsultant().getNickname())
                         .title(consulting.getTitle())
                         .date(sdate)
@@ -175,6 +176,7 @@ public class UserServiceImpl implements UserService {
                 Date date = Timestamp.valueOf(consulting.getStartTime());
                 String sdate = date.toString().split(" ")[0].replace(':', '-');
                 BroadCastHistoryDto dto = BroadCastHistoryDto.builder()
+                        .consulting_no(consulting.getNo())
                         .consultant(consulting.getConsultant().getNickname())
                         .title(consulting.getTitle())
                         .date(sdate)
