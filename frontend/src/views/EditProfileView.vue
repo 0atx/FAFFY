@@ -89,7 +89,11 @@
             <v-text-field
               v-model="form.password"
               type="password"
-              :rules="rules.password()"
+              :rules="
+                form.password != undefined && form.password != ''
+                  ? rules.password()
+                  : [true]
+              "
               hint="비밀번호를 변경할 경우에만 입력하세요. 8~16자 영문 대 소문자, 숫자, 특수문자 포함"
               persistent-hint
               label="비밀번호"
@@ -101,7 +105,11 @@
             <v-text-field
               v-model="form.confirmPw"
               type="password"
-              :rules="[rules.matchValue(form.password)]"
+              :rules="
+                form.password != undefined && form.password != ''
+                  ? [rules.matchValue(form.password)]
+                  : [true]
+              "
               hint="변경할 비밀번호를 재입력해주세요."
               persistent-hint
               label="비밀번호 확인"
@@ -148,16 +156,16 @@
 
             <!-- 관심 카테고리 -->
             <v-label>관심 분야</v-label>
-            <v-chip-group v-model="selectedCategorys" column multiple>
+            <v-chip-group v-model="form.categories" column multiple>
               <v-chip
-                v-for="(category, i) in categorys"
+                v-for="(c, i) in categoryList"
                 :key="i"
                 class="chip"
-                :value="category"
+                :value="c.name"
                 filter
                 color="#0c0f66"
               >
-                {{ category }}</v-chip
+                {{ c.name }}</v-chip
               >
             </v-chip-group>
 
@@ -207,6 +215,8 @@ import DarkButton from "@/components/common/DarkButton.vue";
 import validateRules from "@/utils/validateRules.js";
 import { mapState, mapMutations } from "vuex";
 import { auth } from "@/api/auth.js";
+import { category } from "@/api/category.js";
+
 const authStore = "authStore";
 export default {
   name: "EditProfileView",
@@ -228,7 +238,7 @@ export default {
         introduce:
           "간단한 자기소개를 작성해주세요. 작성된 내용은 프로필 카드에 노출됩니다.",
         info: "자세한 자기소개를 작성해주세요. 작성된 내용은 프로필 상세 페이지에서 확인할 수 있습니다.",
-        categories: ["hiphop"],
+        categories: [],
         instaLink: "",
         facebookLink: "",
         youtubeLink: "",
@@ -237,22 +247,22 @@ export default {
       // 유저가 선택한 이미지 url
       url: null,
 
-      // user가 선택한 카테고리 > DB에 넘겨야 함
-      selectedCategorys: "",
+      // 카테고리 목록
+      categoryList: [],
 
       // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      categorys: [
-        "워크웨어",
-        "히피",
-        "페미닌",
-        "캐주얼",
-        "모던",
-        "시크",
-        "댄디",
-        "빈티지",
-        "미니멀",
-        "스트릿",
-      ],
+      // categorys: [
+      //   "워크웨어",
+      //   "히피",
+      //   "페미닌",
+      //   "캐주얼",
+      //   "모던",
+      //   "시크",
+      //   "댄디",
+      //   "빈티지",
+      //   "미니멀",
+      //   "스트릿",
+      // ],
 
       // 닉네임 중복 확인 후 중복 아닐 때 true 처리
       checkNicknameIcon: false,
@@ -268,7 +278,19 @@ export default {
       alert("로그인이 필요합니다.");
       this.$router.push({ name: "main" });
     }
-    this.form = this.loginUser;
+    this.form = { ...this.loginUser };
+
+    // 카테고리 목록 불러오기
+    category.getCategories(
+      (response) => {
+        console.log("카테고리 요청 성공");
+        this.categoryList = response.data["content"];
+      },
+      (response) => {
+        console.log("요청 실패");
+        console.log(response);
+      }
+    );
   },
   methods: {
     ...mapMutations(authStore, ["SET_USER_INFO"]),
@@ -294,13 +316,15 @@ export default {
       formData.append("nickname", this.form.nickname);
       formData.append("name", this.form.name);
       formData.append("info", this.form.info);
-      formData.append("password", this.form.password);
+      if (this.form.password != undefined)
+        formData.append("password", this.form.password);
       if (this.form.file != null) formData.append("file", this.form.file);
       formData.append("introduce", this.form.introduce);
       formData.append("birthday", this.form.birthday);
       formData.append("instaLink", this.form.instaLink);
       formData.append("facebookLink", this.form.facebookLink);
       formData.append("youtubeLink", this.form.youtubeLink);
+      formData.append("categories", this.form.categories);
 
       auth.updateProfile(
         formData,

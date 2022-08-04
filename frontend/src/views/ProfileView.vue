@@ -32,6 +32,11 @@ export default {
   mounted() {
     this.loadProfile();
   },
+  watch: {
+    $route() {
+      this.loadProfile();
+    },
+  },
   methods: {
     ...mapActions(profileStore, ["getUserProfile"]),
     async loadProfile() {
