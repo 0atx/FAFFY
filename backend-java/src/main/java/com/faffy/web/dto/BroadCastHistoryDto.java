@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class BroadCastHistoryDto {
+    private int consulting_no;
     private String title;
     private String intro;
     private String consultant; //닉네임
