@@ -54,7 +54,7 @@ public class UserDto {
     private String instaLink;
     private String facebookLink;
     private String youtubeLink;
-
+    private List<String> categories = new ArrayList<>();
     /**
      * 프로필 사진
      */
