@@ -1,6 +1,8 @@
 package com.faffy.web.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -8,6 +10,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConsultingLog extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
