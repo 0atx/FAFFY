@@ -33,6 +33,10 @@ public class Consulting extends BaseEntity {
     @JsonIgnore
     private List<ConsultingCategory> categories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "consulting")
+    @JsonIgnore
+    private List<ConsultingFile> snapshots = new ArrayList<>();
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }
