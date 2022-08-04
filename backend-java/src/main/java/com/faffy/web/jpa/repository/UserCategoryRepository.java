@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface UserCategoryRepository extends JpaRepository<UserCategory, Integer> {
 
-    @Query("select u.userCategoryMapper.user from User_Category u where u.userCategoryMapper.user=:user")
+    @Query("select u from User_Category u where u.userCategoryMapper.user=:user")
     List<UserCategory> findByUser(@Param("user") User user);
     @Query("select u.userCategoryMapper.category from User_Category u where u.userCategoryMapper.user = :user")
     List<FashionCategory> findCategoriesByUser(@Param("user") User user);

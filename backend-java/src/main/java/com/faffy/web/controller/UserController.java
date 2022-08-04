@@ -3,8 +3,10 @@ package com.faffy.web.controller;
 import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.UserCategoryService;
+import com.faffy.web.service.UserCategoryServiceImpl;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +37,9 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    UserCategoryService userCategoryService;
+    UserCategoryServiceImpl categoryService;
+    @Autowired
+    UserCategoryServiceImpl userCategoryService;
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -194,7 +198,9 @@ public class UserController {
 
         try {
             User user = userService.updateUser(userDto);
-            resultMap.put("content", user);
+            userCategoryService.setUserCategories(userDto.getNo(), userDto.getCategories());
+
+            resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");
@@ -277,8 +283,8 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            String result = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
-            resultMap.put("content", result);
+            UserCategory category = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
+            resultMap.put("content", category.getUserCategoryMapper().getCategory());
         } catch (Exception e) {
             logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
             resultMap.put("msg", e.getMessage());

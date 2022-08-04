@@ -91,7 +91,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Builder
     public User(int no, String email, LoginType loginType, String name, String nickname, String password, LocalDate birthday, String introduce, Gender gender, String info, List<String> roles
-    , String instaLink, String facebookLink, String youtubeLink) {
+            , String instaLink, String facebookLink, String youtubeLink) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -124,11 +124,13 @@ public class User extends BaseEntity implements UserDetails {
         this.introduce = userDto.getIntroduce();
         this.instaLink = userDto.getInstaLink();
         this.facebookLink = userDto.getFacebookLink();
-        this.youtubeLink =  userDto.getYoutubeLink();
+        this.youtubeLink = userDto.getYoutubeLink();
+
     }
 
     /**
      * 프로필 사진 수정
+     *
      * @param img
      */
     public void updateProfileImage(UploadFile img) {
@@ -153,6 +155,7 @@ public class User extends BaseEntity implements UserDetails {
                 .build();
         return userPublicDto;
     }
+
     public UserGetDetailDto toDetailDto() {
         UserGetDetailDto userDetailDto = UserGetDetailDto.builder()
                 .no(this.no)
@@ -181,7 +184,6 @@ public class User extends BaseEntity implements UserDetails {
                 .build();
         return simpleDto;
     }
-
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
