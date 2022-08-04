@@ -4,29 +4,29 @@ const boardStore = {
   namespaced: true,
   state: {
     // 전체 게시글 목록
-    articleList: [],
+    boardList: [],
 
     // 조회할 게시글 정보
-    currentArticle: {},
+    currentBoard: {},
 
     // 조회 중인 글의 댓글 목록
     commentList: [],
   },
   getters: {
-    articleList: state => state.articleList,
-    freeArticles: state => state.articleList.filter(article => article.category === 'Free'),
-    qnaArticles: state => state.articleList.filter(article => article.category === 'QnA'),
-    infoArticles: state => state.articleList.filter(article => article.category === 'Info'),
-    currentArticle: state => state.currentArticle,
+    boardList: state => state.boardList,
+    freeBoards: state => state.boardList.filter(board => board.category === 'Free'),
+    qnaBoards: state => state.boardList.filter(board => board.category === 'QnA'),
+    infoBoards: state => state.boardList.filter(board => board.category === 'Info'),
+    currentBoard: state => state.currentBoard,
     commentList: state => state.commentList,
   },
   mutations: {
-    SET_ARTICLES: (state, articles) => state.articleList = articles,
-    SET_ARTICLE: (state, article) => state.currentArticle = article,
+    SET_BOARD_LIST: (state, boardList) => state.boardList = boardList,
+    SET_BOARD: (state, board) => state.currentBoard = board,
     SET_COMMENT_LIST: (state, commentList) => state.commentList = commentList,
   },
   actions: {
-    fetchArticles({ commit }) {
+    fetchBoardList({ commit }) {
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'get',
@@ -35,22 +35,21 @@ const boardStore = {
       })
         .then(res => {
           console.log('getallboards', res)
-          commit('SET_ARTICLES', res.data.content)
+          commit('SET_BOARD_LIST', res.data.content)
         })
         .catch(err => {
           console.log(err)
         })
     },
-    createArticle(context, article) {
+    createBoard(context, board) {
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'post',
-        data: article,
+        data: board,
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
           console.log(res)
-          this.$router.push({ name: 'board' })
         })
         .catch(err => {
           console.log(err)
@@ -59,22 +58,22 @@ const boardStore = {
     fetchCommentList({ commit }, commentList) {
       commit('SET_COMMENT_LIST', commentList)
     },
-    fetchArticle({ commit, dispatch }, articleNo) {
+    fetchBoard({ commit, dispatch }, boardNo) {
       axios({
-        url: `http://localhost:8888/api/boards/${articleNo}`,
+        url: `http://localhost:8888/api/boards/${boardNo}`,
         method: 'get',
         headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
           console.log(res.data.content.board)
-          commit('SET_ARTICLE', res.data.content.board)
+          commit('SET_BOARD', res.data.content.board)
           dispatch('fetchCommentList', res.data.content.comments)
         })
         .catch(err => {
           console.log(err)
         })
     },
-    createComment({ getters }, commentForm) {
+    createComment(context, commentForm) {
       axios({
         url: 'http://localhost:8888/api/comments',
         method: 'post',
@@ -83,7 +82,6 @@ const boardStore = {
       })
         .then(res => {
           console.log('성공', res)
-          console.log(typeof(getters.currentArticle.no))
         })
         .catch(err => {
           console.log('실패', err)

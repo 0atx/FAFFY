@@ -25,7 +25,6 @@
       name="input-7-4"
       label="본문"
       rows="10"
-      value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
       v-model="content">
     </v-textarea>
     <!--이미지 첨부-->
@@ -41,7 +40,7 @@
       outlined
       v-model="hashtag">
     </v-text-field>
-    <v-btn color="success" @click="submitArticle">작성</v-btn>
+    <v-btn color="success" @click="submitBoard">작성</v-btn>
     <v-btn color="warning" @click="resetForm">초기화</v-btn>
   </v-container>
 </template>
@@ -51,7 +50,7 @@ import { mapActions } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
-  name: 'CreateArticleForm',
+  name: 'CreateBoardForm',
   data() {
     return {
       categories: ['자유', '질문', '후기'],
@@ -75,7 +74,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(boardStore, ['createArticle']),
+    ...mapActions(boardStore, ['createBoard']),
+    // 게시글 작성 초기화
     resetForm() {
       this.title = ''
       this.category = ''
@@ -83,16 +83,18 @@ export default {
       this.img = null
       this.hashtag = ''
     },
-    submitArticle() {
-      const articleForm = {
+    // 게시글 작성
+    submitBoard() {
+      const boardForm = {
         'title': this.title,
         'category': this.boardCategory,
         'content': this.content,
         'img': this.img
       }
 
-      console.log('article', articleForm)
-      this.createArticle(articleForm)
+      console.log('board', boardForm)
+      this.createBoard(boardForm)
+      this.$router.push({ name: 'board' })
     }
   }
 }

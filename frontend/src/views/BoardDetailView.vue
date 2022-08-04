@@ -1,7 +1,8 @@
 <template>
   <v-container class="grey lighten-5">
     <h1>게시글 상세보기</h1>
-    <ArticleDetail />
+    <v-btn color="success" @click="moveToBoard">게시판으로 돌아가기</v-btn>
+    <BoardDetail />
     <CommentForm />
     <CommentList />
   </v-container>
@@ -9,28 +10,32 @@
 
 <script>
 import { mapActions } from 'vuex'
-import ArticleDetail from '@/components/board/ArticleDetail.vue'
+import BoardDetail from '@/components/board/BoardDetail.vue'
 import CommentForm from '@/components/board/CommentForm.vue'
 import CommentList from '@/components/board/CommentList.vue'
 const boardStore = "boardStore"
 
 export default {
-  name: 'ArticleDeatilView',
+  name: 'BoardDeatilView',
   components: {
-    ArticleDetail,
+    BoardDetail,
     CommentForm,
     CommentList,
   },
   data() {
     return {
-      articleNo: this.$route.params.articleNo
+      boardNo: this.$route.params.boardNo
     }
   },
   methods: {
-    ...mapActions(boardStore, ['fetchArticle']),
+    ...mapActions(boardStore, ['fetchBoard']),
+    // 게시판으로 이동
+    moveToBoard() {
+      this.$router.push({ name: 'board' })
+    }
   },
   created() {
-    this.fetchArticle(this.articleNo)
+    this.fetchBoard(this.boardNo)
   }
 }
 </script>
