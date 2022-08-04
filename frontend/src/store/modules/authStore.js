@@ -6,8 +6,10 @@ const authStore = {
     isLogin: false,
     userInfo: null,
   },
-  checkUserInfo: function (state) {
-    return state.userInfo;
+  getters: {
+    checkUserInfo: function (state) {
+      return state.userInfo;
+    }
   },
   mutations: {
     SET_USER_INFO: (state, userInfo) => {

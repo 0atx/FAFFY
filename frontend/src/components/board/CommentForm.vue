@@ -1,7 +1,7 @@
 <!--
   작성자: 류경하
   설명: 댓글 작성
-  최종 수정일: 2022.08.03
+  최종 수정일: 2022.08.04
 -->
 <template>
   <v-container>
@@ -17,7 +17,6 @@
       </v-col>
       <v-col cols="4">
         <v-btn color="warning" @click="submitComment(comment)">등록</v-btn>
-        <p>{{ checkUserInfo }}</p>
       </v-col>
     </v-row>
   </v-container>
@@ -25,8 +24,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-const commentStore = "commentStore"
 const authStore = "authStore"
+const boardStore = "boardStore"
 
 export default {
   name: 'CommentForm',
@@ -40,7 +39,7 @@ export default {
     ...mapGetters(authStore, ['checkUserInfo'])
   },
   methods: {
-    ...mapActions(commentStore, ['createComment']),
+    ...mapActions(boardStore, ['createComment']),
     submitComment(comment) {
       const commentForm = {
         board_no: this.articleNo,
@@ -49,6 +48,7 @@ export default {
       }
       console.log(commentForm)
       this.createComment(commentForm)
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }

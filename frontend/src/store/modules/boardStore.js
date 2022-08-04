@@ -18,6 +18,7 @@ const boardStore = {
     qnaArticles: state => state.articleList.filter(article => article.category === 'QnA'),
     infoArticles: state => state.articleList.filter(article => article.category === 'Info'),
     currentArticle: state => state.currentArticle,
+    commentList: state => state.commentList,
   },
   mutations: {
     SET_ARTICLES: (state, articles) => state.articleList = articles,
@@ -54,8 +55,11 @@ const boardStore = {
         .catch(err => {
           console.log(err)
         })
+      },
+    fetchCommentList({ commit }, commentList) {
+      commit('SET_COMMENT_LIST', commentList)
     },
-    fetchArticle({ commit }, articleNo) {
+    fetchArticle({ commit, dispatch }, articleNo) {
       axios({
         url: `http://localhost:8888/api/boards/${articleNo}`,
         method: 'get',
@@ -64,15 +68,13 @@ const boardStore = {
         .then(res => {
           console.log(res.data.content.board)
           commit('SET_ARTICLE', res.data.content.board)
+          dispatch('fetchCommentList', res.data.content.comments)
         })
         .catch(err => {
           console.log(err)
         })
     },
-    fetchCommentList({ commit }, commentList) {
-      commit('SET_COMMENT_LIST', commentList)
-    },
-    createComment(context, commentForm) {
+    createComment({ getters }, commentForm) {
       axios({
         url: 'http://localhost:8888/api/comments',
         method: 'post',
@@ -81,6 +83,7 @@ const boardStore = {
       })
         .then(res => {
           console.log('성공', res)
+          console.log(typeof(getters.currentArticle.no))
         })
         .catch(err => {
           console.log('실패', err)

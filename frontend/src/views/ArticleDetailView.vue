@@ -1,8 +1,9 @@
 <template>
-  <v-container>
+  <v-container class="grey lighten-5">
     <h1>게시글 상세보기</h1>
     <ArticleDetail />
     <CommentForm />
+    <CommentList />
   </v-container>
 </template>
 
@@ -10,6 +11,7 @@
 import { mapActions } from 'vuex'
 import ArticleDetail from '@/components/board/ArticleDetail.vue'
 import CommentForm from '@/components/board/CommentForm.vue'
+import CommentList from '@/components/board/CommentList.vue'
 const boardStore = "boardStore"
 
 export default {
@@ -17,6 +19,7 @@ export default {
   components: {
     ArticleDetail,
     CommentForm,
+    CommentList,
   },
   data() {
     return {
