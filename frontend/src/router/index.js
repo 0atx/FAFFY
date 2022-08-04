@@ -94,6 +94,16 @@ const routes = [
     name: "board",
     component: () => import("@/views/BoardView.vue"),
   },
+  {
+    path: "/board/new",
+    name: "board-new",
+    component: () => import("@/views/CreateBoardView.vue"),
+  },
+  {
+    path: "/board/:boardNo",
+    name: "board-detail",
+    component: () => import("@/views/BoardDetailView.vue"),
+  },
 ];
 
 const router = new VueRouter({
