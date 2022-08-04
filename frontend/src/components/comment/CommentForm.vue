@@ -11,19 +11,46 @@
           clearable
           clear-icon="mdi-close-circle"
           label="Text"
+          v-model="comment"
           value="This is clearable text.">
         </v-textarea>
       </v-col>
       <v-col cols="4">
-        <v-btn color="warning" label="등 록"></v-btn>
+        <v-btn color="warning" @click="submitComment(comment)">등록</v-btn>
+        <p>{{ checkUserInfo }}</p>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+const commentStore = "commentStore"
+const authStore = "authStore"
+
 export default {
   name: 'CommentForm',
+  data() {
+    return {
+      articleNo: this.$route.params.articleNo,
+      comment: '',
+    }
+  },
+  computed: {
+    ...mapGetters(authStore, ['checkUserInfo'])
+  },
+  methods: {
+    ...mapActions(commentStore, ['createComment']),
+    submitComment(comment) {
+      const commentForm = {
+        board_no: this.articleNo,
+        writer_no: this.checkUserInfo.no,
+        content: comment,
+      }
+      console.log(commentForm)
+      this.createComment(commentForm)
+    }
+  }
 }
 </script>
 
