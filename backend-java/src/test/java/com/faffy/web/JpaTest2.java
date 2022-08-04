@@ -1,7 +1,11 @@
 package com.faffy.web;
 
 import com.faffy.web.dto.UserDto;
+import com.faffy.web.jpa.entity.Consulting;
+import com.faffy.web.jpa.entity.ConsultingLog;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.repository.ConsultingLogRepository;
+import com.faffy.web.jpa.repository.ConsultingRepository;
 import com.faffy.web.jpa.repository.FashionCategoryRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.Gender;
@@ -14,6 +18,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +33,12 @@ public class JpaTest2 {
 
     @Autowired
     FashionCategoryRepository fashionCategoryRepository;
+
+    @Autowired
+    ConsultingRepository consultingRepository;
+
+    @Autowired
+    ConsultingLogRepository consultingLogRepository;
 
     @Autowired
     UserService userService;
@@ -127,4 +138,57 @@ public class JpaTest2 {
 
     }
 
+    @Test
+    @DisplayName("방송 더미 데이터 삽입")
+    void insertConsultings(){
+        try{
+            User user1 = userRepository.findByNo(1).orElse(null);
+            User user2 = userRepository.findByNo(2).orElse(null);
+
+            Consulting consulting = Consulting.builder()
+                    .startTime(LocalDateTime.now())
+                    .endTime(LocalDateTime.now())
+                    .title("전직 모델의 날씬해 보이게 입는 법 컨설팅")
+                    .intro("나에게 잘 맞는 옷을 골라야 합니다!")
+                    .roomSize(10)
+                    .viewCount(100)
+                    .consultant(user1)
+                    .build();
+            consultingRepository.save(consulting);
+            ConsultingLog log = new ConsultingLog(consulting, user1);
+            consultingLogRepository.save(log);
+
+            Thread.sleep(1000);
+            consulting = Consulting.builder()
+                    .startTime(LocalDateTime.now())
+                    .endTime(LocalDateTime.now())
+                    .title("스트릿 패션의 정수를 보여주마")
+                    .intro("홍대 길바닥 패션 경력 10년 짬바가 옷 입는법 알려드림")
+                    .roomSize(12)
+                    .viewCount(120)
+                    .consultant(user2)
+                    .build();
+            consultingRepository.save(consulting);
+            log = new ConsultingLog(consulting, user2);
+            consultingLogRepository.save(log);
+
+            Thread.sleep(1000);
+            consulting = Consulting.builder()
+                    .startTime(LocalDateTime.now())
+                    .endTime(LocalDateTime.now())
+                    .title("격식 있는 듯 없는 듯 입는 패션 전수")
+                    .intro("적당히 포멀하면서 적당히 캐주얼한 옷 입기")
+                    .roomSize(8)
+                    .viewCount(80)
+                    .consultant(user1)
+                    .build();
+            consultingRepository.save(consulting);
+            log = new ConsultingLog(consulting, user1);
+            consultingLogRepository.save(log);
+            log = new ConsultingLog(consulting, user2);
+            consultingLogRepository.save(log);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

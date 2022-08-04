@@ -1,15 +1,15 @@
 package com.faffy.web.service;
 
-import com.faffy.web.dto.UserDto;
-import com.faffy.web.dto.UserGetDetailDto;
-import com.faffy.web.dto.UserLoginDto;
-import com.faffy.web.dto.UserPublicDto;
+import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
+import com.faffy.web.jpa.entity.Consulting;
+import com.faffy.web.jpa.entity.ConsultingLog;
 import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.repository.ConsultingLogRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.PublicUserInfo;
@@ -28,8 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.sql.Timestamp;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -41,6 +44,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     UploadFileRepository uploadFileRepository;
+    @Autowired
+    ConsultingLogRepository consultingLogRepository;
     @Autowired
     FileHandler fileHandler;
 
@@ -116,6 +121,70 @@ public class UserServiceImpl implements UserService {
         UploadFile uf = user.getProfileImage();
         String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
         return new File(filename);
+    }
+
+    @Override
+    public List<BroadCastHistoryDto> getPartiList(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        List<ConsultingLog> logList = consultingLogRepository.findConsultingLogsByUserNo(no).orElse(null);
+        List<Consulting> consultings = new ArrayList<>();
+        List<BroadCastHistoryDto> dtoList = new ArrayList<>();
+        if(!logList.isEmpty()){
+            for(ConsultingLog log : logList){
+                Consulting consulting = log.getConsulting();
+                if(consulting.getConsultant().getNo() == user.getNo()) continue; // 방송 진행한 경우는 건너뜀
+                consultings.add(consulting);
+            }
+
+            for(Consulting consulting : consultings){
+                Date date = Timestamp.valueOf(consulting.getStartTime());
+                String sdate = date.toString().split(" ")[0].replace(':', '-');
+                BroadCastHistoryDto dto = BroadCastHistoryDto.builder()
+                        .consultant(consulting.getConsultant().getNickname())
+                        .title(consulting.getTitle())
+                        .date(sdate)
+                        .intro(consulting.getIntro())
+                        .build();
+                dtoList.add(dto);
+            }
+        }
+
+        return dtoList;
+    }
+
+    @Override
+    public List<BroadCastHistoryDto> getConsultList(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        List<ConsultingLog> logList = consultingLogRepository.findConsultingLogsByUserNo(no).orElse(null);
+        List<Consulting> consultings = new ArrayList<>();
+        List<BroadCastHistoryDto> dtoList = new ArrayList<>();
+        if(!logList.isEmpty()){
+            for(ConsultingLog log : logList){
+                Consulting consulting = log.getConsulting();
+                if(consulting.getConsultant().getNo() != user.getNo()) continue; // 방송 참여한 경우는 건너뜀
+                consultings.add(consulting);
+            }
+
+            for(Consulting consulting : consultings){
+                Date date = Timestamp.valueOf(consulting.getStartTime());
+                String sdate = date.toString().split(" ")[0].replace(':', '-');
+                BroadCastHistoryDto dto = BroadCastHistoryDto.builder()
+                        .consultant(consulting.getConsultant().getNickname())
+                        .title(consulting.getTitle())
+                        .date(sdate)
+                        .intro(consulting.getIntro())
+                        .build();
+                dtoList.add(dto);
+            }
+        }
+
+        return dtoList;
     }
 
     @Override
