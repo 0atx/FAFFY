@@ -10,19 +10,29 @@
           <p class="text-h6" style="font-weight: 600">Edit</p>
         </div>
         <div id="editInfo">
-          <v-form ref="form" method="post" enctype="multipart/form-data" @submit.prevent="requestEdit">
-
+          <v-form
+            ref="form"
+            method="post"
+            enctype="multipart/form-data"
+            @submit.prevent="requestEdit"
+          >
             <!-- 프로필 이미지 src 변수로 받아와서 적용시켜줘야 함 -->
             <div style="text-align: center">
-            <v-avatar id="avatar" color="#fff" class="mt-8 mb-4" size="250" rounded>
-              <v-img v-if="url" :src="url"></v-img>
-              <v-img v-else src="@/assets/images/default_profile.png"></v-img>
-            </v-avatar>
+              <v-avatar
+                id="avatar"
+                color="#fff"
+                class="mt-8 mb-4"
+                size="250"
+                rounded
+              >
+                <v-img v-if="url" :src="url"></v-img>
+                <v-img v-else src="@/assets/images/default_profile.png"></v-img>
+              </v-avatar>
             </div>
 
             <v-file-input
               @change="fileChanged"
-              v-model="form.img"
+              v-model="form.file"
               accept="image/*"
               label="프로필 이미지 선택"
               prepend-icon=""
@@ -63,8 +73,15 @@
               </div>
 
               <!-- 별명 중복 확인 -->
-              <v-btn id="checkNicknameBtn" class="mt-2" icon @click="checkNickname">
-                <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
+              <v-btn
+                id="checkNicknameBtn"
+                class="mt-2"
+                icon
+                @click="checkNickname"
+              >
+                <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'"
+                  >mdi-check</v-icon
+                >
               </v-btn>
             </div>
 
@@ -72,7 +89,11 @@
             <v-text-field
               v-model="form.password"
               type="password"
-              :rules="rules.password()"
+              :rules="
+                form.password != undefined && form.password != ''
+                  ? rules.password()
+                  : [true]
+              "
               hint="비밀번호를 변경할 경우에만 입력하세요. 8~16자 영문 대 소문자, 숫자, 특수문자 포함"
               persistent-hint
               label="비밀번호"
@@ -82,9 +103,13 @@
 
             <!-- 비밀번호 확인 -->
             <v-text-field
-              v-model="confirmPw"
+              v-model="form.confirmPw"
               type="password"
-              :rules="[rules.matchValue(form.password)]"
+              :rules="
+                form.password != undefined && form.password != ''
+                  ? [rules.matchValue(form.password)]
+                  : [true]
+              "
               hint="변경할 비밀번호를 재입력해주세요."
               persistent-hint
               label="비밀번호 확인"
@@ -119,7 +144,7 @@
 
             <!-- 상세 자기소개 -->
             <v-textarea
-              v-model="form.infoDetail"
+              v-model="form.introduce"
               label="상세 자기소개"
               auto-grow
               clearable
@@ -131,24 +156,22 @@
 
             <!-- 관심 카테고리 -->
             <v-label>관심 분야</v-label>
-            <v-chip-group
-              v-model="selectedCategorys"
-              column
-              multiple
-            >
+            <v-chip-group v-model="form.categories" column multiple>
               <v-chip
-                v-for="(category, i) in categorys"
+                v-for="(c, i) in categoryList"
                 :key="i"
                 class="chip"
-                :value="category"
+                :value="c.name"
                 filter
                 color="#0c0f66"
-              > {{ category }}</v-chip>
+              >
+                {{ c.name }}</v-chip
+              >
             </v-chip-group>
 
             <!-- SNS 링크 instagram -->
             <v-text-field
-              v-model="form.instagram"
+              v-model="form.instaLink"
               label="인스타그램 링크"
               :rules="rules.instagram()"
               placeholder="https://www.instagram.com/faffy"
@@ -158,7 +181,7 @@
 
             <!-- SNS 링크 facebook -->
             <v-text-field
-              v-model="form.facebook"
+              v-model="form.facebookLink"
               label="페이스북 링크"
               :rules="rules.facebook()"
               placeholder="https://www.facebook.com/faffy"
@@ -168,7 +191,7 @@
 
             <!-- SNS 링크 youtube -->
             <v-text-field
-              v-model="form.youtube"
+              v-model="form.youtubeLink"
               label="유튜브 링크"
               :rules="rules.youtube()"
               placeholder="https://www.youtube.com/c/faffy"
@@ -177,18 +200,11 @@
             ></v-text-field>
 
             <dark-button :btnValue="editValue" @click="requestEdit" />
-            <v-btn
-              id="quitBtn"
-              class="mt-4 mb-2"
-              block
-              rounded
-              elevation="0"
-            >
+            <v-btn id="quitBtn" class="mt-4 mb-2" block rounded elevation="0">
               회원 탈퇴
             </v-btn>
           </v-form>
         </div>
-
       </div>
     </v-container>
   </div>
@@ -197,9 +213,13 @@
 <script>
 import DarkButton from "@/components/common/DarkButton.vue";
 import validateRules from "@/utils/validateRules.js";
+import { mapState, mapMutations } from "vuex";
+import { auth } from "@/api/auth.js";
+import { category } from "@/api/category.js";
 
+const authStore = "authStore";
 export default {
-	name: "EditProfileView",
+  name: "EditProfileView",
   components: {
     DarkButton,
   },
@@ -207,41 +227,28 @@ export default {
     return {
       // 임시 user 정보, 추후 DB에서 데이터 불러와서 값 넣어줘야 함
       form: {
-        img: null,
+        file: null,
         email: "ha110011@naver.com",
         name: "박윤하",
         nickname: "별명짓기귀찮다",
         password: "Password1!",
+        confirmPW: "",
         birthday: "1998-11-07",
         gender: "여자",
-        info: "간단한 자기소개를 작성해주세요. 작성된 내용은 프로필 카드에 노출됩니다.",
-        infoDetail: "자세한 자기소개를 작성해주세요. 작성된 내용은 프로필 상세 페이지에서 확인할 수 있습니다.",
-        instagram: "",
-        facebook: "",
-        youtube: ""
+        introduce:
+          "간단한 자기소개를 작성해주세요. 작성된 내용은 프로필 카드에 노출됩니다.",
+        info: "자세한 자기소개를 작성해주세요. 작성된 내용은 프로필 상세 페이지에서 확인할 수 있습니다.",
+        categories: [],
+        instaLink: "",
+        facebookLink: "",
+        youtubeLink: "",
       },
 
       // 유저가 선택한 이미지 url
       url: null,
 
-      // user가 선택한 카테고리 > DB에 넘겨야 함
-      selectedCategorys: "",
-
-      // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      categorys: [
-        "워크웨어",
-        "히피",
-        "페미닌",
-        "캐주얼",
-        "모던",
-        "시크",
-        "댄디",
-        "빈티지",
-        "미니멀",
-        "스트릿",
-      ],
-
-      confirmPw: "Password1!",
+      // 카테고리 목록
+      categoryList: [],
 
       // 닉네임 중복 확인 후 중복 아닐 때 true 처리
       checkNicknameIcon: false,
@@ -252,7 +259,27 @@ export default {
   watch: {
     selectedCategorys: "show",
   },
+  mounted() {
+    if (!this.isLogin) {
+      alert("로그인이 필요합니다.");
+      this.$router.push({ name: "main" });
+    }
+    this.form = { ...this.loginUser };
+
+    // 카테고리 목록 불러오기
+    category.getCategories(
+      (response) => {
+        console.log("카테고리 요청 성공");
+        this.categoryList = response.data["content"];
+      },
+      (response) => {
+        console.log("요청 실패");
+        console.log(response);
+      }
+    );
+  },
   methods: {
+    ...mapMutations(authStore, ["SET_USER_INFO"]),
     goTo() {
       this.$router.go(-1);
     },
@@ -264,37 +291,58 @@ export default {
       const validate = this.$refs.form.validate();
 
       // 유효성 검사 안됐으면 alert
-      if(!validate) {
-        alert('회원가입 입력 형식을 맞춰주세요.')
+      if (!validate) {
+        alert("입력 형식을 맞춰주세요.");
         return;
       }
       // 유효성 검사 됐으면 수정 처리
 
-      // let formData = new FormData();
-      // axios.put('http://localhost:8888/api/users', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(
-      //   response => {
-      //     if (!!response && response.status === 200) {
-      //       console.log("OK");
-      //     }
-      //   }).catch(error => {
-      //     console.log(error);
-      //   });
+      let formData = new FormData();
+      formData.append("no", this.loginUser.no);
+      formData.append("nickname", this.form.nickname);
+      formData.append("name", this.form.name);
+      formData.append("info", this.form.info);
+      if (this.form.password != undefined)
+        formData.append("password", this.form.password);
+      if (this.form.file != null) formData.append("file", this.form.file);
+      formData.append("introduce", this.form.introduce);
+      formData.append("birthday", this.form.birthday);
+      formData.append("instaLink", this.form.instaLink);
+      formData.append("facebookLink", this.form.facebookLink);
+      formData.append("youtubeLink", this.form.youtubeLink);
+      formData.append("categories", this.form.categories);
 
-      console.log("정보 수정 보내야 합니다.");
+      auth.updateProfile(
+        formData,
+        (response) => {
+          console.log("성공");
+          console.log(response);
+          this.SET_USER_INFO(response.data["content"]);
+          this.$router.push({
+            name: "profile",
+            params: { no: this.loginUser.no },
+          });
+        },
+        (response) => {
+          console.log("실패");
+          console.log(response);
+        }
+      );
     },
     fileChanged() {
-      if(this.form.img != null) {
-        this.url = URL.createObjectURL(this.form.img);
+      if (this.form.file != null) {
+        this.url = URL.createObjectURL(this.form.file);
       } else {
         this.url = null;
       }
     },
     show() {
       console.log(this.selectedCategorys);
-    }
+    },
   },
   computed: {
     rules: () => validateRules,
+    ...mapState(authStore, ["isLogin", "loginUser"]),
   },
 };
 </script>
