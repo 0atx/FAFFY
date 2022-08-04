@@ -30,7 +30,7 @@
       <!-- 로그인 후 메뉴 바 -->
       <v-menu
         offset-y
-        v-if="userInfo"
+        v-if="loginUser"
       >
 
         <template v-slot:activator="{ on, attrs }">
@@ -101,7 +101,7 @@ export default {
     ProfileIconAvatar
   },
     computed: {
-    ...mapState(authStore, ["userInfo","isLogin"]),
+    ...mapState(authStore, ["loginUser","isLogin"]),
   },
   methods: {
     ...mapActions(authStore,["logout"]),
@@ -116,7 +116,7 @@ export default {
       }
     },
     toMyProfile() {
-      this.$router.push("/profile/"+this.userInfo.no).catch(()=>{});
+      this.$router.push("/profile/"+this.loginUser.no).catch(()=>{});
     }
   }
 };
