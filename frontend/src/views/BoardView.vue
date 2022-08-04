@@ -7,7 +7,7 @@
       </v-col>
       <v-col
       cols="9">
-        <ArticleList :type="boardType" />
+        <BoardList :type="boardType" />
       </v-col>
     </v-row>
   </v-container>
@@ -15,7 +15,7 @@
 
 <script>
 import SideBar from '@/components/board/SideBar.vue'
-import ArticleList from '@/components/board/ArticleList.vue'
+import BoardList from '@/components/board/BoardList.vue'
 import { mapActions } from 'vuex'
 const boardStore = "boardStore";
 
@@ -23,7 +23,7 @@ export default {
   name: 'BoardView',
   components: {
     SideBar,
-    ArticleList,
+    BoardList,
   },
   data() {
     return {
@@ -31,14 +31,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(boardStore, ['fetchArticles']),
+    ...mapActions(boardStore, ['fetchBoardList']),
+    // 게시판 카테고리 변경
     changeType(type) {
       this.boardType = type
       console.log(type)
     },
   },
   created() {
-    this.fetchArticles()
+    this.fetchBoardList()
   }
 }
 </script>
