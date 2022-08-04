@@ -1,8 +1,7 @@
 package com.faffy.web.jpa.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +13,9 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Consulting extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "consultant_no")
@@ -26,10 +28,6 @@ public class Consulting extends BaseEntity {
 
     @Column(length = 300)
     private String intro;
-
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "category_no")
-//    private FashionCategory category;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "consultingCategoryMapper.consulting")
     @JsonIgnore

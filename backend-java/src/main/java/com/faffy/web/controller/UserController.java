@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -301,4 +302,39 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @GetMapping("/profile/{no}/history/parti")
+    public ResponseEntity<Page<BroadCastHistoryDto>> getParticipantHistory(@PathVariable int no,
+                                                                           @RequestParam(defaultValue = "0") int page,
+                                                                           @RequestParam(defaultValue = "10") int size){
+        List<BroadCastHistoryDto> dtoList = userService.getPartiList(no);
+        if(dtoList == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            Pageable paging = PageRequest.of(page, size, Sort.by("date").descending());
+            int start = (int)paging.getOffset();
+            int end = Math.min(start+paging.getPageSize(), dtoList.size());
+            Page<BroadCastHistoryDto> res = new PageImpl<>(dtoList.subList(start, end), paging, dtoList.size());
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(value="방송 진행 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @GetMapping("/profile/{no}/history/consult")
+    public ResponseEntity<Page<BroadCastHistoryDto>> getConsultantHistory(@PathVariable int no,
+                                                                          @RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "10") int size){
+        List<BroadCastHistoryDto> dtoList = userService.getConsultList(no);
+        if(dtoList == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            Pageable paging = PageRequest.of(page, size, Sort.by("date").descending());
+            int start = (int)paging.getOffset();
+            int end = Math.min(start+paging.getPageSize(), dtoList.size());
+            Page<BroadCastHistoryDto> res = new PageImpl<>(dtoList.subList(start, end), paging, dtoList.size());
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+    }
 }
