@@ -3,9 +3,14 @@ import axios from "axios";
 const boardStore = {
   namespaced: true,
   state: {
-    // 임시로 설정한 글 목록입니다
+    // 전체 게시글 목록
     articleList: [],
+
+    // 조회할 게시글 정보
     currentArticle: {},
+
+    // 조회 중인 글의 댓글 목록
+    commentList: [],
   },
   getters: {
     articleList: state => state.articleList,
@@ -17,6 +22,7 @@ const boardStore = {
   mutations: {
     SET_ARTICLES: (state, articles) => state.articleList = articles,
     SET_ARTICLE: (state, article) => state.currentArticle = article,
+    SET_COMMENT_LIST: (state, commentList) => state.commentList = commentList,
   },
   actions: {
     fetchArticles({ commit }) {
@@ -61,6 +67,23 @@ const boardStore = {
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    fetchCommentList({ commit }, commentList) {
+      commit('SET_COMMENT_LIST', commentList)
+    },
+    createComment(context, commentForm) {
+      axios({
+        url: 'http://localhost:8888/api/comments',
+        method: 'post',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
+        data: commentForm
+      })
+        .then(res => {
+          console.log('성공', res)
+        })
+        .catch(err => {
+          console.log('실패', err)
         })
     }
   },

@@ -9,7 +9,7 @@
 <script>
 import { mapActions } from 'vuex'
 import ArticleDetail from '@/components/board/ArticleDetail.vue'
-import CommentForm from '@/components/comment/CommentForm.vue'
+import CommentForm from '@/components/board/CommentForm.vue'
 const boardStore = "boardStore"
 
 export default {
