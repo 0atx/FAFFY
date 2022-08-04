@@ -2,8 +2,10 @@ package com.faffy.web.controller;
 
 import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataNotFoundException;
+import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
+import com.faffy.web.service.ConsultingService;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
@@ -36,6 +38,8 @@ public class UserController {
     UserServiceImpl userService;
     @Autowired
     UserCategoryService userCategoryService;
+    @Autowired
+    ConsultingService consultingService;
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -161,22 +165,20 @@ public class UserController {
     @ApiOperation(value="회원 프로필 사진 조회", notes="해당 유저의 프로필 사진을 반환합니다.")
     @GetMapping("/profile/image/{no}")
     public ResponseEntity<byte[]> getUserProfileImg(@PathVariable int no) {
-        HttpStatus status = HttpStatus.OK;
 
-        File file = userService.getProfileImg(no);
-        if(file == null){
-            status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<>(status);
-        }
-        else {
+        try {
+            File file = userService.getProfileImg(no);
             HttpHeaders header = new HttpHeaders();
             try {
                 header.add("Content-Type", Files.probeContentType(file.toPath()));
-                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, status);
-            } catch (Exception e){
+                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+        } catch (IllegalInputException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -302,7 +304,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 반환")
     @GetMapping("/profile/{no}/history/parti")
     public ResponseEntity<Page<BroadCastHistoryDto>> getParticipantHistory(@PathVariable int no,
                                                                            @RequestParam(defaultValue = "0") int page,
@@ -320,7 +322,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value="방송 진행 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @ApiOperation(value="방송 진행 기록 불러오기", notes="해당 유저의 방송 진행 기록을 반환")
     @GetMapping("/profile/{no}/history/consult")
     public ResponseEntity<Page<BroadCastHistoryDto>> getConsultantHistory(@PathVariable int no,
                                                                           @RequestParam(defaultValue = "0") int page,
@@ -337,4 +339,41 @@ public class UserController {
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
     }
+
+    @ApiOperation(value="상세 히스토리 조회", notes="해당 유저가 참여했던 방송의 상세 기록을 반환")
+    @GetMapping("/profile/{user_no}/history/{consulting_no}")
+    public ResponseEntity<HistoryDetailDto> getHistoryDetail(@PathVariable int user_no,
+                                                             @PathVariable int consulting_no){
+        try {
+            HistoryUserInfoDto userInfoDto = userService.getHistoryUserInfo(consulting_no);
+            HistoryConsultingDto consultingDto = consultingService.getHistoryConsulting(consulting_no);
+            HistoryDetailDto dto = new HistoryDetailDto(userInfoDto, consultingDto);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }catch (IllegalInputException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+//    @ApiOperation(value="상세 히스토리 이미지 조회", notes="상세 히스토리 페이지에서 필요한 방송 진행자 프로필 사진, 방송 스냅샷들을 반환")
+//    @GetMapping("/profile/{user_no}/history/{consulting_no}/images")
+//    public ResponseEntity<Map<String, Object>> getHistoryDetailImages(@PathVariable int user_no,
+//                                                                      @PathVariable int consulting_no) {
+//
+//        try {
+//            File profileImg = userService.getProfileImg(user_no);
+//            File snapshots = consultingService.getSnapShots(consulting_no);
+//
+//            HttpHeaders header = new HttpHeaders();
+//            try {
+//                header.add("Content-Type", Files.probeContentType(profileImg.toPath()));
+//
+//                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(profileImg), header, HttpStatus.OK);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } catch (IllegalInputException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }

@@ -87,9 +87,11 @@ public interface UserService {
 
     UserGetDetailDto getProfile(int no);
 
-    File getProfileImg(int no);
+    File getProfileImg(int no) throws IllegalInputException;
 
     List<BroadCastHistoryDto> getPartiList(int no);
 
     List<BroadCastHistoryDto> getConsultList(int no);
+
+    HistoryUserInfoDto getHistoryUserInfo(int no) throws IllegalInputException;
 }
