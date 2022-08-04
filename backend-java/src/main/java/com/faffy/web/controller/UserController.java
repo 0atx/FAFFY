@@ -30,7 +30,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 @CrossOrigin("*")
 public class UserController {
 

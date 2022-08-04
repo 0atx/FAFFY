@@ -10,7 +10,7 @@
       아래 이미지 v-if로 사진 없을 때 디폴트 사진을 보여주던가 해야할거 같음
     -->
       <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
-        <v-img src="@/assets/images/default_profile.png"></v-img>
+        <img :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`" />
         <!--
       <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
       -->
@@ -25,7 +25,7 @@
           클릭 시 정보 수정 페이지로 이동
         -->
         <v-btn
-          v-if="loginUser != null && userProfile.no == loginUser.no"
+          v-if="userProfile"
           id="profileBtn"
           class="mx-2 pb-1"
           elevation="0"
@@ -57,10 +57,10 @@
 
       <!-- 팔로잉 팔로워 -->
       <div>
-        <router-link to="/profile/1/following"
+        <router-link :to="{ name: 'following' }"
           >팔로잉 {{ userProfile.followingCount }}</router-link
         >
-        <router-link to="/profile/1/follower"
+        <router-link :to="{ name: 'follower' }"
           >팔로워 {{ userProfile.followerCount }}</router-link
         >
       </div>
@@ -134,35 +134,18 @@
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
 import { mapState } from "vuex";
+import { API_BASE_URL } from "@/config";
 const profileStore = "profileStore";
-const authStore = "authStore";
 export default {
   name: "ProfileCard",
   components: { CategoryChips },
   computed: {
     ...mapState(profileStore, ["userProfile"]),
-    ...mapState(authStore, ["loginUser"]),
-  },
-  mounted() {
-    // 로그인 했다면 이 사람이 내가 팔로우 했는지 아닌지 체크
   },
   data() {
     return {
-      // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      // categorys: [
-      //   "워크웨어",
-      //   "히피",
-      //   "페미닌",
-      //   "캐주얼",
-      //   "모던",
-      //   "시크",
-      //   "댄디",
-      //   "빈티지",
-      //   "미니멀",
-      //   "스트릿",
-      // ],
       readonly: { type: Boolean, default: true },
-
+      API_BASE_URL: API_BASE_URL,
       follow: true,
     };
   },
