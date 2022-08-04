@@ -3,7 +3,9 @@ package com.faffy.web.service;
 import com.faffy.web.dto.HistoryConsultingDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.Consulting;
+import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.repository.ConsultingRepository;
+import com.faffy.web.jpa.repository.UploadFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.Date;
 public class ConsultingServiceImpl implements ConsultingService{
     @Autowired
     ConsultingRepository consultingRepository;
+    @Autowired
+    UploadFileRepository uploadFileRepository;
 
     private String getDuration(String startTime, String endTime){
         System.out.println("startTime:"+startTime);
@@ -52,11 +56,17 @@ public class ConsultingServiceImpl implements ConsultingService{
                 .endTime(endTime)
                 .introduce(consulting.getIntro())
                 .categories(consulting.getCategories())
+                .fileList(consulting.getSnapshots())
                 .build();
     }
 
     @Override
-    public File getSnapShots(int no) {
-        return null;
+    public File getSnapshot(int no) throws IllegalInputException{
+        UploadFile uf = uploadFileRepository.findById(no).orElse(null);
+        if(uf == null)
+            throw new IllegalInputException();
+
+        String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
+        return new File(filename);
     }
 }

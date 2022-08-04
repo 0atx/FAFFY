@@ -1,6 +1,7 @@
 package com.faffy.web.dto;
 
 import com.faffy.web.jpa.entity.ConsultingCategory;
+import com.faffy.web.jpa.entity.ConsultingFile;
 import com.faffy.web.jpa.entity.UserCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +22,11 @@ public class HistoryConsultingDto {
     private String endTime;
     private String introduce;
     private List<String> categories = new ArrayList<>();
+    private List<Integer> snapshotNoList = new ArrayList();
 
     @Builder
-    public HistoryConsultingDto(int no, String title, String date, String duration, String startTime, String endTime, String introduce, List<ConsultingCategory> categories) {
+    public HistoryConsultingDto(int no, String title, String date, String duration, String startTime, String endTime,
+                                String introduce, List<ConsultingCategory> categories, List<ConsultingFile> fileList) {
         this.no = no;
         this.title = title;
         this.date = date;
@@ -34,6 +37,10 @@ public class HistoryConsultingDto {
 
         for (ConsultingCategory category : categories) {
             this.categories.add(category.getConsultingCategoryMapper().getCategory().getName());
+        }
+
+        for(ConsultingFile file : fileList){
+            this.snapshotNoList.add(file.getFile().getNo());
         }
     }
 }
