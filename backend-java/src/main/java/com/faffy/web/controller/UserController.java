@@ -308,4 +308,29 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @GetMapping("/profile/{no}/history/parti")
+    public ResponseEntity<List<BroadCastHistoryDto>> getParticipantHistory(@PathVariable int no){
+        HttpStatus status = HttpStatus.OK;
+
+        List<BroadCastHistoryDto> dtoList = userService.getPartiList(no);
+        if(dtoList == null){
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(dtoList, status);
+    }
+
+    @ApiOperation(value="방송 진행 기록 불러오기", notes="해당 유저의 방송 참여 기록을 불러온다.")
+    @GetMapping("/profile/{no}/history/consult")
+    public ResponseEntity<List<BroadCastHistoryDto>> getConsultantHistory(@PathVariable int no){
+        HttpStatus status = HttpStatus.OK;
+
+        List<BroadCastHistoryDto> dtoList = userService.getConsultList(no);
+        if(dtoList == null){
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(dtoList, status);
+    }
 }

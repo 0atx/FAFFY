@@ -245,22 +245,22 @@ public class JpaTest {
         fashionCategoryRepository.save(category);
     }
 
-    @Test
-    @DisplayName("관심 목록 추가")
-    @Order(50)
-    void addUserCategories() {
-        System.out.println("추가결과 : " + userCategoryService.addUserCategory(1, "hip-hop"));
-        userCategoryService.addUserCategory(1, "daily");
-        userCategoryService.addUserCategory(1, "beach");
-    }
+//    @Test
+//    @DisplayName("관심 목록 추가")
+//    @Order(50)
+//    void addUserCategories() {
+//        System.out.println("추가결과 : " + userCategoryService.addUserCategory(1, "hip-hop"));
+//        userCategoryService.addUserCategory(1, "daily");
+//        userCategoryService.addUserCategory(1, "beach");
+//    }
 
-    @Test
-    @DisplayName("회원 카테고리 삭제")
-    @Order(51)
-    void deleteCategory() {
-        System.out.println("삭제결과 : " + userCategoryService.deleteUserCategory(1, "sports"));
-
-    }
+//    @Test
+//    @DisplayName("회원 카테고리 삭제")
+//    @Order(51)
+//    void deleteCategory() {
+//        System.out.println("삭제결과 : " + userCategoryService.deleteUserCategory(1, "sports"));
+//
+//    }
 
     @Test
     @DisplayName("회원의 카테고리 검색")
