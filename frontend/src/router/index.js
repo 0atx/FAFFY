@@ -95,14 +95,14 @@ const routes = [
     component: () => import("@/views/BoardView.vue"),
   },
   {
-    path: "/article",
-    name: "article",
-    component: () => import("@/views/CreateArticleView.vue"),
+    path: "/board/new",
+    name: "board-new",
+    component: () => import("@/views/CreateBoardView.vue"),
   },
   {
-    path: "/article/:articleNo",
-    name: "article-detail",
-    component: () => import("@/views/ArticleDetailView.vue"),
+    path: "/board/:boardNo",
+    name: "board-detail",
+    component: () => import("@/views/BoardDetailView.vue"),
   },
 ];
 

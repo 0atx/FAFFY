@@ -7,6 +7,7 @@
   <v-container>
     <v-row>
       <v-col cols="8">
+        <!-- 댓글 작성 -->
         <v-textarea
           clearable
           clear-icon="mdi-close-circle"
@@ -15,6 +16,7 @@
           value="This is clearable text.">
         </v-textarea>
       </v-col>
+      <!-- 댓글 작성 버튼 -->
       <v-col cols="4">
         <v-btn color="warning" @click="submitComment(comment)">등록</v-btn>
       </v-col>
@@ -31,7 +33,7 @@ export default {
   name: 'CommentForm',
   data() {
     return {
-      articleNo: this.$route.params.articleNo,
+      boardNo: this.$route.params.boardNo,
       comment: '',
     }
   },
@@ -41,14 +43,18 @@ export default {
   methods: {
     ...mapActions(boardStore, ['createComment']),
     submitComment(comment) {
-      const commentForm = {
-        board_no: this.articleNo,
-        writer_no: this.checkUserInfo.no,
-        content: comment,
+      if (!this.comment) {
+        alert('내용을 입력하세요.')
+      } else {
+        const commentForm = {
+          board_no: this.boardNo,
+          writer_no: this.checkUserInfo.no,
+          content: comment,
+        }
+        console.log(commentForm)
+        this.createComment(commentForm)
+        this.$router.go(this.$router.currentRoute)
       }
-      console.log(commentForm)
-      this.createComment(commentForm)
-      this.$router.go(this.$router.currentRoute)
     }
   }
 }
