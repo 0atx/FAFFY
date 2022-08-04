@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -223,10 +224,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
-        // 비밀번호 정규 표현식 만족 체크
-        if (!Pattern.matches(RegularExpression.PASSWORD_REG_EX,userDto.getPassword()))
-            throw new IllegalInputException(ILLEGAL_PASSWORD_CONDITION);
-        
         try {
             User user;
             if (userDto.getNo() == 0) {
@@ -235,7 +232,15 @@ public class UserServiceImpl implements UserService {
                 user = userRepository.findByNo(userDto.getNo()).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
             }
             
-            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            // 비밀번호 정규 표현식 만족 체크
+            if (StringUtils.hasLength(userDto.getPassword())) { // 변경 비밀번호 입력시
+                if (!Pattern.matches(RegularExpression.PASSWORD_REG_EX, userDto.getPassword()))
+                    throw new IllegalInputException(ILLEGAL_PASSWORD_CONDITION);
+
+                userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            } else {
+                userDto.setPassword(user.getPassword());
+            }
             //프로필 사진 관련
             MultipartFile file = userDto.getFile();
             if(file != null){ //선택한 파일이 있으면 이전 프로필 사진 삭제

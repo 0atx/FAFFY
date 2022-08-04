@@ -10,7 +10,7 @@
       아래 이미지 v-if로 사진 없을 때 디폴트 사진을 보여주던가 해야할거 같음
     -->
       <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
-        <v-img src="@/assets/images/default_profile.png"></v-img>
+        <img :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`" />
         <!--
       <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
       -->
@@ -18,7 +18,7 @@
 
       <!-- 별명 -->
       <div id="name" class="text-h6 mb-2">
-        {{userProfile.nickname}}
+        {{ userProfile.nickname }}
 
         <!-- 정보 수정 버튼
           v-if로 본인일 경우에만 보여지게
@@ -57,13 +57,17 @@
 
       <!-- 팔로잉 팔로워 -->
       <div>
-        <router-link to="/profile/1/following">팔로잉 {{userProfile.followingCount}}</router-link>
-        <router-link to="/profile/1/follower">팔로워 {{userProfile.followerCount}}</router-link>
+        <router-link :to="{ name: 'following' }"
+          >팔로잉 {{ userProfile.followingCount }}</router-link
+        >
+        <router-link :to="{ name: 'follower' }"
+          >팔로워 {{ userProfile.followerCount }}</router-link
+        >
       </div>
 
       <!-- 한 줄 자기소개 -->
       <div id="introduce">
-        {{userProfile.introduce}}
+        {{ userProfile.introduce }}
       </div>
 
       <!-- 관심 카테고리 -->
@@ -82,7 +86,12 @@
       -->
       <div id="social" class="mb-2">
         <!-- 인스타그램 -->
-        <v-btn v-if="userProfile.instaLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.instaLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/instagram_logo.png"
             alt=""
@@ -91,7 +100,12 @@
         </v-btn>
 
         <!-- 페이스북 -->
-        <v-btn v-if="userProfile.facebookLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.facebookLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/facebook_logo.png"
             alt=""
@@ -100,7 +114,12 @@
         </v-btn>
 
         <!-- 유튜브 -->
-        <v-btn v-if="userProfile.youtubeLink" fab elevation="0" class="overflow-hidden">
+        <v-btn
+          v-if="userProfile.youtubeLink"
+          fab
+          elevation="0"
+          class="overflow-hidden"
+        >
           <img
             src="@/assets/images/youtube_logo.png"
             alt=""
@@ -114,38 +133,21 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
-import {mapState} from "vuex"
+import { mapState } from "vuex";
+import { API_BASE_URL } from "@/config";
 const profileStore = "profileStore";
-
 export default {
   name: "ProfileCard",
   components: { CategoryChips },
   computed: {
-    ...mapState(profileStore,["userProfile"]),
+    ...mapState(profileStore, ["userProfile"]),
   },
   data() {
     return {
-      // 임의로 설정한 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      // categorys: [
-      //   "워크웨어",
-      //   "히피",
-      //   "페미닌",
-      //   "캐주얼",
-      //   "모던",
-      //   "시크",
-      //   "댄디",
-      //   "빈티지",
-      //   "미니멀",
-      //   "스트릿",
-      // ],
       readonly: { type: Boolean, default: true },
-
+      API_BASE_URL: API_BASE_URL,
       follow: true,
     };
-  },
-  beforeUpdate() {
-    console.log("profile card ready");
-    console.log(this.userProfile);
   },
   metaInfo() {
     return {
