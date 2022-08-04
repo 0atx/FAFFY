@@ -199,8 +199,6 @@ public class UserController {
         try {
             User user = userService.updateUser(userDto);
             userCategoryService.setUserCategories(userDto.getNo(), userDto.getCategories());
-//            for(String categoryName:userDto.getCategories())
-//                categoryService.addUserCategory(userDto.getNo(),categoryName);
 
             resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
