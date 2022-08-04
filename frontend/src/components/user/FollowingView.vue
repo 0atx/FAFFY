@@ -13,19 +13,14 @@
         <p class="text-h6" style="font-weight: 600">Following</p>
       </div>
       <div id="content" class="mt-4">
-        <p class="text-h6" style="font-weight: 600">
-          팔로잉 목록
-        </p>
+        <p class="text-h6" style="font-weight: 600">팔로잉 목록</p>
         <hr />
         <div id="followingList">
           <v-list style="padding: 0">
             <v-list-item-group>
-              <template v-for="(user, index) in users">
-
+              <template v-for="(user, index) in followingList">
                 <!-- 클릭하면 해당 인물 프로필 페이지로 넘어가게 해야 함 -->
-                <v-list-item
-                  :key="user.info"
-                >
+                <v-list-item :key="user.nickname">
                   <template v-slot:default>
                     <v-list-item-avatar>
                       <v-img :src="user.img"></v-img>
@@ -33,8 +28,14 @@
 
                     <v-list-item-content id="itemContent">
                       <div id="item">
-                        <v-list-item-title class="mb-1" v-html="user.nickname"></v-list-item-title>
-                        <v-list-item-subtitle class="mt-1" v-html="user.info"></v-list-item-subtitle>
+                        <v-list-item-title
+                          class="mb-1"
+                          v-html="user.nickname"
+                        ></v-list-item-title>
+                        <v-list-item-subtitle
+                          class="mt-1"
+                          v-html="user.info"
+                        ></v-list-item-subtitle>
                       </div>
                       <div id="followBtn">
                         <v-btn
@@ -68,102 +69,106 @@
 
 <script>
 //import DarkButton from "@/components/common/DarkButton.vue";
-
+import { mapState } from "vuex";
+const profileStore = "profileStore";
 export default {
   name: "FollowingView",
   components: {
     //DarkButton,
+  },
+  computed: {
+    ...mapState(profileStore, ["followingList"]),
   },
   data() {
     return {
       // user가 팔로우하고 있는 유저 리스트 가져와서 넣어야 함
       users: [
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다',
-          info: '50자로 확정했습니다 내 맘대로ㅎㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다",
+          info: "50자로 확정했습니다 내 맘대로ㅎㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다2',
-          info: '한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다2",
+          info: "한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다3',
-          info: '넓이 고정이 안돼;;;',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다3",
+          info: "넓이 고정이 안돼;;;",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다4',
-          info: '는줄 알았는데 되네ㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다4",
+          info: "는줄 알았는데 되네ㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다',
-          info: '50자로 확정했습니다 내 맘대로ㅎㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다",
+          info: "50자로 확정했습니다 내 맘대로ㅎㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다2',
-          info: '한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다2",
+          info: "한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다3',
-          info: '넓이 고정이 안돼;;;',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다3",
+          info: "넓이 고정이 안돼;;;",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다4',
-          info: '는줄 알았는데 되네ㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다4",
+          info: "는줄 알았는데 되네ㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다',
-          info: '50자로 확정했습니다 내 맘대로ㅎㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다",
+          info: "50자로 확정했습니다 내 맘대로ㅎㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다2',
-          info: '한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다2",
+          info: "한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다3',
-          info: '넓이 고정이 안돼;;;',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다3",
+          info: "넓이 고정이 안돼;;;",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다4',
-          info: '는줄 알았는데 되네ㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다4",
+          info: "는줄 알았는데 되네ㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다',
-          info: '50자로 확정했습니다 내 맘대로ㅎㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다",
+          info: "50자로 확정했습니다 내 맘대로ㅎㅎ",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다2',
-          info: '한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다2",
+          info: "한 줄 소개 들어갈 부분입니다. 근데 한 줄 소개는 글자수 제한을 몇자로 하지 100자로?",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다3',
-          info: '넓이 고정이 안돼;;;',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다3",
+          info: "넓이 고정이 안돼;;;",
         },
         {
-          img: 'http://localhost:8080/img/default_profile.777a4c74.png',
-          nickname: '별명짓기귀찮다4',
-          info: '는줄 알았는데 되네ㅎ',
+          img: "http://localhost:8080/img/default_profile.777a4c74.png",
+          nickname: "별명짓기귀찮다4",
+          info: "는줄 알았는데 되네ㅎ",
         },
       ],
 
-      followValue: "팔로우"
+      followValue: "팔로우",
     };
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -203,14 +208,14 @@ a {
 
 #item {
   display: table-cell;
-  vertical-align:middle;
+  vertical-align: middle;
   padding-right: 10px;
   width: 500px !important;
 }
 
 #followBtn {
   display: table-cell;
-  vertical-align:middle;
+  vertical-align: middle;
   width: 60px !important;
 }
 
