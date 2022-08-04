@@ -9,6 +9,7 @@ import com.faffy.web.jpa.entity.ConsultingLog;
 import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.ConsultingLogRepository;
+import com.faffy.web.jpa.repository.ConsultingRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
@@ -41,6 +42,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     UploadFileRepository uploadFileRepository;
+    @Autowired
+    ConsultingRepository consultingRepository;
     @Autowired
     ConsultingLogRepository consultingLogRepository;
     @Autowired
@@ -110,12 +113,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public File getProfileImg(int no) {
+    public File getProfileImg(int no) throws IllegalInputException{
         User user = userRepository.findByNo(no).orElse(null);
         if(user == null)
-            return null;
+            throw new IllegalInputException();
 
         UploadFile uf = user.getProfileImage();
+        if(uf == null)
+            return null;
+
         String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
         return new File(filename);
     }
@@ -184,6 +190,22 @@ public class UserServiceImpl implements UserService {
         }
 
         return dtoList;
+    }
+
+    @Override
+    public HistoryUserInfoDto getHistoryUserInfo(int no) throws IllegalInputException{
+        Consulting consulting = consultingRepository.findById(no).orElse(null);
+        if(consulting == null)
+            throw new IllegalInputException();
+        User user = consulting.getConsultant();
+        return HistoryUserInfoDto.builder()
+                .no(user.getNo())
+                .nickname(user.getNickname())
+                .followerCount(user.getFollowedMappings().size())
+                .followingCount(user.getFollowMappings().size())
+                .introduce(user.getIntroduce())
+                .categories(user.getCategories())
+                .build();
     }
 
     @Override

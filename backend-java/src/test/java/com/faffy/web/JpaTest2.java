@@ -9,7 +9,6 @@ import com.faffy.web.jpa.repository.ConsultingRepository;
 import com.faffy.web.jpa.repository.FashionCategoryRepository;
 import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.Gender;
-import com.faffy.web.jpa.type.PublicUserInfo;
 import com.faffy.web.service.BoardService;
 import com.faffy.web.service.CommentService;
 import com.faffy.web.service.UserCategoryService;
