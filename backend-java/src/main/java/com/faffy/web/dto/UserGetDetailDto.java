@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 유저 상세 정보 요청시 응답하는 Wrapper class
+ */
 @Data
 public class UserGetDetailDto {
     private int no;

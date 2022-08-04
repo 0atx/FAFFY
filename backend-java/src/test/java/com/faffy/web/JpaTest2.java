@@ -92,19 +92,19 @@ public class JpaTest2 {
 
     }
 
-    @Test
-    @Order(11)
-    @DisplayName("findAll")
-    void findAllUsers() {
-
-        List<PublicUserInfo> allUsers = userService.findAllUsers();
-        System.out.println("userCount : " +
-                allUsers.size());
-        for (PublicUserInfo user :
-                allUsers) {
-            System.out.println("user = " + user.getNickname());
-        }
-    }
+//    @Test
+//    @Order(11)
+//    @DisplayName("findAll")
+//    void findAllUsers() {
+//
+//        List<PublicUserInfo> allUsers = userService.findAllUsers();
+//        System.out.println("userCount : " +
+//                allUsers.size());
+//        for (PublicUserInfo user :
+//                allUsers) {
+//            System.out.println("user = " + user.getNickname());
+//        }
+//    }
 
     @Test
     @Order(121)

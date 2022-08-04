@@ -5,8 +5,7 @@ import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
-import com.faffy.web.jpa.type.PublicUserInfo;
-import org.springframework.web.multipart.MultipartFile;
+import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +36,7 @@ public interface UserService {
      * @throws Exception 해당하는 유저가 없을 시 예외 발생
      */
     public User getUserByEmail(String email) throws Exception;
-    public List<PublicUserInfo> findAllUsers();
+    public List<UserNoAndNicknameMask> findAllUsers();
 
 
     /**

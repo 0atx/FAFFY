@@ -2,6 +2,7 @@ package com.faffy.web.service;
 
 import com.faffy.web.dto.CommentAddDto;
 import com.faffy.web.dto.CommentUpdateDto;
+import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.jpa.entity.Board;
 import com.faffy.web.jpa.entity.Comment;
 import com.faffy.web.jpa.entity.User;
@@ -42,6 +43,7 @@ public class CommentServiceImpl implements CommentService{
         Board board = boardService.getBoard(commentDto.getBoard_no());
         User user = userService.getUserByNo(commentDto.getWriter_no());
         Comment comment = commentDto.toEntity(user,board);
+        board.addComment(comment);
         commentRepository.save(comment);
 
     }
@@ -56,7 +58,10 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void deleteComment(int comment_no) throws Exception {
-        commentRepository.deleteById(comment_no);
+        Comment comment = commentRepository.findById(comment_no).orElseThrow(()-> new IllegalArgumentException(COMMENT_NOT_FOUND_MSG));
+        Board board = comment.getBoard();
+        board.removeComment(comment);
+        commentRepository.delete(comment);
     }
 
 

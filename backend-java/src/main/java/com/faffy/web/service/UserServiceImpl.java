@@ -3,7 +3,6 @@ package com.faffy.web.service;
 import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
-import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.Consulting;
 import com.faffy.web.jpa.entity.ConsultingLog;
@@ -12,21 +11,18 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.ConsultingLogRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
-import com.faffy.web.jpa.type.PublicUserInfo;
+import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.jpa.type.RegularExpression;
 import com.faffy.web.service.file.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -68,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PublicUserInfo> findAllUsers() {
+    public List<UserNoAndNicknameMask> findAllUsers() {
         return userRepository.findAllBy();
     }
 
