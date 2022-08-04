@@ -5,6 +5,7 @@ import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.UserCategoryService;
+import com.faffy.web.service.UserCategoryServiceImpl;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,8 @@ public class UserController {
 
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    UserCategoryServiceImpl categoryService;
     @Autowired
     UserCategoryService userCategoryService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -194,7 +197,10 @@ public class UserController {
 
         try {
             User user = userService.updateUser(userDto);
-            resultMap.put("content", user);
+            for(String categoryName:userDto.getCategories())
+                categoryService.addUserCategory(userDto.getNo(),categoryName);
+
+            resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");

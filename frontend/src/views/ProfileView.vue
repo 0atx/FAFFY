@@ -1,20 +1,10 @@
 <template>
   <div id="view">
-    <v-row
-      id="ProfileView"
-    >
-      <v-col
-      class="pl-0 pr-0"
-        cols="6"
-        md="4"
-      >
-        <profile-card/>
+    <v-row id="ProfileView">
+      <v-col class="pl-0 pr-0" cols="6" md="4">
+        <profile-card />
       </v-col>
-      <v-col
-        class="pl-0 pr-0"
-        cols="12"
-        md="8"
-      >
+      <v-col class="pl-0 pr-0" cols="12" md="8">
         <router-view></router-view>
       </v-col>
     </v-row>
@@ -22,39 +12,37 @@
 </template>
 
 <script>
-import ProfileCard from '@/components/user/ProfileCard.vue'
-import {mapState, mapActions} from "vuex"
+import ProfileCard from "@/components/user/ProfileCard.vue";
+import { mapState, mapActions } from "vuex";
 const profileStore = "profileStore";
 
 export default {
-	name: "ProfileView",
+  name: "ProfileView",
   components: {
-    ProfileCard
+    ProfileCard,
   },
   computed: {
-    ...mapState(profileStore,["userProfile"]),
+    ...mapState(profileStore, ["userProfile"]),
   },
   data() {
     return {
-      profile:null,
+      profile: null,
     };
   },
   mounted() {
     this.loadProfile();
   },
   methods: {
-    ...mapActions(profileStore,["getUserProfile"]),
+    ...mapActions(profileStore, ["getUserProfile"]),
     async loadProfile() {
       const requestUserNo = this.$route.params.no;
-      // 이미 불러온 정보가 있다면 요청하지 않음
-      if (this.userProfile != null && this.userProfile.no == requestUserNo)
-        return;
 
       console.log("정보 요청하기");
       await this.getUserProfile(requestUserNo);
-      this.profile = this.userProfile;
-    }
-  }
+      if (this.userProfile) this.profile = this.userProfile;
+      else this.$router.push({ name: "main" });
+    },
+  },
 };
 </script>
 
