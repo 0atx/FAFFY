@@ -216,7 +216,7 @@ import validateRules from "@/utils/validateRules.js";
 import { mapState, mapMutations } from "vuex";
 import { auth } from "@/api/auth.js";
 import { category } from "@/api/category.js";
-
+import { API_BASE_URL } from "@/config";
 const authStore = "authStore";
 export default {
   name: "EditProfileView",
@@ -265,7 +265,7 @@ export default {
       this.$router.push({ name: "main" });
     }
     this.form = { ...this.loginUser };
-
+    this.url = `${API_BASE_URL}/users/profile/image/` + this.loginUser.no;
     // 카테고리 목록 불러오기
     category.getCategories(
       (response) => {
