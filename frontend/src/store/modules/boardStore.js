@@ -86,6 +86,23 @@ const boardStore = {
         .catch(err => {
           console.log('실패', err)
         })
+    },
+    deleteBoard({ commit }, boardNo) {
+      axios({
+        url: 'http://localhost:8888/api/boards/',
+        method: 'delete',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
+        data: {
+          no: boardNo
+        }
+      })
+        .then(res => {
+          console.log('삭제 성공', res)
+          commit('SET_BOARD', {})
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
 };
