@@ -2,20 +2,19 @@
 	<div id="main-container" class="container">
 		<!-- 방송 들어가기 전-->
 		<div id="join" v-if="!session">
-			<div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
 			<div id="join-dialog" class="jumbotron vertical-center">
 				<h1>방송 들어가기 </h1>
 				<div class="form-group">
 					<p>
-						<label>참가자명</label>
+						<label>참가자명 : </label>
 						<input v-model="myUserName" class="form-control" type="text" required>
 					</p>
 					<p>
-						<label>화상회의명</label>
+						<label>화상회의명 : </label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
 					</p>
 					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
+						<button class="btn btn-lg btn-success" @click="joinSession()">방송 입장</button>
 					</p>
 				</div>
 			</div>
@@ -24,16 +23,31 @@
 		<div id="session" v-if="session">
 			<div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
+				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession"
+					value="Leave session">
 			</div>
-			<div id="main-video" class="col-md-6">
-				<user-video :stream-manager="mainStreamManager"/>
-				<button @click="onOffCam">캠껐다키기</button> / 
-				<button @click="onOffAudio">오디오껐다키기</button>
-			</div>
+
 			<div id="video-container" class="col-md-6">
-				<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/>
+				<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)" />
+				<div id="main-video" class="col-md-6">
+					<button @click="changeCamValue" type="button">
+						<p v-if="camValue">Cam Off</p>
+						<p v-if="!camValue">Cam On</p>
+					</button>
+					/
+					<button @click="changeAudioValue" type="button">
+						<p v-if="audioValue">Audio Off</p>
+						<p v-if="!audioValue">Audio On</p>
+					</button>
+				</div>
+				<div id="session-header-screenShare">
+					<input v-if="!screenOV" class="btn btn-large btn-danger" type="button" id="buttonLeaveSession"
+						@click="startScreenShare" value="화면 공유 시작">
+					<input v-if="screenOV" class="btn btn-large btn-danger" type="button" id="buttonLeaveSession"
+						@click="stopScreenShare" value="화면 공유 종료">
+				</div>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub"
+					@click.native="updateMainVideoStreamManager(sub)" />
 			</div>
 		</div>
 	</div>
@@ -46,6 +60,7 @@ import UserVideo from '../components/video/UserVideo';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+// 서버 URL _ AWS 주소
 const OPENVIDU_SERVER_URL = "https://" + "13.124.166.155" + ":8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
@@ -56,25 +71,31 @@ export default {
 		UserVideo,
 	},
 
-	data () {
+	data() {
 		return {
 			OV: undefined,
 			session: undefined,
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
+			camValue: true,
+			audioValue: true,
 
-			mySessionId: 's' + Math.floor(Math.random() * 100),
-			myUserName: 'p' + Math.floor(Math.random() * 100),
+			mySessionId: 'session' + Math.floor(Math.random() * 100),
+			myUserName: 'participant' + Math.floor(Math.random() * 100),
 
-			
+			// 화면 공유할 때 사용할 session
+			screenOV: undefined,
+			screenSession: undefined,
+			screenShareName: undefined,
 		}
 	},
 
 	methods: {
-		joinSession () {
+		// 세션(화상회의) 시작
+		joinSession() {
 			// openVidu 객체 생성
-			this.OV = new OpenVidu(); 
+			this.OV = new OpenVidu();
 
 			// 세션 생성
 			this.session = this.OV.initSession();
@@ -113,9 +134,9 @@ export default {
 						let publisher = this.OV.initPublisher(undefined, {
 							audioSource: undefined, // The source of audio. If undefined default microphone
 							videoSource: undefined, // The source of video. If undefined default webcam
-							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-							resolution: '640x480',  // The resolution of your video
+							publishAudio: this.camValue,  	// Whether you want to start publishing with your audio unmuted or not
+							publishVideo: this.audioValue,  	// Whether you want to start publishing with your video enabled or not
+							resolution: '320x240',  // The resolution of your video
 							frameRate: 30,			// The frame rate of your video
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
@@ -135,35 +156,69 @@ export default {
 
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
-		// 캠 껐다 키기
-		onOffCam() {
-			if(this.publisher.publishVideo){
-				console.log("꺼져있으니까 킨다");
-				this.publisher.publishVideo(false);
-				this.session.publish(this.publisher);
-			}
-			else{
-				console.log("켜져있으니까 끈다");
-				this.publisher.publishVideo(true);
-				this.session.publish(this.publisher);
-			}
+		// CAM On / Off
+		changeCamValue() {
+			this.camValue = !this.camValue;
+			if (this.camValue)
+				console.log("CAM Off -> On");
+			else console.log("CAM On -> Off");
+			this.publisher.publishVideo(this.camValue);
 		},
-		// 오디오 껐다 키기
-		onOffAudio() {
-			if(this.publisher.publishAudio){
-				console.log("꺼져있으니까 킨다");
-				this.publisher.publishAudio(false);
-			}
-			else{
-				console.log("켜져있으니까 끈다");
-				this.publisher.publishAudio(true);
-			}
+		// Audio On / Off
+		changeAudioValue() {
+			this.audioValue = !this.audioValue;
+			if (this.audioValue)
+				console.log("Audio Off -> On");
+			else console.log("Audio On -> Off");
+			this.publisher.publishAudio(this.audioValue);
 		},
-		screenShare(){
+		// 화면 공유 시작
+		startScreenShare() {
+			this.screenOV = new OpenVidu();
+			this.screenSession = this.screenOV.initSession();
+			this.screenShareName = this.myUserName + "'s Screen",
+
+				this.getToken(this.mySessionId).then(token => {
+					console.log(token);
+					this.screenSession.connect(token, { clientData: this.screenShareName })
+						.then(() => {
+							let publisher = this.screenOV.initPublisher("html-element-id", { videoSource: "screen", publishAudio: false });
+
+							try {
+								publisher.once('accessAllowed', () => {
+									let test = publisher.stream.getMediaStream().getVideoTracks();
+									console.log(test);
+									publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+										console.log('User pressed the "Stop sharing" button');
+										this.stopScreenShare();
+									});
+									this.screenSession.publish(publisher);
+								});
+
+								publisher.once('accessDenied', (event) => {
+									console.error(event, 'ScreenShare: Access Denied');
+									this.stopScreenShare();
+								});
+							} catch (error) {
+								console.log(error);
+							}
+
+						})
+				}).catch(error => {
+					console.error(error);
+					this.screenOV = undefined;
+					this.screenSession = undefined;
+				})
 
 		},
-
-		leaveSession () {
+		// 화면 공유 종료
+		stopScreenShare() {
+			this.screenSession.disconnect();
+			this.screenOV = undefined;
+			this.screenSession = undefined;
+		},
+		// 세션 종료
+		leaveSession() {
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.disconnect();
 
@@ -175,8 +230,7 @@ export default {
 
 			window.removeEventListener('beforeunload', this.leaveSession);
 		},
-
-		updateMainVideoStreamManager (stream) {
+		updateMainVideoStreamManager(stream) {
 			if (this.mainStreamManager === stream) return;
 			this.mainStreamManager = stream;
 		},
@@ -193,12 +247,12 @@ export default {
 		 *   3) The Connection.token must be consumed in Session.connect() method
 		 */
 
-		getToken (mySessionId) {
+		getToken(mySessionId) {
 			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
 		},
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
-		createSession (sessionId) {
+		createSession(sessionId) {
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
@@ -226,7 +280,7 @@ export default {
 		},
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
-		createToken (sessionId) {
+		createToken(sessionId) {
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
@@ -236,32 +290,10 @@ export default {
 						},
 					})
 					.then(response => response.data)
-					.then(data => resolve(data.token)) 
+					.then(data => resolve(data.token))
 					.catch(error => reject(error.response));
 			});
 		},
 	}
 }
 </script>
-<!-- <template>
-	<div id="">
-    방송 진행 페이지 입니다.
-	</div>
-</template>
-
-<script>
-export default {
-	name: "MainView",
-
-	data() {
-		return {};
-	},
-	mounted() {},
-
-	methods: {},
-};
-</script>
-
-<style scoped>
-
-</style> -->
