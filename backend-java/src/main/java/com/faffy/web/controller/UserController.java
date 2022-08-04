@@ -169,6 +169,8 @@ public class UserController {
 
         try {
             File file = userService.getProfileImg(no);
+            if(file == null)
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
             HttpHeaders header = new HttpHeaders();
             try {
                 header.add("Content-Type", Files.probeContentType(file.toPath()));
@@ -177,7 +179,6 @@ public class UserController {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
         } catch (IllegalInputException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -356,27 +357,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @ApiOperation(value="상세 히스토리 이미지 조회", notes="상세 히스토리 페이지에서 필요한 방송 진행자 프로필 사진, 방송 스냅샷들을 반환")
-//    @GetMapping("/profile/{user_no}/history/{consulting_no}/images")
-//    public ResponseEntity<Map<String, Object>> getHistoryDetailImages(@PathVariable int user_no,
-//                                                                      @PathVariable int consulting_no) {
-//
-//        try {
-//            File profileImg = userService.getProfileImg(user_no);
-//            File snapshots = consultingService.getSnapShots(consulting_no);
-//
-//            HttpHeaders header = new HttpHeaders();
-//            try {
-//                header.add("Content-Type", Files.probeContentType(profileImg.toPath()));
-//
-//                return new ResponseEntity<>(FileCopyUtils.copyToByteArray(profileImg), header, HttpStatus.OK);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } catch (IllegalInputException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
 }

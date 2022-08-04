@@ -7,5 +7,5 @@ import java.io.File;
 
 public interface ConsultingService {
     HistoryConsultingDto getHistoryConsulting(int no) throws IllegalInputException;
-    File getSnapShots(int no);
+    File getSnapshot(int no) throws IllegalInputException;
 }
