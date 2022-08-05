@@ -7,7 +7,7 @@
     <div>
       <div id="route">
         <p class="text-h6" style="font-weight: 600">
-          <router-link to="/profile/1/user-detail"> Profile </router-link>
+          <router-link :to="{ name: 'profile' }"> Profile </router-link>
         </p>
         <v-icon color="black" class="mb-3"> mdi-chevron-right </v-icon>
         <p class="text-h6" style="font-weight: 600">Board</p>
@@ -15,9 +15,21 @@
       <div id="content" class="mt-4">
         <p class="text-h6">
           <v-tabs color="0c0f66">
-            <v-tab :id="selected === 1? 'selectedBtn' : 'selectBtn'" @click="selected = 1">Q&A</v-tab>
-            <v-tab :id="selected === 2? 'selectedBtn' : 'selectBtn'" @click="selected = 2">자유</v-tab>
-            <v-tab :id="selected === 3 ? 'selectedBtn' : 'selectBtn'" @click="selected = 3">정보</v-tab>
+            <v-tab
+              :id="selected === 1 ? 'selectedBtn' : 'selectBtn'"
+              @click="selected = 1"
+              >Q&A</v-tab
+            >
+            <v-tab
+              :id="selected === 2 ? 'selectedBtn' : 'selectBtn'"
+              @click="selected = 2"
+              >자유</v-tab
+            >
+            <v-tab
+              :id="selected === 3 ? 'selectedBtn' : 'selectBtn'"
+              @click="selected = 3"
+              >정보</v-tab
+            >
           </v-tabs>
         </p>
 
@@ -55,96 +67,96 @@ export default {
   data() {
     return {
       headers: [
-        { text: '게시글 제목', align:'start', value:'title'},
-        { text: '댓글 수', value:'comments'},
-        { text: '작성 일자', value:'date'},
-        { text: '조회수', value:'hit'},
+        { text: "게시글 제목", align: "start", value: "title" },
+        { text: "댓글 수", value: "comments" },
+        { text: "작성 일자", value: "date" },
+        { text: "조회수", value: "hit" },
       ],
       // 임시 게시글 기록, DB에서 받아와서 넘겨줘야 함
       boards: [
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
         {
-          title: '게시글 제목입니다.',
-          comments: '[13]',
-          date: '2022-08-01',
-          hit: '56'
+          title: "게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
         },
       ],
 
       // pagination 관련 변수
       page: 1,
       pageCount: 0,
-      itemsPerPage:10,
+      itemsPerPage: 10,
 
       // 카테고리 판별하는 변수 Q&A : 1, 자유 : 2, 정보 : 3
       selected: 1,
-    }
-  }
+    };
+  },
 };
 </script>
 
