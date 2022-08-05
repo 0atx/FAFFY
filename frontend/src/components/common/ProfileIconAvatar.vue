@@ -4,7 +4,7 @@
 -->
 <template>
   <v-avatar
-    size="42"
+    size="40"
     color="#0c0f66"
   >
     <v-icon color="white">
