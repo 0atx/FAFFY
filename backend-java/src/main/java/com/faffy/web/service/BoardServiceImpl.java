@@ -48,33 +48,29 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void writeBoard(BoardDto boardDto,int user_no) throws Exception {
         boardDto.setWriter_no(user_no);
-        Board b = boardRepository.findById(boardDto.getNo()).orElse(null);
+        Board b = boardDto.toEntity();
         User u = userService.getUserByNo(boardDto.getWriter_no());
-        if(b == null || u == null)
+        if(u == null) {
+            System.out.println("글쓰기 실패!!! - 존재하지 않는 작성자.");
             throw new Exception();
+        }
 
-        List<MultipartFile> files = boardDto.getFiles();
-        if(!files.isEmpty()){ //선택한 파일이 있으면
+        MultipartFile file = boardDto.getFile();
+        if(file != null){ //선택한 파일이 있는 경우
             System.out.println("===There are uploaded files===");
-            List<UploadFile> uploadFiles = new ArrayList<>();
-            for(MultipartFile file : files) {
-                try {
-                    UploadFile uf = fileHandler.parseFileInfo(file, "board");
-                    if (uf != null)
-                        uploadFiles.add(uf);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+            UploadFile uf = null;
+            try {
+                uf = fileHandler.parseFileInfo(file, "board");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            uploadFileRepository.saveAll(uploadFiles);
-            for(UploadFile uf : uploadFiles){
-                BoardFile bf = BoardFile.builder()
-                        .board(b)
-                        .file(uf)
-                        .build();
-                boardFileRepository.save(bf);
-            }
+            uploadFileRepository.save(uf);
+            BoardFile bf = BoardFile.builder()
+                    .board(b)
+                    .file(uf)
+                    .build();
+            boardFileRepository.save(bf);
         }
         boardRepository.save(boardDto.toEntityWriteBy(u));
     }
@@ -83,45 +79,34 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void updateBoard(BoardUpdateDto boardDto, int user_no) throws Exception {
         Board board = getBoard(boardDto.getNo());
-        if(!(user_no==board.getUser().getNo())){
+        if(user_no!=board.getUser().getNo()){
             throw new Exception("글쓴이와 로그인 정보가 일치하지 않습니다.");
         }
         board.updateBoard(boardDto);
 
         //첨부 파일 업데이트 - 기존 첨부 되어있는 파일 모두 삭제하고 새로 업로드
-        List<UploadFile> ufList = new ArrayList<>();
         List<BoardFile> bfList = boardFileRepository.findAllWithBoard(board);
-        for(BoardFile bf : bfList){
-            ufList.add(bf.getFile());
-        }
+        UploadFile uploadFile = bfList.get(0).getFile();
         boardFileRepository.deleteAll(bfList);
-        uploadFileRepository.deleteAll(ufList);
-        for(UploadFile uf : ufList){
-            fileHandler.deleteFile(uf);
-        }
+        uploadFileRepository.delete(uploadFile);
+        fileHandler.deleteFile(uploadFile);
 
-        List<MultipartFile> files = boardDto.getFiles();
-        if(!files.isEmpty()){
+        MultipartFile file = boardDto.getFile();
+        if(file != null){ //선택한 파일이 있는 경우
             System.out.println("===There are uploaded files===");
-            List<UploadFile> uploadFiles = new ArrayList<>();
-            for(MultipartFile file : files) {
-                try {
-                    UploadFile uf = fileHandler.parseFileInfo(file, "board");
-                    if (uf != null)
-                        uploadFiles.add(uf);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+            UploadFile uf = null;
+            try {
+                uf = fileHandler.parseFileInfo(file, "board");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            uploadFileRepository.saveAll(uploadFiles);
-            for(UploadFile uf : uploadFiles){
-                BoardFile bf = BoardFile.builder()
-                        .board(board)
-                        .file(uf)
-                        .build();
-                boardFileRepository.save(bf);
-            }
+            uploadFileRepository.save(uf);
+            BoardFile bf = BoardFile.builder()
+                    .board(board)
+                    .file(uf)
+                    .build();
+            boardFileRepository.save(bf);
         }
     }
 
@@ -148,13 +133,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void setFileNos(BoardGetDto dto, Board board) {
+    public void setFileNo(BoardGetDto dto, Board board) {
         List<BoardFile> bfList = boardFileRepository.findAllWithBoard(board);
-        List<Integer> fileNoList = new ArrayList<>();
-        for(BoardFile bf : bfList){
-            fileNoList.add(bf.getFile().getNo());
-        }
-        dto.setFileNos(fileNoList);
+        dto.setFileNo(bfList.get(0).getFile().getNo());
     }
 
     @Override

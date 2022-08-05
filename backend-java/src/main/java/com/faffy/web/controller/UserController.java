@@ -192,7 +192,7 @@ public class UserController {
      */
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity updateUser(@ModelAttribute UserDto userDto) {
+    public ResponseEntity<Map<String, Object>> updateUser(@ModelAttribute UserDto userDto) {
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         System.out.println("userDto:" + userDto);
@@ -206,9 +206,8 @@ public class UserController {
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");
             status = HttpStatus.BAD_REQUEST;
-        } finally {
-            return new ResponseEntity(resultMap,status);
         }
+        return new ResponseEntity(resultMap,status);
     }
 
 //    /**
