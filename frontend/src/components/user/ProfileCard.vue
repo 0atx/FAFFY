@@ -6,17 +6,12 @@
   <div id="profileCard">
     <!-- 유저 프로필 정보 -->
     <div id="profile">
-      <!-- 프로필 이미지
-      아래 이미지 v-if로 사진 없을 때 디폴트 사진을 보여주던가 해야할거 같음
-    -->
+      <!-- 프로필 이미지 -->
       <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
         <img
           :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`"
           @error="replaceByDefault"
         />
-        <!--
-      <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
-      -->
       </v-avatar>
 
       <!-- 별명 -->
@@ -70,7 +65,7 @@
 
       <!-- 한 줄 자기소개 -->
       <div id="introduce">
-        {{ userProfile.introduce }}
+        {{ userProfile.info }}
       </div>
 
       <!-- 관심 카테고리 -->
@@ -84,16 +79,14 @@
         </v-chip-group>
       </div>
 
-      <!-- SNS 정보
-        v-if로 없으면 보이게 안 보이게 설정하고 있으면 버튼에 링크 달아줘야 함
-      -->
+      <!-- SNS 정보 -->
       <div id="social" class="mb-2">
         <!-- 인스타그램 -->
         <v-btn
-          v-if="userProfile.instaLink"
           fab
           elevation="0"
-          class="overflow-hidden"
+          @click="openSNS(userProfile.instaLink)"
+          :class="userProfile.instaLink ? 'overflow-hidden' : 'overflow-hidden hiddenBtn'"
         >
           <img
             src="@/assets/images/instagram_logo.png"
@@ -104,10 +97,10 @@
 
         <!-- 페이스북 -->
         <v-btn
-          v-if="userProfile.facebookLink"
           fab
           elevation="0"
-          class="overflow-hidden"
+          @click="openSNS(userProfile.facebookLink)"
+          :class="userProfile.facebookLink ? 'overflow-hidden' : 'overflow-hidden hiddenBtn'"
         >
           <img
             src="@/assets/images/facebook_logo.png"
@@ -118,10 +111,10 @@
 
         <!-- 유튜브 -->
         <v-btn
-          v-if="userProfile.youtubeLink"
           fab
           elevation="0"
-          class="overflow-hidden"
+          @click="openSNS(userProfile.youtubeLink)"
+          :class="userProfile.youtubeLink ? 'overflow-hidden' : 'overflow-hidden hiddenBtn'"
         >
           <img
             src="@/assets/images/youtube_logo.png"
@@ -156,6 +149,9 @@ export default {
   },
   methods: {
     replaceByDefault: defaultProfileSetter.replaceByDefault,
+    openSNS(val) {
+      window.open(val);
+    },
   },
   metaInfo() {
     return {
@@ -227,5 +223,14 @@ a {
 #social {
   display: flex;
   justify-content: space-around;
+}
+
+img {
+  object-fit: cover;
+}
+
+.hiddenBtn {
+  filter: brightness(30%);
+  pointer-events: none;
 }
 </style>
