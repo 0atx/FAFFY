@@ -94,9 +94,11 @@
         <div style="height: 500px; display:flex; flex-wrap:nowrap; justify-content: space-evenly;">
           <!-- 방송 정보 카드 -->
           <v-card
-            v-for="consult in consults"
+            tile
+            v-for="(consult, i) in consults"
             :key="consult.title"
-            style="height: 450px; width: 300px;"
+            :class="i % 2 == 0 ? 'blueCard' : 'orangeCard'"
+            style="height: 460px; width: 300px;"
             outlined
           >
             <!-- 방송 진행자 이미지 정보 -->
@@ -193,19 +195,29 @@
           <div style="width: 500px; ">
             <router-link style="font-weight:600;" class="text-h6 ml-3" to="/auth/sign-in">게시글3<v-icon color="black" class="mb-1"> mdi-chevron-right </v-icon></router-link>
               <v-row style="margin: 0px;">
+                <!-- 반복문 수정 필요 -->
                 <v-col
                   v-for="n in 4"
                   :key="n"
                   class="mt-2 d-flex child-flex"
                   cols="6"
                 >
-                <v-card>
+                <figure class="imgBoard">
+                  <!-- 게시글 이미지 -->
                   <v-img
                     :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
                     :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
                     aspect-ratio="1"
                     class="grey lighten-2"
                   >
+                    <!-- 게시글 정보 -->
+                    <figcaption>
+                      <h3>게시글 제목입니다.</h3>
+                      <p>게시글 내용 요약해서 보여줄 것 입니다. 아니면 작성자 닉네임 쓸 것 50자 내외로요...</p>
+                      <p style="margin-bottom:5px;">별명짓기귀찮다팔구십</p><p>2022-08-01</p>
+                      <!-- 클릭 시 해당 게시글 상세정보로 넘어가게 변경 예정 -->
+                      <a href="#" class="read">Read More</a>
+                    </figcaption>
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -219,7 +231,7 @@
                       </v-row>
                     </template>
                   </v-img>
-                </v-card>
+                </figure>
               </v-col>
             </v-row>
           </div>
@@ -378,6 +390,7 @@ export default {
 #topContent {
   height:350px;
   width: 100%;
+  padding-top:2%;
   display:flex;
   align-items:center;
 }
@@ -395,6 +408,88 @@ a {
   text-decoration: none;
 }
 
+.orangeCard {
+  --c: #fff; /* the color */
+  --b: 1px;    /* border length*/
+  --d: 10px;    /* the cube depth */
+
+  --_s: calc(var(--d) + var(--b));
+  color: var(--c);
+  border: solid #0000;
+  border-width: var(--b) var(--b) var(--_s) var(--_s);
+  background:
+    conic-gradient(at left var(--d)  bottom var(--d),
+      #0000 90deg, rgb(255 255 255 /0.3) 0 225deg,rgb(255 255 255 /0.6) 0) border-box,
+    conic-gradient(at left var(--_s) bottom var(--_s),
+      #0000 90deg,var(--c) 0) 0 100%/calc(100% - var(--b)) calc(100% - var(--b))  border-box;
+  transform: translate(calc(var(--d)/-1),var(--d));
+  clip-path:
+    polygon(
+      var(--d) 0%,
+      var(--d) 0%,
+      100% 0%,
+      100% calc(100% - var(--d)),
+      100% calc(100% - var(--d)),
+      var(--d) calc(100% - var(--d))
+    );
+  transition: 0.5s;
+}
+
+.orangeCard:hover {
+  --c: #ff7451;
+  transform: translate(0,0);
+  clip-path:
+    polygon(
+      0% var(--d),
+      var(--d) 0%,
+      100% 0%,
+      100% calc(100% - var(--d)),
+      calc(100% - var(--d)) 100%,
+      0% 100%
+  );
+}
+
+.blueCard {
+  --c: #fff; /* the color */
+  --b: 1px;    /* border length*/
+  --d: 10px;    /* the cube depth */
+
+  --_s: calc(var(--d) + var(--b));
+  color: var(--c);
+  border: solid #0000;
+  border-width: var(--b) var(--b) var(--_s) var(--_s);
+  background:
+    conic-gradient(at left var(--d)  bottom var(--d),
+      #0000 90deg, rgb(255 255 255 /0.3) 0 225deg,rgb(255 255 255 /0.6) 0) border-box,
+    conic-gradient(at left var(--_s) bottom var(--_s),
+      #0000 90deg,var(--c) 0) 0 100%/calc(100% - var(--b)) calc(100% - var(--b))  border-box;
+  transform: translate(calc(var(--d)/-1),var(--d));
+  clip-path:
+    polygon(
+      var(--d) 0%,
+      var(--d) 0%,
+      100% 0%,
+      100% calc(100% - var(--d)),
+      100% calc(100% - var(--d)),
+      var(--d) calc(100% - var(--d))
+    );
+  transition: 0.5s;
+}
+
+.blueCard:hover {
+  --c: #0c0f66;
+  transform: translate(0,0);
+  clip-path:
+    polygon(
+      0% var(--d),
+      var(--d) 0%,
+      100% 0%,
+      100% calc(100% - var(--d)),
+      calc(100% - var(--d)) 100%,
+      0% 100%
+  );
+}
+
 #introduce {
   height: 80px;
   display: flex;
@@ -408,4 +503,67 @@ a {
   background-color: #0c0f66;
   color: #fff;
 }
+
+.imgBoard {
+	position: relative;
+  width: 100%;
+  height:100%;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+.imgBoard img {
+	width: 100%;
+	filter: saturate(50%);
+	transition: all 0.3s ease 0.1s;
+	backface-visibility: hidden;
+}
+.imgBoard figcaption {
+	position: absolute;
+	top: 50%; left: 0;
+	width: 100%;
+  height: 100%;
+	padding: 35px 10px;
+	box-sizing: border-box;
+	z-index: 1;
+	line-height: 1em;
+	color: #fff;
+	font-size: 16px;
+	opacity:1;
+	transition: all 0.5s ease;
+	transform: rotatex(90deg) translate(0, -50%);
+	transform-origin: 0% 0%;
+}
+.imgBoard figcaption h3 {
+  line-height: 1em;
+	font-weight: 800;
+}
+.imgBoard figcaption p {
+  font-size: 0.8em;
+  font-weight: 500;
+  margin: 0 0 15px;
+}
+.imgBoard figcaption .read {
+	border: 2px solid #fff;
+	padding: 0.5em 1em;
+	font-size: 0.8em;
+	color: #fff !important;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+.imgBoard figcaption .read:hover {
+	background: #fff;
+	color: #000 !important;
+}
+
+.imgBoard:hover img {
+	transform: rotatex(-180deg);
+	opacity: 0;
+	transition-delay: 0;
+}
+.imgBoard:hover figcaption {
+	transform: rotatex(0deg) translate(0, -50%);
+  background-color: #000;
+	opacity: 0.8;
+	transition-delay: 0.35s;
+}
+
 </style>
