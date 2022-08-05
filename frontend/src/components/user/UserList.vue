@@ -1,12 +1,7 @@
 <template>
   <v-list style="padding: 0">
     <v-list-item-group>
-      <user-list-item v-for="(u, index) in list" :key="u.nickname" :user="u">
-        <v-divider
-          v-if="index < list.length - 1"
-          :key="index"
-          inset
-        ></v-divider>
+      <user-list-item v-for="u in list" :key="u.nickname" :user="u">
       </user-list-item>
     </v-list-item-group>
   </v-list>
@@ -23,4 +18,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

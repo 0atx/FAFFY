@@ -60,7 +60,7 @@
           :ripple="false"
           @click="toMyProfile"
         >
-          <profile-icon-avatar class="ml-2"></profile-icon-avatar>
+          <profile-img-avatar class="ml-8" :user_no="loginUser.no" />
         </v-btn>
       </div>
 
@@ -94,7 +94,7 @@
 
 <script>
 import SearchBar from '@/components/common/SearchBar.vue'
-import ProfileIconAvatar from '@/components/common/ProfileIconAvatar.vue'
+import ProfileImgAvatar from '@/components/common/ProfileImgAvatar.vue'
 import { mapState, mapActions } from "vuex";
 // import { auth } from "@/api/auth.js";
 
@@ -104,7 +104,7 @@ export default {
   name: "Header",
   components: {
     SearchBar,
-    ProfileIconAvatar
+    ProfileImgAvatar
   },
     computed: {
     ...mapState(authStore, ["loginUser","isLogin"]),
