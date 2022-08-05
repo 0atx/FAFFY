@@ -10,7 +10,10 @@
       아래 이미지 v-if로 사진 없을 때 디폴트 사진을 보여주던가 해야할거 같음
     -->
       <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
-        <img :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`" />
+        <img
+          :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`"
+          @error="replaceByDefault"
+        />
         <!--
       <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
       -->
@@ -135,6 +138,8 @@
 import CategoryChips from "@/components/common/CategoryChips.vue";
 import { mapState } from "vuex";
 import { API_BASE_URL } from "@/config";
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
+
 const profileStore = "profileStore";
 export default {
   name: "ProfileCard",
@@ -148,6 +153,9 @@ export default {
       API_BASE_URL: API_BASE_URL,
       follow: true,
     };
+  },
+  methods: {
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
   },
   metaInfo() {
     return {

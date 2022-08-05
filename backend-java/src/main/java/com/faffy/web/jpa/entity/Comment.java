@@ -49,6 +49,7 @@ public class Comment extends BaseEntity {
 
     public CommentGetDto toCommentGetDto() {
         CommentGetDto commentGetDto = CommentGetDto.builder()
+                .no(getNo())
                 .content(getContent())
                 .writer(getWriter().toSimpleDto())
                 .datetime(getDatetime())
