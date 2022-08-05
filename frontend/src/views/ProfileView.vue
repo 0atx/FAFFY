@@ -13,7 +13,8 @@
 
 <script>
 import ProfileCard from "@/components/user/ProfileCard.vue";
-import { mapState, mapActions } from "vuex";
+import { user } from "@/api/user.js";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 const profileStore = "profileStore";
 
@@ -41,11 +42,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions(profileStore, [
-      "getUserProfile",
-      "loadFollower",
-      "loadFollowing",
-    ]),
+    ...mapActions(profileStore, ["loadFollower", "loadFollowing"]),
+    ...mapMutations(profileStore, ["SET_USER_PROFILE"]),
     loadProfile() {
       this.loadUserInfo();
       this.loadFollower(this.userProfile.no);
@@ -55,13 +53,19 @@ export default {
       const requestUserNo = this.$route.params.no;
 
       console.log("유저 정보 요청하기");
-      await this.getUserProfile(requestUserNo);
-      if (!this.userProfile) {
-        console.log("회원 정보가 없음");
-        this.$router.push({ name: "main" });
-      }
-
-      console.log("프로필 사진 불러오기");
+      user.getUserProfile(
+        requestUserNo,
+        (response) => {
+          console.log(response.data["content"]);
+          this.SET_USER_PROFILE(response.data["content"]);
+        },
+        (response) => {
+          console.log(response);
+          this.SET_USER_PROFILE(null);
+          console.log("회원 정보가 없음");
+          this.$router.push({ name: "main" });
+        }
+      );
     },
   },
 };
