@@ -3,13 +3,15 @@
 프로필 이미지 아바타
 -->
 <template>
-  <v-avatar>
+  <v-list-item-avatar
+    size="40"
+  >
     <img
       :src="`${IMG_BASE_URL}/` + user_no"
       :alt="imgName"
       @error="replaceByDefault"
     />
-  </v-avatar>
+  </v-list-item-avatar>
 </template>
 
 <script>
@@ -38,4 +40,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+img {
+  object-fit: cover;
+}
+</style>
