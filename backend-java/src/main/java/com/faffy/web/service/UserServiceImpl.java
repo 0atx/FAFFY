@@ -213,6 +213,8 @@ public class UserServiceImpl implements UserService {
         try {
             userDto.setRoles(Collections.singletonList("ROLE_USER"));
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            userDto.setIntroduce("안녕하세요!");
+            userDto.setInfo(userDto.getNickname()+"입니다 반갑습니다.");
             return userRepository.save(userDto.toEntity());
         } catch (IllegalInputException e) {
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);
