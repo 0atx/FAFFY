@@ -7,7 +7,7 @@
     <div>
       <div id="route">
         <p class="text-h6" style="font-weight: 600">
-          <router-link to="/profile/1/user-detail"> Profile </router-link>
+          <router-link :to="{ name: 'profile' }"> Profile </router-link>
         </p>
         <v-icon color="black" class="mb-3"> mdi-chevron-right </v-icon>
         <p class="text-h6" style="font-weight: 600">Following</p>
@@ -16,14 +16,14 @@
         <p class="text-h6" style="font-weight: 600">팔로잉 목록</p>
         <hr />
         <div id="followingList">
-          <v-list style="padding: 0">
+          <user-list :list="followingList" />
+          <!-- <v-list style="padding: 0">
             <v-list-item-group>
               <template v-for="(user, index) in followingList">
-                <!-- 클릭하면 해당 인물 프로필 페이지로 넘어가게 해야 함 -->
                 <v-list-item :key="user.nickname">
                   <template v-slot:default>
                     <v-list-item-avatar>
-                      <v-img :src="user.img"></v-img>
+                      <v-img :src="`${IMG_BASE_URL}/` + user.no"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content id="itemContent">
@@ -47,7 +47,6 @@
                         >
                           <v-icon> mdi-heart </v-icon>
                         </v-btn>
-                        <!--<dark-button class="mb-2" :btnValue="followValue" />-->
                       </div>
                     </v-list-item-content>
                   </template>
@@ -60,7 +59,7 @@
                 ></v-divider>
               </template>
             </v-list-item-group>
-          </v-list>
+          </v-list> -->
         </div>
       </div>
     </div>
@@ -70,17 +69,24 @@
 <script>
 //import DarkButton from "@/components/common/DarkButton.vue";
 import { mapState } from "vuex";
+import { API_BASE_URL } from "@/config";
+import UserList from "./UserList.vue";
 const profileStore = "profileStore";
 export default {
   name: "FollowingView",
   components: {
+    UserList,
     //DarkButton,
   },
   computed: {
     ...mapState(profileStore, ["followingList"]),
   },
+  mounted() {
+    this.IMG_BASE_URL = API_BASE_URL + "/users/profile/image";
+  },
   data() {
     return {
+      IMG_BASE_URL: null,
       // user가 팔로우하고 있는 유저 리스트 가져와서 넣어야 함
       users: [
         {

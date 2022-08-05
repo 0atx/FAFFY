@@ -1,4 +1,4 @@
-import { user, follow } from "@/api/user.js";
+import { follow } from "@/api/user.js";
 
 const profileStore = {
   namespaced: true,
@@ -22,19 +22,6 @@ const profileStore = {
     },
   },
   actions: {
-    async getUserProfile({ commit }, user_no) {
-      user.getUserProfile(
-        user_no,
-        (response) => {
-          console.log(response.data["content"]);
-          commit("SET_USER_PROFILE", response.data["content"]);
-        },
-        (response) => {
-          console.log(response);
-          commit("SET_USER_PROFILE", null);
-        }
-      );
-    },
     async loadFollower({ commit }, user_no) {
       console.log("팔로워 리스트 불러오기");
       follow.getFollowerList(
