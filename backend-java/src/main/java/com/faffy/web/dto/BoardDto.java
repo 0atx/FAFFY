@@ -7,8 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -26,11 +28,13 @@ public class BoardDto {
     private int hit;
     private int commentCount;
 
+    private List<MultipartFile> files;
+
     public BoardDto(){}
 
     @Builder
     public BoardDto(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category,
-                    int hit, int commentCount) {
+                    int hit, int commentCount, List<MultipartFile> files) {
         if (StringUtils.hasLength(title))
         this.no = no;
         this.title = title;
@@ -40,6 +44,7 @@ public class BoardDto {
         this.category = category;
         this.hit=hit;
         this.commentCount = commentCount;
+        this.files = files;
     }
 
     public Board toEntityWriteBy(User user) {
