@@ -17,12 +17,14 @@
             required
             color="#0c0f66"
             hide-details
+            @input="checkingEmail"
             @keydown.enter="onInputKeyword"
+            ref="email"
           />
         </div>
 
         <!-- 이메일 중복 확인 -->
-        <v-btn id="checkEmailBtn" class="mt-2" icon @click="checkEmail">
+        <v-btn id="checkEmailBtn" class="mt-2" icon>
           <v-icon :color="checkEmailIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
         </v-btn>
       </div>
@@ -78,12 +80,14 @@
             label="별명"
             required
             color="#0c0f66"
+            @input="checkingNickname"
             @keydown.enter="onInputKeyword"
+            ref="nickname"
           />
         </div>
 
         <!-- 별명 중복 확인 -->
-        <v-btn id="checkNicknameBtn" class="mt-2" icon @click="checkNickname">
+        <v-btn id="checkNicknameBtn" class="mt-2" icon >
           <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
         </v-btn>
       </div>
@@ -218,6 +222,7 @@ import validateRules from "@/utils/validateRules.js";
 import ServiceTermsText from './ServiceTermsText.vue';
 import PrivateTermsText from './PrivateTermsText.vue';
 import { auth } from "@/api/auth.js";
+import { user } from "@/api/user.js";
 
 export default {
   name: "SignUp",
@@ -267,11 +272,33 @@ export default {
     save(birth) {
       this.$refs.menu.save(birth);
     },
-    checkEmail() {
-      console.log("이메일 중복 확인 함수 입니다. 중복 없으면 checkEmailIcon true로 변경");
+    checkingEmail() {
+      if (!this.$refs.email.validate())
+        return;
+
+      user.checkEmail(this.form.email,
+      ()=> {
+        this.checkEmailIcon =true;
+      },
+      (response)=> {
+        console.log(response);
+       this.checkEmailIcon =false;
+      })
+
     },
-    checkNickname() {
-      console.log("별명 중복 확인 함수 입니다. 중복 없으면 checkNicknameIcon true로 변경");
+    checkingNickname() {
+      if (!this.$refs.nickname.validate())
+        return;
+
+      user.checkNickname(this.form.nickname,
+      ()=> {
+        this.checkNicknameIcon =true;
+      },
+      (response)=> {
+        console.log(response);
+
+       this.checkNicknameIcon =false;
+      })
     },
     requestSignUp() {
       console.log(
@@ -279,7 +306,7 @@ export default {
       );
       const validate = this.$refs.form.validate();
 
-      if(!validate) {
+      if(!validate && this.checkEmailIcon && this.checkNicknameIcon) {
         alert('회원가입 입력 형식을 맞춰주세요.')
         return;
       }
