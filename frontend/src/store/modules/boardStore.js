@@ -103,6 +103,19 @@ const boardStore = {
         .catch(err => {
           console.log(err)
         })
+    },
+    deleteComment(context, commentNo) {
+      axios({
+        url: `http://localhost:8888/api/comments/${commentNo}`,
+        method: 'delete',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
+      })
+        .then(res => {
+          console.log('댓글 삭제', res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
 };
