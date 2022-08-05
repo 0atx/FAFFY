@@ -5,26 +5,37 @@
 <template>
   <v-avatar>
     <img
-      :src=imgSrc
-      :alt=imgName
-    >
+      :src="`${IMG_BASE_URL}/` + user_no"
+      :alt="imgName"
+      @error="replaceByDefault"
+    />
   </v-avatar>
 </template>
 
 <script>
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
+import { API_BASE_URL } from "@/config";
+
 export default {
-  name: 'ProfileIconAvatar',
+  name: "ProfileIconAvatar",
+  methods: {
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
+  },
   props: {
+    user_no: Number,
     imgSrc: {
-      type: String
+      type: String,
     },
     imgName: {
-      type: String
-    }
+      type: String,
+    },
   },
-}
+  data() {
+    return {
+      IMG_BASE_URL: API_BASE_URL + "/users/profile/image",
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
