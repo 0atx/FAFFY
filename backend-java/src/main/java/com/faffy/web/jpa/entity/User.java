@@ -1,9 +1,6 @@
 package com.faffy.web.jpa.entity;
 
-import com.faffy.web.dto.UserDto;
-import com.faffy.web.dto.UserGetDetailDto;
-import com.faffy.web.dto.UserGetSimpleDto;
-import com.faffy.web.dto.UserPublicDto;
+import com.faffy.web.dto.*;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.type.Gender;
 import com.faffy.web.jpa.type.LoginType;
@@ -12,7 +9,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
