@@ -1,6 +1,6 @@
 <template v-slot:default>
-  <div>
-    <v-list-item :key="user.nickname">
+  <v-list style="padding: 0">
+    <v-list-item :key="user.nickname" v-on:click="toDetail()">
       <template v-slot:default>
         <profile-img-avatar :user_no="user.no" />
 
@@ -15,19 +15,17 @@
               v-html="user.info"
             ></v-list-item-subtitle>
           </div>
-          <!-- <div id="followBtn">
-            <v-btn elevation="0" class="pt-1" icon small color="#ff7451">
-              <v-icon> mdi-heart </v-icon>
-            </v-btn>
-          </div> -->
           <div id="followBtn">
             <dark-button class="mb-2" :btnValue="followValue" />
           </div>
-          <!--<dark-button class="mb-2" :btnValue="followValue" />-->
         </v-list-item-content>
       </template>
     </v-list-item>
-  </div>
+    <v-divider
+      :key="index"
+      inset
+    ></v-divider>
+  </v-list>
 </template>
 
 <script>
@@ -45,6 +43,11 @@ export default {
       followValue: "팔로우",
     };
   },
+  methods: {
+    toDetail() {
+      this.$router.push("/profile/"+this.user.no).catch(()=>{});
+    }
+  },
 };
 </script>
 
@@ -54,9 +57,11 @@ export default {
   vertical-align: middle;
   width: 60px !important;
 }
+
 #itemContent {
   display: table;
 }
+
 #item {
   display: table-cell;
   vertical-align: middle;

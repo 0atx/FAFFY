@@ -10,6 +10,7 @@ import com.faffy.web.service.ConsultingService;
 import com.faffy.web.service.UserCategoryService;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
+import com.sun.net.httpserver.HttpsServer;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -355,6 +356,38 @@ public class UserController {
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }catch (IllegalInputException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/validation/nickname/{nickname}")
+    public ResponseEntity checkNicknameDuplication(@PathVariable("nickname") String nickname) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            userService.getUserByNickname(nickname);
+            resultMap.put("msg","이미 사용중인 닉네임입니다.");
+            status = HttpStatus.BAD_REQUEST;
+        } catch (Exception e) {
+            status = HttpStatus.OK;
+            resultMap.put("content","사용 가능한 닉네임 입니다.");
+        }finally {
+            return new ResponseEntity(resultMap,status);
+        }
+    }
+
+    @GetMapping("/validation/email/{email}")
+    public ResponseEntity checkEmailDuplication(@PathVariable("email") String email) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            userService.getUserByEmail(email);
+            resultMap.put("msg","이미 사용중인 이메일입니다.");
+            status = HttpStatus.BAD_REQUEST;
+        } catch (Exception e) {
+            status = HttpStatus.OK;
+            resultMap.put("content","사용 가능한 이메일 입니다.");
+        }finally {
+            return new ResponseEntity(resultMap,status);
         }
     }
 }
