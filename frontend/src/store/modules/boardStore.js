@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from '@/router'
 
 const boardStore = {
   namespaced: true,
@@ -50,6 +51,8 @@ const boardStore = {
       })
         .then(res => {
           console.log(res)
+          alert('게시글이 등록되었습니다.')
+          router.push({ name: 'board' })
         })
         .catch(err => {
           console.log(err)
@@ -82,6 +85,7 @@ const boardStore = {
       })
         .then(res => {
           console.log('성공', res)
+          router.go(router.currentRoute)
         })
         .catch(err => {
           console.log('실패', err)
@@ -98,7 +102,9 @@ const boardStore = {
       })
         .then(res => {
           console.log('삭제 성공', res)
+          alert('게시글이 정상적으로 삭제되었습니다.')
           commit('SET_BOARD', {})
+          router.push({ name: 'board' })
         })
         .catch(err => {
           console.log(err)
@@ -112,6 +118,8 @@ const boardStore = {
       })
         .then(res => {
           console.log('댓글 삭제', res)
+          alert('댓글이 정상적으로 삭제되었습니다.')
+          router.go(router.currentRoute)
         })
         .catch(err => {
           console.log(err)
