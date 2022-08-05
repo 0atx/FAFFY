@@ -34,12 +34,6 @@
       multiple
       v-model="img">
     </v-file-input>
-    <v-text-field
-      label="해시태그"
-      placeholder="Placeholder"
-      outlined
-      v-model="hashtag">
-    </v-text-field>
     <v-btn color="success" @click="submitBoard">작성</v-btn>
     <v-btn color="warning" @click="resetForm">초기화</v-btn>
   </v-container>
@@ -58,8 +52,6 @@ export default {
       category: '',
       content: '',
       img: null,
-      hashtag: '',
-      token: localStorage.getItem('token'),
     }
   },
   computed: {
@@ -77,11 +69,16 @@ export default {
     ...mapActions(boardStore, ['createBoard']),
     // 게시글 작성 초기화
     resetForm() {
-      this.title = ''
-      this.category = ''
-      this.content = ''
-      this.img = null
-      this.hashtag = ''
+      if (this.title || this.content || this.img) {
+        if (confirm('작성 중이던 내용을 잃게 됩니다. 정말 초기화 하시겠습니까?')) {
+          this.title = ''
+          this.category = ''
+          this.content = ''
+          this.img = null
+        }
+      } else {
+        this.category = ''
+      }
     },
     // 게시글 작성
     submitBoard() {
@@ -94,7 +91,6 @@ export default {
 
       console.log('board', boardForm)
       this.createBoard(boardForm)
-      this.$router.push({ name: 'board' })
     }
   }
 }

@@ -39,8 +39,6 @@ export default {
       console.log(`${boardNo}번 글을 삭제합니다.`)
       if (confirm('정말로 삭제하시겠습니까?')) {
         this.deleteBoard(boardNo)
-        alert('게시글이 정상적으로 삭제되었습니다.')
-        this.$router.push({ name: 'board' })
       }
     }
   },

@@ -1,7 +1,7 @@
 <!--
   작성자: 류경하
   설명: 각각의 댓글
-  최종 수정일: 2022.08.04
+  최종 수정일: 2022.08.05
 -->
 <template>
   <v-container fluid>
@@ -50,10 +50,10 @@ export default {
   methods: {
     ...mapActions(boardStore, ['deleteComment']),
     requestDeleteComment(commentNo) {
-      console.log(`${commentNo}번 댓글을 삭제합니다.`)
-      this.deleteComment(commentNo)
-      alert('댓글이 정상적으로 삭제되었습니다.')
-      this.$router.go(this.$router.currentRoute)
+      if (confirm('정말 삭제하시겠습니까?')) {
+        console.log(`${commentNo}번 댓글을 삭제합니다.`)
+        this.deleteComment(commentNo)
+      }
     }
   }
 }
