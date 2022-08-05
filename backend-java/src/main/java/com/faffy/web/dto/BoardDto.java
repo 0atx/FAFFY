@@ -28,13 +28,13 @@ public class BoardDto {
     private int hit;
     private int commentCount;
 
-    private List<MultipartFile> files;
+    private MultipartFile file;
 
     public BoardDto(){}
 
     @Builder
     public BoardDto(int no, String title, LocalDateTime datetime, String content, User user, BoardCategory category,
-                    int hit, int commentCount, List<MultipartFile> files) {
+                    int hit, int commentCount, MultipartFile file) {
         if (StringUtils.hasLength(title))
         this.no = no;
         this.title = title;
@@ -44,7 +44,7 @@ public class BoardDto {
         this.category = category;
         this.hit=hit;
         this.commentCount = commentCount;
-        this.files = files;
+        this.file = file;
     }
 
     public Board toEntityWriteBy(User user) {

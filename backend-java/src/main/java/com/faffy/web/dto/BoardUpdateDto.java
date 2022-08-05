@@ -27,21 +27,21 @@ public class BoardUpdateDto {
     private String content;
     @NonNull
     private BoardCategory category;
-    private List<MultipartFile> files;
+    private MultipartFile file;
 
     public BoardUpdateDto() {
     }
 
     @Builder
     public BoardUpdateDto(@NonNull int no,@NonNull int writer_no, @NonNull String title, @NonNull String content,
-                          @NonNull BoardCategory category, List<MultipartFile> files) throws IllegalInputException{
+                          @NonNull BoardCategory category, MultipartFile file) throws IllegalInputException{
         if (StringUtils.hasLength(title) && StringUtils.hasLength(content)) {
             this.no = no;
             this.writer_no = writer_no;
             this.title = title;
             this.content = content;
             this.category = category;
-            this.files = files;
+            this.file = file;
         } else {
             throw new IllegalInputException("유효하지 않은 값이 존재합니다.");
         }

@@ -95,7 +95,7 @@ export default {
       boardForm.append("title", this.title);
       boardForm.append("category", this.boardCategory);
       boardForm.append("content", this.content);
-      boardForm.append("files", this.img);
+      if(this.img != null) boardForm.append("file", this.img);
 
       console.log('board', boardForm)
       this.createBoard(boardForm)

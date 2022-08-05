@@ -49,7 +49,7 @@ public interface BoardService {
      */
     public Board getBoard(int boardNo) throws Exception;
 
-    void setFileNos(BoardGetDto dto, Board board);
+    void setFileNo(BoardGetDto dto, Board board);
 
     File getFile(int no) throws IllegalInputException;
 }

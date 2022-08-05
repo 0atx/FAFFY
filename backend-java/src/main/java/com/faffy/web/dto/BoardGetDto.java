@@ -20,7 +20,7 @@ public class BoardGetDto {
     private int hit;
     private int commentCount;
 
-    private List<Integer> fileNos;
+    private int fileNo;
 
     public BoardGetDto() {
     }
