@@ -7,7 +7,7 @@
     <div>
       <div id="route">
         <p class="text-h6" style="font-weight: 600">
-          <router-link to="/profile/1/user-detail"> Profile </router-link>
+          <router-link :to="{ name: 'profile' }"> Profile </router-link>
         </p>
         <v-icon color="black" class="mb-3"> mdi-chevron-right </v-icon>
         <p class="text-h6" style="font-weight: 600">Following</p>

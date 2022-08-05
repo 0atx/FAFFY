@@ -12,7 +12,7 @@
         <p class="text-h6" style="font-weight: 600">정보</p>
         <hr />
         <div id="info">
-          {{userProfile.info}}
+          {{ userProfile.info }}
         </div>
       </div>
       <div id="content">
@@ -25,7 +25,7 @@
             icon
             small
             color="gray"
-            to="/profile/1/history"
+            :to="{ name: 'user-history' }"
           >
             <v-icon> mdi-plus </v-icon>
           </v-btn>
@@ -47,16 +47,16 @@
             icon
             small
             color="gray"
-            to="/profile/1/user-board"
+            :to="{ name: 'user-board' }"
           >
             <v-icon> mdi-plus </v-icon>
           </v-btn>
         </p>
         <hr />
         <div id="board">
-          게시글 리스트 부분입니다. 추후 게시글 리스트 컴포넌트 구현 후
-          추가할 예정입니다. <br />ex) 카테고리(Q&A, 자유) | 게시글 제목 ㅁ댓글
-          갯수 or 작성 일자
+          게시글 리스트 부분입니다. 추후 게시글 리스트 컴포넌트 구현 후 추가할
+          예정입니다. <br />ex) 카테고리(Q&A, 자유) | 게시글 제목 ㅁ댓글 갯수 or
+          작성 일자
         </div>
       </div>
     </div>
@@ -64,12 +64,12 @@
 </template>
 
 <script>
-import {mapState} from "vuex"
-const profileStore = "profileStore"
+import { mapState } from "vuex";
+const profileStore = "profileStore";
 export default {
   name: "ProfileDetailView",
-    computed: {
-    ...mapState(profileStore,["userProfile"]),
+  computed: {
+    ...mapState(profileStore, ["userProfile"]),
   },
   data() {
     return {};
