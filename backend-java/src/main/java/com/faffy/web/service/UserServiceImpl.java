@@ -215,6 +215,9 @@ public class UserServiceImpl implements UserService {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             userDto.setIntroduce("안녕하세요!");
             userDto.setInfo(userDto.getNickname()+"입니다 반갑습니다.");
+            userDto.setInstaLink("");
+            userDto.setFacebookLink("");
+            userDto.setYoutubeLink("");
             return userRepository.save(userDto.toEntity());
         } catch (IllegalInputException e) {
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);

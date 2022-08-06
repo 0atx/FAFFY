@@ -18,10 +18,15 @@ public interface FollowMappingRepository extends JpaRepository<FollowMapping, In
 //    @Query("select f from FollowMapping f where f.followUser=:followUser")
 //    List<FollowMapping> findFollowing(@Param("followUser") User followUser);
 
-    List<FollowMapping> findFollowMappingsByFollowedUser(User followedUser);
-    List<FollowMapping> findFollowMappingsByFollowUser(User followUser);
+    @Query("select u from FollowMapping u where u.followMapper.followedUser=:followedUser")
+    List<FollowMapping> getFollowMappingsByFollowedUser(@Param("followedUser") User followedUser);
+    @Query("select u from FollowMapping u where u.followMapper.followUser=:followUser")
 
-    Optional<FollowMapping> findByFollowUserAndFollowedUser(User FollowUser,User followedUser);
+    List<FollowMapping> getFollowMappingsByFollowUser(@Param("followUser")User followUser);
+
+    @Query("select u from FollowMapping u where u.followMapper.followUser=:followUser and u.followMapper.followedUser=:followedUser ")
+
+    Optional<FollowMapping> getByFollowUserAndFollowedUser(@Param("followUser")User followUser, @Param("followedUser")User followedUser);
 
 
 }
