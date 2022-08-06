@@ -26,7 +26,7 @@
       </template>
     </v-list-item>
     <v-divider
-      :key="index"
+      :key="user.no"
       inset
     ></v-divider>
   </v-list>
