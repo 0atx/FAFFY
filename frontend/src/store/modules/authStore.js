@@ -1,10 +1,11 @@
 import { auth } from "@/api/auth.js";
-
+import {follow} from "@/api/user.js";
 const authStore = {
   namespaced: true,
   state: {
     isLogin: false,
     loginUser: null,
+    followingList:[],
   },
   getters: {
     checkUserInfo: function (state) {
@@ -16,6 +17,9 @@ const authStore = {
       state.isLogin = userInfo != null ? true : false;
       state.loginUser = userInfo;
     },
+    SET_FOLLOWING_LIST:(state,followingList) => {
+      state.followingList = followingList;
+    }
   },
   actions: {
     async logout({commit}) {
@@ -23,28 +27,29 @@ const authStore = {
         console.log("로그아웃 성공");
         console.log(response);
         commit("SET_USER_INFO",null);
-
+        commit("SET_FOLLOWING_LIST",[]);
         sessionStorage.removeItem("X-AUTH-TOKEN");
       },
       (response)=> {
         console.log("로그아웃 실패");
         console.log(response);
       })
-    }
-    // async userModify({ commit }, user) {
-    //   await auth.userModify(user, (response) => {
-    //     commit("SET_USER_INFO", response.data.userInfo);
-    //   });
-    // },
-    // async userDelete({ commit }) {
-    //   await auth.userDelete((response) => {
-    //     if (response.data.message === "success") {
-    //       commit("SET_USER_INFO", "");
-    //       commit("SET_IS_LOGIN", false);
-    //       commit("SET_IS_LOGIN_ERROR", true);
-    //     }
-    //   });
-    // },
+    },
+    async loadFollowing({ commit ,state}) {
+      console.log("팔로잉 리스트 불러오 ");
+      follow.getFollowingList(
+        state.loginUser.no,
+        (response) => {
+          console.log("팔로잉 목록 불러오기 성공");
+          commit("SET_FOLLOWING_LIST", response.data["content"]);
+        },
+        (response) => {
+          console.log("팔로잉 목록 불러오기 실패");
+          console.log(response);
+          commit("SET_FOLLOWING_LIST", []);
+        }
+      );
+    },
   },
 };
 
