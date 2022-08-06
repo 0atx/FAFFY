@@ -23,7 +23,7 @@
           클릭 시 정보 수정 페이지로 이동
         -->
         <v-btn
-          v-if="userProfile"
+          v-if="isMyProfile"
           id="profileBtn"
           class="mx-2 pb-1"
           elevation="0"
@@ -40,7 +40,7 @@
           팔로우 중이 아니라면 기본 회색 아이콘(gray),
           팔로우 중이라면 다른 색 아이콘(임시 : #ff7451)
         -->
-        <v-btn
+        <!-- <v-btn
           v-else
           id="profileBtn"
           class="mx-2 pb-1"
@@ -50,7 +50,8 @@
           :color="follow ? '#ff7451' : 'gray'"
         >
           <v-icon> mdi-heart </v-icon>
-        </v-btn>
+        </v-btn> -->
+        <follow-button v-else :user_no="userProfile.no"/>
       </div>
 
       <!-- 팔로잉 팔로워 -->
@@ -129,22 +130,40 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
+import FollowButton from "@/components/user/FollowButton.vue";
 import { mapState } from "vuex";
 import { API_BASE_URL } from "@/config";
 import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
 
 const profileStore = "profileStore";
+const authStore = "authStore";
 export default {
   name: "ProfileCard",
-  components: { CategoryChips },
+  components: { CategoryChips,FollowButton   },
   computed: {
     ...mapState(profileStore, ["userProfile"]),
+    ...mapState(authStore, ["loginUser","isLogin","followingList"]),
+    isMyProfile: function() {
+      if (!this.isLogin)
+        return false;
+      return this.loginUser.no == this.userProfile.no;
+    },
+    follow: function() {
+      if (this.isMyProfile)
+        return false;
+
+      let isFollowing = false;
+      this.followingList.forEach(element => {
+        if (element.no === this.userProfile.no)
+          isFollowing = true;
+      });
+      return isFollowing;
+    }
   },
   data() {
     return {
       readonly: { type: Boolean, default: true },
       API_BASE_URL: API_BASE_URL,
-      follow: true,
     };
   },
   methods: {
