@@ -1,5 +1,5 @@
 <template>
-  <v-btn
+  <v-btn v-if="!isMyProfile"
     id="profileBtn"
     class="mx-2 pb-1"
     elevation="0"
@@ -80,7 +80,6 @@ export default {
           console.log(response);
         });
       }
-      // await this.loadFollowing();
     }
   }
 }

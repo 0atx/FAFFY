@@ -33,6 +33,10 @@ const authStore = {
       (response)=> {
         console.log("로그아웃 실패");
         console.log(response);
+        commit("SET_USER_INFO",null);
+        commit("SET_FOLLOWING_LIST",[]);
+        sessionStorage.removeItem("X-AUTH-TOKEN");
+
       })
     },
     async loadFollowing({ commit ,state}) {
