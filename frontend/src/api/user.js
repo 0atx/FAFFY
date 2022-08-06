@@ -14,6 +14,9 @@ const user = {
       .then(success)
       .catch(fail);
   },
+  getProfileImg:async function (user_no,success,fail) {
+    await api.get(`/users/profile/image/${user_no}`).then(success).catch(fail);
+  }
 };
 const follow = {
   getFollowerList: async function (user_no, success, fail) {

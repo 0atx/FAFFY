@@ -94,4 +94,6 @@ public interface UserService {
     List<BroadCastHistoryDto> getConsultList(int no);
 
     HistoryUserInfoDto getHistoryUserInfo(int no) throws IllegalInputException;
+    void deleteUserImg(int no) throws DataNotFoundException;
+
 }
