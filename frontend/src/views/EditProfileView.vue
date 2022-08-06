@@ -25,7 +25,7 @@
                 size="250"
                 rounded
               >
-                <v-img v-if="url" :src="url"></v-img>
+                <v-img v-if="url" :src="url" @error="replaceByDefault"></v-img>
                 <v-img v-else src="@/assets/images/default_profile.png"></v-img>
               </v-avatar>
             </div>
@@ -37,8 +37,10 @@
               label="프로필 이미지 선택"
               prepend-icon=""
               append-icon="mdi-camera"
-              color="#0c0f66"
-            ></v-file-input>
+              color="#0c0f66"></v-file-input>
+            <v-btn id="deleteProfileImgBtn" class="mt-4 mb-2" block rounded elevation="0" @click="deleteProfileImg">
+              프로필 이미지 삭제
+            </v-btn>
 
             <!-- 이메일 -->
             <v-text-field
@@ -217,6 +219,7 @@ import { mapState, mapMutations } from "vuex";
 import { auth } from "@/api/auth.js";
 import { category } from "@/api/category.js";
 import { API_BASE_URL } from "@/config";
+
 const authStore = "authStore";
 export default {
   name: "EditProfileView",
@@ -280,6 +283,10 @@ export default {
   },
   methods: {
     ...mapMutations(authStore, ["SET_USER_INFO"]),
+    replaceByDefault() {
+      this.form.url = "@/assets/images/default_profile.png";
+      this.fileChanged();
+    },
     goTo() {
       this.$router.go(-1);
     },
@@ -339,6 +346,20 @@ export default {
     show() {
       console.log(this.selectedCategorys);
     },
+    deleteProfileImg() {
+      if (!confirm("프로필 이미지를 삭제하시겠습니까?"))
+        return;
+
+      auth.deleteProfileImg(this.loginUser.no,
+      (response) => {
+        console.log(response.data);
+        this.form.file = null;
+        this.url = null;
+      },
+      (response)=> {
+        console.log(response.data);
+      })
+    }
   },
   computed: {
     rules: () => validateRules,

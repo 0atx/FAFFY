@@ -167,7 +167,6 @@ public class UserController {
     @ApiOperation(value="회원 프로필 사진 조회", notes="해당 유저의 프로필 사진을 반환합니다.")
     @GetMapping("/profile/image/{no}")
     public ResponseEntity<byte[]> getUserProfileImg(@PathVariable int no) {
-
         try {
             File file = userService.getProfileImg(no);
             if(file == null)
@@ -183,6 +182,19 @@ public class UserController {
         } catch (IllegalInputException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+    @DeleteMapping("/profile/image/{no}")
+    public ResponseEntity deleteUserProfileImg(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            userService.deleteUserImg(no);
+            resultMap.put("content",no);
+        } catch (DataNotFoundException e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("msg",e.getMessage());
+        }
+        return new ResponseEntity(resultMap, status);
     }
 
     /**
