@@ -254,7 +254,7 @@ public class UserServiceImpl implements UserService {
                         System.out.println("------파일 삭제 실패------");
                 }
 
-                UploadFile img = fileHandler.parseFileInfo(file);
+                UploadFile img = fileHandler.parseFileInfo(file, "profile");
                 if(img != null){
                     uploadFileRepository.save(img);
                     user.updateProfileImage(img);
