@@ -260,15 +260,7 @@ public class UserServiceImpl implements UserService {
                     user.updateProfileImage(img);
                 }
             }
-            else{ //선택한 파일이 없는 경우 기존 프로필 사진과 db 정보 삭제
-                System.out.println("===No File selected===");
-                UploadFile img = user.getProfileImage();
-                user.updateProfileImage(null);
-                if(img != null) {
-                    uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
-                    fileHandler.deleteFile(img); //실제 파일 삭제
-                }
-            }
+
 
             user.updateUser(userDto);
             return user;
@@ -278,7 +270,20 @@ public class UserServiceImpl implements UserService {
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);
         }
     }
-
+    public void deleteUserImg(int no) throws DataNotFoundException {
+        User user = null;
+        try {
+            user = getUserByNo(no);
+            UploadFile img = user.getProfileImage();
+            user.updateProfileImage(null);
+            if(img != null) {
+                uploadFileRepository.delete(img); //db에서 프로필 이미지 저장 정보 삭제
+                fileHandler.deleteFile(img); //실제 파일 삭제
+            }
+        } catch (Exception e) {
+            throw new DataNotFoundException(USER_NOT_FOUND_MSG);
+        }
+    }
 //    @Override
 //    @Transactional
 //    public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException{
