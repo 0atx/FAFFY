@@ -85,12 +85,17 @@ export default {
     },
     // 게시글 작성
     submitBoard() {
-      const boardForm = {
-        'title': this.title,
-        'category': this.boardCategory,
-        'content': this.content,
-        'img': this.img
-      }
+      // const boardForm = {
+      //   'title': this.title,
+      //   'category': this.boardCategory,
+      //   'content': this.content,
+      //   'img': this.img
+      // }
+      let boardForm = new FormData();
+      boardForm.append("title", this.title);
+      boardForm.append("category", this.boardCategory);
+      boardForm.append("content", this.content);
+      if(this.img != null) boardForm.append("file", this.img);
 
       console.log('board', boardForm)
       this.createBoard(boardForm)
