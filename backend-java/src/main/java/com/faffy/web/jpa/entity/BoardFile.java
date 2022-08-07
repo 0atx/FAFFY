@@ -1,7 +1,6 @@
 package com.faffy.web.jpa.entity;
 
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -13,6 +12,9 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Table(name = "board_file")
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class BoardFile extends BaseEntity {
     @ManyToOne(fetch = LAZY) @JoinColumn(name = "board_no")
     private Board board;

@@ -43,11 +43,14 @@ const boardStore = {
         })
     },
     createBoard(context, board) {
+      for(let key of board.keys())
+        console.log(`${key}: ${board.get(key)}`);
+
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'post',
         data: board,
-        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') }
+        headers: { "Content-Type": "multipart/form-data", "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
           console.log(res)
