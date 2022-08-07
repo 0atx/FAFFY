@@ -46,10 +46,10 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void writeBoard(BoardDto boardDto,int user_no) throws Exception {
+    public void writeBoard(BoardDto boardDto, int user_no) throws Exception {
         boardDto.setWriter_no(user_no);
-        Board b = boardDto.toEntity();
-        User u = userService.getUserByNo(boardDto.getWriter_no());
+        User u = userService.getUserByNo(user_no);
+        Board b = boardDto.toEntityWriteBy(u);
         if(u == null) {
             System.out.println("글쓰기 실패!!! - 존재하지 않는 작성자.");
             throw new Exception();
@@ -65,6 +65,7 @@ public class BoardServiceImpl implements BoardService {
                 e.printStackTrace();
             }
 
+            boardRepository.save(b);
             uploadFileRepository.save(uf);
             BoardFile bf = BoardFile.builder()
                     .board(b)
@@ -72,7 +73,6 @@ public class BoardServiceImpl implements BoardService {
                     .build();
             boardFileRepository.save(bf);
         }
-        boardRepository.save(boardDto.toEntityWriteBy(u));
     }
 
     @Override
@@ -120,6 +120,14 @@ public class BoardServiceImpl implements BoardService {
             throw new Exception("글쓴이와 로그인 정보가 일치하지 않습니다.");
         }
         try {
+            List<BoardFile> bfList = boardFileRepository.findAllWithBoard(board);
+            if(!bfList.isEmpty()) {
+                UploadFile uploadFile = bfList.get(0).getFile();
+                boardFileRepository.deleteAll(bfList);
+                uploadFileRepository.delete(uploadFile);
+                fileHandler.deleteFile(uploadFile);
+            }
+
             boardRepository.deleteById(no);
         } catch (Exception e) {
             throw new Exception(BOARD_NOT_FOUND_MSG);
