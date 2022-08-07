@@ -108,7 +108,7 @@ public class BoardController {
 //        return new ResponseEntity(resultMap, status);
 //    }
 
-    @ApiOperation(value="게시물 쓰기",notes="새로운 게시물을 씁니다. (파일 첨부는 한개만 가능)", produces = "multipart/form-data")
+    @ApiOperation(value="게시물 쓰기",notes="새로운 게시물을 씁니다. (파일 첨부는 한개만 가능)")
     @PostMapping("")
     ResponseEntity writeBoard(@ModelAttribute BoardDto boardDto, @RequestHeader(value = "X-AUTH-TOKEN") String token) {
         System.out.print("boardDto: "+boardDto);
@@ -142,6 +142,7 @@ public class BoardController {
 
     @PutMapping("")
     ResponseEntity updateBoard(@ModelAttribute BoardUpdateDto boardUpdateDto, @RequestHeader(value = "X-AUTH-TOKEN") String token) {
+        System.out.println("boardUpdateDto: "+boardUpdateDto);
         int user_no = Integer.parseInt(jwtTokenProvider.getUserPk(token));
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
