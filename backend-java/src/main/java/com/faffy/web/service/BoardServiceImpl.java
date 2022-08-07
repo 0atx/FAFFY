@@ -86,10 +86,12 @@ public class BoardServiceImpl implements BoardService {
 
         //첨부 파일 업데이트 - 기존 첨부 되어있는 파일 모두 삭제하고 새로 업로드
         List<BoardFile> bfList = boardFileRepository.findAllWithBoard(board);
-        UploadFile uploadFile = bfList.get(0).getFile();
-        boardFileRepository.deleteAll(bfList);
-        uploadFileRepository.delete(uploadFile);
-        fileHandler.deleteFile(uploadFile);
+        if(!bfList.isEmpty()) {
+            UploadFile uploadFile = bfList.get(0).getFile();
+            boardFileRepository.deleteAll(bfList);
+            uploadFileRepository.delete(uploadFile);
+            fileHandler.deleteFile(uploadFile);
+        }
 
         MultipartFile file = boardDto.getFile();
         if(file != null){ //선택한 파일이 있는 경우
@@ -135,7 +137,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void setFileNo(BoardGetDto dto, Board board) {
         List<BoardFile> bfList = boardFileRepository.findAllWithBoard(board);
-        dto.setFileNo(bfList.get(0).getFile().getNo());
+        if(!bfList.isEmpty())
+            dto.setFileNo(bfList.get(0).getFile().getNo());
     }
 
     @Override
