@@ -54,7 +54,6 @@ public class BoardDto {
     }
     public Board toEntity() {
         Board board = Board.builder()
-                .no(no)
                 .title(title)
                 .datetime(datetime)
                 .content(content)
