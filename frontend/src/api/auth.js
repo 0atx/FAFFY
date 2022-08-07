@@ -38,6 +38,12 @@ const auth = {
     )
     .then(success)
     .catch(fail);
+  },
+  deleteProfileImg: async function(user_no,success,fail) {
+    await api
+    .delete(`/users/profile/image/${user_no}`)
+    .then(success)
+    .catch(fail);
   }
 };
 

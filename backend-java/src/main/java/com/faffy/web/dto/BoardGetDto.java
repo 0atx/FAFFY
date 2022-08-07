@@ -1,7 +1,10 @@
 package com.faffy.web.dto;
 
+import com.faffy.web.jpa.entity.UploadFile;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 게시글 정보 응답 시 답을 Wrapper 클래스
@@ -17,12 +20,14 @@ public class BoardGetDto {
     private int hit;
     private int commentCount;
 
+    private int fileNo;
+
     public BoardGetDto() {
     }
 
     @Builder
     public BoardGetDto(int no, String title, String content, String dateTime, UserGetSimpleDto user,
-                       int hit, int commentCount,String category) {
+                       int hit, int commentCount, String category) {
         this.no = no;
         this.title = title;
         this.content = content;

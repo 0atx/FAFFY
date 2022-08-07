@@ -29,27 +29,30 @@ public class FileHandler {
      * @return UploadFile
      * @throws Exception
      */
-    public UploadFile parseFileInfo(MultipartFile img) throws Exception{
-        String absPath = null;
-        if(System.getProperty("os.name").toLowerCase().contains("win"))
-            absPath = WIN_FILE_PATH + "\\";
-        else
-            absPath = LINUX_FILE_PATH + "/";
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        String path = "profile_images" + sep + sdf.format(date).replace("-", sep);
-
-        File file = new File(absPath + path);
-        //저장할 디렉토리가 존재하지 않는 경우 새로 생성
-        if(!file.exists()){
-            System.out.println("===폴더 새로 생성===");
-            file.mkdirs();
-        }
-
+    public UploadFile parseFileInfo(MultipartFile img, String type) throws Exception{
         if(!img.isEmpty()){
-            String contentType = img.getContentType();
+            String absPath = null;
+            if(System.getProperty("os.name").toLowerCase().contains("win"))
+                absPath = WIN_FILE_PATH + "\\";
+            else
+                absPath = LINUX_FILE_PATH + "/";
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            String path = null;
+            if(type.equals("profile"))
+                path = "profile_images" + sep + sdf.format(date).replace("-", sep);
+            else if(type.equals("board"))
+                path = "board" + sep + sdf.format(date).replace("-", sep);
+
+            File file = new File(absPath + path);
+            //저장할 디렉토리가 존재하지 않는 경우 새로 생성
+            if(!file.exists()){
+                System.out.println("===폴더 새로 생성===");
+                file.mkdirs();
+            }
+
+            String contentType = img.getContentType();
             //확장자 명이 없는 파일은 처리 안함
             if(ObjectUtils.isEmpty(contentType)){
                 System.out.println("확장자 명 없음!!");

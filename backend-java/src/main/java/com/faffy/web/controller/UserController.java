@@ -167,7 +167,6 @@ public class UserController {
     @ApiOperation(value="회원 프로필 사진 조회", notes="해당 유저의 프로필 사진을 반환합니다.")
     @GetMapping("/profile/image/{no}")
     public ResponseEntity<byte[]> getUserProfileImg(@PathVariable int no) {
-
         try {
             File file = userService.getProfileImg(no);
             if(file == null)
@@ -184,6 +183,19 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    @DeleteMapping("/profile/image/{no}")
+    public ResponseEntity deleteUserProfileImg(@PathVariable int no) {
+        HttpStatus status = HttpStatus.OK;
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            userService.deleteUserImg(no);
+            resultMap.put("content",no);
+        } catch (DataNotFoundException e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("msg",e.getMessage());
+        }
+        return new ResponseEntity(resultMap, status);
+    }
 
     /**
      * 회원정보 수정
@@ -192,7 +204,7 @@ public class UserController {
      */
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity updateUser(@ModelAttribute UserDto userDto) {
+    public ResponseEntity<Map<String, Object>> updateUser(@ModelAttribute UserDto userDto) {
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         System.out.println("userDto:" + userDto);
@@ -206,9 +218,8 @@ public class UserController {
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");
             status = HttpStatus.BAD_REQUEST;
-        } finally {
-            return new ResponseEntity(resultMap,status);
         }
+        return new ResponseEntity(resultMap,status);
     }
 
 //    /**
