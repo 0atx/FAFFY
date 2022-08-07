@@ -43,14 +43,12 @@ const boardStore = {
         })
     },
     createBoard(context, board) {
-      for(let key of board.keys())
-        console.log(`${key}: ${board.get(key)}`);
-
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'post',
         data: board,
-        headers: { "Content-Type": "multipart/form-data", "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') }
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
+        "Content-Type": "multipart/form-data" }
       })
         .then(res => {
           console.log(res)
@@ -123,6 +121,22 @@ const boardStore = {
           console.log('댓글 삭제', res)
           alert('댓글이 정상적으로 삭제되었습니다.')
           router.go(router.currentRoute)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    updateBoard(context, formData) {
+      axios({
+        url: 'http://localhost:8888/api/boards',
+        method: 'put',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
+      "Content-Type": "multipart/form-data" },
+        data: formData
+      })
+        .then(res => {
+          console.log('성공', res)
+          router.push({ name: 'board-detail', params: { boardNo: formData.get('no')}})
         })
         .catch(err => {
           console.log(err)
