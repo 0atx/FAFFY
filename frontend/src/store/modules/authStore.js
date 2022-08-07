@@ -8,7 +8,7 @@ const authStore = {
   },
   getters: {
     checkUserInfo: function (state) {
-      return state.userInfo;
+      return state.loginUser;
     }
   },
   mutations: {
