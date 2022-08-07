@@ -28,6 +28,9 @@ export default {
   computed: {
     ...mapGetters(boardStore, ['currentBoard']),
   },
+  created() {
+    console.log('해위', this.currentBoard.content)
+  }
 }
 </script>
 

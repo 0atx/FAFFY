@@ -1,7 +1,7 @@
 <!--
   작성자: 류경하
   설명: 댓글 작성
-  최종 수정일: 2022.08.04
+  최종 수정일: 2022.08.05
 -->
 <template>
   <v-container>
@@ -53,7 +53,6 @@ export default {
         }
         console.log(commentForm)
         this.createComment(commentForm)
-        this.$router.go(this.$router.currentRoute)
       }
     }
   }

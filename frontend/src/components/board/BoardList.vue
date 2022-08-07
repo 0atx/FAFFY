@@ -92,10 +92,9 @@ export default {
         page: 1,
         itemsPerPage: 10,
         totalVisible: 7,
-        now: [],
         keyword: '',
         items: ['제목', '작성자'],
-        searchCategory: ''
+        searchCategory: '',
       }
     },
   props: {
@@ -103,6 +102,20 @@ export default {
   },
   computed: {
     ...mapGetters(boardStore, ['freeBoards', 'qnaBoards', 'infoBoards']),
+    now: {
+      get() {
+        if (this.type === '자유') {
+          return this.freeBoards
+        } else if (this.type === '질문') {
+          return this.qnaBoards
+        } else {
+          return this.infoBoards
+        }
+      },
+      set() {
+
+      }
+    },
     // 페이지네이션 - 전체 페이지
     totalPages() {
       return this.now.length % this.itemsPerPage > 0 ? parseInt(this.now.length/this.itemsPerPage)+1 : parseInt(this.now.length/this.itemsPerPage)
@@ -115,7 +128,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchBoards']),
+    ...mapActions(boardStore, ['fetchBoards']),
     // 상세조회 페이지 이동
     boardDetail(boardNo) {
       console.log(`${boardNo}번 글로 이동`)
@@ -124,13 +137,13 @@ export default {
     // 최신순 정렬
     sortByDate() {
       this.now.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at)
+        return new Date(b.dateTime) - new Date(a.dateTime)
       })
     },
     // 답글 많은 순 정렬
     sortByComments() {
       this.now.sort((a, b) => {
-        return b.comments - a.comments
+        return b.commentCount - a.commentCount
       })
     },
     // 검색 카테고리 별 정렬
@@ -149,13 +162,6 @@ export default {
     resetSearch() {
       this.keyword = ''
       this.searchCategory = ''
-      if (this.type === '자유') {
-        return this.now = this.freeBoards
-      } else if (this.type === '질문') {
-        return this.now = this.qnaBoards
-      } else {
-        return this.now = this.infoBoards
-      }
     },
     // 게시글 생성
     createBoard() {
@@ -168,13 +174,13 @@ export default {
       this.keyword = ''
       this.page = 1
       this.searchCategory = ''
-      if (this.type === '자유') {
-        return this.now = this.freeBoards
-      } else if (this.type === '질문') {
-        return this.now = this.qnaBoards
-      } else {
-        return this.now = this.infoBoards
-      }
+      // if (this.type === '자유') {
+      //   return this.now = this.freeBoards
+      // } else if (this.type === '질문') {
+      //   return this.now = this.qnaBoards
+      // } else {
+      //   return this.now = this.infoBoards
+      // }
     },
   },
   created() {
