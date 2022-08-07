@@ -30,6 +30,9 @@ export default {
       boardType: '자유',
     }
   },
+  // computed: {
+  //   ...mapGetters(boardStore, ['boardList'])
+  // },
   methods: {
     ...mapActions(boardStore, ['fetchBoardList']),
     // 게시판 카테고리 변경
