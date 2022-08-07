@@ -46,9 +46,9 @@ const boardStore = {
       axios({
         url: 'http://localhost:8888/api/boards/',
         method: 'post',
-        data: board,
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
-        "Content-Type": "multipart/form-data" }
+        "Content-Type": "multipart/form-data" },
+        data: board
       })
         .then(res => {
           console.log(res)
