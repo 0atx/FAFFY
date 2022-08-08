@@ -35,7 +35,7 @@ import java.util.Map;
 @RequestMapping("/api/boards")
 @CrossOrigin("*")
 public class BoardController {
-    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     @Autowired
     BoardService boardService;

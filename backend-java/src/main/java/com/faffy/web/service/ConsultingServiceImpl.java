@@ -1,5 +1,6 @@
 package com.faffy.web.service;
 
+import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.Consulting;
@@ -7,11 +8,15 @@ import com.faffy.web.jpa.entity.UploadFile;
 import com.faffy.web.jpa.repository.ConsultingRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ConsultingServiceImpl implements ConsultingService{
@@ -68,5 +73,15 @@ public class ConsultingServiceImpl implements ConsultingService{
 
         String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
         return new File(filename);
+    }
+
+    @Override
+    public List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable) {
+        List<Consulting> consultings = consultingRepository.findAllOrderByViewCount(pageable);
+        List<ConsultingGetDto> dtoList = new ArrayList<>();
+        for(Consulting c : consultings){
+            dtoList.add(c.toConsultingGetDto());
+        }
+        return dtoList;
     }
 }
