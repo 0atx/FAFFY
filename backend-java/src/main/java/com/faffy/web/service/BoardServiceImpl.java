@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +158,26 @@ public class BoardServiceImpl implements BoardService {
 
         String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
         return new File(filename);
+    }
+
+    @Override
+    public List<BoardGetDto> getBoardsByDate(Pageable pageable) {
+        List<Board> boardList = boardRepository.findAllOrderByDate(pageable);
+        List<BoardGetDto> result = new ArrayList<>();
+        for(Board b : boardList){
+            result.add(b.toBoardGetDto());
+        }
+        return result;
+    }
+
+    @Override
+    public List<BoardGetDto> getBoardsByHit(Pageable pageable) {
+        List<Board> boardList = boardRepository.findAllOrderByHit(pageable);
+        List<BoardGetDto> result = new ArrayList<>();
+        for(Board b : boardList){
+            result.add(b.toBoardGetDto());
+        }
+        return result;
     }
 
 }
