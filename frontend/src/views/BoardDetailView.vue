@@ -1,21 +1,25 @@
 <template>
-  <v-container class="grey lighten-5">
-    <h1>게시글 상세보기</h1>
-    <v-btn color="success" @click="moveToBoard">게시판으로 돌아가기</v-btn>
-    <v-btn color="error" @click="requestDeleteBoard(boardNo)">게시글 삭제하기</v-btn>
-    <v-btn color="warning" @click="requestUpdateBoard(boardNo)">게시글 수정하기</v-btn>
+  <v-container class="grey lighten-5" fluid>
+    <div class="d-flex justify-start">
+      <v-btn id="boardBtn" text color="#0c0f66" @click="moveToBoard"><v-icon>mdi-arrow-left</v-icon>게시판으로 돌아가기</v-btn>
+    </div>
     <BoardDetail />
+    <!-- <div id="buttonGroup" class="d-flex justify-end">
+      <v-btn color="error" @click="requestDeleteBoard(boardNo)" :disabled="checkUserInfo.no!==currentBoard.user.no">삭제</v-btn>
+      <v-btn color="warning" @click="requestUpdateBoard(boardNo)" :disabled="checkUserInfo.no!==currentBoard.user.no">수정</v-btn>
+    </div> -->
     <CommentForm />
     <CommentList />
   </v-container>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import BoardDetail from '@/components/board/BoardDetail.vue'
 import CommentForm from '@/components/board/CommentForm.vue'
 import CommentList from '@/components/board/CommentList.vue'
 const boardStore = "boardStore"
+const authStore = "authStore"
 
 export default {
   name: 'BoardDeatilView',
@@ -28,6 +32,10 @@ export default {
     return {
       boardNo: this.$route.params.boardNo
     }
+  },
+  computed: {
+    ...mapGetters(authStore, ['checkUserInfo']),
+    ...mapGetters(boardStore, ['currentBoard']),
   },
   methods: {
     ...mapActions(boardStore, ['fetchBoard', 'deleteBoard']),
@@ -53,6 +61,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+#buttonGroup {
+  margin-bottom: 10px;
+  padding: 12px;
+}
 </style>

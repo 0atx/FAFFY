@@ -5,7 +5,7 @@
 -->
 <template>
   <v-container fluid>
-    <h1>댓글 목록</h1>
+    <!-- <h1>댓글 목록</h1> -->
     <CommentItem
       v-for="comment in commentList"
       :key="comment.no"

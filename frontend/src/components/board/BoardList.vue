@@ -5,7 +5,8 @@
 -->
 <template>
   <v-container fluid>
-    <v-row align="center">
+    <h1 class="text-left mb-10">{{ type }} 게시판</h1>
+    <v-row align="center" class="mb-5">
       <!--검색 기준 선택(작성자 or 제목)-->
       <v-col
         class="d-flex"
@@ -16,6 +17,7 @@
           label="검색"
           v-model="searchCategory"
           outlined
+          hide-details
         ></v-select>
       </v-col>
 
@@ -25,59 +27,81 @@
           v-model="keyword"
           label="검색어를 입력하세요"
           append-icon="mdi-magnify"
+          outlined
+          hide-details
           @keyup.enter="searchKeyword(keyword)"
         ></v-text-field>
       </v-col>
-      <v-btn col="4" color="success" @click="resetSearch">검색 결과 초기화</v-btn>
+      <v-btn id="searchBtn" class="rounded-lg" col="2" height="56px" @click="searchKeyword(keyword)">검색</v-btn>
+      <v-btn id="resetBtn" class="rounded-lg" col="2" height="56px" @click="resetSearch">초기화</v-btn>
 
     </v-row>
-    <h3>{{ type }} 게시판</h3>
-    <v-btn color="success" @click="sortByDate">최신순</v-btn>
-    <v-btn color="primary" @click="sortByComments">답글 많은 순</v-btn>
-    <v-btn color="warning" @click="createBoard">글 쓰기</v-btn>
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-center">
-              작성자
-            </th>
-            <!--추후에 카테고리 대신 댓글 수로 대체 예정-->
-            <th class="text-center">
-              댓글 수
-            </th>
-            <th class="text-center">
-              제목
-            </th>
-            <th class="text-center">
-              작성일
-            </th>
-          </tr>
-        </thead>
-        <!--각각의 게시글, 클릭하면 상세조회로 이동-->
-        <tbody>
-          <tr
-            v-for="board in currentPage"
-            :key="board.content.no"
-            @click="boardDetail(board.no)"
-            style="cursor: pointer"
-          >
-            <td>{{ board.user.nickname }}</td>
-            <td>{{ board.commentCount }}</td>
-            <td>{{ board.title }}</td>
-            <td>{{ board.dateTime }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+
+    <v-row>
+      <v-col cols="9" align="start">
+        <v-btn id="recentBtn" color="#0c0f66" text @click="sortByDate">최신순</v-btn>
+        <v-btn id="commentBtn" color="#0c0f66" text @click="sortByComments">답글 많은 순</v-btn>
+      </v-col>
+      <v-col cols="3" align="end">
+        <v-btn @click="createBoard"><v-icon>mdi-pencil</v-icon>글 쓰기</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-center">
+                  제목
+                </th>
+                <!--추후에 카테고리 대신 댓글 수로 대체 예정-->
+                <th class="text-center">
+                  댓글
+                </th>
+                <th class="text-center">
+                  작성자
+                </th>
+                <th class="text-center">
+                  작성일
+                </th>
+                <th class="text-center">
+                  조회수
+                </th>
+              </tr>
+            </thead>
+            <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+            <tbody>
+              <tr
+                v-for="board in currentPage"
+                :key="board.content.no"
+                @click="boardDetail(board.no)"
+                style="cursor: pointer"
+              >
+                <td>{{ board.title }}</td>
+                <td><v-icon>mdi-comment-processing-outline</v-icon>{{ board.commentCount }}</td>
+                <td>{{ board.user.nickname }}</td>
+                <td>{{ board.dateTime.slice(0,4)+'년 '+board.dateTime.slice(5, 7)+'월 '+board.dateTime.slice(8, 10)+'일' }}</td>
+                <td><v-icon>mdi-eye</v-icon>{{ board.hit }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-col>
+    </v-row>
     <!-- 페이지네이션 -->
-    <v-pagination
-      v-model="page"
-      :length="totalPages"
-      prev-icon="mdi-menu-left"
-      next-icon="mdi-menu-right"
-      :total-visible="totalVisible">
-    </v-pagination>
+    <v-row>
+      <v-col cols="12">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          prev-icon="mdi-menu-left"
+          next-icon="mdi-menu-right"
+          :total-visible="totalVisible">
+        </v-pagination>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -189,6 +213,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+h1 {
+  margin-bottom: 10px;
+}
 
+button {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+#searchBtn {
+  background-color: #0c0f66;
+  color: white;
+}
+#resetBtn {
+  background-color: #0c0f66;
+  color: white;
+}
 </style>

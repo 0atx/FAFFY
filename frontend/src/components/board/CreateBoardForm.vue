@@ -33,8 +33,8 @@
       filled
       v-model="boardForm.img">
     </v-file-input>
-    <v-btn color="success" @click="submitBoard">작성</v-btn>
-    <v-btn color="warning" @click="resetForm">내용 초기화</v-btn>
+    <v-btn id="submitBtn" @click="submitBoard">{{ action==="create" ? "작성" : "수정" }}</v-btn>
+    <v-btn color="error" @click="resetForm">초기화</v-btn>
     <!--글 수정일 때만 표시-->
     <v-btn v-if="action === 'update'" color="warning" @click="moveToDetail">취소</v-btn>
   </v-container>
@@ -112,12 +112,16 @@ export default {
       }
     },
     moveToDetail() {
+      if (confirm('작업 중인 내용을 중단하고 글로 돌아가시겠습니까?')) {
       this.$router.push({ name: 'board-detail', params: { boardNo: this.$route.params.boardNo }})
-    }
+    }}
   },
 }
 </script>
 
-<style>
-
+<style scoped>
+#submitBtn {
+  background-color: #0c0f66;
+  color: white;
+}
 </style>

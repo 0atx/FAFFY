@@ -4,21 +4,24 @@
   최종 수정일: 2022.08.05
 -->
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="10">
         <!-- 댓글 작성 -->
         <v-textarea
           clearable
+          outlined
           clear-icon="mdi-close-circle"
           label="Text"
           v-model="comment"
+          hide-details
+          rows="3"
           value="This is clearable text.">
         </v-textarea>
       </v-col>
       <!-- 댓글 작성 버튼 -->
-      <v-col cols="4">
-        <v-btn color="warning" @click="submitComment(comment)">등록</v-btn>
+      <v-col cols="2">
+        <v-btn id="commentBtn" height="100%" width="100%" @click="submitComment(comment)">등록</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -59,6 +62,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+#commentBtn {
+  background-color: #0c0f66;
+  color: white;
+}
 
 </style>
