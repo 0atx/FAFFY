@@ -1,5 +1,6 @@
 package com.faffy.web.service;
 
+import com.faffy.web.dto.ConsultingCreateDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
 import com.faffy.web.exception.IllegalInputException;
@@ -13,4 +14,6 @@ public interface ConsultingService {
     File getSnapshot(int no) throws IllegalInputException;
 
     List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable);
+
+    ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto, int no);
 }
