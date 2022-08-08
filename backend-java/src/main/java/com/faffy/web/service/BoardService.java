@@ -4,7 +4,7 @@ package com.faffy.web.service;
 import com.faffy.web.dto.BoardDto;
 import com.faffy.web.dto.BoardGetDto;
 import com.faffy.web.dto.BoardUpdateDto;
-import com.faffy.web.dto.UserDto;
+import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.Board;
 import org.springframework.data.domain.Pageable;
@@ -52,4 +52,10 @@ public interface BoardService {
     void setFileNo(BoardGetDto dto, Board board);
 
     File getFile(int no) throws IllegalInputException;
+
+    List<BoardGetDto> getBoardsByDate(Pageable pageable);
+
+    List<BoardGetDto> getBoardsByHit(Pageable pageable);
+
+    List<Integer> getBoardsImageNoByDate(Pageable pageable);
 }

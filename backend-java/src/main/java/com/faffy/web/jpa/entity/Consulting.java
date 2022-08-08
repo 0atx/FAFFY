@@ -1,5 +1,6 @@
 package com.faffy.web.jpa.entity;
 
+import com.faffy.web.dto.ConsultingGetDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -39,5 +40,23 @@ public class Consulting extends BaseEntity {
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    public ConsultingGetDto toConsultingGetDto(){
+        List<String> categories = new ArrayList<>();
+        for(ConsultingCategory c : this.categories){
+            categories.add(c.getConsultingCategoryMapper().getCategory().getName());
+        }
+
+        return ConsultingGetDto.builder()
+                .no(this.no)
+                .consultant(this.consultant.getNickname())
+                .title(this.title)
+                .introduce(this.intro)
+                .roomSize(this.roomSize)
+                .viewCount(this.viewCount)
+                .categories(categories)
+                .profileImageNo(consultant.getProfileImage().getNo())
+                .build();
+    }
 }
 
