@@ -2,6 +2,7 @@ package com.faffy.web.service;
 
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.jpa.entity.FashionCategory;
+import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.entity.UserCategory;
 
 import java.util.List;
@@ -27,6 +28,6 @@ public interface UserCategoryService {
      */
     public String deleteUserCategory(int user_no, String categoryName) throws Exception;
 
-    public List<String> setUserCategories(int user_no, List<String> categoryNames) throws Exception;
+    public List<String> setUserCategories(User user, List<String> categoryNames) throws Exception;
 
 }
