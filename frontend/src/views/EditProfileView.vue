@@ -374,7 +374,7 @@ export default {
   padding: 5%;
   text-align: left;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
@@ -388,7 +388,7 @@ export default {
 
 #route {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
 }
 

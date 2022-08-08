@@ -57,14 +57,14 @@ export default {
   text-align: left;
   height: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
   cursor: default;
 }
 
 #route {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 a {
