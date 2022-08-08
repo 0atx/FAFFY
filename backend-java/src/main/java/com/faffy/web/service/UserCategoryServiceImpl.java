@@ -72,22 +72,22 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
-    public List<String> setUserCategories(int user_no, List<String> categoryNames) throws Exception {
+    public List<String> setUserCategories(User user, List<String> categoryNames) throws Exception {
         List<String> result = new ArrayList<>();
 
         try {
-            User user = userService.getUserByNo(user_no);
             List<UserCategory> userCategories = userCategoryRepository.findByUser(user);
             for(UserCategory category : userCategories) {
                 userCategoryRepository.delete(category);
             }
             for (String categoryName : categoryNames) {
-                addUserCategory(user_no,categoryName);
+                addUserCategory(user.getNo(),categoryName);
             }
 
 
         } catch (DataNotFoundException e) {
-            throw new DataNotFoundException(ExceptionMsg.USER_NOT_FOUND_MSG);
+            e.printStackTrace();
+            throw new DataNotFoundException("여기서 에러 발생했어요");
         }
 
         return result;

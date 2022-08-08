@@ -317,7 +317,10 @@ export default {
       formData.append("instaLink", this.form.instaLink);
       formData.append("facebookLink", this.form.facebookLink);
       formData.append("youtubeLink", this.form.youtubeLink);
+      if (this.form.categories != undefined)
       formData.append("categories", this.form.categories);
+      else
+      formData.append("categories", []);
 
       auth.updateProfile(
         formData,
