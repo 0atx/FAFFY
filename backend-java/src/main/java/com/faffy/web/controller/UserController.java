@@ -8,6 +8,7 @@ import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.ConsultingService;
 import com.faffy.web.service.UserCategoryService;
+import com.faffy.web.service.UserCategoryServiceImpl;
 import com.faffy.web.service.UserServiceImpl;
 import com.faffy.web.service.token.JwtTokenProvider;
 import com.sun.net.httpserver.HttpsServer;
@@ -39,7 +40,7 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    UserCategoryService userCategoryService;
+    UserCategoryServiceImpl userCategoryService;
     @Autowired
     ConsultingService consultingService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -205,13 +206,14 @@ public class UserController {
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateUser(@ModelAttribute UserDto userDto) {
+        logger.info("user dto : {}",userDto);
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         System.out.println("userDto:" + userDto);
 
         try {
             User user = userService.updateUser(userDto);
-            userCategoryService.setUserCategories(userDto.getNo(), userDto.getCategories());
+            userCategoryService.setUserCategories(user, userDto.getCategories());
 
             resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
