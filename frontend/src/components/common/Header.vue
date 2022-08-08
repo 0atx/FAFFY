@@ -30,6 +30,7 @@
       <!-- 로그인 후 메뉴 바 -->
       <div style="display:flex;align-items:center" v-if="loginUser">
         <v-btn
+          v-if="!isOnAir"
           style="font-size:16px;width:80px"
           class="mr-1"
           id="consultBtn"
@@ -39,6 +40,19 @@
           @click="toReady"
         >
           방송 시작
+        </v-btn>
+
+        <v-btn
+          v-else
+          style="font-size:16px;width:80px"
+          class="mr-1"
+          id="consultBtn"
+          rounded
+          elevation="0"
+          :ripple="false"
+          @click="toReady"
+        >
+          방송 나가기
         </v-btn>
 
         <v-btn
@@ -106,7 +120,10 @@ export default {
     SearchBar,
     ProfileImgAvatar
   },
-    computed: {
+  props: {
+    isOnAir: Boolean,
+  },
+  computed: {
     ...mapState(authStore, ["loginUser","isLogin"]),
   },
   methods: {
