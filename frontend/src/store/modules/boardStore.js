@@ -12,6 +12,9 @@ const boardStore = {
 
     // 조회 중인 글의 댓글 목록
     commentList: [],
+
+    // 조회할 게시글의 이미지
+    currentImage: null,
   },
   getters: {
     boardList: state => state.boardList,
@@ -20,16 +23,18 @@ const boardStore = {
     infoBoards: state => state.boardList.filter(board => board.category === 'Info'),
     currentBoard: state => state.currentBoard,
     commentList: state => state.commentList,
+    currentImage: state => state.currentImage,
   },
   mutations: {
     SET_BOARD_LIST: (state, boardList) => state.boardList = boardList,
     SET_BOARD: (state, board) => state.currentBoard = board,
     SET_COMMENT_LIST: (state, commentList) => state.commentList = commentList,
+    SET_IMAGE: (state, img) => state.currentImage = img,
   },
   actions: {
     fetchBoardList({ commit }) {
       axios({
-        url: 'http://localhost:8888/api/boards/',
+        url: 'http://localhost:8082/api/boards/',
         method: 'get',
         headers: {
           'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
@@ -44,7 +49,7 @@ const boardStore = {
     },
     createBoard(context, board) {
       axios({
-        url: 'http://localhost:8888/api/boards/',
+        url: 'http://localhost:8082/api/boards/',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
         "Content-Type": "multipart/form-data" },
@@ -64,7 +69,7 @@ const boardStore = {
     },
     fetchBoard({ commit, dispatch }, boardNo) {
       axios({
-        url: `http://localhost:8888/api/boards/${boardNo}`,
+        url: `http://localhost:8082/api/boards/${boardNo}`,
         method: 'get',
         headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
@@ -72,6 +77,11 @@ const boardStore = {
           console.log(res.data.content.board)
           commit('SET_BOARD', res.data.content.board)
           dispatch('fetchCommentList', res.data.content.comments)
+          if (res.data.content.board.fileNo !== 0) {
+            dispatch('fetchImage', res.data.content.board.fileNo)
+          } else {
+            commit('SET_IMAGE', null)
+          }
         })
         .catch(err => {
           console.log(err)
@@ -79,7 +89,7 @@ const boardStore = {
     },
     createComment(context, commentForm) {
       axios({
-        url: 'http://localhost:8888/api/comments',
+        url: 'http://localhost:8082/api/comments',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: commentForm
@@ -94,7 +104,7 @@ const boardStore = {
     },
     deleteBoard({ commit }, boardNo) {
       axios({
-        url: 'http://localhost:8888/api/boards/',
+        url: 'http://localhost:8082/api/boards/',
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: {
@@ -113,7 +123,7 @@ const boardStore = {
     },
     deleteComment(context, commentNo) {
       axios({
-        url: `http://localhost:8888/api/comments/${commentNo}`,
+        url: `http://localhost:8082/api/comments/${commentNo}`,
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
       })
@@ -128,7 +138,7 @@ const boardStore = {
     },
     updateBoard(context, formData) {
       axios({
-        url: 'http://localhost:8888/api/boards',
+        url: 'http://localhost:8082/api/boards',
         method: 'put',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
       "Content-Type": "multipart/form-data" },
@@ -137,6 +147,22 @@ const boardStore = {
         .then(res => {
           console.log('성공', res)
           router.push({ name: 'board-detail', params: { boardNo: formData.get('no')}})
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    fetchImage({ commit }, fileNo) {
+      axios({
+        url: `http://localhost:8082/api/boards/file/${fileNo}`,
+        method: 'get',
+        responseType: 'blob',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
+      })
+        .then(res => {
+          console.log('이미지 가져오기 성공')
+          const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] } ))
+          commit('SET_IMAGE', url)
         })
         .catch(err => {
           console.log(err)
