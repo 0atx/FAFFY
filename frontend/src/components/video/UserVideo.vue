@@ -1,7 +1,16 @@
 <template>
 <div v-if="streamManager" style="position:relative;">
 	<ov-video :stream-manager="streamManager"/>
-	<div class="nameTag"><p>{{ clientData }}</p></div>
+	<div class="nameTag"><p>{{ clientData }}</p>
+    <button @click="capture">캡쳐</button></div>
+    <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
+<!--
+<div v-if="streamManager">
+	<ov-video :stream-manager="streamManager" ref="ov_video"/>
+	<div><p>{{ clientData }}</p></div>
+  <button @click="capture">캡쳐</button>
+  <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/> -->
+
 </div>
 </template>
 
@@ -31,6 +40,19 @@ export default {
 			const { connection } = this.streamManager.stream;
 			return JSON.parse(connection.data);
 		},
+    capture() {
+      console.log("#######################"+this.clientData);
+      var video = this.$refs.ov_video.$refs.video;
+      console.log(video);
+      // var video = document.querySelector('video');
+      var canvas = document.getElementById("drawCanvas"+this.clientData);
+      // var canvas = this.$refs.clientData;
+      console.log(canvas);
+			var context = canvas.getContext("2d");
+
+			context.drawImage(video, 0, 0, 320, 240);
+      console.log("#######################");
+    }
 	},
 };
 </script>
