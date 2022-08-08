@@ -72,22 +72,14 @@ const routes = [
     component: () => import("@/views/EditProfileView.vue"),
   },
   {
-    path: "/consulting",
+    path: "/consulting/ready",
     name: "consulting",
-    redirect: "/consulting/ready",
+    component: () => import("@/views/ConsultingFormView.vue"),
+  },
+  {
+    path: "/consulting/onair",
+    name: "consulting-onair",
     component: () => import("@/views/ConsultingView.vue"),
-    children: [
-      {
-        path: "ready",
-        name: "consulting-ready",
-        component: () => import("@/views/ConsultingFormView.vue"),
-      },
-      {
-        path: "onair",
-        name: "consulting-onair",
-        component: () => import("@/views/ConsultingView.vue"),
-      },
-    ],
   },
   {
     path: "/board",
@@ -114,6 +106,9 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   routes,
+  scrollBehavior(){
+    return { top: 0 }
+  },
 });
 
 export default router;

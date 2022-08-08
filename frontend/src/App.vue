@@ -1,8 +1,8 @@
 <template>
   <v-app id="faffy">
-    <Header />
+    <Header :isOnAir="isOnAir" />
     <router-view></router-view>
-    <Footer />
+    <Footer v-if="show" />
   </v-app>
 </template>
 
@@ -15,7 +15,29 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  data() {
+    return {
+      show: false,
+      isOnAir: false,
+    };
+  },
+  watch: {
+    $route(to) {
+      if (
+        !(
+          to.name == "consulting-onair" ||
+          to.name == "consulting-ready"
+        )
+      ) {
+        this.show = true;
+        this.isOnAir = false;
+      } else {
+        this.show = false;
+        this.isOnAir = true;
+      }
+    },
+  },
 }
 </script>
 
@@ -26,7 +48,7 @@ export default {
 }
 
 #faffy {
-  font-family: SUIT-Medium, Avenir, Helvetica, Arial, sans-serif;
+  font-family: SUIT-Medium, sans-serif, Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: calc(100vw - (100vw - 100%));
