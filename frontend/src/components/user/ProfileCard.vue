@@ -5,7 +5,7 @@
 <template>
   <div id="profileCard">
     <!-- 유저 프로필 정보 -->
-    <div id="profile">
+    <div id="profile" class="ml-7">
       <!-- 프로필 이미지 -->
       <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
         <img
@@ -15,7 +15,7 @@
       </v-avatar>
 
       <!-- 별명 -->
-      <div id="name" class="text-h6 mb-2">
+      <div id="name" class="text-h6 ml-8 mb-2">
         {{ userProfile.nickname }}
 
         <!-- 정보 수정 버튼

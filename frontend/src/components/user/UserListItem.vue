@@ -1,11 +1,11 @@
 <template v-slot:default>
   <v-list style="padding: 0">
-    <v-list-item :key="user.nickname" v-on:click="toDetail()">
+    <v-list-item :ripple="false" :key="user.nickname">
       <template v-slot:default>
         <profile-img-avatar :user_no="user.no" />
 
         <v-list-item-content id="itemContent">
-          <div id="item">
+          <div id="item" v-on:click="toDetail()">
             <v-list-item-title
               class="mb-1"
               v-html="user.nickname"
@@ -20,7 +20,7 @@
               <v-icon> mdi-heart </v-icon>
             </v-btn>
           </div> -->
-          <follow-button :user_no="user.no"/>
+          <follow-button class="mt-2" :user_no="user.no"/>
           <!--<dark-button class="mb-2" :btnValue="followValue" />-->
         </v-list-item-content>
       </template>
@@ -72,7 +72,4 @@ export default {
   width: 500px !important;
 }
 
-button:before {
-  background-color: transparent;
-}
 </style>

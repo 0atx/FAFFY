@@ -374,7 +374,9 @@ export default {
     };
 	},
 
-	mounted() {},
+	mounted() {
+    window.scrollTo(0, 0);
+  },
 
 	methods: {},
 };
@@ -494,7 +496,7 @@ a {
   height: 80px;
   display: flex;
   padding: 0;
-  justify-content: start;
+  justify-content: flex-start;
   pointer-events: none;
   font-size:15px;
 }
