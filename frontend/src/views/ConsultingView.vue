@@ -48,7 +48,15 @@
 				</div>
 				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub"
 					@click.native="updateMainVideoStreamManager(sub)" />
+				<div id="chat">
+					메세지 : <input v-model="message" type="text">
+					<input type="button" @click="send" value="보내기">
+					<div v-for="(item, idx) in recvList" :key="idx">
+						<p>{{ item.userName }} : {{ item.content }}</p>
+					</div>
+				</div>
 			</div>
+
 		</div>
 	</div>
 </template>
@@ -57,6 +65,7 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '../components/video/UserVideo';
+// import Chat from '@/components/chat/Chat';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -69,6 +78,7 @@ export default {
 
 	components: {
 		UserVideo,
+		// Chat
 	},
 
 	data() {
@@ -88,10 +98,30 @@ export default {
 			screenOV: undefined,
 			screenSession: undefined,
 			screenShareName: undefined,
+
+			message: "",
+			recvList: []
 		}
 	},
-
 	methods: {
+		send() {
+			this.session.signal({
+				data: JSON.stringify({
+					message: this.message,  // Any string (optional)
+					userName: this.myUserName,
+				}),
+				to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+				type: 'my-chat'             // The type of message (optional)
+			})
+				.then(() => {
+					console.log('Message successfully sent');
+					this.message = "";
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+
 		// 세션(화상회의) 시작
 		joinSession() {
 			// openVidu 객체 생성
@@ -120,12 +150,24 @@ export default {
 			this.session.on('exception', ({ exception }) => {
 				console.warn(exception);
 			});
-
+			// 채팅 수신
+			this.session.on('signal', (event) => {
+				event = JSON.parse(event.data);
+				console.log(event.data); // Message
+				// console.log(event.from); // Connection object of the sender
+				// console.log(event.type); // The type of message
+				const msg = {
+					userName: event.userName,
+					content: event.message,
+				}
+				this.recvList.push(msg)
+			});
 			// 유효한 유저 토큰으로 세션에 연결
 
 			// 'getToken' 은 서버측에서 수행해야할 작업을 시뮬레이션
 			// 'token' 매개 변수는 사백엔드에서 검색하여 반환해야 함
 			this.getToken(this.mySessionId).then(token => {
+
 				this.session.connect(token, { clientData: this.myUserName })
 					.then(() => {
 
@@ -153,7 +195,6 @@ export default {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
-
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
 		// CAM On / Off
