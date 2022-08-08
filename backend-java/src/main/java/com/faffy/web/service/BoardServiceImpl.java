@@ -13,12 +13,11 @@ import com.faffy.web.jpa.repository.BoardRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.service.file.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +55,7 @@ public class BoardServiceImpl implements BoardService {
             throw new Exception();
         }
 
+        boardRepository.save(b);
         MultipartFile file = boardDto.getFile();
         if(file != null){ //선택한 파일이 있는 경우
             System.out.println("===There are uploaded files===");
@@ -66,7 +66,6 @@ public class BoardServiceImpl implements BoardService {
                 e.printStackTrace();
             }
 
-            boardRepository.save(b);
             uploadFileRepository.save(uf);
             BoardFile bf = BoardFile.builder()
                     .board(b)
@@ -178,6 +177,16 @@ public class BoardServiceImpl implements BoardService {
             result.add(b.toBoardGetDto());
         }
         return result;
+    }
+
+    @Override
+    public List<Integer> getBoardsImageNoByDate(Pageable pageable) {
+        List<BoardFile> boardFiles = boardFileRepository.findAllOrderByDateWithImage(pageable);
+        List<Integer> res = new ArrayList<>();
+        for(BoardFile bf : boardFiles){
+            res.add(bf.getFile().getNo());
+        }
+        return res;
     }
 
 }

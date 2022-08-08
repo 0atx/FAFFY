@@ -1,12 +1,12 @@
 package com.faffy.web.jpa.repository;
 
 import com.faffy.web.jpa.entity.Board;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +21,6 @@ public interface BoardRepository extends JpaRepository<Board,Integer> {
     @Query("select b from Board b order by b.datetime desc")
     List<Board> findAllOrderByDate(Pageable pageable);
 
-    @Query("select b from Board b order by b.hit desc")
+    @Query("select b from Board b order by b.hit desc, b.datetime desc")
     List<Board> findAllOrderByHit(Pageable pageable);
 }
