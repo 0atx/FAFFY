@@ -12,7 +12,7 @@
         <p class="text-h6" style="font-weight: 600">정보</p>
         <hr />
         <div id="info">
-          {{ userProfile.info }}
+          {{ userProfile.introduce }}
         </div>
       </div>
       <div id="content">
@@ -92,7 +92,7 @@ export default {
   text-align: left;
   height: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
   cursor: default;
 }

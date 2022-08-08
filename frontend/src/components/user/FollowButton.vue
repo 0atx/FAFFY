@@ -5,6 +5,7 @@
     elevation="0"
     icon
     small
+    :ripple="false"
     :color="follow ? '#ff7451' : 'gray'"
     @click="toggleFollow"
   >
