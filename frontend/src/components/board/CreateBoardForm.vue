@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
@@ -57,18 +57,21 @@ export default {
         title: this.board.title,
         content: this.board.content,
         category: '',
-        img: this.board.img
+        img: this.currentImage
       }
     }
   },
   computed: {
+    ...mapGetters(['currentImage']),
     boardCategory() {
       if (this.boardForm.category === '자유') {
         return 'Free'
       } else if (this.boardForm.category === '질문') {
         return 'QnA'
-      } else {
+      } else if (this.boardForm.category === '후기') {
         return 'Info'
+      } else {
+        return ''
       }
     },
   },
@@ -111,7 +114,7 @@ export default {
     moveToDetail() {
       this.$router.push({ name: 'board-detail', params: { boardNo: this.$route.params.boardNo }})
     }
-  }
+  },
 }
 </script>
 
