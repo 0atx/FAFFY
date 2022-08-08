@@ -11,6 +11,7 @@
     <p>카테고리: {{ currentBoard.category }}</p>
     <p>조회수: {{ currentBoard.hit }}</p>
     <p>내용: {{ currentBoard.content }}</p>
+    <p v-if="currentImage">이미지: <img :src="currentImage" alt=""></p>
   </v-container>
 </template>
 
@@ -26,11 +27,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(boardStore, ['currentBoard']),
+    ...mapGetters(boardStore, ['currentBoard', 'currentImage']),
   },
-  created() {
-    console.log('해위', this.currentBoard.content)
-  }
 }
 </script>
 

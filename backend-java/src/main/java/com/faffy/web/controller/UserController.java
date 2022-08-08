@@ -249,6 +249,7 @@ public class UserController {
         HttpStatus status = HttpStatus.OK;
 
         try {
+            deleteUserProfileImg(no);
             userService.deleteUser(no);
             resultMap.put("content", no);
         } catch (Exception e) {
