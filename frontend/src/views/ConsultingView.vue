@@ -229,6 +229,8 @@ export default {
 			this.OV = undefined;
 
 			window.removeEventListener('beforeunload', this.leaveSession);
+
+      this.$router.push({name:"main"});
 		},
 		updateMainVideoStreamManager(stream) {
 			if (this.mainStreamManager === stream) return;
