@@ -16,7 +16,6 @@
 
 <script>
 import OvVideo from './OvVideo';
-
 export default {
 	name: 'UserVideo',
 
@@ -51,7 +50,39 @@ export default {
 			var context = canvas.getContext("2d");
 
 			context.drawImage(video, 0, 0, 320, 240);
+      console.log("캡쳐 완료");
+
+      const imgBase64 = canvas.toDataURL('image/jpeg','multipart/form-data');
+			const decodImg = atob(imgBase64.split(',')[1]);
+
+
+			let array = [];
+			for (let i = 0; i < decodImg.length; i++) {
+				array.push(decodImg.charCodeAt(i));
+			}
+
+			const file = new Blob([ new Uint8Array(array) ], {
+				type : 'image/jpeg'
+			});
+			const fileName = 'web_snapshot_'+Date.now()+'.jpg';
+			let formData = new FormData();
+			formData.append('file', file, fileName);
+
+      // $.ajax({
+			// 	type : 'post',
+			// 	url : '../upload',
+			// 	cache : false,
+			// 	data : formData,
+			// 	processData : false,
+			// 	contentType : false,
+			// 	success : function(data) {
+			// 		alert('Uploaded !!');
+			// 	}
+			// });
+
       console.log("#######################");
+
+
     }
 	},
 };
