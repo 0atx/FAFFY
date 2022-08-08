@@ -112,8 +112,9 @@ export default {
       }
     },
     moveToDetail() {
+      if (confirm('작업 중인 내용을 중단하고 글로 돌아가시겠습니까?')) {
       this.$router.push({ name: 'board-detail', params: { boardNo: this.$route.params.boardNo }})
-    }
+    }}
   },
 }
 </script>
