@@ -1,12 +1,10 @@
 package com.faffy.web.jpa.entity;
 
+import com.faffy.web.jpa.type.FollowMapper;
 import lombok.Data;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -18,15 +16,19 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Table(name = "follow_mapping")
-public class FollowMapping extends BaseEntity {
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="follow_user_no")
-    private User followUser;
-    @ManyToOne(fetch = LAZY) @JoinColumn(name="followed_user_no")
-    private User followedUser;
+public class FollowMapping  {
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name="follow_user_no")
+//    private User followUser;
+//    @ManyToOne(fetch = LAZY) @JoinColumn(name="followed_user_no")
+//    private User followedUser;
+    @EmbeddedId
+    private FollowMapper followMapper;
 
     public void setMapping(User from, User to) {
-        followUser = from;
-        followedUser = to;
+        followMapper = FollowMapper.builder()
+                .from(from)
+                .to(to)
+                .build();
     }
 }

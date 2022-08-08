@@ -13,7 +13,6 @@
         label="이메일"
         required
         color="#0c0f66"
-        @keydown.enter="onInputKeyword"
       />
 
       <!-- 비밀번호 입력 -->
@@ -25,7 +24,6 @@
         required
         color="#0c0f66"
         @click:append="type = !type"
-        @keydown.enter="onInputKeyword"
       />
 
       <dark-button :btnValue="signInValue" @click="requestSignIn" />
@@ -60,7 +58,6 @@
                   label="이메일"
                   required
                   color="#0c0f66"
-                  @keydown.enter="onInputKeyword"
                 />
 
                 <!-- 이름 입력 -->
@@ -70,7 +67,6 @@
                   label="이름"
                   required
                   color="#0c0f66"
-                  @keydown.enter="onInputKeyword"
                 />
 
                 <dark-button class="mt-4" :btnValue="findValue" @click="findPassword" />
@@ -116,7 +112,7 @@
 
 <script>
 import DarkButton from "@/components/common/DarkButton.vue";
-import { mapMutations } from "vuex";
+import { mapState, mapMutations,mapActions } from "vuex";
 import { auth } from "@/api/auth.js";
 const authStore = "authStore";
 
@@ -145,13 +141,16 @@ export default {
       findValue: "비밀번호 찾기",
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(authStore,["isLogin","loginUser"]),
+  },
   methods: {
     ...mapMutations(authStore, [
       "SET_IS_LOGIN",
       "SET_USER_INFO",
-      "SET_IS_LOGIN_ERROR",
+      "SET_FOLLOWING_LIST"
     ]),
+    ...mapActions(authStore,["loadFollowing"]),
     async save() {
       this.$refs.form.validate();
       await this.$nextTick();
@@ -170,7 +169,7 @@ export default {
       this.dialog = false;
     },
     async requestSignIn() {
-      auth.login(
+      await auth.login(
         this.form,
         (response) => {
           console.log("로그인 성공");
@@ -180,15 +179,18 @@ export default {
           const accessToken = response.data.content["token"];
           sessionStorage.setItem("X-AUTH-TOKEN", accessToken);
 
-          const user = response.data.content["user"];
-          this.SET_USER_INFO(user);
-
+          const loginUser = response.data.content["user"];
+          this.SET_USER_INFO(loginUser);
           this.$router.push({ name: "main" });
         },
         () => {
           alert("로그인 실패. 나중에 바꿔야함");
         }
       );
+      if (!this.isLogin)
+        return;
+
+      await this.loadFollowing();
     },
   },
   metaInfo() {
