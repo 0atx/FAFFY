@@ -16,7 +16,7 @@
             게시판
           </v-list-item-title>
           <v-list-item-subtitle>
-            subtext
+            <!-- subtext -->
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -34,7 +34,7 @@
           @click="boardType(item.title)"
         >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="#0c0f66">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>

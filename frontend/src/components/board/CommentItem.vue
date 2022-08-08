@@ -4,48 +4,50 @@
   최종 수정일: 2022.08.05
 -->
 <template>
-  <v-container fluid>
+  <v-container fluid class="pa-1 border border-primary rounded-4">
     <v-card
       outlined
       class="mx-auto text-left"
     >
     <!-- 댓글 내용 -->
       <v-card-text>
-        <div>{{ comment.writer.nickname }}</div>
+        <div class="d-flex justify-space-between">
+          <span class="text-h6 text--primary" style="cursor:pointer" @click="moveProfile(comment.writer.no)">
+            <v-avatar rounded><img src="" alt=""></v-avatar>{{ comment.writer.nickname }}
+          </span>
+          <span>{{ comment.datetime.slice(0,4)+'년 '+comment.datetime.slice(5, 7)+'월 '+comment.datetime.slice(8, 10)+'일' }}</span>
+        </div>
+        <hr inset>
         <div class="text--primary">
           {{ comment.content}}
         </div>
       </v-card-text>
-    <!-- 수정, 삭제 버튼 -->
+    <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
       <v-card-actions>
-        <v-btn
-          text
-          color="deep-purple accent-2"
-        >
-          수정
-        </v-btn>
         <v-btn
           text
           color="error accent-2"
           @click="requestDeleteComment(comment.no)"
-        >
+          :disabled="comment.writer.nickname !== checkUserInfo.nickname">
           삭제
         </v-btn>
-        <p>작성일: {{ comment.datetime }}</p>
-        <p>정보: {{ comment }}</p>
       </v-card-actions>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 const boardStore = "boardStore"
+const authStore = "authStore"
 
 export default {
   name: 'CommentItem',
   props: {
     comment: Object,
+  },
+  computed: {
+    ...mapGetters(authStore, ['checkUserInfo']),
   },
   methods: {
     ...mapActions(boardStore, ['deleteComment']),
@@ -54,11 +56,14 @@ export default {
         console.log(`${commentNo}번 댓글을 삭제합니다.`)
         this.deleteComment(commentNo)
       }
+    },
+    moveProfile(userNo) {
+      console.log(userNo)
+      this.$router.push({ name: 'profile', params: { no: userNo }})
     }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
 </style>
