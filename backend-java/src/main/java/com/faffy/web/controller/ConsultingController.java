@@ -1,5 +1,7 @@
 package com.faffy.web.controller;
 
+import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.service.ConsultingService;
 import com.faffy.web.service.UserService;
@@ -42,5 +44,16 @@ public class ConsultingController {
         } catch (IllegalInputException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ApiOperation(value="새로운 방송 정보 생성", notes="해당 유저를 consultant로 하여 새로운 방송 정보 db에 생성")
+    @PostMapping("")
+    public ResponseEntity createConsulting(@RequestBody ConsultingCreateDto consultingCreateDto,
+                                                             @RequestParam int no) { //파라미터를 Token 정보로 바꿔야 함.
+        ConsultingGetDto dto = consultingService.createConsulting(consultingCreateDto, no);
+        if(dto == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

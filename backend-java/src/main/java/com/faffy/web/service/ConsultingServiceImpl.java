@@ -1,21 +1,20 @@
 package com.faffy.web.service;
 
+import com.faffy.web.dto.ConsultingCreateDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
 import com.faffy.web.exception.IllegalInputException;
-import com.faffy.web.jpa.entity.Consulting;
-import com.faffy.web.jpa.entity.UploadFile;
-import com.faffy.web.jpa.repository.ConsultingRepository;
-import com.faffy.web.jpa.repository.UploadFileRepository;
+import com.faffy.web.jpa.entity.*;
+import com.faffy.web.jpa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,6 +23,12 @@ public class ConsultingServiceImpl implements ConsultingService{
     ConsultingRepository consultingRepository;
     @Autowired
     UploadFileRepository uploadFileRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    FashionCategoryRepository fashionCategoryRepository;
+    @Autowired
+    ConsultingCategoryRepository consultingCategoryRepository;
 
     private String getDuration(String startTime, String endTime){
         System.out.println("startTime:"+startTime);
@@ -83,5 +88,33 @@ public class ConsultingServiceImpl implements ConsultingService{
             dtoList.add(c.toConsultingGetDto());
         }
         return dtoList;
+    }
+
+    @Override
+    @Transactional
+    public ConsultingGetDto createConsulting(ConsultingCreateDto dto, int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        Consulting consulting = Consulting.builder()
+                .consultant(user)
+                .title(dto.getTitle())
+                .intro(dto.getIntroduce())
+                .roomSize(dto.getRoomSize())
+                .startTime(LocalDateTime.now())
+                .build();
+
+        consultingRepository.save(consulting);
+        for(String c : dto.getCategories()){
+            FashionCategory fashionCategory = fashionCategoryRepository.findByName(c).orElse(null);
+            if(fashionCategory == null) //저장되지 않은 카테고리면 설정하지 않음
+                continue;
+
+            ConsultingCategory cc = ConsultingCategory.builder().category(fashionCategory).consulting(consulting).build();
+            consultingCategoryRepository.save(cc);
+        }
+//        return consulting.toConsultingGetDto();
+        return ConsultingGetDto.builder().build(); // 성공시 빈 객체 반환
     }
 }

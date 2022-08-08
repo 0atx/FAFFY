@@ -36,28 +36,28 @@ public class MainController {
     public static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     @ApiOperation(value="메인 화면에서 최신순으로 게시물 불러오기", notes="최신순으로 게시물을 (5개) 반환한다.")
-    @PostMapping("/board/date")
+    @GetMapping("/board/date")
     public ResponseEntity<List<BoardGetDto>> getBoardsByDate() {
         List<BoardGetDto> res = boardService.getBoardsByDate(PageRequest.of(0, 5));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @ApiOperation(value="메인 화면에서 조회순으로 게시물 불러오기", notes="조회순으로 게시물을 (5개) 반환한다.")
-    @PostMapping("/board/hit")
+    @GetMapping("/board/hit")
     public ResponseEntity<List<BoardGetDto>> getBoardsByHit() {
         List<BoardGetDto> res = boardService.getBoardsByHit(PageRequest.of(0, 5));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @ApiOperation(value="메인 화면에서 최신순으로 게시물 이미지 불러오기", notes="최신순으로 게시물의 첨부 이미지를 (4개) 반환한다.")
-    @PostMapping("/board/image")
+    @GetMapping("/board/image")
     public ResponseEntity<List<Integer>> getBoardsImageNoByDate() {
         List<Integer> res = boardService.getBoardsImageNoByDate(PageRequest.of(0, 4));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @ApiOperation(value="메인 화면에서 진행 중인 방송 불러오기", notes="참여자 수가 높은 순으로 방송정보를 (4개) 반환한다.")
-    @PostMapping("/consulting/hit")
+    @GetMapping("/consulting/hit")
     public ResponseEntity<List<ConsultingGetDto>> getConsultingsByViewCount() {
         List<ConsultingGetDto> res = consultingService.getConsultingsByViewCount(PageRequest.of(0, 4));
         return new ResponseEntity<>(res, HttpStatus.OK);
