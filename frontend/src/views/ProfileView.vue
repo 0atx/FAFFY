@@ -32,7 +32,7 @@ export default {
     ...mapState(profileStore, ["userProfile", "followerList", "followingList"]),
   },
   mounted() {
-    this.loadProfile();
+      this.loadProfile();
   },
   watch: {
     $route() {
@@ -46,13 +46,13 @@ export default {
     ...mapMutations(profileStore, ["SET_USER_PROFILE"]),
     loadProfile() {
       this.loadUserInfo();
-      this.loadFollower(this.userProfile.no);
-      this.loadFollowing(this.userProfile.no);
+      this.loadFollower(this.$route.params.no);
+      this.loadFollowing(this.$route.params.no);
     },
     async loadUserInfo() {
       const requestUserNo = this.$route.params.no;
 
-      console.log("유저 정보 요청하기");
+      console.log(requestUserNo+"번 유저 정보 요청하기");
       user.getUserProfile(
         requestUserNo,
         (response) => {

@@ -74,10 +74,10 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     List<UserCategory> categories = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "followUser")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "followMapper.followUser")
     @JsonIgnore
     List<FollowMapping> followMappings = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "followedUser")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY, mappedBy = "followMapper.followedUser")
     @JsonIgnore
     List<FollowMapping> followedMappings = new ArrayList<>();
 

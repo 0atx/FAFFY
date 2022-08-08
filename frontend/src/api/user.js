@@ -25,5 +25,18 @@ const follow = {
   getFollowingList: async function (user_no, success, fail) {
     await api.get(`/follow/following/${user_no}`).then(success).catch(fail);
   },
+  follow:async function(followMapping,success,fail) {
+    await api
+    .post(`/follow`,JSON.stringify(followMapping),null)
+    .then(success)
+    .catch(fail);
+  },
+  followCancel:async function(followMapping,success,fail) {
+    console.log(followMapping)
+    await api
+    .delete(`/follow`,{data:followMapping})
+    .then(success)
+    .catch(fail);
+  }
 };
 export { user, follow };

@@ -21,11 +21,11 @@ public class FollowServiceImpl implements FollowService{
     @Override
     public List<UserGetDetailDto> getFollowing(int user_no) throws Exception {
         User user = userService.getUserByNo(user_no);
-        List<FollowMapping> following = followMappingRepository.findFollowMappingsByFollowUser(user);
+        List<FollowMapping> following = followMappingRepository.getFollowMappingsByFollowUser(user);
 
         List<UserGetDetailDto> result = new ArrayList<>();
         for (FollowMapping follow : following)
-            result.add(follow.getFollowedUser().toDetailDto());
+            result.add(follow.getFollowMapper().getFollowedUser().toDetailDto());
 
         return result;
     }
@@ -33,10 +33,10 @@ public class FollowServiceImpl implements FollowService{
     @Override
     public List<UserGetDetailDto> getUserFollower(int user_no) throws Exception {
         User user = userService.getUserByNo(user_no);
-        List<FollowMapping> follower = followMappingRepository.findFollowMappingsByFollowedUser(user);
+        List<FollowMapping> follower = followMappingRepository.getFollowMappingsByFollowedUser(user);
         List<UserGetDetailDto> result = new ArrayList<>();
         for (FollowMapping follow : follower)
-            result.add(follow.getFollowUser().toDetailDto());
+            result.add(follow.getFollowMapper().getFollowUser().toDetailDto());
         return result;
     }
 
@@ -54,7 +54,7 @@ public class FollowServiceImpl implements FollowService{
     public String followCancel(int from_no, int to_no) throws Exception {
         User from = userService.getUserByNo(from_no);
         User to = userService.getUserByNo(to_no);
-        FollowMapping mapping = followMappingRepository.findByFollowUserAndFollowedUser(from,to).orElseThrow(
+        FollowMapping mapping = followMappingRepository.getByFollowUserAndFollowedUser(from,to).orElseThrow(
                 ()->new IllegalArgumentException(USER_NOT_FOUND_MSG));
         followMappingRepository.delete(mapping);
         return to.getNickname();
