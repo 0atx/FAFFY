@@ -13,7 +13,7 @@
       <v-card-text>
         <div class="d-flex justify-space-between">
           <span class="text-h6 text--primary" style="cursor:pointer" @click="moveProfile(comment.writer.no)">
-            <v-avatar rounded><img src="" alt=""></v-avatar>{{ comment.writer.nickname }}
+            {{ comment.writer.nickname }}
           </span>
           <span>{{ comment.datetime.slice(0,4)+'년 '+comment.datetime.slice(5, 7)+'월 '+comment.datetime.slice(8, 10)+'일' }}</span>
         </div>
