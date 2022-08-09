@@ -1,5 +1,5 @@
 <template>
-	<video autoplay/>
+	<video autoplay style="width: 98%; max-width: 540px; border-radius: 5px;" />
 </template>
 
 <script>
@@ -15,3 +15,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+.host-user {
+  border: 4px solid #ff7451;
+}
+</style>

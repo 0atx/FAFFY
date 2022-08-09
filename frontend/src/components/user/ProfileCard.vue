@@ -30,6 +30,7 @@
           icon
           small
           color="gray"
+          :ripple="false"
           to="/edit-profile"
         >
           <v-icon> mdi-pencil </v-icon>
