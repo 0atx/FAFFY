@@ -20,11 +20,11 @@ public interface ConsultingService {
 
     List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable);
 
-    ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto, int no);
+    ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto);
 
     void createLog(int consulting_no, int user_no) throws IllegalInputException;
 
     void upViewCount(int no) throws IllegalInputException;
-    String uploadSnapshot(ConsultingSnapshotUploadDto file) throws Exception;
+    int uploadSnapshot(ConsultingSnapshotUploadDto file) throws Exception;
 
 }
