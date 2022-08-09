@@ -268,6 +268,10 @@ export default {
       this.$router.push({ name: "main" });
     }
     this.form = { ...this.loginUser };
+    console.log(this.form);
+    if (this.form.categories == undefined)
+      this.form.categories = [];
+
     this.url = `${API_BASE_URL}/users/profile/image/` + this.loginUser.no;
     // 카테고리 목록 불러오기
     category.getCategories(
@@ -317,10 +321,13 @@ export default {
       formData.append("instaLink", this.form.instaLink);
       formData.append("facebookLink", this.form.facebookLink);
       formData.append("youtubeLink", this.form.youtubeLink);
+      console.log(this.form.categories);
       if (this.form.categories != undefined)
       formData.append("categories", this.form.categories);
-      else
+      else {
+        console.log("unidentifed!");
       formData.append("categories", []);
+      }
 
       auth.updateProfile(
         formData,
