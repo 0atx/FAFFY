@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -55,5 +56,20 @@ public class ConsultingController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value="방송 입장 시 로그 생성", notes="방송 입장 시에 로그 정보 기록, 시청자 수 증가시키기")
+    @PostMapping("/log")
+    public ResponseEntity createConsultingLog(int consulting_no, int user_no) {
+        try {
+            consultingService.createLog(consulting_no, user_no);
+            consultingService.upViewCount(consulting_no);
+        } catch(Exception e){
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("msg", "유효하지 않은 방송 또는 유저입니다.");
+            return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
