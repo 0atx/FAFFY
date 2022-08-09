@@ -37,7 +37,6 @@ export default {
 <style scoped>
 #view {
   background-color: white;
-  height:100vh;
   padding: 2% 2%;
   text-align: left;
 }
