@@ -20,6 +20,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.io.File;
 import java.nio.file.Files;
@@ -60,9 +61,8 @@ public class ConsultingController {
 
     @ApiOperation(value="새로운 방송 정보 생성", notes="해당 유저를 consultant로 하여 새로운 방송 정보 db에 생성")
     @PostMapping("")
-    public ResponseEntity createConsulting(@RequestBody ConsultingCreateDto consultingCreateDto,
-                                                             @RequestParam int no) { //파라미터를 Token 정보로 바꿔야 함.
-        ConsultingGetDto dto = consultingService.createConsulting(consultingCreateDto, no);
+    public ResponseEntity createConsulting(@RequestBody @Valid ConsultingCreateDto consultingCreateDto) { //파라미터를 Token 정보로 바꿔야 함.
+        ConsultingGetDto dto = consultingService.createConsulting(consultingCreateDto);
         if (dto == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -105,7 +105,6 @@ public class ConsultingController {
             status = HttpStatus.OK;
         } catch (Exception e) {
             System.out.println("error:"+e.getMessage());
-            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity(status);

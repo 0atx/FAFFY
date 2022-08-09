@@ -1,5 +1,6 @@
 package com.faffy.web.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -18,4 +19,11 @@ public class ConsultingFile extends BaseEntity {
     private Consulting consulting;
     @ManyToOne(fetch = LAZY) @JoinColumn(name = "file_no")
     private UploadFile file;
+
+    public ConsultingFile() {}
+    @Builder
+    public ConsultingFile(Consulting consulting,UploadFile file) {
+        this.consulting = consulting;
+        this.file = file;
+    }
 }
