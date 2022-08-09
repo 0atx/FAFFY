@@ -63,10 +63,23 @@ public class ConsultingController {
     public ResponseEntity createConsultingLog(int consulting_no, int user_no) {
         try {
             consultingService.createLog(consulting_no, user_no);
-            consultingService.upViewCount(consulting_no);
         } catch(Exception e){
             HashMap<String, Object> result = new HashMap<>();
             result.put("msg", "유효하지 않은 방송 또는 유저입니다.");
+            return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @ApiOperation(value="현재 방의 시청자 수를 재설정", notes="")
+    @PostMapping("/viewCount")
+    public ResponseEntity setConsultingViewCount(int consulting_no, int count) {
+        try {
+            consultingService.setViewCount(consulting_no, count);
+        } catch(Exception e){
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("msg", "유효하지 않은 방송입니다.");
             return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
         }
 
