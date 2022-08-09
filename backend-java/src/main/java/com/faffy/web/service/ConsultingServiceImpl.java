@@ -44,25 +44,28 @@ public class ConsultingServiceImpl implements ConsultingService {
     @Autowired
     ConsultingLogRepository consultingLogRepository;
     @Autowired
+    ConsultingFileRepository consultingFileRepository;
+    @Autowired
     FileHandler fileHandler;
 
-    private String getDuration(String startTime, String endTime){
-        System.out.println("startTime:"+startTime);
-        System.out.println("endTime:"+endTime);
-        String[] sTime = startTime.substring(0, startTime.length()-2).split(":");
-        String[] eTime = endTime.substring(0, startTime.length()-2).split(":");
-        int stotal = 60*60*Integer.parseInt(sTime[0]) + 60*Integer.parseInt(sTime[1]) + Integer.parseInt(sTime[2]);
-        int etotal = 60*60*Integer.parseInt(eTime[0]) + 60*Integer.parseInt(eTime[1]) + Integer.parseInt(eTime[2]);
+
+    private String getDuration(String startTime, String endTime) {
+        System.out.println("startTime:" + startTime);
+        System.out.println("endTime:" + endTime);
+        String[] sTime = startTime.substring(0, startTime.length() - 2).split(":");
+        String[] eTime = endTime.substring(0, startTime.length() - 2).split(":");
+        int stotal = 60 * 60 * Integer.parseInt(sTime[0]) + 60 * Integer.parseInt(sTime[1]) + Integer.parseInt(sTime[2]);
+        int etotal = 60 * 60 * Integer.parseInt(eTime[0]) + 60 * Integer.parseInt(eTime[1]) + Integer.parseInt(eTime[2]);
         int dur = etotal - stotal;
 
-        int hour = dur/3600, minute = (dur%3600)/60, second = dur%60;
+        int hour = dur / 3600, minute = (dur % 3600) / 60, second = dur % 60;
         return hour + ":" + minute + ":" + second;
     }
 
     @Override
     public HistoryConsultingDto getHistoryConsulting(int no) throws IllegalInputException {
         Consulting consulting = consultingRepository.findById(no).orElse(null);
-        if(consulting == null)
+        if (consulting == null)
             throw new IllegalInputException();
 
         Timestamp startTimestamp = Timestamp.valueOf(consulting.getStartTime());
@@ -87,9 +90,9 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Override
-    public File getSnapshot(int no) throws IllegalInputException{
+    public File getSnapshot(int no) throws IllegalInputException {
         UploadFile uf = uploadFileRepository.findById(no).orElse(null);
-        if(uf == null)
+        if (uf == null)
             throw new IllegalInputException();
 
         String filename = uf.getUploadPath() + File.separator + uf.getUuid() + "_" + uf.getFileName();
@@ -100,7 +103,7 @@ public class ConsultingServiceImpl implements ConsultingService {
     public List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable) {
         List<Consulting> consultings = consultingRepository.findAllOrderByViewCount(pageable);
         List<ConsultingGetDto> dtoList = new ArrayList<>();
-        for(Consulting c : consultings){
+        for (Consulting c : consultings) {
             dtoList.add(c.toConsultingGetDto());
         }
         return dtoList;
@@ -108,23 +111,23 @@ public class ConsultingServiceImpl implements ConsultingService {
 
     @Override
     @Transactional
-    public ConsultingGetDto createConsulting(ConsultingCreateDto dto, int no) {
-        User user = userRepository.findByNo(no).orElse(null);
-        if(user == null)
+    public ConsultingGetDto createConsulting(ConsultingCreateDto dto) {
+        User user = userRepository.findByNo(dto.getConsultant_no()).orElse(null);
+        if (user == null)
             return null;
 
         Consulting consulting = Consulting.builder()
                 .consultant(user)
                 .title(dto.getTitle())
-                .intro(dto.getIntroduce())
+                .intro(dto.getIntro())
                 .roomSize(dto.getRoomSize())
                 .startTime(LocalDateTime.now())
                 .build();
 
         consultingRepository.save(consulting);
-        for(String c : dto.getCategories()){
+        for (String c : dto.getCategories()) {
             FashionCategory fashionCategory = fashionCategoryRepository.findByName(c).orElse(null);
-            if(fashionCategory == null) //저장되지 않은 카테고리면 설정하지 않음
+            if (fashionCategory == null) //저장되지 않은 카테고리면 설정하지 않음
                 continue;
 
             ConsultingCategory cc = ConsultingCategory.builder().category(fashionCategory).consulting(consulting).build();
@@ -135,10 +138,10 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Override
-    public void createLog(int consulting_no, int user_no) throws IllegalInputException{
+    public void createLog(int consulting_no, int user_no) throws IllegalInputException {
         Consulting consulting = consultingRepository.findById(consulting_no).orElse(null);
         User user = userRepository.findByNo(user_no).orElse(null);
-        if(consulting == null || user == null){
+        if (consulting == null || user == null) {
             throw new IllegalInputException();
         }
 
@@ -150,25 +153,29 @@ public class ConsultingServiceImpl implements ConsultingService {
     @Transactional
     public void upViewCount(int no) throws IllegalInputException {
         Consulting consulting = consultingRepository.findById(no).orElse(null);
-        if(consulting == null)
+        if (consulting == null)
             throw new IllegalInputException();
 
         consulting.increaseViewCount();
     }
-    public String uploadSnapshot(ConsultingSnapshotUploadDto dto) throws Exception {
-        Consulting consulting = consultingRepository.findById(dto.getConsulting_no()).orElseThrow(() -> new IllegalArgumentException(CONSULTING_NOT_FOUND_MSG));
-        // ConsultingFile 비영속 객체 생성
-        //
-        if(dto.getFile() != null){
-            System.out.println("===file is not Null===");
-            System.out.println(dto.getFile());
-            UploadFile img = fileHandler.parseFileInfo(dto.getFile(), FileType.SNAPSHOT);
-            if(img != null) {
-                uploadFileRepository.save(img);
-            }
-        }
 
-        return "ok";
+    @Transactional
+    public int uploadSnapshot(ConsultingSnapshotUploadDto dto) throws Exception {
+        Consulting consulting = consultingRepository.findById(dto.getConsulting_no()).orElseThrow(() -> new IllegalArgumentException(CONSULTING_NOT_FOUND_MSG));
+        UploadFile img = fileHandler.parseFileInfo(dto.getFile(), FileType.SNAPSHOT);
+
+        if (img == null)
+            throw new Exception("이미지 파싱 에러");
+
+        uploadFileRepository.save(img);
+
+        ConsultingFile consultingFile = ConsultingFile.builder()
+                .consulting(consulting)
+                .file(img)
+                .build();
+        consultingFileRepository.save(consultingFile);
+
+        return consultingFile.getNo();
     }
 
 }
