@@ -180,6 +180,11 @@ public class User extends BaseEntity implements UserDetails {
                 .build();
         return simpleDto;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
