@@ -1,21 +1,21 @@
 <template>
 <div v-if="streamManager" style="position:relative;">
-	<ov-video :stream-manager="streamManager"/>
-	<div class="nameTag"><p>{{ clientData }}</p>
-    <button @click="capture">캡쳐</button></div>
-    <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
-<!--
-<div v-if="streamManager">
 	<ov-video :stream-manager="streamManager" ref="ov_video"/>
-	<div><p>{{ clientData }}</p></div>
-  <button @click="capture">캡쳐</button>
-  <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/> -->
-
+    <div class="nameTag">
+      <p>{{ clientData }}</p>
+      <button @click="capture">캡쳐</button>
+    </div>
+    <div>
+    <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
+    <button @click="upload">전송</button>
+    </div>
 </div>
 </template>
 
 <script>
 import OvVideo from './OvVideo';
+import {consulting} from '@/api/consulting.js'
+
 export default {
 	name: 'UserVideo',
 
@@ -52,9 +52,16 @@ export default {
 			context.drawImage(video, 0, 0, 320, 240);
       console.log("캡쳐 완료");
 
+      console.log("#######################");
+
+
+    },
+    upload() {
+      console.log("#######################");
+
+      var canvas = document.getElementById("drawCanvas"+this.clientData);
       const imgBase64 = canvas.toDataURL('image/jpeg','multipart/form-data');
 			const decodImg = atob(imgBase64.split(',')[1]);
-
 
 			let array = [];
 			for (let i = 0; i < decodImg.length; i++) {
@@ -66,7 +73,21 @@ export default {
 			});
 			const fileName = 'web_snapshot_'+Date.now()+'.jpg';
 			let formData = new FormData();
+      const consulting_no = this.streamManager.session.sessionId;
 			formData.append('file', file, fileName);
+      formData.append('consulting_no',consulting_no);
+      console.log(formData);
+
+      consulting.uploadSnapshop(formData)
+      .then(response=> {
+        console.log(response);
+      })
+      .catch(response => {
+        console.log(response);
+      })
+
+      console.log("#######################");
+
 
       // $.ajax({
 			// 	type : 'post',
@@ -79,10 +100,6 @@ export default {
 			// 		alert('Uploaded !!');
 			// 	}
 			// });
-
-      console.log("#######################");
-
-
     }
 	},
 };
