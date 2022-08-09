@@ -19,5 +19,5 @@ public interface ConsultingService {
 
     void createLog(int consulting_no, int user_no) throws IllegalInputException;
 
-    void upViewCount(int no) throws IllegalInputException;
+    void setViewCount(int no, int cnt) throws IllegalInputException;
 }
