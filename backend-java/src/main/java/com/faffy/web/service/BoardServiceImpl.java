@@ -11,6 +11,7 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.BoardFileRepository;
 import com.faffy.web.jpa.repository.BoardRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
+import com.faffy.web.jpa.type.FileType;
 import com.faffy.web.service.file.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
             System.out.println("===There are uploaded files===");
             UploadFile uf = null;
             try {
-                uf = fileHandler.parseFileInfo(file, "board");
+                uf = fileHandler.parseFileInfo(file, FileType.BOARD_IMG);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -98,7 +99,7 @@ public class BoardServiceImpl implements BoardService {
             System.out.println("===There are uploaded files===");
             UploadFile uf = null;
             try {
-                uf = fileHandler.parseFileInfo(file, "board");
+                uf = fileHandler.parseFileInfo(file, FileType.BOARD_IMG);
             } catch (Exception e) {
                 e.printStackTrace();
             }

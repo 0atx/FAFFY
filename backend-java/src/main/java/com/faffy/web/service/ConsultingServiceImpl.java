@@ -1,21 +1,33 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingDto;
+import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
+import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.*;
 import com.faffy.web.jpa.repository.*;
+import com.faffy.web.jpa.entity.Consulting;
+import com.faffy.web.jpa.entity.UploadFile;
+import com.faffy.web.jpa.repository.ConsultingRepository;
+import com.faffy.web.jpa.repository.UploadFileRepository;
+import com.faffy.web.jpa.type.FileType;
+import com.faffy.web.service.file.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.faffy.web.exception.ExceptionMsg.CONSULTING_NOT_FOUND_MSG;
 
 @Service
 public class ConsultingServiceImpl implements ConsultingService {
@@ -31,6 +43,8 @@ public class ConsultingServiceImpl implements ConsultingService {
     ConsultingCategoryRepository consultingCategoryRepository;
     @Autowired
     ConsultingLogRepository consultingLogRepository;
+    @Autowired
+    FileHandler fileHandler;
 
     private String getDuration(String startTime, String endTime){
         System.out.println("startTime:"+startTime);
@@ -141,4 +155,20 @@ public class ConsultingServiceImpl implements ConsultingService {
 
         consulting.increaseViewCount();
     }
+    public String uploadSnapshot(ConsultingSnapshotUploadDto dto) throws Exception {
+        Consulting consulting = consultingRepository.findById(dto.getConsulting_no()).orElseThrow(() -> new IllegalArgumentException(CONSULTING_NOT_FOUND_MSG));
+        // ConsultingFile 비영속 객체 생성
+        //
+        if(dto.getFile() != null){
+            System.out.println("===file is not Null===");
+            System.out.println(dto.getFile());
+            UploadFile img = fileHandler.parseFileInfo(dto.getFile(), FileType.SNAPSHOT);
+            if(img != null) {
+                uploadFileRepository.save(img);
+            }
+        }
+
+        return "ok";
+    }
+
 }

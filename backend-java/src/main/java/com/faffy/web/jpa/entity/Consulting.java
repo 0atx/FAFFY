@@ -22,7 +22,7 @@ public class Consulting extends BaseEntity {
     @JoinColumn(name = "consultant_no")
     private User consultant;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String title;
     private int roomSize;
     private int viewCount;
