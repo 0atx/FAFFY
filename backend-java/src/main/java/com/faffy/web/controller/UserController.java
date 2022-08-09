@@ -6,13 +6,11 @@ import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.entity.UserCategory;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
-import com.faffy.web.service.ConsultingService;
-import com.faffy.web.service.UserCategoryService;
-import com.faffy.web.service.UserCategoryServiceImpl;
-import com.faffy.web.service.UserServiceImpl;
+import com.faffy.web.service.*;
 import com.faffy.web.service.token.JwtTokenProvider;
 import com.sun.net.httpserver.HttpsServer;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.File;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +43,9 @@ public class UserController {
     UserCategoryServiceImpl userCategoryService;
     @Autowired
     ConsultingService consultingService;
+    @Autowired
+    EmailService emailService;
+
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -150,6 +153,37 @@ public class UserController {
         } finally {
             return new ResponseEntity(resultMap, status);
         }
+    }
+
+    @ApiOperation(value="비밀번호 찾기",notes="해당 유저의 이메일로 임시 비밀번호를 전송합니다.")
+    @PutMapping("/findpwd")
+    public ResponseEntity<Map<String, Object>> findPwd(@RequestParam String email, @RequestParam String birthday) {
+        HttpStatus status = null;
+        Map<String, Object> resultMap = new HashMap<>();
+        String pwd = "";
+
+        LocalDate date = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        User user = userService.getUserByEmailBirthday(email, date);
+        if(user == null){
+            resultMap.put("msg", "해당 이메일, 생일과 일치하는 유저가 없습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            pwd = emailService.sendMsg(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("msg", "해당 이메일로의 비밀번호 전송에 실패하였습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+        if(userService.setUserPwdByUserEmail(email, pwd)) {
+            status = HttpStatus.OK;
+        } else {
+            resultMap.put("msg", "존재하지 않는 유저입니다.");
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
     }
 
     @ApiOperation(value="회원 프로필 정보 조회", notes="해당 유저의 프로필 사진을 제외한 프로필 정보를 반환합니다.")
