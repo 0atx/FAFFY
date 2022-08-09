@@ -24,7 +24,7 @@ public class FollowController {
     @Autowired
     FollowServiceImpl followService;
 
-    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(FollowController.class);
 
 
     @GetMapping("/following/{no}")

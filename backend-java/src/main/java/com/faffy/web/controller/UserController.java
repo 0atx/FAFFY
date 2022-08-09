@@ -47,7 +47,7 @@ public class UserController {
     EmailService emailService;
 
     private final JwtTokenProvider jwtTokenProvider;
-    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     /**
      * 모든 회원 정보 받아오기
@@ -243,7 +243,6 @@ public class UserController {
         logger.info("user dto : {}",userDto);
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
-        System.out.println("userDto:" + userDto);
 
         try {
             User user = userService.updateUser(userDto);
@@ -327,35 +326,35 @@ public class UserController {
         userService.logout(token);
     }
 
-    @PostMapping("/category")
-    public ResponseEntity addCategory(@RequestBody UserCategoryRequestDto userCategoryAddDto) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.OK;
-        try {
-            UserCategory category = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
-            resultMap.put("content", category.getUserCategoryMapper().getCategory());
-        } catch (Exception e) {
-            logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
-            resultMap.put("msg", e.getMessage());
-        } finally {
-            return new ResponseEntity(resultMap,status);
-        }
-    }
+//    @PostMapping("/category")
+//    public ResponseEntity addCategory(@RequestBody UserCategoryRequestDto userCategoryAddDto) {
+//        Map<String, Object> resultMap = new HashMap<>();
+//        HttpStatus status = HttpStatus.OK;
+//        try {
+//            UserCategory category = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
+//            resultMap.put("content", category.getUserCategoryMapper().getCategory());
+//        } catch (Exception e) {
+//            logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
+//            resultMap.put("msg", e.getMessage());
+//        } finally {
+//            return new ResponseEntity(resultMap,status);
+//        }
+//    }
 
-    @DeleteMapping("/category")
-    public ResponseEntity deleteCategory(@RequestBody UserCategoryRequestDto userCategoryRequestDto) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.OK;
-        try {
-            String result = userCategoryService.deleteUserCategory(userCategoryRequestDto.getUser_no(), userCategoryRequestDto.getCategory_name());
-            resultMap.put("content", result);
-        } catch (Exception e) {
-            logger.error("카테고리 삭제 에러 발생 : {}",e.getMessage());
-            resultMap.put("msg", e.getMessage());
-        } finally {
-            return new ResponseEntity(resultMap,status);
-        }
-    }
+//    @DeleteMapping("/category")
+//    public ResponseEntity deleteCategory(@RequestBody UserCategoryRequestDto userCategoryRequestDto) {
+//        Map<String, Object> resultMap = new HashMap<>();
+//        HttpStatus status = HttpStatus.OK;
+//        try {
+//            String result = userCategoryService.deleteUserCategory(userCategoryRequestDto.getUser_no(), userCategoryRequestDto.getCategory_name());
+//            resultMap.put("content", result);
+//        } catch (Exception e) {
+//            logger.error("카테고리 삭제 에러 발생 : {}",e.getMessage());
+//            resultMap.put("msg", e.getMessage());
+//        } finally {
+//            return new ResponseEntity(resultMap,status);
+//        }
+//    }
 
     @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 반환")
     @GetMapping("/profile/{no}/history/parti")
