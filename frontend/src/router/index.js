@@ -74,7 +74,7 @@ const routes = [
   {
     path: "/consulting/ready",
     name: "consulting-ready",
-    component: () => import("@/views/ConsultingReadyView.vue"),
+    component: () => import("@/views/ConsultingFormView.vue"),
   },
   {
     path: "/consulting/onair",
