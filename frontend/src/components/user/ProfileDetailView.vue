@@ -25,6 +25,7 @@
             icon
             small
             color="gray"
+            :ripple="false"
             :to="{ name: 'user-history' }"
           >
             <v-icon> mdi-plus </v-icon>
@@ -47,6 +48,7 @@
             icon
             small
             color="gray"
+            :ripple="false"
             :to="{ name: 'user-board' }"
           >
             <v-icon> mdi-plus </v-icon>

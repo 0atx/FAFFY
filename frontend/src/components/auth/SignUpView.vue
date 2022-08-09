@@ -119,11 +119,7 @@
           color="#0c0f66"
           :active-picker.sync="activePicker"
           locale="ko=KR"
-          :max="
-            new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-              .toISOString()
-              .substr(0, 10)
-          "
+          max="2001-01-01"
           min="1922-01-01"
           @change="save"
         ></v-date-picker>
@@ -301,28 +297,33 @@ export default {
       })
     },
     requestSignUp() {
-      console.log(
-        "모든 빈칸이 입력되어야함 + 이메일, 비밀번호 유효성 통과시 요청 전송해야함"
-      );
       const validate = this.$refs.form.validate();
 
-      if(!validate && this.checkEmailIcon && this.checkNicknameIcon) {
-        alert('회원가입 입력 형식을 맞춰주세요.')
-        return;
+      if(validate && this.checkEmailIcon && this.checkNicknameIcon) {
+        auth.signUp(
+          this.form,
+          (response) => {
+            console.log("요청 성공");
+            this.$dialog.message.info(`${response.data["content"].nickname}님, 환영합니다!`, {
+              position: "top",
+              timeout: 2000,
+              color: "#0c0f66",
+            });
+            this.$router.push("/");
+          },
+          (response) => {
+            console.log("요청 실패");
+            console.log(response);
+          }
+        );
+      } else {
+        this.$dialog.message.info('회원가입 입력 형식을 맞춰주세요.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
       }
 
-      auth.signUp(
-        this.form,
-        (response) => {
-          console.log("요청 성공");
-          alert(`${response.data["content"].nickname}님, 환영합니다!`);
-          this.$router.push("/");
-        },
-        (response) => {
-          console.log("요청 실패");
-          console.log(response);
-        }
-      );
     },
   },
   metaInfo() {
