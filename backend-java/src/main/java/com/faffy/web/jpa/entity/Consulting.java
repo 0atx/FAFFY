@@ -58,5 +58,9 @@ public class Consulting extends BaseEntity {
                 .profileImageNo(consultant.getProfileImage().getNo())
                 .build();
     }
+
+    public void setCategories(List<ConsultingCategory> categories) {
+        this.categories = categories;
+    }
 }
 
