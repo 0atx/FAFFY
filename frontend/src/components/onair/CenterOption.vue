@@ -1,18 +1,15 @@
 <template>
 	<div id="centerOption">
-    중간 여기 높이 작게 줘야 함 비디오 오디오 화면공유 음악재생 나가기 등 옵션 버튼 자리 > 캡쳐랑 앨범 버튼도 여기다 둘까? 전부 아이콘 버튼으로 할 지 일부는 텍스트로 할 지도 정해야 할 듯
-
-    <div class="mafia-setting-btn"><v-icon>mdi-information</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-microphone</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-microphone-off</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-video</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-video-off</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-camera</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-camera-off</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-image-multiple</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-monitor-share</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-monitor-off</v-icon></div>
-    <div class="mafia-setting-btn"><v-icon>mdi-close</v-icon></div>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-microphone</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-microphone-off</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-video</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-video-off</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-reflect-horizontal</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-monitor-off</v-icon></v-btn>
+    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-close</v-icon></v-btn>
     <!--
     <div class="mafia-setting-btn" @click="clickGuide"><i class="el-icon-guide"></i></div>
     <div v-if="state.mafiaManager.onAudio" class="mafia-setting-btn" @click="muteAudio"><i class="el-icon-microphone"></i></div>
@@ -44,19 +41,25 @@ export default {
 
 <style scoped>
 #centerOption {
-  width:100%;
-  background-color: palegoldenrod;
+  width:60%;
+  padding: 10px;
+  margin: 0 20%;
+  text-align: center;
+  border-radius: 40px;
+  background-color: rgb(200, 200, 200);
 }
 
-.setting-btns {
-  display: flex;
-  justify-content: center;
+.onButton {
+  width:45px;
+  height:45px;
+  background-color:#0c0f66;
+  margin: 0 10px;
 }
 
-.mafia-setting-btn {
-  display: inline-block;
-  cursor: pointer;
+.offButton {
+  width:45px;
+  height:45px;
+  background-color:#ff7451;
+  margin: 0 10px;
 }
-
-
 </style>
