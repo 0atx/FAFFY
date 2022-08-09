@@ -73,8 +73,8 @@ const routes = [
   },
   {
     path: "/consulting/ready",
-    name: "consulting",
-    component: () => import("@/views/ConsultingFormView.vue"),
+    name: "consulting-ready",
+    component: () => import("@/views/ConsultingReadyView.vue"),
   },
   {
     path: "/consulting/onair",
