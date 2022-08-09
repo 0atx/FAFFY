@@ -1,25 +1,29 @@
 <template>
   <v-app id="faffy">
     <Header :isOnAir="isOnAir" />
-    <router-view></router-view>
+    <Loading v-if="loading"/>
+    <router-view v-show="!loading"></router-view>
     <Footer v-if="show" />
   </v-app>
 </template>
 
 <script>
 import Header from '@/components/common/Header.vue'
+import Loading from '@/components/common/LoadingView.vue'
 import Footer from '@/components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
+    Loading,
     Footer
   },
   data() {
     return {
       show: false,
       isOnAir: false,
+      loading: false,
     };
   },
   watch: {
@@ -35,9 +39,18 @@ export default {
       } else {
         this.show = false;
         this.isOnAir = true;
+        this.onLoading();
       }
     },
   },
+  methods: {
+    onLoading () {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 5000);
+    }
+  }
 }
 </script>
 
@@ -53,6 +66,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   width: calc(100vw - (100vw - 100%));
   text-align: center;
-  background-color: #afb2b5;
+  background-color: #fff;
 }
 </style>
