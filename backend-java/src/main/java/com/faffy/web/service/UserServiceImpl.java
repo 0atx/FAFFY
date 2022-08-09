@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -287,24 +288,22 @@ public class UserServiceImpl implements UserService {
             throw new DataNotFoundException(USER_NOT_FOUND_MSG);
         }
     }
-//    @Override
-//    @Transactional
-//    public User updateUserImg(MultipartFile file) throws DataNotFoundException, IllegalInputException{
-//        User user = userRepository.findByNo(1).orElse(null);
-//        if(file == null || user == null)
-//            return null;
-//
-//        try {
-//            UploadFile img = fileHandler.parseFileInfo(file);
-//            if (img != null) {
-//                uploadFileRepository.save(img);
-//                user.updateProfileImage(img);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return user;
-//    }
 
+    @Override
+    @Transactional
+    public boolean setUserPwdByUserEmail(String email, String pwd) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if(user == null)
+            return false;
+        else{
+            user.setPassword(passwordEncoder.encode(pwd));
+            return true;
+        }
+    }
+
+    @Override
+    public User getUserByEmailBirthday(String email, LocalDate birthday) {
+        return userRepository.findByEmailBirthday(email, birthday).orElse(null);
+    }
 
 }
