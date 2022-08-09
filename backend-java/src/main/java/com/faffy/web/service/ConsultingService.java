@@ -25,6 +25,6 @@ public interface ConsultingService {
     void createLog(int consulting_no, int user_no) throws IllegalInputException;
 
     void setViewCount(int no, int cnt) throws IllegalInputException;
-    String uploadSnapshot(ConsultingSnapshotUploadDto file) throws Exception;
+    int uploadSnapshot(ConsultingSnapshotUploadDto file) throws Exception;
 
 }
