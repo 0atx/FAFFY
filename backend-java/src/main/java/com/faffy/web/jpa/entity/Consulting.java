@@ -62,5 +62,9 @@ public class Consulting extends BaseEntity {
     public void setCategories(List<ConsultingCategory> categories) {
         this.categories = categories;
     }
+
+    public void increaseViewCount(){
+        this.viewCount++;
+    }
 }
 
