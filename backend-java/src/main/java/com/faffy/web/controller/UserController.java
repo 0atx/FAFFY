@@ -44,7 +44,7 @@ public class UserController {
     @Autowired
     ConsultingService consultingService;
     private final JwtTokenProvider jwtTokenProvider;
-    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     /**
      * 모든 회원 정보 받아오기
@@ -209,7 +209,6 @@ public class UserController {
         logger.info("user dto : {}",userDto);
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
-        System.out.println("userDto:" + userDto);
 
         try {
             User user = userService.updateUser(userDto);
