@@ -32,7 +32,7 @@ public class CommentController {
     @Autowired
     BoardService boardService;
 
-    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     @PostMapping("")
     public ResponseEntity addComment(@RequestBody CommentAddDto commentAddDto) {
