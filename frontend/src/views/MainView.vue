@@ -504,6 +504,7 @@ a {
 #categoryChips {
   background-color: #0c0f66;
   color: #fff;
+  pointer-events: none;
 }
 
 .imgBoard {
