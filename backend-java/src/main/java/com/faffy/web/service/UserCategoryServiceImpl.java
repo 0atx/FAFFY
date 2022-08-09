@@ -45,16 +45,16 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
-    public UserCategory addUserCategory(int user_no, String categoryName) throws Exception {
+    public UserCategory addUserCategory(User user, String categoryName) throws Exception {
         try {
-            User user = userService.getUserByNo(user_no);
             FashionCategory fashionCategory = fashionCategoryRepository.findByName(categoryName).orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.CATEGORY_NOT_FOUND_MSG));
 
             UserCategory userCategory = UserCategory.builder().user(user).category(fashionCategory).build();
             userCategoryRepository.save(userCategory);
             return userCategory;
         } catch (Exception e) {
-            throw new DataNotFoundException(e.getMessage());
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
@@ -81,7 +81,7 @@ public class UserCategoryServiceImpl implements UserCategoryService {
                 userCategoryRepository.delete(category);
             }
             for (String categoryName : categoryNames) {
-                addUserCategory(user.getNo(),categoryName);
+                addUserCategory(user,categoryName);
             }
 
 
