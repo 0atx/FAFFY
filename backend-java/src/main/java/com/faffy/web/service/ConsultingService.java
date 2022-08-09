@@ -20,7 +20,7 @@ public interface ConsultingService {
 
     List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable);
 
-    ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto, int no);
+    ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto);
 
     void createLog(int consulting_no, int user_no) throws IllegalInputException;
 
