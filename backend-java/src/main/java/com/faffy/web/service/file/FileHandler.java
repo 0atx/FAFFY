@@ -33,9 +33,9 @@ public class FileHandler {
         if(!img.isEmpty()){
             String absPath = null;
             if(System.getProperty("os.name").toLowerCase().contains("win"))
-                absPath = WIN_FILE_PATH + "\\";
+                absPath = WIN_FILE_PATH + sep;
             else
-                absPath = LINUX_FILE_PATH + "/";
+                absPath = LINUX_FILE_PATH + sep;
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
@@ -44,6 +44,8 @@ public class FileHandler {
                 path = "profile_images" + sep + sdf.format(date).replace("-", sep);
             else if(type.equals("board"))
                 path = "board" + sep + sdf.format(date).replace("-", sep);
+            else if (type.equals("snapshop"))
+                path = "snapshot" + sep + sdf.format(date).replace("-", sep);
 
             File file = new File(absPath + path);
             //저장할 디렉토리가 존재하지 않는 경우 새로 생성

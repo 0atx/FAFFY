@@ -18,7 +18,7 @@ public interface UserCategoryService {
      * @param categoryName 추가할 카테고리 이름
      * @return 정상 추가시 true, 유저 정보나 카테고리를 찾을 수 없을 경우 false
      */
-    public UserCategory addUserCategory(int user_no, String categoryName) throws Exception;
+    public UserCategory addUserCategory(User user, String categoryName) throws Exception;
 
     /**
      * user_no에 해당하는 유저의 관심분야를 삭제합니다.
