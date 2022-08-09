@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ConsultingServiceImpl implements ConsultingService{
+public class ConsultingServiceImpl implements ConsultingService {
     @Autowired
     ConsultingRepository consultingRepository;
     @Autowired
@@ -29,6 +29,8 @@ public class ConsultingServiceImpl implements ConsultingService{
     FashionCategoryRepository fashionCategoryRepository;
     @Autowired
     ConsultingCategoryRepository consultingCategoryRepository;
+    @Autowired
+    ConsultingLogRepository consultingLogRepository;
 
     private String getDuration(String startTime, String endTime){
         System.out.println("startTime:"+startTime);
@@ -116,5 +118,27 @@ public class ConsultingServiceImpl implements ConsultingService{
         }
 //        return consulting.toConsultingGetDto();
         return ConsultingGetDto.builder().build(); // 성공시 빈 객체 반환
+    }
+
+    @Override
+    public void createLog(int consulting_no, int user_no) throws IllegalInputException{
+        Consulting consulting = consultingRepository.findById(consulting_no).orElse(null);
+        User user = userRepository.findByNo(user_no).orElse(null);
+        if(consulting == null || user == null){
+            throw new IllegalInputException();
+        }
+
+        ConsultingLog log = ConsultingLog.builder().consulting(consulting).user(user).build();
+        consultingLogRepository.save(log);
+    }
+
+    @Override
+    @Transactional
+    public void upViewCount(int no) throws IllegalInputException {
+        Consulting consulting = consultingRepository.findById(no).orElse(null);
+        if(consulting == null)
+            throw new IllegalInputException();
+
+        consulting.increaseViewCount();
     }
 }
