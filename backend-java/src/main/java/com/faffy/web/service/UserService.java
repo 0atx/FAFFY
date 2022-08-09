@@ -8,6 +8,7 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -96,4 +97,7 @@ public interface UserService {
     HistoryUserInfoDto getHistoryUserInfo(int no) throws IllegalInputException;
     void deleteUserImg(int no) throws DataNotFoundException;
 
+    boolean setUserPwdByUserEmail(String email, String pwd);
+
+    User getUserByEmailBirthday(String email, LocalDate birthday);
 }
