@@ -54,9 +54,11 @@
             <thead>
               <tr>
                 <th class="text-center">
+                  카테고리
+                </th>
+                <th class="text-center">
                   제목
                 </th>
-                <!--추후에 카테고리 대신 댓글 수로 대체 예정-->
                 <th class="text-center">
                   댓글
                 </th>
@@ -79,6 +81,7 @@
                 @click="boardDetail(board.no)"
                 style="cursor: pointer"
               >
+                <td>{{ typeList[board.category] }}</td>
                 <td>{{ board.title }}</td>
                 <td><v-icon>mdi-comment-processing-outline</v-icon>{{ board.commentCount }}</td>
                 <td>{{ board.user.nickname }}</td>
@@ -119,27 +122,15 @@ export default {
         keyword: '',
         items: ['제목', '작성자'],
         searchCategory: '',
+        now: this.boardList,
+        typeList: { 'Free': '자유', 'QnA': '질문', 'Info': '정보' }
       }
     },
   props: {
     type: String,
   },
   computed: {
-    ...mapGetters(boardStore, ['freeBoards', 'qnaBoards', 'infoBoards']),
-    now: {
-      get() {
-        if (this.type === '자유') {
-          return this.freeBoards
-        } else if (this.type === '질문') {
-          return this.qnaBoards
-        } else {
-          return this.infoBoards
-        }
-      },
-      set() {
-
-      }
-    },
+    ...mapGetters(boardStore, ['boardList', 'freeBoards', 'qnaBoards', 'infoBoards']),
     // 페이지네이션 - 전체 페이지
     totalPages() {
       return this.now.length % this.itemsPerPage > 0 ? parseInt(this.now.length/this.itemsPerPage)+1 : parseInt(this.now.length/this.itemsPerPage)
@@ -181,6 +172,7 @@ export default {
       } else {
         alert('검색 기준을 선택하세요')
       }
+      console.log(this.now)
     },
     // 검색 결과 초기화
     resetSearch() {
@@ -198,17 +190,19 @@ export default {
       this.keyword = ''
       this.page = 1
       this.searchCategory = ''
-      // if (this.type === '자유') {
-      //   return this.now = this.freeBoards
-      // } else if (this.type === '질문') {
-      //   return this.now = this.qnaBoards
-      // } else {
-      //   return this.now = this.infoBoards
-      // }
+      if (this.type === '자유') {
+        this.now = this.freeBoards
+      } else if (this.type === '질문') {
+        this.now = this.qnaBoards
+      } else if (this.type === '정보') {
+        this.now = this.infoBoards
+      } else {
+        this.now = this.boardList
+      }
     },
   },
   created() {
-    this.now = this.freeBoards
+    this.now = this.boardList
   }
 }
 </script>
