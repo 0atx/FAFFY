@@ -1,5 +1,5 @@
 <template>
-	<video autoplay style="width: 98%; max-width: 540px; border-radius: 5px;" />
+	<video autoplay style="width: 98%; max-width: 540px; border-radius: 5px;" ref="video"/>
 </template>
 
 <script>
@@ -13,6 +13,12 @@ export default {
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
 	},
+
+  methods: {
+    capture() {
+      alert("캡쳐");
+    }
+  }
 };
 </script>
 

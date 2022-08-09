@@ -12,6 +12,7 @@ import com.faffy.web.jpa.repository.ConsultingLogRepository;
 import com.faffy.web.jpa.repository.ConsultingRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
 import com.faffy.web.jpa.repository.UserRepository;
+import com.faffy.web.jpa.type.FileType;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.jpa.type.RegularExpression;
 import com.faffy.web.service.file.FileHandler;
@@ -258,7 +259,7 @@ public class UserServiceImpl implements UserService {
                         System.out.println("------파일 삭제 실패------");
                 }
 
-                UploadFile img = fileHandler.parseFileInfo(file, "profile");
+                UploadFile img = fileHandler.parseFileInfo(file, FileType.PROFILE_IMG);
                 if(img != null){
                     uploadFileRepository.save(img);
                     user.updateProfileImage(img);
