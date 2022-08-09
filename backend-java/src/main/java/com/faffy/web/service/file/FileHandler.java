@@ -1,6 +1,7 @@
 package com.faffy.web.service.file;
 
 import com.faffy.web.jpa.entity.UploadFile;
+import com.faffy.web.jpa.type.FileType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
+
+import static com.faffy.web.jpa.type.FileType.*;
 
 @Component
 public class FileHandler {
@@ -29,21 +32,23 @@ public class FileHandler {
      * @return UploadFile
      * @throws Exception
      */
-    public UploadFile parseFileInfo(MultipartFile img, String type) throws Exception{
+    public UploadFile parseFileInfo(MultipartFile img, FileType type) throws Exception{
         if(!img.isEmpty()){
             String absPath = null;
             if(System.getProperty("os.name").toLowerCase().contains("win"))
-                absPath = WIN_FILE_PATH + "\\";
+                absPath = WIN_FILE_PATH + sep;
             else
-                absPath = LINUX_FILE_PATH + "/";
+                absPath = LINUX_FILE_PATH + sep;
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
             String path = null;
-            if(type.equals("profile"))
+            if(type.equals(PROFILE_IMG))
                 path = "profile_images" + sep + sdf.format(date).replace("-", sep);
-            else if(type.equals("board"))
+            else if(type.equals(BOARD_IMG))
                 path = "board" + sep + sdf.format(date).replace("-", sep);
+            else if (type.equals(SNAPSHOT))
+                path = "snapshot" + sep + sdf.format(date).replace("-", sep);
 
             File file = new File(absPath + path);
             //저장할 디렉토리가 존재하지 않는 경우 새로 생성
