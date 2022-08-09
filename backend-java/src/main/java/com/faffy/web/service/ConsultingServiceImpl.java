@@ -134,11 +134,11 @@ public class ConsultingServiceImpl implements ConsultingService {
 
     @Override
     @Transactional
-    public void upViewCount(int no) throws IllegalInputException {
+    public void setViewCount(int no, int cnt) throws IllegalInputException {
         Consulting consulting = consultingRepository.findById(no).orElse(null);
         if(consulting == null)
             throw new IllegalInputException();
 
-        consulting.increaseViewCount();
+        consulting.setViewCount(cnt);
     }
 }
