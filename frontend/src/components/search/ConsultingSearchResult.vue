@@ -56,6 +56,17 @@
       </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          prev-icon="mdi-menu-left"
+          next-icon="mdi-menu-right"
+          :total-visible="totalVisible">
+        </v-pagination>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

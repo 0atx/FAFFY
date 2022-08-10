@@ -35,11 +35,11 @@ export default {
   data() {
     return {
       headers: [
-        { text: '분류', align:'start', value:'category', width: '5%'},
-        { text: '게시글 제목', align: 'center',value:'title', width: '65%'},
-        { text: '작성자', align: 'end',value:'writer', width: '10%'},
-        { text: '작성 일자', align: 'end',value:'date', width: '10%'},
-        { text: '조회수', align: 'end',value:'hit', width: '5%'},
+        { text: '분류', align:'start', value:'category', width: '10%'},
+        { text: '게시글 제목', align: 'start',value:'title', width: '50%'},
+        { text: '작성자', align: 'start',value:'writer', width: '15%'},
+        { text: '작성 일자', align: 'start',value:'date', width: '15%'},
+        { text: '조회수', align: 'center',value:'hit', width: '10%'},
       ],
       boards: [
         {
