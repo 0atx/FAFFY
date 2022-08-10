@@ -21,15 +21,14 @@ export default {
   name: 'SearchResultView',
   data() {
     return {
+      // 검색어
+      keyword: this.$route.params.keyword
     }
   },
   components: {
     BoardSearchResult,
     ConsultingSearchResult,
     UserSearchResult
-  },
-  computed: {
-    keyword() { return this.$route.params.keyword }
   },
   created() {
     console.log(this.keyword+'로 방송을 검색')
