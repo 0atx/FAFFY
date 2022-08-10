@@ -27,7 +27,7 @@
             <!--각 유저 각 행을 클릭시 프로필로 이동하거나 다른 처리 가능-->
             <tbody>
               <tr
-                v-for="user in users"
+                v-for="user in currentPage"
                 :key="user.nickname"
               >
                 <td class="d-flex flex-row align-center">
@@ -91,12 +91,9 @@ export default {
   name: 'UserSearchResult',
   data() {
     return {
-      headers: [
-        { text: '닉네임', align:'start', value:'nickname', width: '17%'},
-        { text: '이메일', align: 'center',value:'email', width: '33%'},
-        { text: '팔로워 수', align: 'end',value:'followers', width: '17%'},
-        { text: '관심 카테고리', align: 'end',value:'categories', width: '33%'},
-      ],
+      page: 1,
+      itemsPerPage: 5,
+      totalVisible: 7,
       users: [
         {
           no: 1,
@@ -132,6 +129,17 @@ export default {
         },
       ]
     }
+  },
+  computed: {
+    totalPages() {
+      return this.users.length % this.itemsPerPage > 0 ? parseInt(this.users.length/this.itemsPerPage)+1 : parseInt(this.users.length/this.itemsPerPage)
+    },
+    // 페이지네이션 - 현재 페이지 게시물
+    currentPage() {
+      const start = (this.page-1)*this.itemsPerPage
+      const end = start+this.itemsPerPage
+      return this.users.slice(start, end)
+    },
   }
 }
 </script>

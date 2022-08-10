@@ -39,7 +39,7 @@
               v-for="category in consulting.categories"
               :key="category"
               :category="category"
-              class="consultingCategory"
+              id="consultingCategory"
             >
               {{ category }}
             </v-chip>
@@ -133,9 +133,9 @@ export default {
 </script>
 
 <style scoped>
-.consultingCategory {
+#consultingCategory {
   background-color: #0c0f66;
-  color: black;
+  color: white;
   pointer-events: none;
 }
 </style>
