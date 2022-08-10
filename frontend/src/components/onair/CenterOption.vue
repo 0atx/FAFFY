@@ -1,15 +1,16 @@
 <template>
-	<div id="centerOption">
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-microphone</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-microphone-off</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-video</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-video-off</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-reflect-horizontal</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-monitor-off</v-icon></v-btn>
-    <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-close</v-icon></v-btn>
+	<div id="centerOption" class="grey lighten-2">
+    <div id="optionButton" class="grey lighten-1">
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-microphone</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-microphone-off</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-video</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-video-off</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-reflect-horizontal</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-monitor-off</v-icon></v-btn>
+      <v-btn elevation="0" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-close</v-icon></v-btn>
     <!--
     <div class="mafia-setting-btn" @click="clickGuide"><i class="el-icon-guide"></i></div>
     <div v-if="state.mafiaManager.onAudio" class="mafia-setting-btn" @click="muteAudio"><i class="el-icon-microphone"></i></div>
@@ -20,6 +21,7 @@
     <div v-if="!state.onScreen" class="mafia-setting-btn" @click="shareScreen"><i class="el-icon-video-pause"></i></div>
     <div class="mafia-setting-btn" @click="leaveRoom"><i class="el-icon-close"></i></div>
     -->
+    </div>
   </div>
 </template>
 
@@ -41,12 +43,18 @@ export default {
 
 <style scoped>
 #centerOption {
-  width:60%;
+  width:100%;
   padding: 10px;
+  padding-bottom: 20px;
+}
+
+#optionButton {
+  width:60%;
+  height: 70px;
   margin: 0 20%;
   text-align: center;
+  padding-top: 12px;
   border-radius: 40px;
-  background-color: rgb(200, 200, 200);
 }
 
 .onButton {

@@ -184,7 +184,11 @@ export default {
           this.$router.push({ name: "main" });
         },
         () => {
-          alert("로그인 실패. 나중에 바꿔야함");
+          this.$dialog.message.info('로그인에 실패했습니다. 아이디 및 비밀번호를 확인하세요.', {
+            position: "top",
+            timeout: 2000,
+            color: "#ff7451",
+          });
         }
       );
       if (!this.isLogin)

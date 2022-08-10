@@ -1,27 +1,68 @@
 <template>
-	<div id="rightSub" style="height: 70vh">
-    <div style="height: 10vh">
+	<div id="rightSub">
+    <!--<div style="height: 10vh">
       <div id="host">
         <span>컨설턴트: {{ host.nickname }}</span>
       </div>
       <div id="participantCount">
         <div>참여 인원: {{ participants.length }} / {{ participantsLimit }}</div>
       </div>
-      <p>참여 리스트</p>
     </div>
     <v-card class="overflow-auto" height="60vh">
       <v-card v-for="participant in participants" :key="participant.no" outlined>
         <span @click="moveProfile(participant.no)" style="cursor: pointer">{{ participant.nickname }}</span>
       </v-card>
-    </v-card>
+    </v-card>-->
+    <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="text-h6 pt-1">
+            참여자 목록
+            <v-btn
+              id="tapBtn"
+              class="mb-1" style="margin-left:45%; cursor: pointer"
+              elevation="0"
+              icon
+              small
+              color="gray"
+              :ripple="false"
+              @click="$emit('change')"
+            >
+              <v-icon> mdi-chat </v-icon>
+            </v-btn>
+          </v-list-item-title>
+          <v-list-item-title>컨설턴트 : {{ host.nickname }}</v-list-item-title>
+          <v-list-item-subtitle>참여 인원 : {{ participants.length }} / {{ participantsLimit }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <div class="overflow-auto" style="height: 80vh">
+      <v-list>
+        <v-list-item
+          class="participant"
+          v-for="participant in participants"
+          :key="participant.no"
+        >
+
+        <profile-img-avatar :user_no="participant.no" />
+
+        <v-list-item-content @click="moveProfile(participant.no)">
+          <v-list-item-title v-text="participant.nickname"></v-list-item-title>
+        </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </div>
   </div>
 </template>
 
 <script>
+import ProfileImgAvatar from "@/components/common/ProfileImgAvatar.vue";
+
 export default {
 	name: 'rightSubscriber',
   components: {
-
+    ProfileImgAvatar
   },
   data() {
     return {
@@ -66,4 +107,28 @@ export default {
   height:100%;
   /* background-color: palegoldenrod; */
 }
+
+.participant {
+  cursor: pointer;
+}
+
+.participant:hover {
+  background-color: #f0f0f0;
+}
+
+::v-deep ::-webkit-scrollbar {
+  width: 10px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+::v-deep ::-webkit-scrollbar-thumb {
+  background: #0c0f66;
+  border-radius: 10px;
+}
+
+#tapBtn::before {
+  background-color: transparent;
+}
+
 </style>

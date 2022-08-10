@@ -148,7 +148,7 @@
             <v-textarea
               v-model="form.introduce"
               label="상세 자기소개"
-              auto-grow
+              rows="4"
               clearable
               clear-icon="mdi-close-circle"
               color="#0c0f66"
@@ -435,6 +435,11 @@ form {
 
 #checkNicknameBtn i:hover {
   transform: scale(1.15);
+}
+
+::v-deep ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 .chip {
