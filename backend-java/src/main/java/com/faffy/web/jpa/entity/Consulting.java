@@ -43,9 +43,10 @@ public class Consulting extends BaseEntity {
 
     public ConsultingGetDto toConsultingGetDto(){
         List<String> categories = new ArrayList<>();
-        for(ConsultingCategory c : this.categories){
-            categories.add(c.getConsultingCategoryMapper().getCategory().getName());
-        }
+        if (this.categories != null)
+            for(ConsultingCategory c : this.categories){
+                categories.add(c.getConsultingCategoryMapper().getCategory().getName());
+            }
 
         return ConsultingGetDto.builder()
                 .no(this.no)
@@ -55,7 +56,7 @@ public class Consulting extends BaseEntity {
                 .roomSize(this.roomSize)
                 .viewCount(this.viewCount)
                 .categories(categories)
-                .profileImageNo(consultant.getProfileImage().getNo())
+                .profileImageNo(consultant.getProfileImage() != null ? consultant.getProfileImage().getNo() : 0)
                 .build();
     }
 
@@ -65,6 +66,15 @@ public class Consulting extends BaseEntity {
 
     public void setViewCount(int cnt){
         this.viewCount = cnt;
+    }
+
+    public void finish() {
+        this.endTime = LocalDateTime.now();
+        this.viewCount = 0;
+    }
+
+    public boolean isFinished() {
+        return this.endTime != null;
     }
 }
 
