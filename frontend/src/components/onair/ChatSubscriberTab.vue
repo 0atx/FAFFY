@@ -1,36 +1,16 @@
 <template>
   <div style="height: 80vh">
-    <v-tabs
-      v-model="tab"
-      background-color="deep-purple accent-4"
-      centered
-      dark
-      icons-and-text
-      style="height:10vh"
-    >
-      <v-tabs-slider></v-tabs-slider>
-
-      <v-tab href="#participants">
-        참가자 목록
-        <v-icon>mdi-account-box</v-icon>
-      </v-tab>
-
-      <v-tab href="#chat">
-        채팅
-        <v-icon>mdi-heart</v-icon>
-      </v-tab>
-
-    </v-tabs>
-
-    <v-tabs-items v-model="tab">
-      <v-tab-item value="participants">
-        <RightSubscriber />
-      </v-tab-item>
-
-      <v-tab-item value="chat">
-        <RightChat />
-      </v-tab-item>
-    </v-tabs-items>
+    <v-container>
+      <div class="d-flex justify-space-between">
+        <v-icon @click="hideDrawer">mdi-arrow-right</v-icon>
+        <div>{{ tab==='participants'? '참여자 목록' : '채팅' }}</div>
+        <v-icon @click="switchTab" style="cursor: pointer">{{ tab==='participants'? 'mdi-account-multiple' : 'mdi-chat'}}</v-icon>
+      </div>
+      <v-container>
+        <right-subscriber v-if="tab==='participants'" />
+        <right-chat v-else/>
+      </v-container>
+    </v-container>
   </div>
 </template>
 
@@ -47,6 +27,18 @@ export default {
   data() {
     return {
       tab: 'participants'
+    }
+  },
+  methods: {
+    switchTab() {
+      if (this.tab==='participants') {
+        this.tab = 'subscribers'
+      } else {
+        this.tab = 'participants'
+      }
+    },
+    hideDrawer() {
+      this.$emit('hideDrawer')
     }
   }
 }

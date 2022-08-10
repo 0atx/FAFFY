@@ -1,19 +1,17 @@
 <template>
   <div id="view">
-    <v-btn color="success" @click="drawer = !drawer">{{ drawer? '숨기기' : '보이기' }}</v-btn>
     <div style="display:flex;width:100%;">
-      <div style="width: 80%;">
+      <div style="width: 80%; height: 80vh">
         <top-video />
         <center-option />
         <bottom-info />
       </div>
-      <div style="width:20%;" v-show="drawer">
+      <div style="width:20%;" id="drawer">
         <!-- v-if 탭으로 둘 중 하나 보였다 안 보였다? -->
         <!-- <right-subscriber />
         <right-chat /> -->
-        <v-navigation-drawer v-model="drawer" right>
-          <chat-subscriber-tab />
-        </v-navigation-drawer>
+        <v-icon v-if="!drawer" @click="drawer=!drawer">mdi-arrow-left</v-icon>
+        <chat-subscriber-tab v-if="drawer" @hideDrawer="hideDrawer"/>
       </div>
     </div>
   </div>
@@ -42,6 +40,11 @@ export default {
       drawer: true,
     }
   },
+  methods: {
+    hideDrawer() {
+      this.drawer = !this.drawer
+    }
+  }
 }
 </script>
 
@@ -50,5 +53,11 @@ export default {
   background-color: white;
   padding: 2% 2%;
   text-align: left;
+}
+#drawer {
+  position: fixed;
+  top: 50;
+  right: 0;
+  /* border: 1px solid black; */
 }
 </style>
