@@ -7,24 +7,30 @@
     <v-row>
       <v-col cols="3" v-for="consulting in consultings" :key="consulting.host">
         <v-card class="mx-auto" max-width="344">
+        <!--방송화면 or 썸네일 -->
         <v-img
           :src="consulting.img"
           height="200px"
         ></v-img>
 
+        <!-- 방송 제목 -->
         <v-card-title class="d-flex justify-space-between">
           <div>
             {{ consulting.title }}
           </div>
+
+          <!--인원 현황-->
           <div>
             <p><v-icon>mdi-account-multiple</v-icon>{{ consulting.currentMember }}/{{ consulting.memberLimit }}</p>
           </div>
         </v-card-title>
 
+        <!--컨설턴트-->
         <v-card-subtitle>
           {{ consulting.host }}
         </v-card-subtitle>
 
+        <!--카테고리-->
         <v-card-text>
           <v-chip-group>
             <v-chip
@@ -39,6 +45,7 @@
             </v-chip>
           </v-chip-group>
         </v-card-text>
+
         <!-- 태그, 방송 참여하기 버튼 등등 -->
         <v-card-actions>
           <v-btn
@@ -58,18 +65,21 @@
           </v-btn>
         </v-card-actions>
 
+        <!--방송 내용 소개(필요 없을 경우 제거-->
         <v-expand-transition>
           <div v-show="show">
             <v-divider></v-divider>
 
             <v-card-text>
-              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+              방송 내용 소개
             </v-card-text>
           </div>
         </v-expand-transition>
       </v-card>
       </v-col>
     </v-row>
+
+    <!--페이지네이션-->
     <v-row>
       <v-col cols="12">
         <v-pagination
@@ -95,10 +105,7 @@ export default {
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지']},
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지']},
       ],
-      show1: false,
-      show2: false,
-      show3: false,
-      show4: false,
+      show: false,
     }
   }
 }

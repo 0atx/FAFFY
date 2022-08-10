@@ -24,13 +24,15 @@
                 </th>
               </tr>
             </thead>
-            <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+            <!--각 유저 각 행을 클릭시 프로필로 이동하거나 다른 처리 가능-->
             <tbody>
               <tr
                 v-for="user in users"
                 :key="user.nickname"
               >
                 <td class="d-flex flex-row align-center">
+
+                  <!--프로필 이미지 + 닉네임 -->
                   <v-avatar
                   size="36px">
                     <img
@@ -40,8 +42,14 @@
                   </v-avatar>
                   {{ user.nickname}}
                 </td>
+
+                <!-- 이메일 -->
                 <td>{{ user.email }}</td>
+
+                <!-- 팔로워 수 -->
                 <td><v-icon>mdi-heart</v-icon>{{ user.followers }}</td>
+
+                <!-- 관심 카테고리 -->
                 <td>
                   <v-chip-group>
                     <v-chip
@@ -62,6 +70,8 @@
         </v-simple-table>
       </v-col>
     </v-row>
+
+    <!-- 페이지네이션 -->
     <v-row>
       <v-col cols="12">
         <v-pagination

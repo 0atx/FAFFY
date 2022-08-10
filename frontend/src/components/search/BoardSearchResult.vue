@@ -4,6 +4,8 @@
       <h2>게시판 검색 결과</h2>
       <v-btn text>인기 순</v-btn>
     </v-row>
+
+    <!-- 게시글 검색 목록 -->
     <v-row>
       <v-col cols="12">
         <v-data-table
@@ -15,6 +17,8 @@
         </v-data-table>
       </v-col>
     </v-row>
+
+    <!-- 페이지네이션 -->
     <v-row>
       <v-col cols="12">
         <v-pagination
