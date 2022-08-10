@@ -1,5 +1,6 @@
 package com.faffy.web.dto;
 
+import com.faffy.web.jpa.entity.Consulting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,5 @@ public class ConsultingGetDto {
     private String consultant; //닉네임
     private List<String> categories = new ArrayList<>();
     private int profileImageNo;
+    
 }
