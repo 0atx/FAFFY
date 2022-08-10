@@ -33,6 +33,12 @@ export default {
       this.keyword = e.target.value;
       console.log(this.keyword);
       e.target.value = '';
+      console.log(this.$route.name)
+      if (this.$route.name === 'search') {
+        this.$router.replace({ name: 'search', params: { keyword: this.keyword }})
+      } else {
+        this.$router.push({ name: 'search', params: { keyword: this.keyword }})
+      }
       // 키워드랑 같이 검색 결과 페이지로 이동
     }
   }
