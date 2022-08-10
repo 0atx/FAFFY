@@ -1,6 +1,6 @@
 <!--
 작성자: 류경하
-설명: 게시판 좌측 메뉴(질문응답/자유/후기 게시판)
+설명: 게시판 좌측 메뉴(질문응답/자유/정보 게시판)
 최종 수정일: 2022.07.29
 -->
 <template>
@@ -12,7 +12,7 @@
     <v-navigation-drawer permanent>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="text-h6">
+          <v-list-item-title class="text-h6" style="cursor: pointer" @click="moveBoard">
             게시판
           </v-list-item-title>
           <v-list-item-subtitle>
@@ -53,7 +53,7 @@ export default {
       items: [
         { title: '자유', icon: 'mdi-view-dashboard' },
         { title: '질문', icon: 'mdi-help-box' },
-        { title: '후기', icon: 'mdi-image' },
+        { title: '정보', icon: 'mdi-image' },
       ],
       right: null,
     }
@@ -63,6 +63,9 @@ export default {
     boardType(type) {
       console.log(`${type} 게시판 보기`)
       this.$emit('changeBoardType', type)
+    },
+    moveBoard() {
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }
