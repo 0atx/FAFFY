@@ -5,7 +5,7 @@
       <v-btn text>인기 순</v-btn>
     </v-row>
     <v-row>
-      <v-col cols="3" v-for="consulting in consultings" :key="consulting.host">
+      <v-col cols="3" v-for="consulting in currentPage" :key="consulting.host">
         <v-card class="mx-auto" max-width="344">
         <!--방송화면 or 썸네일 -->
         <v-img
@@ -104,8 +104,29 @@ export default {
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지']},
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지']},
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하2', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성2', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석2', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만2', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하3', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성3', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석3', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만3', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지']},
       ],
       show: false,
+      page: 1,
+      itemsPerPage: 4,
+      totalVisible: 7,
+    }
+  },
+  computed: {
+    totalPages() {
+      return this.consultings.length % this.itemsPerPage > 0 ? parseInt(this.consultings.length/this.itemsPerPage)+1 : parseInt(this.consultings.length/this.itemsPerPage)
+    },
+    currentPage() {
+      const start = (this.page-1)*this.itemsPerPage
+      const end = start+this.itemsPerPage
+      return this.consultings.slice(start, end)
     }
   }
 }
