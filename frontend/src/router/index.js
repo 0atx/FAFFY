@@ -101,6 +101,12 @@ const routes = [
     name: "board-update",
     component: () => import("@/views/UpdateBoardView.vue"),
   },
+  {
+    path: "/search/:keyword",
+    name: "search",
+    component: () => import("@/views/SearchResultView.vue"),
+  },
+
 ];
 
 const router = new VueRouter({
