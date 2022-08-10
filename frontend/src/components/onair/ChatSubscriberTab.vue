@@ -1,16 +1,9 @@
 <template>
-  <div style="height: 80vh">
-    <v-container>
-      <div class="d-flex justify-space-between">
-        <v-icon @click="hideDrawer">mdi-arrow-right</v-icon>
-        <div>{{ tab==='participants'? '참여자 목록' : '채팅' }}</div>
-        <v-icon @click="switchTab" style="cursor: pointer">{{ tab==='participants'? 'mdi-account-multiple' : 'mdi-chat'}}</v-icon>
-      </div>
-      <v-container>
-        <right-subscriber v-if="tab==='participants'" />
-        <right-chat v-else/>
-      </v-container>
-    </v-container>
+  <div id="tab">
+    <div class="mx-2">
+      <right-subscriber @change="switchTab" v-if="tab==='participants'" />
+      <right-chat @change="switchTab" v-else/>
+    </div>
   </div>
 </template>
 
@@ -44,6 +37,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+#tab {
+  position: sticky;
+  top: 0;
+  right: 0;
+}
 </style>
