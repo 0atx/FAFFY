@@ -69,7 +69,7 @@ export default {
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성', memberLimit: 40, currentMember: 13},
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14},
         { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33},
-      ]
+      ],
     }
   }
 }
