@@ -1,7 +1,7 @@
 <template>
   <div id="view">
     <div class="mb-4">
-      <video id="video" autoplay style="width: 98%; max-width: 500px; border-radius: 5px;" />
+      <video id="video" autoplay style="max-width: 500px; border-radius: 5px;" />
     </div>
     <div style="width:70%; margin:0 auto;">
       <v-form ref="form" style="display:flex;justify-content:space-evenly;">
