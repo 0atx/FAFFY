@@ -47,7 +47,7 @@
                     <v-chip
                       small
                       :ripple="false"
-                      id="categoryChips"
+                      id="categoryChip"
                       v-for="category in user.categories"
                       :key="category"
                       :category="category"
@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style>
-#categoryChips {
+#categoryChip {
   background-color: #0c0f66;
   color: #fff;
   pointer-events: none;

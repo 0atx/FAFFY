@@ -29,8 +29,13 @@ export default {
     UserSearchResult
   },
   computed: {
-      keyword() { return this.$route.params.keyword }
-  }
+    keyword() { return this.$route.params.keyword }
+  },
+  created() {
+    console.log(this.keyword+'로 방송을 검색')
+    console.log(this.keyword+'로 게시글을 검색')
+    console.log(this.keyword+'로 유저목록을 검색')
+  },
 }
 </script>
 

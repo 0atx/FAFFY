@@ -5,30 +5,44 @@
       <v-btn text>인기 순</v-btn>
     </v-row>
     <v-row>
-      <v-col cols="3" v-for="result in results" :key="result.host">
+      <v-col cols="3" v-for="consulting in consultings" :key="consulting.host">
         <v-card class="mx-auto" max-width="344">
         <v-img
-          :src="result.img"
+          :src="consulting.img"
           height="200px"
         ></v-img>
 
         <v-card-title class="d-flex justify-space-between">
           <div>
-            {{ result.title }}
+            {{ consulting.title }}
           </div>
           <div>
-            <p><v-icon>mdi-account-multiple</v-icon>{{ result.currentMember }}/{{ result.memberLimit }}</p>
+            <p><v-icon>mdi-account-multiple</v-icon>{{ consulting.currentMember }}/{{ consulting.memberLimit }}</p>
           </div>
         </v-card-title>
 
         <v-card-subtitle>
-          {{ result.host }}
+          {{ consulting.host }}
         </v-card-subtitle>
 
+        <v-card-text>
+          <v-chip-group>
+            <v-chip
+              small
+              :ripple="false"
+              v-for="category in consulting.categories"
+              :key="category"
+              :category="category"
+              class="consultingCategory"
+            >
+              {{ category }}
+            </v-chip>
+          </v-chip-group>
+        </v-card-text>
         <!-- 태그, 방송 참여하기 버튼 등등 -->
         <v-card-actions>
           <v-btn
-            color="orange lighten-2"
+            color="#c0f66 lighten-2"
             text
           >
             방송 보기
@@ -72,20 +86,28 @@
 
 <script>
 export default {
-  name: 'ConsultingSearchResult',
+  name: 'ConsultingSearchconsulting',
   data() {
     return {
-      results: [
-        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하', memberLimit: 10, currentMember: 6},
-        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성', memberLimit: 40, currentMember: 13},
-        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14},
-        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33},
+      consultings: [
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지']},
+        { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지']},
       ],
+      show1: false,
+      show2: false,
+      show3: false,
+      show4: false,
     }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.consultingCategory {
+  background-color: #0c0f66;
+  color: black;
+  pointer-events: none;
+}
 </style>
