@@ -1,10 +1,11 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.ConsultingCreateDto;
-import com.faffy.web.dto.ConsultingDto;
-import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadDto;
+import com.faffy.web.dto.ConsultingDto.ConsultingFinishRequestDto;
+import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadRequestDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
+import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.ExceptionMsg;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.*;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -100,6 +100,12 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Override
+    public Consulting getConsulting(int consulting_no) throws Exception {
+        Consulting consulting = consultingRepository.findById(consulting_no).orElseThrow(() -> new DataNotFoundException(CONSULTING_NOT_FOUND_MSG));
+        return consulting;
+    }
+
+    @Override
     public List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable) {
         List<Consulting> consultings = consultingRepository.findAllOrderByViewCount(pageable);
         List<ConsultingGetDto> dtoList = new ArrayList<>();
@@ -111,10 +117,12 @@ public class ConsultingServiceImpl implements ConsultingService {
 
     @Override
     @Transactional
-    public ConsultingGetDto createConsulting(ConsultingCreateDto dto) {
+    public ConsultingGetDto createConsulting(ConsultingCreateDto dto) throws Exception {
+        // 이미 생성된 방송이 있으면 에러 발생해야함
+
         User user = userRepository.findByNo(dto.getConsultant_no()).orElse(null);
         if (user == null)
-            return null;
+            throw new DataNotFoundException(ExceptionMsg.USER_NOT_FOUND_MSG);
 
         Consulting consulting = Consulting.builder()
                 .consultant(user)
@@ -133,8 +141,8 @@ public class ConsultingServiceImpl implements ConsultingService {
             ConsultingCategory cc = ConsultingCategory.builder().category(fashionCategory).consulting(consulting).build();
             consultingCategoryRepository.save(cc);
         }
-//        return consulting.toConsultingGetDto();
-        return ConsultingGetDto.builder().build(); // 성공시 빈 객체 반환
+        return consulting.toConsultingGetDto();
+//        return ConsultingGetDto.builder().build(); // 성공시 빈 객체 반환
     }
 
     @Override
@@ -160,7 +168,7 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Transactional
-    public int uploadSnapshot(ConsultingSnapshotUploadDto dto) throws Exception {
+    public int uploadSnapshot(ConsultingSnapshotUploadRequestDto dto) throws Exception {
         Consulting consulting = consultingRepository.findById(dto.getConsulting_no()).orElseThrow(() -> new IllegalArgumentException(CONSULTING_NOT_FOUND_MSG));
         UploadFile img = fileHandler.parseFileInfo(dto.getFile(), FileType.SNAPSHOT);
 
@@ -176,6 +184,16 @@ public class ConsultingServiceImpl implements ConsultingService {
         consultingFileRepository.save(consultingFile);
 
         return consultingFile.getNo();
+    }
+
+    @Override
+    @Transactional
+    public void finishConsulting(ConsultingFinishRequestDto finishDto) throws Exception {
+        // 먼저 컨설팅 찾기
+        Consulting consulting = getConsulting(finishDto.getConsulting_no());
+        // 컨설팅 종료 날짜 현재 시각으로 설정
+        consulting.finish();
+        // 현재 보고있는 시청자수 0으로 하는건 딱히 의미 없나?
     }
 
 }
