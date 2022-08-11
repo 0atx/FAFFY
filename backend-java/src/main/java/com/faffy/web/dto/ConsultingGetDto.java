@@ -20,6 +20,7 @@ public class ConsultingGetDto {
     private int roomSize;
     private int viewCount;
     private String consultant; //닉네임
+    private int consultant_no;
     private List<String> categories = new ArrayList<>();
     private int profileImageNo;
     

@@ -1,8 +1,10 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingFinishRequestDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadRequestDto;
+import com.faffy.web.dto.ConsultingDto.CreateLogRequestDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.dto.HistoryConsultingDto;
 import com.faffy.web.exception.DataNotFoundException;
@@ -26,6 +28,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.faffy.web.exception.ExceptionMsg.CONSULTING_NOT_FOUND_MSG;
 
@@ -146,14 +149,18 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Override
-    public void createLog(int consulting_no, int user_no) throws IllegalInputException {
-        Consulting consulting = consultingRepository.findById(consulting_no).orElse(null);
-        User user = userRepository.findByNo(user_no).orElse(null);
+    public void createLog(CreateLogRequestDto logDto) throws IllegalInputException {
+        Consulting consulting = consultingRepository.findById(logDto.getConsulting_no()).orElse(null);
+        User user = userRepository.findByNo(logDto.getUser_no()).orElse(null);
         if (consulting == null || user == null) {
             throw new IllegalInputException();
         }
 
+        // 이미 참여한 기록이 있다면 다시 저장하지 않음
         ConsultingLog log = ConsultingLog.builder().consulting(consulting).user(user).build();
+        if (consultingLogRepository.findConsultingLogByUserAndConsulting(user,consulting).isPresent())
+            return;
+
         consultingLogRepository.save(log);
     }
 
