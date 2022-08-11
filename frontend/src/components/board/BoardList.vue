@@ -1,53 +1,51 @@
 <!--
 작성자: 류경하
 설명: 게시판 글 목록
-최종 수정일: 2022.08.03
+최종 수정일: 2022.08.10
+최종 수정자: 박윤하
 -->
 <template>
-  <v-container fluid>
-    <h1 class="text-left mb-10">{{ type }} 게시판</h1>
-    <v-row align="center" class="mb-5">
-      <!--검색 기준 선택(작성자 or 제목)-->
-      <v-col
-        class="d-flex"
-        cols="2"
-      >
+  <v-container>
+    <v-row>
+      <v-col cols="3" class="pr-0" align="start">
+        <v-btn id="recentBtn" class="ml-0 pr-0" color="#0c0f66" text @click="sortByDate">최신 순</v-btn>
+        <v-btn id="commentBtn" class="ml-0" color="#0c0f66" text @click="sortByComments">답글 순</v-btn>
+      </v-col>
+      <v-col cols="7" class="pl-0" style="display:flex;" align="start">
+        <!--검색 기준 선택(작성자 or 제목)-->
         <v-select
+          style="width:30%; margin-right:10px;"
           :items="items"
+          color="#0c0f66"
           label="검색"
           v-model="searchCategory"
+          dense
           outlined
           hide-details
         ></v-select>
-      </v-col>
 
-      <!--검색어 입력-->
-      <v-col cols="6">
+        <!--검색어 입력-->
         <v-text-field
+          style="width:65%;"
+          color="#0c0f66"
           v-model="keyword"
-          label="검색어를 입력하세요"
+          placeholder="검색어를 입력하세요"
           append-icon="mdi-magnify"
+          dense
           outlined
           hide-details
           @keyup.enter="searchKeyword(keyword)"
+          @click:append="searchKeyword(keyword)"
         ></v-text-field>
+      <v-btn :ripple="false" elevation="0" id="searchBtn" style="width:10%;" @click="searchKeyword(keyword)">검색</v-btn>
+      <v-btn :ripple="false" elevation="0" id="resetBtn" style="width:15%;" @click="resetSearch">초기화</v-btn>
       </v-col>
-      <v-btn id="searchBtn" class="rounded-lg" col="2" height="56px" @click="searchKeyword(keyword)">검색</v-btn>
-      <v-btn id="resetBtn" class="rounded-lg" col="2" height="56px" @click="resetSearch">초기화</v-btn>
-
-    </v-row>
-
-    <v-row>
-      <v-col cols="9" align="start">
-        <v-btn id="recentBtn" color="#0c0f66" text @click="sortByDate">최신순</v-btn>
-        <v-btn id="commentBtn" color="#0c0f66" text @click="sortByComments">답글 많은 순</v-btn>
-      </v-col>
-      <v-col cols="3" align="end">
-        <v-btn @click="createBoard"><v-icon>mdi-pencil</v-icon>글 쓰기</v-btn>
+      <v-col cols="2" align="end">
+        <v-btn :ripple="false" elevation="0" id="writeBtn" @click="createBoard"><v-icon small class="mr-1">mdi-pencil</v-icon> 글 쓰기</v-btn>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row id="table">
       <v-col cols="12">
         <v-simple-table>
           <template v-slot:default>
@@ -83,10 +81,10 @@
               >
                 <td>{{ typeList[board.category] }}</td>
                 <td>{{ board.title }}</td>
-                <td><v-icon>mdi-comment-processing-outline</v-icon>{{ board.commentCount }}</td>
+                <td><v-icon small> mdi-comment-processing-outline </v-icon> {{ board.commentCount }}</td>
                 <td>{{ board.user.nickname }}</td>
-                <td>{{ board.dateTime.slice(0,4)+'년 '+board.dateTime.slice(5, 7)+'월 '+board.dateTime.slice(8, 10)+'일' }}</td>
-                <td><v-icon>mdi-eye</v-icon>{{ board.hit }}</td>
+                <td>{{ board.dateTime.replaceAll('-', '.').slice(0,10) }}</td>
+                <td><v-icon small> mdi-eye </v-icon> {{ board.hit }}</td>
               </tr>
             </tbody>
           </template>
@@ -97,6 +95,8 @@
     <v-row>
       <v-col cols="12">
         <v-pagination
+          circle
+          color="#0c0f66"
           v-model="page"
           :length="totalPages"
           prev-icon="mdi-menu-left"
@@ -170,7 +170,11 @@ export default {
       } else if (this.searchCategory === '제목') {
         this.now = this.now.filter(board => board.title.includes(this.keyword))
       } else {
-        alert('검색 기준을 선택하세요')
+        this.$dialog.message.info('검색 기준을 선택하세요', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
       }
       console.log(this.now)
     },
@@ -213,15 +217,30 @@ h1 {
 }
 
 button {
-  margin-left: 3px;
-  margin-right: 3px;
+  margin-left: 10px;
+  height: 40px !important;
 }
+
+#recentBtn::before, #commentBtn::before {
+  background-color: transparent;
+}
+
 #searchBtn {
   background-color: #0c0f66;
   color: white;
 }
+
 #resetBtn {
-  background-color: #0c0f66;
+  background-color: #ff7451;
   color: white;
+}
+
+#writeBtn {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+#table {
+  height: 530px;
 }
 </style>
