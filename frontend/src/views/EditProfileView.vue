@@ -38,7 +38,7 @@
               prepend-icon=""
               append-icon="mdi-camera"
               color="#0c0f66"></v-file-input>
-            <v-btn id="deleteProfileImgBtn" class="mt-4 mb-2" block rounded elevation="0" @click="deleteProfileImg">
+            <v-btn id="deleteProfileImgBtn" class="mb-4" block rounded elevation="0" @click="deleteProfileImg">
               프로필 이미지 삭제
             </v-btn>
 
@@ -150,6 +150,7 @@
               label="상세 자기소개"
               auto-grow
               clearable
+              no-resize
               clear-icon="mdi-close-circle"
               color="#0c0f66"
               maxlength="300"
@@ -435,6 +436,15 @@ form {
 
 #checkNicknameBtn i:hover {
   transform: scale(1.15);
+}
+
+img {
+  object-fit: cover;
+}
+
+::v-deep ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 .chip {
