@@ -47,7 +47,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void writeBoard(BoardDto boardDto, int user_no) throws Exception {
+    public Board writeBoard(BoardDto boardDto, int user_no) throws Exception {
         boardDto.setWriter_no(user_no);
         User u = userService.getUserByNo(user_no);
         Board b = boardDto.toEntityWriteBy(u);
@@ -74,11 +74,12 @@ public class BoardServiceImpl implements BoardService {
                     .build();
             boardFileRepository.save(bf);
         }
+        return b;
     }
 
     @Override
     @Transactional
-    public void updateBoard(BoardUpdateDto boardDto, int user_no) throws Exception {
+    public Board updateBoard(BoardUpdateDto boardDto, int user_no) throws Exception {
         Board board = getBoard(boardDto.getNo());
         if(user_no!=board.getUser().getNo()){
             throw new Exception("글쓴이와 로그인 정보가 일치하지 않습니다.");
@@ -111,6 +112,7 @@ public class BoardServiceImpl implements BoardService {
                     .build();
             boardFileRepository.save(bf);
         }
+        return board;
     }
 
     @Override

@@ -132,8 +132,8 @@ export default {
       this.$router.push({ name: "main" });
     },
     toReady() {
-      //this.$router.push({ name: "consulting-ready" });
-      this.$router.push({ name: "consulting-onair" });
+      this.$router.push({ name: "consulting-ready" });
+      // this.$router.push({ name: "consulting-onair" });
     },
     toMyProfile() {
       this.$router.push("/profile/"+this.loginUser.no).catch(()=>{});

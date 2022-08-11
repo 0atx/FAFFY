@@ -148,7 +148,7 @@
             <v-textarea
               v-model="form.introduce"
               label="상세 자기소개"
-              auto-grow
+              rows="4"
               clearable
               no-resize
               clear-icon="mdi-close-circle"
