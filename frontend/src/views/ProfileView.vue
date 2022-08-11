@@ -34,13 +34,6 @@ export default {
   mounted() {
       this.loadProfile();
   },
-  watch: {
-    $route() {
-      if (this.prevUserNo == this.$route.params.no) return;
-      this.prevUserNo = this.$route.params.no;
-      this.loadProfile();
-    },
-  },
   methods: {
     ...mapActions(profileStore, ["loadFollower", "loadFollowing"]),
     ...mapMutations(profileStore, ["SET_USER_PROFILE"]),
