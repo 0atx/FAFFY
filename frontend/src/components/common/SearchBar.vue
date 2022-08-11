@@ -14,6 +14,7 @@
       dense
       single-line
       append-icon="mdi-magnify" class="shrink mx-4"
+      @click:append="onInputKeyword"
       @keydown.enter="onInputKeyword"
       @keyup.tab="onInputKeyword"
     />
