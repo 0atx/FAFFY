@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 public class GoogleOauth implements SocialOauth{
     private String GOOGLE_SNS_LOGIN_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-//    private String GOOGLE_DATA_ACCESS_SCOPE ="https://www.googleapis.com/auth/cloud-platform";
     private String GOOGLE_DATA_ACCESS_SCOPE =
         "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid";
     @Value("${spring.security.oauth2.client.registration.google.client-id}")

@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @GetMapping("/login/{socialLoginType}/callback")
-    public ResponseEntity<Map<String, Object>> callback (
+    public ResponseEntity callback (
             @PathVariable(name = "socialLoginType") String socialLoginPath,
             @RequestParam(name = "code") String code) throws Exception {
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ code);
@@ -58,19 +58,15 @@ public class AuthController {
         //토큰, 유저 정보를 담아 홈으로 리다이렉트
         User user = getSocialOAuthRes.getUser();
         String token = getSocialOAuthRes.getJwtToken();
-        HashMap<String, Object> resultMap = new HashMap<>();
-        HashMap<String, Object> resultMapIn = new HashMap<>();
-        try {
-            resultMapIn.put("user", user);
-            resultMapIn.put("token", token);
-            resultMap.put("content", resultMapIn);
-        } catch (Exception e) {
-            logger.error("로그인 에러 : {}",e.getMessage());
-            resultMap.put("msg", e.getMessage());
-            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-        }
+//        HashMap<String, Object> resultMap = new HashMap<>();
+//        HashMap<String, Object> resultMapIn = new HashMap<>();
+//        resultMapIn.put("user", user);
+//        resultMapIn.put("token", token);
+//        resultMap.put("content", resultMapIn);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(mainURL));
-        return new ResponseEntity<>(resultMap, headers, HttpStatus.MOVED_PERMANENTLY);
+        headers.set("X-AUTH-TOKEN", token);
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+//        return new ResponseEntity<>(resultMap, headers, HttpStatus.OK);
     }
 }

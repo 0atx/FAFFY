@@ -189,6 +189,23 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="JWT 토큰으로 회원 찾기",notes="jwt 토큰에 해당하는 유저의 정보를 반환합니다.")
+    @GetMapping("/token")
+    public ResponseEntity findUserByToken(@RequestParam String token) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.getUserByNo(Integer.parseInt(jwtTokenProvider.getUserPk(token)));
+            resultMap.put("user", user);
+        } catch (Exception e) {
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
+    }
+
     @ApiOperation(value="비밀번호 찾기",notes="해당 유저의 이메일로 임시 비밀번호를 전송합니다.")
     @PutMapping("/findpwd")
     public ResponseEntity<Map<String, Object>> findPwd(@RequestParam String email, @RequestParam String birthday) {
