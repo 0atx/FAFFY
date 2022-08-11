@@ -1,43 +1,44 @@
 <!--
   작성자: 류경하
   설명: 각각의 댓글
-  최종 수정일: 2022.08.05
+  최종 수정일: 2022.08.11
+  최종 수정자: 박윤하
 -->
 <template>
-  <v-container fluid class="pa-1 border border-primary rounded-4">
+  <v-container style="width: 80%" class="pa-0 border border-primary rounded-4">
     <v-card
-      outlined
+      elevation="0"
       class="mx-auto text-left"
     >
-    <!-- 댓글 내용 -->
-      <v-card-text>
-        <div class="d-flex justify-space-between">
-          <span class="text-h6 text--primary" style="cursor:pointer" @click="moveProfile(comment.writer.no)">
-            {{ comment.writer.nickname }}
-          </span>
-          <span>{{ comment.datetime.slice(0,4)+'년 '+comment.datetime.slice(5, 7)+'월 '+comment.datetime.slice(8, 10)+'일' }}</span>
+      <v-divider></v-divider>
+      <v-card-subtitle style="font-size: 14px; padding-top: 10px; padding-left: 8px; padding-bottom:0">
+        <div style="display:flex; justify-content: space-between">
+          <div  @click="moveProfile(comment.writer.no)" style="cursor: pointer; display:flex; align-items:center">
+          <profile-img-avatar :user_no="comment.writer.no" />
+          <div class="mr-2">{{ comment.writer.nickname }}</div> | <div class="ml-2">{{ date }}</div>
+          </div>
         </div>
-        <hr inset>
-        <div class="text--primary">
-          {{ comment.content}}
-        </div>
+      </v-card-subtitle>
+      <!-- 댓글 내용 -->
+      <v-card-text class="ml-12" style="color:black; padding-bottom:0;">
+        {{ comment.content}}
       </v-card-text>
-    <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
-      <v-card-actions>
+      <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
+      <div style="text-align:right;" v-if="comment.writer.nickname === checkUserInfo.nickname">
         <v-btn
           text
-          color="error accent-2"
+          color="#ff7451"
           @click="requestDeleteComment(comment.no)"
-          :disabled="comment.writer.nickname !== checkUserInfo.nickname">
-          삭제
+        >삭제
         </v-btn>
-      </v-card-actions>
+      </div>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ProfileImgAvatar from '@/components/common/ProfileImgAvatar.vue'
 const boardStore = "boardStore"
 const authStore = "authStore"
 
@@ -46,13 +47,36 @@ export default {
   props: {
     comment: Object,
   },
+  components: {
+    ProfileImgAvatar
+  },
+  data() {
+    return {
+      date : '',
+    }
+  },
   computed: {
     ...mapGetters(authStore, ['checkUserInfo']),
   },
+  mounted() {
+    this.date = this.comment.datetime.replaceAll('-', '.').replace('T', ' ').slice(0, 16);
+  },
   methods: {
     ...mapActions(boardStore, ['deleteComment']),
-    requestDeleteComment(commentNo) {
-      if (confirm('정말 삭제하시겠습니까?')) {
+    async requestDeleteComment(commentNo) {
+      const res = await this.$dialog.confirm({
+          text: '<br>정말로 삭제하시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+      if (res) {
         console.log(`${commentNo}번 댓글을 삭제합니다.`)
         this.deleteComment(commentNo)
       }
@@ -66,4 +90,7 @@ export default {
 </script>
 
 <style scoped>
+.v-btn::before {
+  background-color: transparent;
+}
 </style>
