@@ -2,7 +2,7 @@
   <v-app id="faffy">
     <Header :isOnAir="isOnAir" />
     <Loading v-if="loading"/>
-    <router-view v-show="!loading"></router-view>
+    <router-view v-show="!loading" :key="$route.path"></router-view>
     <Footer v-if="show" />
   </v-app>
 </template>

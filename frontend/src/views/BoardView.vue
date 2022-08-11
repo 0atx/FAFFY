@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      boardType: '자유',
+      boardType: '',
     }
   },
   // computed: {

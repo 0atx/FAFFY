@@ -29,7 +29,7 @@
         </div>
       </v-card-subtitle>
       <v-img
-        contain :src="currentImage" max-height="300px" alt="" class="grey darken-4">
+        v-if="currentImage" contain :src="currentImage" max-height="300px" alt="" class="grey darken-4">
       </v-img>
       <v-card-text class="text--primary d-flex justify-start">
         {{ currentBoard.content }}

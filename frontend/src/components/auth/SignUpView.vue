@@ -410,6 +410,17 @@ input:disabled {
   justify-content : center;
 }
 
+::v-deep ::-webkit-scrollbar {
+  width: 10px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+::v-deep ::-webkit-scrollbar-thumb {
+  background: #0c0f66;
+  border-radius: 10px;
+}
+
 #closeBtn {
   background-color: #0c0f66;
   color: #fff;

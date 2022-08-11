@@ -25,14 +25,14 @@ public interface BoardService {
      * @param boardDto 게시글 내용을 담은 객체
      * @throws Exception 글쓴이 번호에 해당하는 유저를 찾을 수 없거나 입력값이 잘못된 경우 예외 발생
      */
-    public void writeBoard(BoardDto boardDto, int user_no) throws Exception;
+    public Board writeBoard(BoardDto boardDto, int user_no) throws Exception;
 
     /**
      * 게시글 수정
      * @param boardUpdateDto 수정할 게시글의 내용을 담은 객체
      * @throws Exception 해당 게시글이 없거나 유효하지 않은 입력 시 예외 발생
      */
-    public void updateBoard(BoardUpdateDto boardUpdateDto, int user_no) throws Exception;
+    public Board updateBoard(BoardUpdateDto boardUpdateDto, int user_no) throws Exception;
 
     /**
      * 게시글 삭제
