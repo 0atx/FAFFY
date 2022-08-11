@@ -11,6 +11,14 @@ const auth = {
       .then(success)
       .catch(fail);
   },
+  socialLogin: async function (platform, success, fail){
+    await api
+      .get(
+        `/auth/login/${platform}`
+      )
+      .then(success)
+      .catch(fail);
+  },
   logout: async function(success,fail) {
     api.defaults.headers["X-AUTH-TOKEN"] =
       sessionStorage.getItem("X-AUTH-TOKEN");
