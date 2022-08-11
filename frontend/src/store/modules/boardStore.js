@@ -57,7 +57,11 @@ const boardStore = {
       })
         .then(res => {
           console.log(res)
-          alert('게시글이 등록되었습니다.')
+          this.$dialog.message.info('게시글이 등록되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
           router.push({ name: 'board' })
         })
         .catch(err => {
@@ -113,7 +117,11 @@ const boardStore = {
       })
         .then(res => {
           console.log('삭제 성공', res)
-          alert('게시글이 정상적으로 삭제되었습니다.')
+          this.$dialog.message.info('게시글이 정상적으로 삭제되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
           commit('SET_BOARD', {})
           router.push({ name: 'board' })
         })
@@ -129,7 +137,11 @@ const boardStore = {
       })
         .then(res => {
           console.log('댓글 삭제', res)
-          alert('댓글이 정상적으로 삭제되었습니다.')
+          this.$dialog.message.info('댓글이 정상적으로 삭제되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
           router.go(router.currentRoute)
         })
         .catch(err => {

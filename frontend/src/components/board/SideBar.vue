@@ -1,28 +1,18 @@
 <!--
 작성자: 류경하
 설명: 게시판 좌측 메뉴(질문응답/자유/정보 게시판)
-최종 수정일: 2022.07.29
+최종 수정일: 2022.08.10
+최종 수정자: 박윤하
 -->
 <template>
   <v-card
-    height="100vh"
+    height="86vh"
     width="256"
     class="mx-auto"
+    elevation="0"
+    style="text-align:left;"
   >
     <v-navigation-drawer permanent>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6" style="cursor: pointer" @click="moveBoard">
-            게시판
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            <!-- subtext -->
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
       <v-list
         dense
         nav
@@ -38,7 +28,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title style="font-size:16px">{{ item.title }} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -51,7 +41,8 @@ export default {
   data () {
     return {
       items: [
-        { title: '자유', icon: 'mdi-view-dashboard' },
+        { title: '전체', icon: 'mdi-view-dashboard' },
+        { title: '자유', icon: 'mdi-clipboard-text' },
         { title: '질문', icon: 'mdi-help-box' },
         { title: '정보', icon: 'mdi-image' },
       ],
