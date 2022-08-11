@@ -1,10 +1,11 @@
 <!--
   작성자: 류경하
   설명: 댓글 목록
-  최종 수정일: 2022.08.04
+  최종 수정일: 2022.08.11
+  최종 수정자: 박윤하
 -->
 <template>
-  <v-container fluid>
+  <v-container class="ml-2">
     <!-- <h1>댓글 목록</h1> -->
     <CommentItem
       v-for="comment in commentList"
@@ -30,8 +31,6 @@ export default {
 }
 </script>
 
-<style>
-v-container {
-  background-color: beige;
-}
+<style scoped>
+
 </style>
