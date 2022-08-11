@@ -1,5 +1,6 @@
 package com.faffy.web.jpa.repository;
 
+import com.faffy.web.jpa.entity.Consulting;
 import com.faffy.web.jpa.entity.ConsultingLog;
 import com.faffy.web.jpa.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ import java.util.Optional;
 public interface ConsultingLogRepository extends JpaRepository<ConsultingLog, Integer> {
     @Query("select c from ConsultingLog c where c.user.no = :no")
     Optional<List<ConsultingLog>> findConsultingLogsByUserNo(@Param("no") int userNo);
+
+    Optional<ConsultingLog> findConsultingLogByUserAndConsulting(User user, Consulting consulting);
 }

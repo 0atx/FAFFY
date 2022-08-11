@@ -23,4 +23,14 @@ public class ConsultingDto {
         @NonNull
         private int user_no;
     }
+    
+    @Data
+    @NoArgsConstructor
+    public static class CreateLogRequestDto {
+        @NonNull
+        private int consulting_no;
+        // 참여자한 유저의 번호
+        @NonNull
+        private int user_no;
+    }
 }
