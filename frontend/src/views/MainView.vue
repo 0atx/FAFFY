@@ -184,7 +184,6 @@
               <v-data-table
                 class="table"
                 :headers="headers"
-                hide-default-header
                 hide-default-footer
                 :items="boards"
                 :items-per-page="5"

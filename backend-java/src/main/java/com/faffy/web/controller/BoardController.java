@@ -116,7 +116,8 @@ public class BoardController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            boardService.writeBoard(boardDto,user_no);
+            BoardGetDto boardResult = boardService.writeBoard(boardDto, user_no).toBoardGetDto();
+            resultMap.put("content",boardResult);
         } catch (Exception e) {
             logger.error("게시글 쓰기 실패 {}", e.toString());
             resultMap.put("msg", e.getMessage());
@@ -147,7 +148,8 @@ public class BoardController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         try {
-            boardService.updateBoard(boardUpdateDto,user_no);
+            BoardGetDto boardResult = boardService.updateBoard(boardUpdateDto, user_no).toBoardGetDto();
+            resultMap.put("content",boardResult);
         } catch (Exception e) {
             logger.error("게시글 수정 실패 {}", e.toString());
             resultMap.put("msg", e.getMessage());
