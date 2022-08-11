@@ -69,7 +69,6 @@ public class OAuthService {
                 if(user != null) {
                     //서버에 user가 존재하면 앞으로 회원 인가 처리를 위한 jwtToken을 발급한다.
                     String jwtToken = jwtTokenProvider.createToken(String.valueOf(user.getNo()), user.getRoles());
-                    System.out.println("JWT Token created");
                     //액세스 토큰과 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.
                     res = new GetSocialOAuthRes(jwtToken, user.getNo(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), true, user);
                 }else {
@@ -85,7 +84,11 @@ public class OAuthService {
                             .roles(roles)
                             .loginType(LoginType.GOOGLE)
                             .build();
-                    userRepository.save(newUser);
+                    try {
+                        userRepository.save(newUser);
+                    }catch(Exception e){
+                        throw new Exception("중복된 닉네임이 있습니다.");
+                    }
 
                     String jwtToken = jwtTokenProvider.createToken(String.valueOf(newUser.getNo()), newUser.getRoles());
                     res = new GetSocialOAuthRes(jwtToken, newUser.getNo(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), false, newUser);
