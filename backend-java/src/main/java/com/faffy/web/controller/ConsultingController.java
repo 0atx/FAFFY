@@ -1,8 +1,10 @@
 package com.faffy.web.controller;
 
 import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingFinishRequestDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadRequestDto;
+import com.faffy.web.dto.ConsultingDto.CreateLogRequestDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.service.ConsultingServiceImpl;
@@ -114,9 +116,9 @@ public class ConsultingController {
 
     @ApiOperation(value="방송 입장 시 로그 생성", notes="방송 입장 시에 로그 정보 기록, 시청자 수 증가시키기")
     @PostMapping("/log")
-    public ResponseEntity createConsultingLog(int consulting_no, int user_no) {
+    public ResponseEntity createConsultingLog(@RequestBody CreateLogRequestDto logDto) {
         try {
-            consultingService.createLog(consulting_no, user_no);
+            consultingService.createLog(logDto);
         } catch(Exception e){
             HashMap<String, Object> result = new HashMap<>();
             result.put("msg", "유효하지 않은 방송 또는 유저입니다.");

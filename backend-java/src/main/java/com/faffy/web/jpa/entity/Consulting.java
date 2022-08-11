@@ -51,6 +51,7 @@ public class Consulting extends BaseEntity {
         return ConsultingGetDto.builder()
                 .no(this.no)
                 .consultant(this.consultant.getNickname())
+                .consultant_no(this.consultant.getNo())
                 .title(this.title)
                 .introduce(this.intro)
                 .roomSize(this.roomSize)
