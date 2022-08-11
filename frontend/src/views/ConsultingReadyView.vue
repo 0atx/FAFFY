@@ -1,7 +1,7 @@
 <template>
   <div id="view">
     <div class="mb-4">
-      <video id="video" autoplay style="width: 98%; max-width: 500px; border-radius: 5px;" />
+      <video id="video" autoplay style="max-width: 500px; border-radius: 5px;" />
     </div>
     <div style="width:70%; margin:0 auto;">
       <v-form ref="form" style="display:flex;justify-content:space-evenly;">
@@ -64,6 +64,7 @@
             id="onairBtn"
             :ripple="false"
             elevation="0"
+            @click="start"
           >
             방송 시작
           </v-btn>
@@ -75,12 +76,21 @@
 </template>
 
 <script>
+import {consulting} from "@/api/consulting.js"
+import {category} from "@/api/category.js"
+import {mapState} from "vuex";
+
+const authStore = "authStore";
 export default {
   name: 'ConsultingFormView',
+  computed: {
+    ...mapState(authStore,["loginUser"]),
+  },
   data() {
     return {
       // 방송 정보
       form: {
+        consultant_no:"",
         title: "제목",
         roomSize: 5,
         intro: "정보 소개.",
@@ -106,9 +116,38 @@ export default {
     }
   },
   mounted() {
+    // 로그인 체크
 
+    // 내정보, 방송 생성 정보
+    this.form.consultant_no = this.loginUser.no;
+    // 카테고리 요청
+    category.getCategories(
+      (response) => {
+        console.log("카테고리 요청 성공");
+        this.categoryList = response.data["content"];
+      },
+      (response) => {
+        console.log("요청 실패");
+        console.log(response);
+      }
+    );
   },
   methods: {
+    // 방송 시작
+    start() {
+      consulting.createConsulting(this.form)
+      .then(response => {
+        console.log("생성 요청 성공");
+        console.log(response.content);
+        let nickname = response.content.consultant;
+        let consulting_no = response.content.no;
+        this.$router.push({name:"consulting-onair",params:{nickname,consulting_no}});
+      })
+      .catch(error=> {
+        console.log("생성 실패");
+        console.log(error);
+      })
+    }
   },
 
 }

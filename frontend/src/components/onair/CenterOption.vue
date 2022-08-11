@@ -91,6 +91,7 @@
     <div v-if="!state.onScreen" class="mafia-setting-btn" @click="shareScreen"><i class="el-icon-video-pause"></i></div>
     <div class="mafia-setting-btn" @click="leaveRoom"><i class="el-icon-close"></i></div>
     -->
+    </div>
   </div>
 </template>
 
@@ -112,12 +113,18 @@ export default {
 
 <style scoped>
 #centerOption {
-  width:60%;
+  width:100%;
   padding: 10px;
+  padding-bottom: 20px;
+}
+
+#optionButton {
+  width:60%;
+  height: 70px;
   margin: 0 20%;
   text-align: center;
+  padding-top: 12px;
   border-radius: 40px;
-  background-color: rgb(200, 200, 200);
 }
 
 .onButton {
