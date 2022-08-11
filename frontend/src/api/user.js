@@ -39,4 +39,23 @@ const follow = {
     .catch(fail);
   }
 };
-export { user, follow };
+const consulting = {
+  getParticipatedList: async function (user_no, success, fail) {
+    await api.get(`/users/profile/${user_no}/history/parti`)
+    .then(success)
+    .catch(fail);
+  },
+  getConsultingList: async function (user_no, success, fail) {
+    await api.get(`/users/profile/${user_no}/history/consult`)
+    .then(success)
+    .catch(fail);
+  },
+};
+const userBoard = {
+  getUserBoardList: async function (user_no, success, fail) {
+    await api.get(`/users/profile/${user_no}/board`)
+    .then(success)
+    .catch(fail);
+  }
+}
+export { user, follow, consulting, userBoard };

@@ -27,15 +27,22 @@
             color="gray"
             :ripple="false"
             :to="{ name: 'user-history' }"
+            :disabled="!isHistoryExist"
           >
             <v-icon> mdi-plus </v-icon>
           </v-btn>
         </p>
         <hr />
         <div id="history">
-          방송 기록 리스트 부분입니다. 추후 방송 기록 리스트 컴포넌트 구현 후
+          <!-- 방송 기록 리스트 부분입니다. 추후 방송 기록 리스트 컴포넌트 구현 후
           추가할 예정입니다. <br />ex) 카테고리(참여, 진행) | 방송 제목 ㅁ사진
-          갯수 or 방송 일자
+          갯수 or 방송 일자 -->
+          <div v-if="isHistoryExist">
+            {{ consultingHistory.slice(0, 5) }}
+          </div>
+          <div v-else>
+            방송 이력이 없습니다.
+          </div>
         </div>
       </div>
       <div id="content">
@@ -50,15 +57,22 @@
             color="gray"
             :ripple="false"
             :to="{ name: 'user-board' }"
+            :disaled="!isBoardExist"
           >
             <v-icon> mdi-plus </v-icon>
           </v-btn>
         </p>
         <hr />
         <div id="board">
-          게시글 리스트 부분입니다. 추후 게시글 리스트 컴포넌트 구현 후 추가할
+          <!-- 게시글 리스트 부분입니다. 추후 게시글 리스트 컴포넌트 구현 후 추가할
           예정입니다. <br />ex) 카테고리(Q&A, 자유) | 게시글 제목 ㅁ댓글 갯수 or
-          작성 일자
+          작성 일자 -->
+          <div v-if="isBoardExist">
+            {{ userBoardList.slice(0, 5) }}
+          </div>
+          <div v-else>
+            작성한 게시글이 없습니다.
+          </div>
         </div>
       </div>
     </div>
@@ -66,12 +80,26 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import _ from 'lodash'
 const profileStore = "profileStore";
+
 export default {
   name: "ProfileDetailView",
   computed: {
     ...mapState(profileStore, ["userProfile"]),
+    ...mapGetters(profileStore, ["userBoardList", "participatedList","consultingList"]),
+    consultingHistory() {
+      return [...this.participatedList, ...this.consultingList].sort((a, b) => {
+        return b.date - a.date
+      })
+    },
+    isHistoryExist() {
+      return !_.isEmpty(this.consultingHistory)
+    },
+    isBoardExist() {
+      return !_.isEmpty(this.userBoardList)
+    }
   },
   data() {
     return {};
