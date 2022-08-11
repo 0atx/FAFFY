@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -153,5 +156,31 @@ public class ConsultingController {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity(status);
+    }
+
+    @GetMapping("/order/view")
+    public ResponseEntity getConsultingsByViewCount(@RequestParam Integer size) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        PageRequest pageRequest = PageRequest.of(0,size);
+        List<ConsultingGetDto> list = consultingService.getConsultingsByViewCount(pageRequest);
+
+        resultMap.put("content", list);
+
+        return new ResponseEntity(resultMap, status);
+    }
+
+    @GetMapping("/order/latest")
+    public ResponseEntity getLatestConsultings(@RequestParam Integer size) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        PageRequest pageRequest = PageRequest.of(0,size);
+        List<ConsultingGetDto> list = consultingService.getLatestConsultings(pageRequest);
+
+        resultMap.put("content", list);
+
+        return new ResponseEntity(resultMap, status);
     }
 }
