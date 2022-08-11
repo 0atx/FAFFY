@@ -33,12 +33,14 @@ public class User extends BaseEntity implements UserDetails {
     private String name;
     @Column(nullable = false, unique = true)
     private String nickname;
-    @Column(nullable = false)
+    @Column
+//    @Column(nullable = false)
     private String password;
 
     private LocalDate birthday;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(length = 2)
+//    @Column(nullable = false)
     private Gender gender;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -81,13 +83,12 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     List<FollowMapping> followedMappings = new ArrayList<>();
 
-
     public User() {
     }
 
     @Builder
     public User(int no, String email, LoginType loginType, String name, String nickname, String password, LocalDate birthday, String introduce, Gender gender, String info, List<String> roles
-            , String instaLink, String facebookLink, String youtubeLink) {
+            , String instaLink, String facebookLink, String youtubeLink, UploadFile profileImage) {
         this.no = no;
         this.email = email;
         this.name = name;
@@ -102,6 +103,7 @@ public class User extends BaseEntity implements UserDetails {
         this.instaLink = instaLink;
         this.facebookLink = facebookLink;
         this.youtubeLink = youtubeLink;
+        this.profileImage = profileImage;
     }
 
     /**

@@ -40,6 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable() // rest api 만을 고려하여 기본 설정 해제
                 .csrf().disable() // csrf 보안 토큰 disable처리.
+                .headers().frameOptions().disable() // h2-console 화면을 사용하기 위해 해당 옵션 disable
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 비사용
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크(roles에따라 접근 제한)
@@ -49,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
-        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
     }
 }
 
