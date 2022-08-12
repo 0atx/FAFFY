@@ -5,8 +5,10 @@ import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.entity.UserCategory;
+import com.faffy.web.jpa.type.SocialLoginType;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.*;
+import com.faffy.web.service.auth.OAuthService;
 import com.faffy.web.service.token.JwtTokenProvider;
 import com.sun.net.httpserver.HttpsServer;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +51,37 @@ public class UserController {
 
     private final JwtTokenProvider jwtTokenProvider;
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    /**
+     * 로그인
+     * @param userDto
+     * @return 성공시 토큰값(String), 실패시 msg
+     * 토큰의 유효기간은 30분이고 request header에 'X-AUTH-TOKEN' : '토큰값' 형식으로 전송
+     */
+    @ApiOperation(value="로그인",notes="로그인시 토큰값(String)이 반환되고 이후 request header에 ‘X-AUTH-TOKEN’ : ‘토큰값’ 형식으로 전송 필요합니다.")
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserLoginDto userDto) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> resultMapIn = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            UserPublicDto user = userService.login(userDto);
+            resultMapIn.put("user", user);
+            resultMapIn.put("token", jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
+            resultMap.put("content", resultMapIn);
+        } catch (Exception e) {
+            logger.error("로그인 에러 : {}",e.getMessage());
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestHeader(value = "X-AUTH-TOKEN") String token) {
+        userService.logout(token);
+    }
 
     /**
      * 모든 회원 정보 받아오기
@@ -147,6 +181,23 @@ public class UserController {
         try {
             User user = userService.getUserByNickname(nickname);
             resultMap.put("content", user.toDetailDto());
+        } catch (Exception e) {
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } finally {
+            return new ResponseEntity(resultMap, status);
+        }
+    }
+
+    @ApiOperation(value="JWT 토큰으로 회원 찾기",notes="jwt 토큰에 해당하는 유저의 정보를 반환합니다.")
+    @GetMapping("/token")
+    public ResponseEntity findUserByToken(@RequestParam String token) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        try {
+            User user = userService.getUserByNo(Integer.parseInt(jwtTokenProvider.getUserPk(token)));
+            resultMap.put("user", user);
         } catch (Exception e) {
             resultMap.put("msg", e.getMessage());
             status = HttpStatus.BAD_REQUEST;
@@ -294,36 +345,6 @@ public class UserController {
         } finally {
             return new ResponseEntity(resultMap, status);
         }
-    }
-
-    /**
-     * 로그인
-     * @param userDto
-     * @return 성공시 토큰값(String), 실패시 msg
-     * 토큰의 유효기간은 30분이고 request header에 'X-AUTH-TOKEN' : '토큰값' 형식으로 전송
-     */
-    @ApiOperation(value="로그인",notes="로그인시 토큰값(String)이 반환되고 이후 request header에 ‘X-AUTH-TOKEN’ : ‘토큰값’ 형식으로 전송 필요합니다.")
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginDto userDto) {
-        HashMap<String, Object> resultMap = new HashMap<>();
-        HashMap<String, Object> resultMapIn = new HashMap<>();
-        HttpStatus status = HttpStatus.OK;
-        try {
-            UserPublicDto user = userService.login(userDto);
-            resultMapIn.put("user", user);
-            resultMapIn.put("token", jwtTokenProvider.createToken(Integer.toString(user.getNo()), user.getRoles()));
-            resultMap.put("content", resultMapIn);
-        } catch (Exception e) {
-            logger.error("로그인 에러 : {}",e.getMessage());
-            resultMap.put("msg", e.getMessage());
-            status = HttpStatus.BAD_REQUEST;
-        } finally {
-            return new ResponseEntity(resultMap, status);
-        }
-    }
-    @PostMapping("/logout")
-    public void logout(@RequestHeader(value = "X-AUTH-TOKEN") String token) {
-        userService.logout(token);
     }
 
 //    @PostMapping("/category")

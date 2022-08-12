@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import MainView from "@/views/MainView.vue";
+import AuthHandler from "@/views/handler/AuthHandler";
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,11 @@ const routes = [
         name: "sign-up",
         component: () => import("@/components/auth/SignUpView.vue"),
       },
+      {
+        path: "google/redirect",
+        name: "google",
+        component: AuthHandler,
+      }
     ],
   },
   {
