@@ -15,4 +15,6 @@ import java.util.List;
 public interface ConsultingRepository extends JpaRepository<Consulting, Integer> {
     @Query("select c from Consulting c where c.endTime is null order by c.viewCount desc")
     List<Consulting> findAllOrderByViewCount(Pageable pageable);
+    @Query("select c from Consulting c where c.endTime is null order by c.startTime desc")
+    List<Consulting> findAllOrderByStartTime(Pageable pageable);
 }
