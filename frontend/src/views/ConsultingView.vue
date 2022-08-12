@@ -22,7 +22,7 @@
 		<!-- 방송 들어간 후-->
 		<div id="session" v-if="session">
 			<div id="session-header">
-				<h1 id="session-title">{{ mySessionId }}</h1>
+				<h1 id="session-title">방송제목:{{ consultingInfo.title }}</h1>
 				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession"
 					value="Leave session">
 			</div>
@@ -98,19 +98,31 @@ export default {
         this.$router.push('/');
       else {
         this.mySessionId = ""+this.consulting_no;
+        this.nickname = "temp";
+        this.consulting_no = this.mySessionId;
       }
       return;
     }
     this.mySessionId= ""+this.consulting_no;
     this.myUserName=this.loginUser.nickname;
-    // 방장인지 체크
+    // 방송 정보 요청 후 값 세팅
+    consulting.getConsulting(this.consulting_no)
+    .then((data)=> {
+      console.log("방송 정보 요청 성공");
+      console.log(data);
+      this.consultingInfo = data.content;
+      console.log(this.consultingInfo.title);
+    })
+    .catch((error)=> {
+      console.log("방송 정보 요청 실패");
+      console.log(error);
+    })
+    this.joinSession();
+      // 방장인지 체크
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
       alert("방장 어서오고");
-    } else {
-      alert("손님 어서오세요");
     }
-    this.joinSession();
   },
   beforeRouteLeave(to,from,next) {
     console.log("leave!!");
@@ -136,7 +148,9 @@ export default {
 			screenShareName: undefined,
 
 			message: "",
-			recvList: []
+			recvList: [],
+      // 방송 정보
+      consultingInfo:null,
 		}
 	},
 	methods: {
@@ -249,6 +263,24 @@ export default {
 						// --- Publish your stream ---
 
 						this.session.publish(this.publisher);
+
+            console.log("방장체크"+this.nickname);
+            console.log("내닉넴:"+this.loginUser.nickname);
+            if (!this.isHost){
+              const log = {
+                consulting_no:this.mySessionId,
+                user_no:this.loginUser.no,
+              }
+              console.log(log);
+              consulting.createViewLog(log)
+              .then((data)=> {
+                console.log("로그 생성");
+                console.log(data);
+              })
+              .catch((error)=> {
+                console.log(error);
+              })
+            }
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
