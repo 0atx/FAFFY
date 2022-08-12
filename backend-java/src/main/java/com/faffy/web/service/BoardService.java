@@ -58,4 +58,6 @@ public interface BoardService {
     List<BoardGetDto> getBoardsByHit(Pageable pageable);
 
     List<Integer> getBoardsImageNoByDate(Pageable pageable);
+
+    List<BoardGetDto> searchByKeyword(String keyword) throws Exception;
 }
