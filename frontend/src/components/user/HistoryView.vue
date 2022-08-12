@@ -35,7 +35,7 @@
             id="table"
             :headers="headers"
             hide-default-footer
-            :items="selected? parti : consults"
+            :items="selected? participatedList : consultingList"
             :items-per-page="itemsPerPage"
             :page.sync="page"
             @page-count="pageCount = $event"
@@ -60,6 +60,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+const profileStore = "profileStore";
+
 export default {
   name: "HistoryView",
   data() {
@@ -70,182 +73,6 @@ export default {
         { text: "방송 진행자", value: "consultant" },
         { text: "방송 일자", value: "date" },
       ],
-      // 임시 방송 진행 기록, DB에서 받아와서 넘겨줘야 함
-      consults: [
-        {
-          title: "1111111방송 제목입니다.",
-          intro: "카테고리 넣고 상세 페이지에는 그 날 입었던 옷들 기록?",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "제목도 10자 제한(최대 50자)",
-          intro: "30자 출력하게 해야함(최대 300자)",
-          consultant: "별명도 10자?",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.3",
-          intro: "if consults.intro.length <= 30 그냥 출력",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.4",
-          intro: 'else consult.intro.substring(0, 30) + "..." 해서 출력',
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.5",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.6",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.7",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.8",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.9",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.10",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.11",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.12",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.13",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.14",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-      ],
-      // 임시 방송 참여 기록, DB에서 받아와서 넘겨줘야 함
-      parti: [
-        {
-          no: 1,
-          title: "방송 제목입니다.",
-          intro: "카테고리 넣고 상세 페이지에는 그 날 입었던 옷들 기록?",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "제목도 10자 제한(최대 50자)",
-          intro: "30자 출력하게 해야함(최대 300자)",
-          consultant: "별명도 10자?",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.3",
-          intro: "if consults.intro.length <= 30 그냥 출력",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.4",
-          intro: 'else consult.intro.substring(0, 30) + "..." 해서 출력',
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.5",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.6",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.7",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.8",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.9",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.10",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.11",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.12",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.13",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-        {
-          title: "방송 제목입니다.14",
-          intro: "여기 뭐 넣어야 되냐?;;",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-      ],
-
       // pagination 관련 변수
       page: 1,
       pageCount: 0,
@@ -255,10 +82,13 @@ export default {
       selected: true,
     };
   },
+  computed: {
+    ...mapGetters(profileStore, ['participatedList', 'consultingList'])
+  },
   methods: {
     historyDetail (e) {
-      console.log(`${e.no}번 글의 상세 history로 이동합니다.`)
-      this.$router.push({ name: 'user-history-detail', params: { consultNo: e.no } })
+      console.log(`${e.consulting_no}번 글의 상세 history로 이동합니다.`)
+      this.$router.push({ name: 'user-history-detail', params: { consultNo: e.consulting_no } })
     }
   },
   watch: {

@@ -38,7 +38,39 @@
           추가할 예정입니다. <br />ex) 카테고리(참여, 진행) | 방송 제목 ㅁ사진
           갯수 or 방송 일자 -->
           <div v-if="isHistoryExist">
-            {{ consultingHistory.slice(0, 5) }}
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-center">
+                      카테고리
+                    </th>
+                    <th class="text-center">
+                      제목
+                    </th>
+                    <th class="text-center">
+                      진행자
+                    </th>
+                    <th class="text-center">
+                      방송일
+                    </th>
+                  </tr>
+                </thead>
+                <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+                <tbody>
+                  <tr
+                    v-for="consulting in consultingHistory.slice(0, 5)"
+                    :key="consulting.consulting_no"
+                    style="cursor: pointer"
+                  >
+                    <td>{{ checkUserInfo.nickname === consulting.consultant ? "진행" : "참여" }}</td>
+                    <td>{{ consulting.title }}</td>
+                    <td>{{ consulting.consultant }}</td>
+                    <td>{{ consulting.date }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </div>
           <div v-else>
             방송 이력이 없습니다.
@@ -83,12 +115,14 @@
 import { mapGetters, mapState } from "vuex";
 import _ from 'lodash'
 const profileStore = "profileStore";
+const authStore = "authStore";
 
 export default {
   name: "ProfileDetailView",
   computed: {
     ...mapState(profileStore, ["userProfile"]),
     ...mapGetters(profileStore, ["userBoardList", "participatedList","consultingList"]),
+    ...mapGetters(authStore, ['checkUserInfo']),
     consultingHistory() {
       return [...this.participatedList, ...this.consultingList].sort((a, b) => {
         return b.date - a.date

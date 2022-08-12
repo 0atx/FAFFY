@@ -16,6 +16,13 @@ const consulting = {
       .catch(error=>reject(error.response))
     })
   },
+  createConsultingLog: async function(payload) {
+    return new Promise((resolve,reject)=> {
+      api.post(`/consultings/log`,JSON.stringify(payload))
+      .then(response=>resolve(response.data))
+      .catch(error=>reject(error.response))
+    })
+  },
   deleteConsulting: async function(request,success,fail) {
     api.delete(`/consultings`,{data:JSON.stringify(request)})
     .then(success).catch(fail);
