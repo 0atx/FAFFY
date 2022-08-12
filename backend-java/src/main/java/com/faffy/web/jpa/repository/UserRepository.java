@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.repository;
 
 import com.faffy.web.jpa.entity.User;
+import com.faffy.web.jpa.type.LoginType;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByNickname(String nickname);
 
     Optional<User>  findByEmail(String email);
+
+    Optional<User> findByEmailAndLoginType(String email, LoginType loginType);
 
     List<UserNoAndNicknameMask> findAllBy();
 

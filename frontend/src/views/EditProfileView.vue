@@ -70,7 +70,9 @@
                   label="별명"
                   required
                   color="#0c0f66"
+                  @input="checkingNickname"
                   @keydown.enter="onInputKeyword"
+                  ref="nickname"
                 />
               </div>
 
@@ -79,7 +81,7 @@
                 id="checkNicknameBtn"
                 class="mt-2"
                 icon
-                @click="checkNickname"
+                :ripple="false"
               >
                 <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'"
                   >mdi-check</v-icon
@@ -218,6 +220,7 @@ import DarkButton from "@/components/common/DarkButton.vue";
 import validateRules from "@/utils/validateRules.js";
 import { mapState, mapMutations } from "vuex";
 import { auth } from "@/api/auth.js";
+import { user } from "@/api/user.js";
 import { category } from "@/api/category.js";
 import { API_BASE_URL } from "@/config";
 
@@ -232,16 +235,15 @@ export default {
       // 임시 user 정보, 추후 DB에서 데이터 불러와서 값 넣어줘야 함
       form: {
         file: null,
-        email: "ha110011@naver.com",
-        name: "박윤하",
-        nickname: "별명짓기귀찮다",
-        password: "Password1!",
+        email: "",
+        name: "",
+        nickname: "",
+        password: "",
         confirmPW: "",
-        birthday: "1998-11-07",
-        gender: "여자",
-        introduce:
-          "간단한 자기소개를 작성해주세요. 작성된 내용은 프로필 카드에 노출됩니다.",
-        info: "자세한 자기소개를 작성해주세요. 작성된 내용은 프로필 상세 페이지에서 확인할 수 있습니다.",
+        birthday: "",
+        gender: "",
+        introduce: "",
+        info: "",
         categories: [],
         instaLink: "",
         facebookLink: "",
@@ -255,7 +257,7 @@ export default {
       categoryList: [],
 
       // 닉네임 중복 확인 후 중복 아닐 때 true 처리
-      checkNicknameIcon: false,
+      checkNicknameIcon: true,
 
       editValue: "정보 수정",
     };
@@ -269,6 +271,11 @@ export default {
       this.$router.push({ name: "main" });
     }
     this.form = { ...this.loginUser };
+    if(this.form.gender === 'Female') {
+      this.form.gender = '여자'
+    } else {
+      this.form.gender = '남자'
+    }
     console.log(this.form);
     if (this.form.categories == undefined)
       this.form.categories = [];
@@ -295,8 +302,22 @@ export default {
     goTo() {
       this.$router.go(-1);
     },
-    checkNickname() {
-      console.log("별명 중복 확인 함수 입니다. 버튼색도 바뀌면 좋겠다22..");
+    checkingNickname() {
+      if (!this.$refs.nickname.validate())
+        return;
+
+      user.checkNickname(this.form.nickname,
+      ()=> {
+        this.checkNicknameIcon = true;
+      },
+      (response)=> {
+        console.log("결과:" + response);
+        if(this.form.nickname === this.loginUser.nickname) {
+          this.checkNicknameIcon = true;
+        } else {
+          this.checkNicknameIcon = false;
+        }
+      })
     },
     requestEdit() {
       // 별명, SNS 유효성 검사 확인
@@ -304,7 +325,20 @@ export default {
 
       // 유효성 검사 안됐으면 alert
       if (!validate) {
-        alert("입력 형식을 맞춰주세요.");
+        this.$dialog.message.info('입력 형식을 맞춰주세요.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
+        return;
+      }
+
+      if(this.checkNicknameIcon === false) {
+        this.$dialog.message.info('중복된 별명입니다. 다른 별명을 입력하세요.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
         return;
       }
       // 유효성 검사 됐으면 수정 처리
@@ -327,7 +361,7 @@ export default {
       formData.append("categories", this.form.categories);
       else {
         console.log("unidentifed!");
-      formData.append("categories", []);
+        formData.append("categories", []);
       }
 
       auth.updateProfile(
@@ -357,9 +391,22 @@ export default {
     show() {
       console.log(this.selectedCategorys);
     },
-    deleteProfileImg() {
-      if (!confirm("프로필 이미지를 삭제하시겠습니까?"))
+    async deleteProfileImg() {
+      const res = await this.$dialog.confirm({
+          text: '<br>프로필 이미지를 삭제하시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+      if (!res) {
         return;
+      }
 
       auth.deleteProfileImg(this.loginUser.no,
       (response) => {
