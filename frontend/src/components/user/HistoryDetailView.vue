@@ -175,6 +175,8 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
+import { mapActions } from 'vuex';
+const profileStore = "profileStore";
 
 export default {
   name: "HistoryDetailView",
@@ -196,6 +198,16 @@ export default {
       consultCategorys: ["모던", "미니멀"],
     };
   },
+  methods: {
+    ...mapActions(profileStore, ['loadHistoryDetail']),
+  },
+  created() {
+    const payload = {
+      user_no: this.$route.params.no,
+      consulting_no: this.$route.params.consultNo
+    }
+    this.loadHistoryDetail(payload)
+  }
 };
 </script>
 

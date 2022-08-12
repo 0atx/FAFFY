@@ -39,7 +39,7 @@
             :items-per-page="itemsPerPage"
             :page.sync="page"
             @page-count="pageCount = $event"
-            @click:row="boardDetail"
+            @click:row="historyDetail"
             style="cursor: pointer"
           ></v-data-table>
 
@@ -256,9 +256,9 @@ export default {
     };
   },
   methods: {
-    boardDetail (e) {
+    historyDetail (e) {
       console.log(`${e.no}번 글의 상세 history로 이동합니다.`)
-      this.$router.push({ name: 'user-history-detail' })
+      this.$router.push({ name: 'user-history-detail', params: { consultNo: e.no } })
     }
   },
   watch: {

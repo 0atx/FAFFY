@@ -9,6 +9,7 @@ const profileStore = {
     participatedList: [],
     consultingList: [],
     userBoardList: [],
+    HistoryDetail: {},
   },
   getCurrentProfile: function (state) {
     return state.userProfile;
@@ -17,6 +18,7 @@ const profileStore = {
     participatedList: state => state.participatedList.reverse(),
     consultingList: state => state.consultingList.reverse(),
     userBoardList: state => state.userBoardList.reverse(),
+    HistoryDetail: state => state.HistoryDetail,
   },
   mutations: {
     SET_USER_PROFILE: (state, userProfile) => {
@@ -36,6 +38,9 @@ const profileStore = {
     },
     SET_USER_BOARD_LIST: (state, userBoardList) => {
       state.userBoardList = userBoardList;
+    },
+    SET_HISTORY_DETAIL: (state, historyDetail) => {
+      state.HistoryDetail = historyDetail
     },
 
   },
@@ -113,6 +118,22 @@ const profileStore = {
           console.log("작성 게시글 불러오기 실패");
           console.log(response);
           commit("SET_USER_BOARD_LIST", []);
+        }
+      );
+    },
+    async loadHistoryDetail({ commit }, payload) {
+      console.log("상세 히스토리 불러오기");
+      console.log(payload)
+      consulting.getHistoryDetail(
+        payload,
+        (response) => {
+          console.log("상세 히스토리 불러오기 성공");
+          commit("SET_HISTORY_DETAIL", response.data["content"]);
+        },
+        (response) => {
+          console.log("상세 히스토리 불러오기 실패");
+          console.log(response);
+          commit("SET_HISTORY_DETAIL", {});
         }
       );
     },
