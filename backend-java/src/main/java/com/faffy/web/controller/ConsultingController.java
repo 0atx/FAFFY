@@ -1,8 +1,10 @@
 package com.faffy.web.controller;
 
 import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingFinishRequestDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadRequestDto;
+import com.faffy.web.dto.ConsultingDto.CreateLogRequestDto;
 import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.service.ConsultingServiceImpl;
@@ -11,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -114,9 +119,9 @@ public class ConsultingController {
 
     @ApiOperation(value="방송 입장 시 로그 생성", notes="방송 입장 시에 로그 정보 기록")
     @PostMapping("/log")
-    public ResponseEntity createConsultingLog(int consulting_no, int user_no) {
+    public ResponseEntity createConsultingLog(@RequestBody CreateLogRequestDto logDto) {
         try {
-            consultingService.createLog(consulting_no, user_no);
+            consultingService.createLog(logDto);
         } catch(Exception e){
             HashMap<String, Object> result = new HashMap<>();
             result.put("msg", "유효하지 않은 방송 또는 유저입니다.");
@@ -151,5 +156,31 @@ public class ConsultingController {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity(status);
+    }
+
+    @GetMapping("/order/view")
+    public ResponseEntity getConsultingsByViewCount(@RequestParam Integer size) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        PageRequest pageRequest = PageRequest.of(0,size);
+        List<ConsultingGetDto> list = consultingService.getConsultingsByViewCount(pageRequest);
+
+        resultMap.put("content", list);
+
+        return new ResponseEntity(resultMap, status);
+    }
+
+    @GetMapping("/order/latest")
+    public ResponseEntity getLatestConsultings(@RequestParam Integer size) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        PageRequest pageRequest = PageRequest.of(0,size);
+        List<ConsultingGetDto> list = consultingService.getLatestConsultings(pageRequest);
+
+        resultMap.put("content", list);
+
+        return new ResponseEntity(resultMap, status);
     }
 }

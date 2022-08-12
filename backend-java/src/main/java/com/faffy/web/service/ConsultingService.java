@@ -1,6 +1,7 @@
 package com.faffy.web.service;
 
 import com.faffy.web.dto.ConsultingCreateDto;
+import com.faffy.web.dto.ConsultingDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingFinishRequestDto;
 import com.faffy.web.dto.ConsultingDto.ConsultingSnapshotUploadRequestDto;
 import com.faffy.web.dto.ConsultingGetDto;
@@ -19,10 +20,12 @@ public interface ConsultingService {
 
     Consulting getConsulting(int consulting_no) throws Exception;
     List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable);
+    List<ConsultingGetDto> getLatestConsultings(Pageable pageable);
+
 
     ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto) throws Exception;
 
-    void createLog(int consulting_no, int user_no) throws IllegalInputException;
+    void createLog(ConsultingDto.CreateLogRequestDto logDto) throws IllegalInputException;
 
     void setViewCount(int no, int cnt) throws IllegalInputException;
     int uploadSnapshot(ConsultingSnapshotUploadRequestDto file) throws Exception;

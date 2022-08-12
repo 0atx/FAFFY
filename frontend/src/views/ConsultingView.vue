@@ -22,7 +22,7 @@
 		<!-- 방송 들어간 후-->
 		<div id="session" v-if="session">
 			<div id="session-header">
-				<h1 id="session-title">{{ mySessionId }}</h1>
+				<h1 id="session-title">방송제목:{{ consultingInfo.title }}</h1>
 				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession"
 					value="Leave session">
 			</div>
@@ -65,6 +65,8 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '../components/video/UserVideo';
+import {mapState} from "vuex";
+import {consulting} from "@/api/consulting.js";
 // import Chat from '@/components/chat/Chat';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -75,12 +77,58 @@ const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 export default {
 	name: 'ConsultingView',
-
 	components: {
 		UserVideo,
 		// Chat
 	},
-
+  computed: {
+    ...mapState("authStore",["loginUser"]),
+  },
+  mounted() {
+    // 뒤로가기 막기
+    this.preventBack();
+    // this.mySessionId = this.host_no;
+    console.log("넘겨받은 값");
+    console.log(this.$route.params.nickname);
+    this.nickname = this.$route.params.nickname;
+    this.consulting_no = this.$route.params.consulting_no;
+    console.log(this.consulting_no);
+    if (this.nickname == undefined) {
+      if ( !confirm("이상하게 들어왔는데 입장합니까"))
+        this.$router.push('/');
+      else {
+        this.mySessionId = ""+this.consulting_no;
+        this.nickname = "temp";
+        this.consulting_no = this.mySessionId;
+      }
+      return;
+    }
+    this.mySessionId= ""+this.consulting_no;
+    this.myUserName=this.loginUser.nickname;
+    // 방송 정보 요청 후 값 세팅
+    consulting.getConsulting(this.consulting_no)
+    .then((data)=> {
+      console.log("방송 정보 요청 성공");
+      console.log(data);
+      this.consultingInfo = data.content;
+      console.log(this.consultingInfo.title);
+    })
+    .catch((error)=> {
+      console.log("방송 정보 요청 실패");
+      console.log(error);
+    })
+    this.joinSession();
+      // 방장인지 체크
+    if (this.nickname==this.loginUser.nickname) {
+      this.isHost = true;
+      alert("방장 어서오고");
+    }
+  },
+  beforeRouteLeave(to,from,next) {
+    console.log("leave!!");
+    this.leaveSession();
+    next();
+  },
 	data() {
 		return {
 			OV: undefined,
@@ -90,20 +138,31 @@ export default {
 			subscribers: [],
 			camValue: true,
 			audioValue: true,
-
+      isHost:false,
 			mySessionId: 'session' + Math.floor(Math.random() * 100),
 			myUserName: 'participant' + Math.floor(Math.random() * 100),
-
+      consulting_no:"",
 			// 화면 공유할 때 사용할 session
 			screenOV: undefined,
 			screenSession: undefined,
 			screenShareName: undefined,
 
 			message: "",
-			recvList: []
+			recvList: [],
+      // 방송 정보
+      consultingInfo:null,
 		}
 	},
 	methods: {
+    // 뒤로가기 막는 함수
+    preventBack: function() {
+      history.pushState(null, null, location.href);
+      window.onbeforeunload = null;
+
+      window.onpopstate = function () {
+          history.go(1);
+      };
+    },
 		send() {
 			this.session.signal({
 				data: JSON.stringify({
@@ -136,6 +195,8 @@ export default {
 			this.session.on('streamCreated', ({ stream }) => {
 				const subscriber = this.session.subscribe(stream);
 				this.subscribers.push(subscriber);
+        console.log("subscrobers");
+        console.log(this.subscribers)
 			});
 
 			// 끝낸 모든 스트림들에 대해서
@@ -152,15 +213,27 @@ export default {
 			});
 			// 채팅 수신
 			this.session.on('signal', (event) => {
-				event = JSON.parse(event.data);
-				console.log(event.data); // Message
+        let data = JSON.parse(event.data);
+        let type = event.type;
+				// event = JSON.parse(event.data);
+				console.log(data); // Message
 				// console.log(event.from); // Connection object of the sender
-				// console.log(event.type); // The type of message
-				const msg = {
-					userName: event.userName,
-					content: event.message,
-				}
-				this.recvList.push(msg)
+				console.log(type); // The type of message
+        // 방송 종료 signal일 경우
+        if (event.type == "signal:naga") {
+          if (!this.isHost) {
+            alert(data.message);
+            console.log("okay bye");
+            this.leaveSession();
+          }
+        // 채팅 signal일 경우
+        } else if (event.type == "signal:my-chat") {
+          const msg = {
+            userName: data.userName,
+            content: data.message,
+          }
+          this.recvList.push(msg)
+        }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
 
@@ -190,6 +263,24 @@ export default {
 						// --- Publish your stream ---
 
 						this.session.publish(this.publisher);
+
+            console.log("방장체크"+this.nickname);
+            console.log("내닉넴:"+this.loginUser.nickname);
+            if (!this.isHost){
+              const log = {
+                consulting_no:this.mySessionId,
+                user_no:this.loginUser.no,
+              }
+              console.log(log);
+              consulting.createViewLog(log)
+              .then((data)=> {
+                console.log("로그 생성");
+                console.log(data);
+              })
+              .catch((error)=> {
+                console.log(error);
+              })
+            }
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
@@ -259,8 +350,18 @@ export default {
 			this.screenSession = undefined;
 		},
 		// 세션 종료
-		leaveSession() {
-			// --- Leave the session by calling 'disconnect' method over the Session object ---
+		async leaveSession() {
+      // 내가 방장일 경우 방송 종료
+      if (this.isHost) {
+        console.log("방장인데 불좀 꺼줄래");
+        await consulting.deleteConsulting({consulting_no:this.consulting_no,user_no:this.loginUser.no},()=> {
+          console.log("good");
+        },()=> {
+          console.log("TT");
+        })
+        this.NAGA();
+      }
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.disconnect();
 
 			this.session = undefined;
@@ -271,7 +372,7 @@ export default {
 
 			window.removeEventListener('beforeunload', this.leaveSession);
 
-      this.$router.push({name:"main"});
+      // this.$router.push({name:"main"});
 		},
 		updateMainVideoStreamManager(stream) {
 			if (this.mainStreamManager === stream) return;
@@ -337,6 +438,23 @@ export default {
 					.catch(error => reject(error.response));
 			});
 		},
+    async NAGA() {
+      console.log("NAGA!");
+      this.session.signal({
+				data: JSON.stringify({
+					message:"방송이 종료되었습니다."
+				}),
+				to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+				type: 'naga'             // The type of message (optional)
+			})
+				.then(() => {
+					console.log('Message successfully sent');
+					this.message = "";
+				})
+				.catch(error => {
+					console.error(error);
+				});
+    }
 	}
 }
 </script>
