@@ -1,6 +1,6 @@
 <template>
   <v-container style="text-align: start">
-    <div>
+    <div class="mt-10 mb-5">
       <h1>"{{ keyword }}" 에 대한 검색 결과입니다.</h1>
     </div>
     <!--방송 검색 결과-->
@@ -38,6 +38,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
