@@ -122,6 +122,7 @@
                       <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
                         {{ consult.title }}
                       </v-list-item-title>
+                    </div>
 
                     <!-- 컨설턴트 닉네임 / 참여 인원 -->
                     <v-list-item-subtitle class="mb-1">
