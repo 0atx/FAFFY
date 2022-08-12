@@ -35,12 +35,15 @@ export default {
       this.loadProfile();
   },
   methods: {
-    ...mapActions(profileStore, ["loadFollower", "loadFollowing"]),
+    ...mapActions(profileStore, ["loadFollower", "loadFollowing", "loadParticipatedList", "loadConsultingList", "loadBoardList"]),
     ...mapMutations(profileStore, ["SET_USER_PROFILE"]),
     loadProfile() {
       this.loadUserInfo();
       this.loadFollower(this.$route.params.no);
       this.loadFollowing(this.$route.params.no);
+      this.loadParticipatedList(this.$route.params.no);
+      this.loadConsultingList(this.$route.params.no);
+      this.loadBoardList(this.$route.params.no);
     },
     async loadUserInfo() {
       const requestUserNo = this.$route.params.no;
