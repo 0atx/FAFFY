@@ -117,7 +117,7 @@ public class ConsultingController {
         return new ResponseEntity(resultMap,status);
     }
 
-    @ApiOperation(value="방송 입장 시 로그 생성", notes="방송 입장 시에 로그 정보 기록, 시청자 수 증가시키기")
+    @ApiOperation(value="방송 입장 시 로그 생성", notes="방송 입장 시에 로그 정보 기록")
     @PostMapping("/log")
     public ResponseEntity createConsultingLog(@RequestBody CreateLogRequestDto logDto) {
         try {

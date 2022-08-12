@@ -89,7 +89,7 @@
 
       <div id="social">
         <!-- 네이버 로그인 -->
-        <v-btn fab elevation="0" class="overflow-hidden">
+        <v-btn fab elevation="0" class="overflow-hidden" @click="naverLogin">
           <img
             src="@/assets/images/naver_login.png"
             alt=""
@@ -98,7 +98,7 @@
         </v-btn>
 
         <!-- 구글 로그인 -->
-        <v-btn fab elevation="0" class="overflow-hidden">
+        <v-btn fab elevation="0" class="overflow-hidden" @click="googleLogin">
           <img
             src="@/assets/images/google_login.png"
             alt=""
@@ -196,6 +196,21 @@ export default {
 
       await this.loadFollowing();
     },
+    googleLogin(){
+      auth.socialLogin(
+        "google",
+        (response) => {
+          console.log("success:"+response.data);
+          window.location.href= response.data;
+        },
+        () => {
+          console.log("구글 로그인 실패");
+        }
+      )
+    },
+    naverLogin(){
+
+    }
   },
   metaInfo() {
     return {
