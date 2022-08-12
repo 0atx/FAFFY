@@ -85,7 +85,7 @@ const routes = [
   {
     path: "/consulting/onair",
     name: "consulting-onair",
-    component: () => import("@/views/ConsultingView.vue"),
+    component: () => import("@/views/ConsultingFormView.vue"),
   },
   {
     path: "/board",
