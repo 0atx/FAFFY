@@ -16,7 +16,7 @@ import java.util.List;
 public class ConsultingGetDto {
     private int no;
     private String title;
-    private String introduce;
+    private String intro;
     private int roomSize;
     private int viewCount;
     private String consultant; //닉네임
