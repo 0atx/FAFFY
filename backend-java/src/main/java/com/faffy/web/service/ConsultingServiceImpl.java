@@ -213,4 +213,14 @@ public class ConsultingServiceImpl implements ConsultingService {
         // 현재 보고있는 시청자수 0으로 하는건 딱히 의미 없나?
     }
 
+    @Override
+    public List<ConsultingGetDto> searchByKeyword(String keyword) throws Exception{
+        List<Consulting> consultings = consultingRepository.findByKeyword(keyword);
+        List<ConsultingGetDto> dtoList = new ArrayList<>();
+        for(Consulting c : consultings){
+            dtoList.add(c.toConsultingGetDto());
+        }
+        return dtoList;
+    }
+
 }
