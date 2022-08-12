@@ -81,36 +81,37 @@ public class MainController {
             Pageable paging = PageRequest.of(userPage, userSize);
             int start = (int) paging.getOffset();
             int end = Math.min(start + paging.getPageSize(), userDtoList.size());
-            Page<UserPublicDto> res = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
+            Page<UserPublicDto> userRes = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
             HashMap<String, Object> tmpMap = new HashMap<>();
-            tmpMap.put("content", res.getContent());
-            tmpMap.put("currentPage", res.getNumber());
-            tmpMap.put("totalItems", res.getTotalElements());
-            tmpMap.put("totalPages", res.getTotalPages());
+            tmpMap.put("content", userRes.getContent());
+            tmpMap.put("currentPage", userRes.getNumber());
+            tmpMap.put("totalItems", userRes.getTotalElements());
+            tmpMap.put("totalPages", userRes.getTotalPages());
             map.put("user", tmpMap);
 
-//            paging = PageRequest.of(boardPage, boardSize);
-//            start = (int) paging.getOffset();
-//            end = Math.min(start + paging.getPageSize(), boardDtoList.size());
-//            res = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
-//            tmpMap = new HashMap<>();
-//            tmpMap.put("content", res.getContent());
-//            tmpMap.put("currentPage", res.getNumber());
-//            tmpMap.put("totalItems", res.getTotalElements());
-//            tmpMap.put("totalPages", res.getTotalPages());
-//            map.put("board", tmpMap);
-//
-//            paging = PageRequest.of(consultingPage, consultingSize);
-//            start = (int) paging.getOffset();
-//            end = Math.min(start + paging.getPageSize(), consultingDtoList.size());
-//            res = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
-//            tmpMap = new HashMap<>();
-//            tmpMap.put("content", res.getContent());
-//            tmpMap.put("currentPage", res.getNumber());
-//            tmpMap.put("totalItems", res.getTotalElements());
-//            tmpMap.put("totalPages", res.getTotalPages());
-//            map.put("consulting", tmpMap);
+            paging = PageRequest.of(boardPage, boardSize);
+            start = (int) paging.getOffset();
+            end = Math.min(start + paging.getPageSize(), boardDtoList.size());
+            Page<BoardGetDto> boardRes = new PageImpl<>(boardDtoList.subList(start, end), paging, boardDtoList.size());
+            tmpMap = new HashMap<>();
+            tmpMap.put("content", boardRes.getContent());
+            tmpMap.put("currentPage", boardRes.getNumber());
+            tmpMap.put("totalItems", boardRes.getTotalElements());
+            tmpMap.put("totalPages", boardRes.getTotalPages());
+            map.put("board", tmpMap);
+
+            paging = PageRequest.of(consultingPage, consultingSize);
+            start = (int) paging.getOffset();
+            end = Math.min(start + paging.getPageSize(), consultingDtoList.size());
+            Page<ConsultingGetDto> consultingRes = new PageImpl<>(consultingDtoList.subList(start, end), paging, consultingDtoList.size());
+            tmpMap = new HashMap<>();
+            tmpMap.put("content", consultingRes.getContent());
+            tmpMap.put("currentPage", consultingRes.getNumber());
+            tmpMap.put("totalItems", consultingRes.getTotalElements());
+            tmpMap.put("totalPages", consultingRes.getTotalPages());
+            map.put("consulting", tmpMap);
         }catch(Exception e){
+            e.printStackTrace();
             System.out.println("검색 과정에서 에러 발생");
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
