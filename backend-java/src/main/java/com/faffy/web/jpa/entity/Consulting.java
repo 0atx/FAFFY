@@ -53,7 +53,7 @@ public class Consulting extends BaseEntity {
                 .consultant(this.consultant.getNickname())
                 .consultant_no(this.consultant.getNo())
                 .title(this.title)
-                .introduce(this.intro)
+                .intro(this.intro)
                 .roomSize(this.roomSize)
                 .viewCount(this.viewCount)
                 .categories(categories)
