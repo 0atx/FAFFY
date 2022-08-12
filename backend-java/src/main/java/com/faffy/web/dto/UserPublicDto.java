@@ -23,7 +23,9 @@ public class UserPublicDto {
     private LocalDate birthday;
     private Gender gender;
 
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
+
+    private List<String> categories = new ArrayList<>();
     /**
      * 자기소개 문구
      */
@@ -36,7 +38,12 @@ public class UserPublicDto {
 
     @Builder
     public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
-                         String introduce, String instaLink, String facebookLink, String youtubeLink) {
+                         String introduce, String instaLink, String facebookLink, String youtubeLink, List<UserCategory> categories) {
+        List<String> Categories = new ArrayList<>();
+        for(UserCategory uc : categories){
+            Categories.add(uc.getUserCategoryMapper().getCategory().getName());
+        }
+
         this.no = no;
         this.email = email;
         this.name = name;
@@ -49,6 +56,6 @@ public class UserPublicDto {
         this.instaLink = instaLink;
         this.facebookLink = facebookLink;
         this.youtubeLink = youtubeLink;
-
+        this.categories = Categories;
     }
 }

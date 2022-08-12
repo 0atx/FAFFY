@@ -25,4 +25,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.email = :email and u.birthday = :birthday")
     Optional<User> findByEmailBirthday(String email, LocalDate birthday);
 
+    @Query("select distinct u from User u join fetch User_Category uc join fetch FashionCategory fc " +
+            "where u.nickname like %:keyword% or fc.name like %:keyword%")
+    List<User> findByKeyword(String keyword);
 }

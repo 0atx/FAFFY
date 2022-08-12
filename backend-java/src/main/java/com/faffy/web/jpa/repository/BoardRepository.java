@@ -23,4 +23,7 @@ public interface BoardRepository extends JpaRepository<Board,Integer> {
 
     @Query("select b from Board b order by b.hit desc, b.datetime desc")
     List<Board> findAllOrderByHit(Pageable pageable);
+
+    @Query("select b from Board b where b.title like %:keyword% or b.content like %:keyword% or b.user.nickname like %:keyword%")
+    List<Board> findByKeyword(String keyword);
 }
