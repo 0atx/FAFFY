@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,9 @@ public interface BoardRepository extends JpaRepository<Board,Integer> {
 
     @Query("select b from Board b order by b.hit desc, b.datetime desc")
     List<Board> findAllOrderByHit(Pageable pageable);
+
+    @Query("select b from Board b where b.title like concat('%', :keyword, '%') " +
+            "or b.content like concat('%', :keyword, '%') " +
+            "or b.user.nickname like concat('%', :keyword, '%')")
+    List<Board> findByKeyword(String keyword) throws SQLException;
 }
