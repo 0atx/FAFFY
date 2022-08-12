@@ -57,7 +57,7 @@
             color="gray"
             :ripple="false"
             :to="{ name: 'user-board' }"
-            :disaled="!isBoardExist"
+            :disabled="!isBoardExist"
           >
             <v-icon> mdi-plus </v-icon>
           </v-btn>
