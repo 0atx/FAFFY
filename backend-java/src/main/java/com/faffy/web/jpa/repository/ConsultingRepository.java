@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -17,4 +18,11 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
     List<Consulting> findAllOrderByViewCount(Pageable pageable);
     @Query("select c from Consulting c where c.endTime is null order by c.startTime desc")
     List<Consulting> findAllOrderByStartTime(Pageable pageable);
+
+    @Query("select distinct c from Consulting c join fetch c.categories cc " +
+            "where c.title like concat('%',:keyword,'%') " +
+            "or c.intro like concat('%',:keyword,'%') " +
+            "or c.consultant.nickname like concat('%',:keyword,'%') " +
+            "or cc.consultingCategoryMapper.category.name like concat('%',:keyword,'%')")
+    List<Consulting> findByKeyword(String keyword) throws SQLException;
 }

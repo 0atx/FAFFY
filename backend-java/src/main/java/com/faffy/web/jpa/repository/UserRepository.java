@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.email = :email and u.birthday = :birthday")
     Optional<User> findByEmailBirthday(String email, LocalDate birthday);
 
-    @Query("select distinct u from User u join fetch User_Category uc join fetch FashionCategory fc " +
-            "where u.nickname like %:keyword% or fc.name like %:keyword%")
-    List<User> findByKeyword(String keyword);
+    @Query("select distinct u from User u join fetch u.categories uc " +
+            "where u.nickname like concat('%',:keyword,'%') " +
+            "or uc.userCategoryMapper.category.name like concat('%',:keyword,'%')")
+    List<User> findByKeyword(String keyword) throws SQLException;
 }
