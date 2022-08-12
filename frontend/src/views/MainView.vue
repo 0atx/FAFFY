@@ -4,6 +4,7 @@
     <!-- 메인 페이지 상단 방송 정보 출력 -->
     <div id="topContent" v-if="topContentLoaded">
       <carousel-3d
+        id="carousel"
         :autoplay="true"
         :autoplay-timeout="5000"
         :controls-visible="true"
@@ -122,14 +123,13 @@
                         {{ consult.title }}
                       </v-list-item-title>
 
-                      <!-- 컨설턴트 닉네임 / 참여 인원 -->
-                      <v-list-item-subtitle class="mb-1">
-                        {{ consult.nickname }}
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle style="font-size: 12px;">
-                        참여자 {{ consult.viewCount }} / 최대 인원 {{ consult.roomSize }}
-                      </v-list-item-subtitle>
-                    </div>
+                    <!-- 컨설턴트 닉네임 / 참여 인원 -->
+                    <v-list-item-subtitle class="mb-1">
+                      {{ consult.nickname }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle style="font-size: 12px;">
+                      <v-icon small>mdi-account-multiple</v-icon> {{ consult.viewCount }} / {{ consult.roomSize }}
+                    </v-list-item-subtitle>
                   </div>
 
                   <!-- 방송 카테고리 -->
@@ -475,6 +475,10 @@ export default {
 
 .carousel-3d-container .carousel-3d-slide .title {
   font-size: 22px;
+}
+
+.carousel-3d-slide:hover {
+  filter: brightness(98%);
 }
 
 a {
