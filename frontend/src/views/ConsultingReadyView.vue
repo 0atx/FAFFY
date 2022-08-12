@@ -141,6 +141,7 @@ export default {
         console.log(response.content);
         let nickname = response.content.consultant;
         let consulting_no = response.content.no;
+        consulting.createConsultingLog({ consulting_no: consulting_no, user_no: this.form.consultant_no })
         this.$router.push({name:"consulting-onair",params:{nickname,consulting_no}});
       })
       .catch(error=> {

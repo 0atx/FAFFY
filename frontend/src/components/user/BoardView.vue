@@ -39,10 +39,12 @@
             id="table"
             :headers="headers"
             hide-default-footer
-            :items="boards"
+            :items="boardType"
             :items-per-page="itemsPerPage"
             :page.sync="page"
             @page-count="pageCount = $event"
+            @click:row="boardDetail"
+            style="cursor: pointer"
           ></v-data-table>
 
           <!-- pagination -->
@@ -75,73 +77,100 @@ export default {
       // 임시 게시글 기록, DB에서 받아와서 넘겨줘야 함
       boards: [
         {
-          title: "게시글 제목입니다.",
+          no: 1,
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Free',
+          title: "f게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Info',
+          title: "i게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Free',
+          title: "f게ww시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Info',
+          title: "i게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Free',
+          title: "f게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'Info',
+          title: "i게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
         },
         {
-          title: "게시글 제목입니다.",
+          category: 'QnA',
+          title: "q게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
+        },
+        {
+          category: 'Free',
+          title: "f게시글 제목입니다.",
+          comments: "[13]",
+          date: "2022-08-01",
+          hit: "56",
+        },
+        {
+          category: 'Info',
+          title: "i게시글 제목입니다.",
           comments: "[13]",
           date: "2022-08-01",
           hit: "56",
@@ -155,8 +184,20 @@ export default {
 
       // 카테고리 판별하는 변수 Q&A : 1, 자유 : 2, 정보 : 3
       selected: 1,
+      types: {1: 'QnA', 2: 'Free', 3: 'Info'}
     };
   },
+  methods: {
+    boardDetail(e) {
+      console.log(e)
+      this.$router.push({ name: 'board-detail', params: { boardNo: e.no }})
+    }
+  },
+  computed: {
+    boardType () {
+      return this.boards.filter(board => board.category === this.types[this.selected])
+    }
+  }
 };
 </script>
 
@@ -212,5 +253,8 @@ a {
 
 button:before {
   background-color: transparent;
+}
+.row-pointer > .v-data-table__wrapper > table > tbody > tr:hover {
+  cursor: pointer;
 }
 </style>
