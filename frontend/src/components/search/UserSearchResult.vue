@@ -1,26 +1,36 @@
 <template>
 <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
-      <h2>유저 검색 결과</h2>
-      <v-btn text>인기 순</v-btn>
+      <h2 class="ml-4">유저 검색 결과</h2>
+      <v-btn v-if="users.length != 0" text>인기 순</v-btn>
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-simple-table>
+        <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="users.length == 0" cols="12">
+          <h2>검색 결과가 없습니다.</h2>
+        </v-col>
+        <v-simple-table v-else>
+          <template slot="no-data">
+            <tr style="visibility: hidden;" />
+            <div class="text-h2">검색 결과가 없습니다.</div>
+          </template>
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-start" style="width: 17%;">
+                <th class="text-start" style="width: 20%;">
                   닉네임
                 </th>
-                <th class="text-start" style="width: 33%;">
+                <th class="text-start" style="width: 25%;">
                   이메일
                 </th>
-                <th class="text-start" style="width: 17%;">
-                  팔로워 수
-                </th>
-                <th class="text-start" style="width: 33%;">
+                <th class="text-start" style="width: 35%;">
                   관심 카테고리
+                </th>
+                <th class="text-start" style="width: 10%;">
+                  팔로잉 수
+                </th>
+                <th class="text-start" style="width: 10%;">
+                  팔로워 수
                 </th>
               </tr>
             </thead>
@@ -34,20 +44,17 @@
 
                   <!--프로필 이미지 + 닉네임 -->
                   <v-avatar
-                  size="36px">
+                    size="36px">
                     <img
                       alt="Avatar"
                       :src="user.img"
                     >
                   </v-avatar>
-                  {{ user.nickname}}
+                  <div class="ml-2">{{ user.nickname }}</div>
                 </td>
 
                 <!-- 이메일 -->
                 <td>{{ user.email }}</td>
-
-                <!-- 팔로워 수 -->
-                <td><v-icon>mdi-heart</v-icon>{{ user.followers }}</td>
 
                 <!-- 관심 카테고리 -->
                 <td>
@@ -64,6 +71,13 @@
                     </v-chip>
                   </v-chip-group>
                 </td>
+
+                <!-- 팔로잉 수 -->
+                <td><v-icon small> mdi-heart </v-icon> {{ user.followings }} </td>
+
+                <!-- 팔로워 수 -->
+                <td><v-icon small> mdi-heart </v-icon> {{ user.followers }} </td>
+
               </tr>
             </tbody>
           </template>
@@ -72,10 +86,12 @@
     </v-row>
 
     <!-- 페이지네이션 -->
-    <v-row>
+    <v-row v-if="users.length != 0">
       <v-col cols="12">
         <v-pagination
           v-model="page"
+          circle
+          color="#0c0f66"
           :length="totalPages"
           prev-icon="mdi-menu-left"
           next-icon="mdi-menu-right"
@@ -100,6 +116,7 @@ export default {
           img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
           nickname: '이준성',
           email: 'ssafy@ssafy.com',
+          followings: 5,
           followers: 10,
           categories: ['힙합', '시크', '모던'],
         },
@@ -108,6 +125,7 @@ export default {
           img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
           nickname: '류경하',
           email: 'ssafy@ssafy.com',
+          followings: 15,
           followers: 17,
           categories: ['힙합', '시크', '모던'],
         },
@@ -116,6 +134,7 @@ export default {
           img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
           nickname: '김명석',
           email: 'ssafy@ssafy.com',
+          followings: 21,
           followers: 13,
           categories: ['힙합', '시크', '모던'],
         },
@@ -124,6 +143,7 @@ export default {
           img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
           nickname: '김수만',
           email: 'ssafy@ssafy.com',
+          followings: 213,
           followers: 100,
           categories: ['힙합', '시크'],
         },
