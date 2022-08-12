@@ -40,6 +40,7 @@ public class GoogleOauth implements SocialOauth{
         params.put("response_type","code");
         params.put("client_id",GOOGLE_SNS_CLIENT_ID);
         params.put("redirect_uri",GOOGLE_SNS_CALLBACK_URL);
+//        params.put("redirect_uri", "http://localhost:8080/auth/google/redirect");
 
         //parameter를 형식에 맞춰 구성해주는 함수
         String parameterString=params.entrySet().stream()

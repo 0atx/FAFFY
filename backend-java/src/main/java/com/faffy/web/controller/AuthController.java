@@ -44,7 +44,6 @@ public class AuthController {
     public ResponseEntity<String> socialLoginRedirect(@PathVariable String socialLoginType) throws IOException {
         SocialLoginType type= SocialLoginType.valueOf(socialLoginType.toUpperCase());
         return new ResponseEntity<>(oAuthService.request(type), HttpStatus.OK);
-//        oAuthService.request(type);
     }
 
     @GetMapping("/login/{socialLoginType}/callback")
@@ -58,15 +57,9 @@ public class AuthController {
         //토큰, 유저 정보를 담아 홈으로 리다이렉트
         User user = getSocialOAuthRes.getUser();
         String token = getSocialOAuthRes.getJwtToken();
-//        HashMap<String, Object> resultMap = new HashMap<>();
-//        HashMap<String, Object> resultMapIn = new HashMap<>();
-//        resultMapIn.put("user", user);
-//        resultMapIn.put("token", token);
-//        resultMap.put("content", resultMapIn);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(mainURL));
-        headers.set("X-AUTH-TOKEN", token);
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-//        return new ResponseEntity<>(resultMap, headers, HttpStatus.OK);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("user", user);
+        resultMap.put("token", token);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
