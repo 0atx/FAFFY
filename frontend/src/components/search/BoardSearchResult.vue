@@ -1,14 +1,17 @@
 <template>
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
-      <h2>게시판 검색 결과</h2>
-      <v-btn text>인기 순</v-btn>
+      <h2 class="ml-4">게시판 검색 결과</h2>
+      <v-btn v-if="boards.length != 0" text>인기 순</v-btn>
     </v-row>
 
     <!-- 게시글 검색 목록 -->
     <v-row>
       <v-col cols="12">
-        <v-simple-table>
+        <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="boards.length == 0" cols="12">
+          <h2>검색 결과가 없습니다.</h2>
+        </v-col>
+        <v-simple-table v-else>
           <template v-slot:default>
             <thead>
               <tr>
@@ -50,10 +53,12 @@
     </v-row>
 
     <!-- 페이지네이션 -->
-    <v-row>
+    <v-row v-if="boards.length != 0">
       <v-col cols="12">
         <v-pagination
           v-model="page"
+          circle
+          color="#0c0f66"
           :length="totalPages"
           prev-icon="mdi-menu-left"
           next-icon="mdi-menu-right"
