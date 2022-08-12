@@ -307,4 +307,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmailBirthday(email, birthday).orElse(null);
     }
 
+    @Override
+    public List<UserPublicDto> searchByKeyword(String keyword) throws Exception{
+        List<User> users = userRepository.findByKeyword(keyword);
+        List<UserPublicDto> dtoList = new ArrayList<>();
+        for(User u : users){
+            dtoList.add(u.toPublicDto());
+        }
+        return dtoList;
+    }
+
 }

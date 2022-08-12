@@ -148,6 +148,7 @@ public class User extends BaseEntity implements UserDetails {
                 .facebookLink(this.facebookLink)
                 .instaLink(this.instaLink)
                 .youtubeLink(this.youtubeLink)
+                .categories(this.categories)
                 .build();
         return userPublicDto;
     }

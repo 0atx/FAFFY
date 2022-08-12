@@ -192,4 +192,14 @@ public class BoardServiceImpl implements BoardService {
         return res;
     }
 
+    @Override
+    public List<BoardGetDto> searchByKeyword(String keyword) throws Exception{
+        List<Board> boards = boardRepository.findByKeyword(keyword);
+        List<BoardGetDto> dtoList = new ArrayList<>();
+        for(Board b : boards){
+            dtoList.add(b.toBoardGetDto());
+        }
+        return dtoList;
+    }
+
 }
