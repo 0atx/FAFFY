@@ -34,16 +34,16 @@
                       style="font-weight: 600"
                       class="text-h6 mt-4 mb-2"
                     >
-                      별명짓기귀찮다
+                      {{ historyDetail.userInfoDto.nickname }}
                     </v-list-item-title>
 
                     <!-- 컨설턴트 팔로잉 / 팔로워 정보 -->
                     <v-list-item-subtitle>
-                      <router-link class="ml-1 mr-4" to="/profile/1/following"
-                        >팔로잉 163</router-link
+                      <router-link class="ml-1 mr-4" :to="`/profile/${userNo}/following`"
+                        >팔로잉 {{ historyDetail.userInfoDto.followingCount }}</router-link
                       >
-                      <router-link class="ml-4" to="/profile/1/follower"
-                        >팔로워 208</router-link
+                      <router-link class="ml-4" :to="`/profile/${userNo}/follower`"
+                        >팔로워 {{ historyDetail.userInfoDto.followerCount }}</router-link
                       >
                     </v-list-item-subtitle>
                   </div>
@@ -51,8 +51,7 @@
 
                 <!-- 컨설턴트 한 줄 자기소개 -->
                 <v-list-item id="introduce"
-                  >소개 들어갈 부분입니다. 근데 간단 소개로 넣을지 상세 소개로
-                  넣을지 고민 중 또 넣을거 없나?</v-list-item
+                  >{{ historyDetail.userInfoDto.introduce }}</v-list-item
                 >
 
                 <!-- 컨설턴트 관심 카테고리
@@ -74,7 +73,7 @@
                 outlined
                 rounded
                 text
-                to="/profile/1/user-detail"
+                :to="`/profile/${historyDetail.userInfoDto.no}/user-detail`"
               >
                 알림 설정
               </v-btn>
@@ -99,14 +98,14 @@
                       style="font-weight: 600"
                       class="text-h6 mt-6 mb-2"
                     >
-                      방송 제목 나올 자리
+                      {{ historyDetail.consultingDto.title }}
                     </v-list-item-title>
 
                     <!-- 방송 시간 및 시청자 수..넣고 싶었는데 팀장이 몽둥이 들었음 눈물난다 그래서 방송일자랑 시간으로 바꿈ㅜ -->
                     <div style="display: flex; justify-content: space-around">
-                      <v-list-item-subtitle> 2022-08-01 </v-list-item-subtitle>
+                      <v-list-item-subtitle> {{ historyDetail.consultingDto.date }} </v-list-item-subtitle>
                       <v-list-item-subtitle style="text-align: right">
-                        2:54:12 || 17:00:04 ~ 18:49:23
+                        {{ historyDetail.consultingDto.duration }} || {{ historyDetail.consultingDto.startTime.slice(0, 8) }} ~ {{ historyDetail.consultingDto.endTime.slice(0, 8) }}
                       </v-list-item-subtitle>
                     </div>
                   </div>
@@ -114,14 +113,13 @@
 
                 <!-- 방송 소개 -->
                 <v-list-item id="introduce"
-                  >방송 소개 들어갈 부분입니다. 근데 뭔가 더 넣고 싶은데 넣을게
-                  없네...?</v-list-item
+                  >{{ historyDetail.consultingDto.introduce }}</v-list-item
                 >
 
                 <!-- 방송 카테고리 -->
                 <v-chip-group class="mt-2" column>
                   <category-chips
-                    v-for="category in consultCategorys"
+                    v-for="category in historyDetail.consultingDto.categories"
                     :key="category"
                     :category="category"
                   />
@@ -132,7 +130,7 @@
               <v-spacer></v-spacer>
 
               <!-- 임시 버튼, 방송 일자 넣어도 되고 다른 정보 넣거나 없앨 수도 있음. 이 버튼은 눌러도 아무 기능 없게 할거임 -->
-              <v-btn class="mr-1" outlined rounded text> 2022.08.01 </v-btn>
+              <v-btn class="mr-1" outlined rounded text> {{ historyDetail.consultingDto.date }} </v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -175,12 +173,17 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
+import { mapActions, mapGetters } from 'vuex';
+const profileStore = "profileStore";
 
 export default {
   name: "HistoryDetailView",
   components: { CategoryChips },
   data() {
     return {
+      userNo: this.$route.params.no,
+
+
       // 임시 방송 기록, DB에서 받아와서 넘겨줘야 함
       consult: [
         {
@@ -196,6 +199,20 @@ export default {
       consultCategorys: ["모던", "미니멀"],
     };
   },
+  methods: {
+    ...mapActions(profileStore, ['loadHistoryDetail']),
+  },
+  computed: {
+    ...mapGetters(profileStore, ['historyDetail']),
+  },
+  created() {
+    const payload = {
+      user_no: Number(this.$route.params.no),
+      consulting_no: Number(this.$route.params.consultNo),
+    }
+    console.log('payload', payload)
+    this.loadHistoryDetail(payload)
+  }
 };
 </script>
 

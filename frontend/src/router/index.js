@@ -51,7 +51,7 @@ const routes = [
         component: () => import("@/components/user/HistoryView.vue"),
       },
       {
-        path: "history-detail",
+        path: "history-detail/:consultNo",
         name: "user-history-detail",
         component: () => import("@/components/user/HistoryDetailView.vue"),
       },
