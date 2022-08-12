@@ -301,26 +301,13 @@ public class UserController {
 
             resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
+            e.printStackTrace();
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");
             status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity(resultMap,status);
     }
-
-//    /**
-//     * 회원정보 수정 - 프로필 사진 업로드 테스트
-//     * @param file
-//     * @return 성공시 User, 실패시 msg
-//     */
-//    @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
-//    @PutMapping
-//    public ResponseEntity updateUser(@Valid @RequestParam MultipartFile file) throws DataNotFoundException, IllegalInputException {
-//        User user = userService.updateUserImg(file);
-//        HashMap<String, Object> hashmap = new HashMap<>();
-//        hashmap.put("content",user);
-//        return ResponseEntity.ok().body(hashmap);
-//    }
 
     /**
      * 회원 탈퇴
@@ -346,36 +333,6 @@ public class UserController {
             return new ResponseEntity(resultMap, status);
         }
     }
-
-//    @PostMapping("/category")
-//    public ResponseEntity addCategory(@RequestBody UserCategoryRequestDto userCategoryAddDto) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = HttpStatus.OK;
-//        try {
-//            UserCategory category = userCategoryService.addUserCategory(userCategoryAddDto.getUser_no(), userCategoryAddDto.getCategory_name());
-//            resultMap.put("content", category.getUserCategoryMapper().getCategory());
-//        } catch (Exception e) {
-//            logger.error("카테고리 추가 에러 발생 : {}",e.getMessage());
-//            resultMap.put("msg", e.getMessage());
-//        } finally {
-//            return new ResponseEntity(resultMap,status);
-//        }
-//    }
-
-//    @DeleteMapping("/category")
-//    public ResponseEntity deleteCategory(@RequestBody UserCategoryRequestDto userCategoryRequestDto) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = HttpStatus.OK;
-//        try {
-//            String result = userCategoryService.deleteUserCategory(userCategoryRequestDto.getUser_no(), userCategoryRequestDto.getCategory_name());
-//            resultMap.put("content", result);
-//        } catch (Exception e) {
-//            logger.error("카테고리 삭제 에러 발생 : {}",e.getMessage());
-//            resultMap.put("msg", e.getMessage());
-//        } finally {
-//            return new ResponseEntity(resultMap,status);
-//        }
-//    }
 
     @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 반환")
     @GetMapping("/profile/{no}/history/parti")
