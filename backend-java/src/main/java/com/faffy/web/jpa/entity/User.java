@@ -118,7 +118,7 @@ public class User extends BaseEntity implements UserDetails {
         this.name = userDto.getName();
         this.password = userDto.getPassword();
         this.info = userDto.getInfo();
-        this.birthday = LocalDate.parse(userDto.getBirthday());
+        if(!userDto.getBirthday().equals("null")) this.birthday = LocalDate.parse(userDto.getBirthday());
         this.introduce = userDto.getIntroduce();
         this.instaLink = userDto.getInstaLink();
         this.facebookLink = userDto.getFacebookLink();
