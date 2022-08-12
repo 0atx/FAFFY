@@ -39,7 +39,7 @@ public class User extends BaseEntity implements UserDetails {
 
     private LocalDate birthday;
     @Enumerated(EnumType.STRING)
-    @Column(length = 2)
+    @Column(length = 10)
 //    @Column(nullable = false)
     private Gender gender;
 
