@@ -266,12 +266,12 @@ public class UserServiceImpl implements UserService {
                 }
             }
 
-
             user.updateUser(userDto);
             return user;
         } catch (IllegalArgumentException e) {
             throw new DataNotFoundException(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new IllegalInputException(ILLEGAL_INPUT_MSG);
         }
     }
