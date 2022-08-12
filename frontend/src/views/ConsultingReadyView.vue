@@ -20,7 +20,7 @@
           />
           <!-- 상세 자기소개 -->
           <v-textarea
-            v-model="form.introduce"
+            v-model="form.intro"
             label="방송 소개"
             rows="2"
             auto-grow

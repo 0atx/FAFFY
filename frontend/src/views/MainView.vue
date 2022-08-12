@@ -2,7 +2,7 @@
 	<div id="view">
 
     <!-- 메인 페이지 상단 방송 정보 출력 -->
-    <div id="topContent">
+    <div id="topContent" v-if="topContentLoaded">
       <carousel-3d
         :autoplay="true"
         :autoplay-timeout="5000"
@@ -17,11 +17,15 @@
         :height="250"
         :display="5"
       >
-        <slide v-for="(slide, i) in slides" :index="i" :key="i">
+
+        <slide v-for="(slide, i) in bestConsultings" :index="i" :key="i">
           <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
             <div style="display:flex">
               <!-- 방송 진행자 이미지 정보 -->
-              <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="slide.src">
+              <!-- <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="slide.src"> -->
+              <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`${API_BASE_URL}/users/profile/image/${slide.profileImageNo}`"
+              @error="replaceByDefault"
+              >
 
               <!-- 방송 정보 -->
               <v-card
@@ -34,15 +38,15 @@
                       <div>
                         <!-- 방송 제목 -->
                         <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
-                          방송 제목
+                          {{slide.title}}
                         </v-list-item-title>
 
                         <!-- 컨설턴트 닉네임 / 참여자 / 참여 인원 -->
                         <v-list-item-subtitle class="mb-1">
-                          닉네임
+                          {{slide.consultant}}
                         </v-list-item-subtitle>
                         <v-list-item-subtitle style="font-size: 12px;">
-                          참여자 1 / 최대 인원 20
+                          참여자 {{slide.viewCount}} / 최대 인원 {{slide.roomSize}}
                         </v-list-item-subtitle>
                       </div>
                     </div>
@@ -53,7 +57,7 @@
                         small
                         :ripple="false"
                         id="categoryChips"
-                        v-for="category in consultCategorys"
+                        v-for="category in slide.categories"
                         :key="category"
                         :category="category"
                       >
@@ -62,7 +66,7 @@
                     </v-chip-group>
 
                     <!-- 방송 소개 -->
-                    <div id="introduce">방송 소개. 여기서도 한 100자에서 ...처리해야 할 듯</div>
+                    <div id="intro">{{slide.intro}}</div>
                     <div style="text-align:right;">
                       <!-- 임시 버튼, 방송 일자 넣어도 되고 다른 정보 넣거나 없앨 수도 있음. 이 버튼은 눌러도 아무 기능 없게 할거임 -->
                       <v-btn
@@ -70,6 +74,7 @@
                         rounded
                         text
                         class="mt-1"
+                        :to="{name:'consulting-onair',params:{nickname:slide.consultant,consulting_no:slide.no}}"
                       >
                         참여
                       </v-btn>
@@ -92,69 +97,72 @@
           <router-link to="/auth/sign-in">진행중인 방송<v-icon color="black" class="mb-1"> mdi-chevron-right </v-icon></router-link>
         </div>
         <div style="height: 500px; display:flex; flex-wrap:nowrap; justify-content: space-evenly;">
+          <!-- <div v-if="midContentLoaded"> -->
           <!-- 방송 정보 카드 -->
-          <v-card
-            tile
-            v-for="(consult, i) in consults"
-            :key="consult.title"
-            :class="i % 2 == 0 ? 'blueCard' : 'orangeCard'"
-            style="height: 460px; width: 300px;"
-            outlined
-          >
-            <!-- 방송 진행자 이미지 정보 -->
-            <v-img
-              height="200"
-              :src="consult.src"
-            ></v-img>
-            <v-list-item>
-              <v-list-item-content>
-                <div style="display:flex; align-items:center">
-                  <div>
+            <v-card
+              tile
+              v-for="(consult, i) in latestConsultings"
+              :key="consult.title"
+              :class="i % 2 == 0 ? 'blueCard' : 'orangeCard'"
+              style="height: 460px; width: 300px;"
+              outlined
+            >
+              <!-- 방송 진행자 이미지 정보 -->
+              <v-img
+                height="200"
+                :src="`${API_BASE_URL}/users/profile/image/${consult.profileImageNo}`"
+              ></v-img>
+              <v-list-item>
+                <v-list-item-content>
+                  <div style="display:flex; align-items:center">
+                    <div>
 
-                    <!-- 방송 제목 -->
-                    <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
-                      {{ consult.title }}
-                    </v-list-item-title>
+                      <!-- 방송 제목 -->
+                      <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
+                        {{ consult.title }}
+                      </v-list-item-title>
 
-                    <!-- 컨설턴트 닉네임 / 참여 인원 -->
-                    <v-list-item-subtitle class="mb-1">
-                      {{ consult.nickname }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle style="font-size: 12px;">
-                      참여자 {{ consult.viewCount }} / 최대 인원 {{ consult.roomSize }}
-                    </v-list-item-subtitle>
+                      <!-- 컨설턴트 닉네임 / 참여 인원 -->
+                      <v-list-item-subtitle class="mb-1">
+                        {{ consult.nickname }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle style="font-size: 12px;">
+                        참여자 {{ consult.viewCount }} / 최대 인원 {{ consult.roomSize }}
+                      </v-list-item-subtitle>
+                    </div>
                   </div>
-                </div>
 
-                <!-- 방송 카테고리 -->
-                <v-chip-group>
-                  <v-chip
-                    small
-                    :ripple="false"
-                    id="categoryChips"
-                    v-for="category in consult.categorys"
-                    :key="category"
-                    :category="category"
-                  >
-                    {{ category }}
-                  </v-chip>
-                </v-chip-group>
+                  <!-- 방송 카테고리 -->
+                  <v-chip-group>
+                    <v-chip
+                      small
+                      :ripple="false"
+                      id="categoryChips"
+                      v-for="category in consult.categorys"
+                      :key="category"
+                      :category="category"
+                    >
+                      {{ category }}
+                    </v-chip>
+                  </v-chip-group>
 
-                <!-- 방송 소개 -->
-                <div style="font-size:15px;" id="introduce">{{ consult.intro }}</div>
-                <div style="text-align:right;">
-                  <!-- 참여 버튼. 클릭 시 화상회의 방 진입 -->
-                  <v-btn
-                    outlined
-                    rounded
-                    text
-                  >
-                    참여
-                  </v-btn>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
+                  <!-- 방송 소개 -->
+                  <div style="font-size:15px;" id="intro">{{ consult.intro }}</div>
+                  <div style="text-align:right;">
+                    <!-- 참여 버튼. 클릭 시 화상회의 방 진입 -->
+                    <v-btn
+                      outlined
+                      rounded
+                      text
+                      :to="{name:'consulting-onair',params:{nickname:consult.consultant,consulting_no:consult.no}}"
+                    >
+                      참여
+                    </v-btn>
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          <!-- </div> -->
         </div>
       </div>
 
@@ -242,6 +250,9 @@
 
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d';
+import {consulting} from "@/api/consulting.js";
+import { API_BASE_URL } from "@/config";
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
 
 export default {
 	name: "MainView",
@@ -251,23 +262,58 @@ export default {
   },
 	data() {
 		return {
-      slides: [
-        {
-          src: "https://picsum.photos/500/300?image=15"
-        },
-        {
-          src: "https://picsum.photos/500/300?image=20"
-        },
-        {
-          src: "https://picsum.photos/500/300?image=25"
-        },
-        {
-          src: "https://picsum.photos/500/300?image=30"
-        },
-        {
-          src: "https://picsum.photos/500/300?image=35"
-        }
-      ],
+      API_BASE_URL: API_BASE_URL,
+      bestConsultings:[],
+      latestConsultings:[],
+      topContentLoaded:false,
+      midContentLoaded:false,
+      // slides: [
+      //   {
+      //     consultant:"park2",
+      //     consultant_no:3,
+      //     intro:"소개",
+      //     title:"제목임",
+      //     categories:["hiphop","daily"],
+      //     no:299,
+      //     profileImageNo:3,
+      //     viewCount:1,
+      //     roomSize:10,
+      //   },
+      //   {
+      //     consultant:"park2",
+      //     consultant_no:3,
+      //     intro:"소개2",
+      //     title:"제목임2",
+      //     categories:["hiphop","daily"],
+      //     no:21,
+      //     profileImageNo:3,
+      //     viewCount:1,
+      //     roomSize:10,
+      //   },
+      //   {
+      //     consultant:"park2",
+      //     consultant_no:3,
+      //     intro:"소개3",
+      //     title:"제목임3",
+      //     categories:["hiphop"],
+      //     no:69,
+      //     profileImageNo:3,
+      //     viewCount:1,
+      //     roomSize:10,
+      //   },
+      //   // {
+      //   //   src: "https://picsum.photos/500/300?image=20"
+      //   // },
+      //   // {
+      //   //   src: "https://picsum.photos/500/300?image=25"
+      //   // },
+      //   // {
+      //   //   src: "https://picsum.photos/500/300?image=30"
+      //   // },
+      //   // {
+      //   //   src: "https://picsum.photos/500/300?image=35"
+      //   // }
+      // ],
 
       consults: [
         {
@@ -375,9 +421,35 @@ export default {
 
 	mounted() {
     window.scrollTo(0, 0);
+    // 방송 목록 요청-----
+    // 상단 참여자수 순 목록
+    consulting.getBestConsultings(5)
+    .then((data)=> {
+      console.log(data);
+      this.bestConsultings = data["content"];
+      this.topContentLoaded=true;
+    })
+    .catch((error)=> {
+      console.log(error);
+    })
+    // 중단 생성 순 목록
+    consulting.getLatestConsultings(5)
+    .then((data)=> {
+      console.log(data);
+      this.latestConsultings = data["content"];
+      this.midContentLoaded=true;
+    })
+    .catch((error)=> {
+      console.log(error);
+    })
+    console.log("hi");
+    // 방송 목록 요청 END
   },
 
-	methods: {},
+	methods: {
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
+
+  },
 };
 </script>
 

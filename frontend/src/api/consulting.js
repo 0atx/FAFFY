@@ -8,8 +8,7 @@ const consulting = {
       .then(response=>resolve(response.data))
       .catch(error=>reject(error.response));
     })
-  }
-  ,
+  },
   createConsulting: async function(consulting) {
     return new Promise((resolve,reject)=> {
       api.post(`/consultings`,JSON.stringify(consulting))
@@ -39,6 +38,20 @@ const consulting = {
           reject(error.response);
       });
     });
+  },
+  getLatestConsultings:async function(size) {
+    return new Promise((resolve,reject)=> {
+      api.get(`/consultings/order/latest?size=${size}`)
+      .then(response=>resolve(response.data))
+      .catch(error=> reject(error.response));
+    })
+  },
+  getBestConsultings:async function(size) {
+    return new Promise((resolve,reject)=> {
+      api.get(`/consultings/order/view?size=${size}`)
+      .then(response=>resolve(response.data))
+      .catch(error=> reject(error.response));
+    })
   }
 }
 

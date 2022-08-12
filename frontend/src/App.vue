@@ -39,7 +39,7 @@ export default {
       } else {
         this.show = false;
         this.isOnAir = true;
-        this.onLoading();
+        // this.onLoading();
       }
     },
   },
