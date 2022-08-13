@@ -17,7 +17,6 @@ export default {
         'google',
         code,
         (response) => {
-          console.log(response.data);
           let token = response.data["token"];
           let user = response.data["user"];
           sessionStorage.setItem("X-AUTH-TOKEN", token);
