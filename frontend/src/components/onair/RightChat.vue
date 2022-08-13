@@ -55,14 +55,14 @@
           <div
             :class="chat.nickname == loginUser.nickname ? 'ml-2 mr-2' : 'ml-1 mr-2'"
             style="font-size: 0.8rem;"
-          >{{ chat.nickname }}</div>
+          >{{ chat.userName }}</div>
           <v-chip
             :color="chat.nickname == loginUser.nickname ? '#ff7451' : '#0c0f66'"
             dark
             style="height:auto;white-space: normal;pointer-events: none;"
             class="pa-3"
           >
-            {{ chat.msg }}
+            {{ chat.content }}
           </v-chip>
           <div
             class="ml-1 mr-1 mb-2"
@@ -81,8 +81,8 @@
         hide-details
         box-sizing="border-box"
         append-icon="mdi-send"
-        @keyup.enter="submitChat(message)"
-        @click:append="submitChat(message)"
+        @keyup.enter="send"
+        @click:append="send"
         v-model="message">
       </v-text-field>
       </div>
@@ -91,37 +91,66 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import { mapState} from "vuex";
 const authStore = "authStore";
 export default {
 	name: 'RightChat',
+  props:{
+    session:Object,
+  },
   components: {
 
   },
+  mounted() {
+    console.log("탭이에요");
+    console.log(this.session);
+    console.log("탭이에요end");
+  },
   data() {
     return {
-      chats: [
-        // { no: 1, nickname: '이준성', msg: '갈매기'},
-        // { no: 2, nickname: '류경하', msg: '기러기'},
-        // { no: 3, nickname: '박윤하', msg: '기차표'},
-        // { no: 4, nickname: '이용우', msg: '표인봉'},
-        // { no: 5, nickname: '김수만', msg: '봉우리'},
-        // { no: 6, nickname: '김명석', msg: '리어카타는거보다 기차타는게 낫고 기차타는것 보다는 비행기 타는게 낫지않음?'},
-        // { no: 7, nickname: '김명석', msg: '리어카타는거보다 기차타는게 낫고 기차타는것 보다는 비행기 타는게 낫지않음?'},
-      ],
+      // chats: [
+      //   { no: 1, nickname: '이준성', msg: '갈매기'},
+      //   { no: 2, nickname: '류경하', msg: '기러기'},
+      //   { no: 3, nickname: '박윤하', msg: '기차표'},
+      //   { no: 4, nickname: '이용우', msg: '표인봉'},
+      //   { no: 5, nickname: '김수만', msg: '봉우리'},
+      //   { no: 6, nickname: '김명석', msg: '리어카타는거보다 기차타는게 낫고 기차타는것 보다는 비행기 타는게 낫지않음?'},
+      //   { no: 7, nickname: '김명석', msg: '리어카타는거보다 기차타는게 낫고 기차타는것 보다는 비행기 타는게 낫지않음?'},
+      // ],
       message: '',
     }
   },
   computed: {
     ...mapState(authStore, ["loginUser"]),
+    ...mapState("consultingStore",["chats"]),
   },
   methods: {
     // 채팅 입력(추후변경) + 스크롤 고정 필요
     submitChat(msg) {
       this.chats.push({ no: 9, nickname: '익명의 누군가', msg: msg, created_at: new Date().toLocaleTimeString() })
       this.message = ''
-    }
+    },
+    send() {
+      const now = new Date();
+      let time = now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+			this.session.signal({
+				data: JSON.stringify({
+					message: this.message,  // Any string (optional)
+					userName: this.loginUser.nickname,
+          created_at:time,
+				}),
+				to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+				type: 'my-chat'             // The type of message (optional)
+			})
+				.then(() => {
+					console.log('Message successfully sent');
+					this.message = "";
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+
   }
 };
 </script>
