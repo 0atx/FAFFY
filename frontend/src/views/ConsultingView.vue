@@ -65,7 +65,7 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '../components/video/UserVideo';
-import {mapState} from "vuex";
+import {mapState,mapMutations} from "vuex";
 import {consulting} from "@/api/consulting.js";
 // import Chat from '@/components/chat/Chat';
 
@@ -83,6 +83,8 @@ export default {
 	},
   computed: {
     ...mapState("authStore",["loginUser"]),
+    ...mapState("consultingStore",["participants"]),
+
   },
   mounted() {
     // 뒤로가기 막기
@@ -154,6 +156,7 @@ export default {
 		}
 	},
 	methods: {
+    ...mapMutations("consultingStore",["SET_PARTICIPANTS"]),
     // 뒤로가기 막는 함수
     preventBack: function() {
       history.pushState(null, null, location.href);
@@ -197,6 +200,7 @@ export default {
 				this.subscribers.push(subscriber);
         console.log("subscrobers");
         console.log(this.subscribers)
+        this.SET_PARTICIPANTS(this.subscribers);
 			});
 
 			// 끝낸 모든 스트림들에 대해서
@@ -205,6 +209,8 @@ export default {
 				if (index >= 0) {
 					this.subscribers.splice(index, 1);
 				}
+        this.SET_PARTICIPANTS(this.subscribers);
+
 			});
 
 			// 보든 비동기 예외에 대해서
