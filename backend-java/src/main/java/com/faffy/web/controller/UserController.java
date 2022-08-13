@@ -301,7 +301,6 @@ public class UserController {
 
             resultMap.put("content", user.toDetailDto());
         } catch(Exception e) {
-            e.printStackTrace();
             logger.error("정보 수정 에러 발생 : {}",e.getMessage());
             resultMap.put("msg","입력 값을 확인해 주세요.");
             status = HttpStatus.BAD_REQUEST;

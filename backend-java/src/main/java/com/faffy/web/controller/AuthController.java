@@ -55,7 +55,7 @@ public class AuthController {
         GetSocialOAuthRes getSocialOAuthRes=oAuthService.oAuthLogin(socialLoginType,code);
 
         //토큰, 유저 정보를 담아 홈으로 리다이렉트
-        User user = getSocialOAuthRes.getUser();
+        UserPublicDto user = getSocialOAuthRes.getUser().toPublicDto();
         String token = getSocialOAuthRes.getJwtToken();
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("user", user);
