@@ -2,7 +2,7 @@
   <div id="tab">
     <div class="mx-2">
       <right-subscriber @change="switchTab" v-if="tab==='participants'" />
-      <right-chat @change="switchTab" v-else/>
+      <right-chat :session="session" @change="switchTab" v-else/>
     </div>
   </div>
 </template>
@@ -13,6 +13,9 @@ import RightSubscriber from '@/components/onair/RightSubscriber.vue'
 
 export default {
   name: 'ChatSubscriberTab',
+  props:{
+    session:Object
+  },
   components: {
     RightChat,
     RightSubscriber,
