@@ -5,17 +5,17 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { auth } from "@/api/auth";
 
 export default {
-  name: 'AuthHandler',
+  name: 'GoogleAuthHandler',
   created() {
-    const code = this.$route.query.code
+    const code = this.$route.query.code;
     if (code) {
       auth.socialCallback(
         'google',
-        code,
+        {code},
         (response) => {
           let token = response.data["token"];
           let user = response.data["user"];
@@ -32,6 +32,9 @@ export default {
     else{
       console.log("code is null");
     }
+  },
+  computed: {
+    ...mapState("authStore" ,["naverState"]),
   },
   methods: {
     ...mapMutations("authStore", [
