@@ -2,13 +2,13 @@
 <div v-if="streamManager" style="position:relative;">
 	<ov-video :stream-manager="streamManager" ref="ov_video"/>
     <div class="nameTag">
-      <p>{{ clientData }}</p>
+      <p>{{ clientData.nickname }}</p>
       <button @click="capture">캡쳐</button>
     </div>
-    <div>
+    <!-- <div>
     <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
     <button @click="upload">전송</button>
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -29,15 +29,21 @@ export default {
 
 	computed: {
 		clientData () {
-			const { clientData } = this.getConnectionData();
-			return clientData;
+			const user = this.getConnectionData();
+			return user;
 		},
 	},
 
 	methods: {
 		getConnectionData () {
-			const { connection } = this.streamManager.stream;
-			return JSON.parse(connection.data);
+			// const { connection } = this.streamManager.stream;
+			// return JSON.parse(connection.data);
+      let namecode = JSON.parse(this.streamManager.stream.connection.data).clientData.split(':');
+        let user = {
+          no:Number(namecode[0]),
+          nickname:namecode[1],
+        }
+        return user;
 		},
     capture() {
       console.log("#######################"+this.clientData);
@@ -116,7 +122,7 @@ div > p {
   background-color: #ff7451;
   color: white;
   font-size: 1vw;
-  position: absolute;
+  /* position: absolute; */
   top: 5%;
   left: 5%;
 }
