@@ -19,10 +19,10 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
     @Query("select c from Consulting c where c.endTime is null order by c.startTime desc")
     List<Consulting> findAllOrderByStartTime(Pageable pageable);
 
-    @Query("select distinct c from Consulting c join fetch c.categories cc " +
+    @Query("select distinct c from Consulting c join fetch c.categories cc join fetch cc.consultingCategoryMapper.category fc " +
             "where c.title like concat('%',:keyword,'%') " +
             "or c.intro like concat('%',:keyword,'%') " +
             "or c.consultant.nickname like concat('%',:keyword,'%') " +
-            "or cc.consultingCategoryMapper.category.name like concat('%',:keyword,'%')")
+            "or fc.name like concat('%',:keyword,'%')")
     List<Consulting> findByKeyword(String keyword) throws SQLException;
 }
