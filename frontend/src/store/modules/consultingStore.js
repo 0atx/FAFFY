@@ -3,6 +3,7 @@ const consultingStore = {
   state:{
     participants:[],
     consultingInfo:null,
+    chats:[],
   },
   mutations:
   {
@@ -31,6 +32,9 @@ const consultingStore = {
     },
     INIT_PARTICIPANTS:(state) => {
       state.participants = [];
+    },
+    SET_CHATS:(state,chatArray)=> {
+      state.chats = chatArray;
     }
   }
 }
