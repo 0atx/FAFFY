@@ -58,6 +58,7 @@ public class Consulting extends BaseEntity {
                 .viewCount(this.viewCount)
                 .categories(categories)
                 .profileImageNo(consultant.getProfileImage() != null ? consultant.getProfileImage().getNo() : 0)
+                .startTime(this.startTime)
                 .build();
     }
 

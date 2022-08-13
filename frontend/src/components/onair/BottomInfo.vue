@@ -16,7 +16,7 @@
                   {{consultingInfo.title}}
                 </v-list-item-title>
                 <v-list-item-subtitle style="font-size:16px; text-align:right">
-                  {{ time }} 현재시간 - 방송 시작 시간으로 바꿔야 함 <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
+                  방송 시작 : {{ consultingInfo.startTime }}  <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
                 </v-list-item-subtitle>
               </div>
 
@@ -39,14 +39,14 @@
                     </v-list-item-subtitle>
 
                   </div>
-                  <div style="display:flex;  width:160px;">
+                  <!-- <div style="display:flex;  width:160px;">
                     <v-list-item-subtitle style="font-size: 13px;">
                       팔로잉 24
                     </v-list-item-subtitle>
                     <v-list-item-subtitle style="font-size: 13px;">
                       팔로워 13
                     </v-list-item-subtitle>
-                  </div>
+                  </div> -->
                 </div>
               </div>
 

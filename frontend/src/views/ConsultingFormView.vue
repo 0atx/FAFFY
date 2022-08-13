@@ -39,8 +39,8 @@
         <center-option />
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
       </div>
-      <div style="width:20%;" id="drawer">
-        <chat-subscriber-tab />
+      <div style="width:20%;" id="drawer"  v-if="session">
+        <chat-subscriber-tab :session="session"/>
       </div>
     </div>
   </div>
@@ -146,7 +146,7 @@ export default {
     .then((data)=> {
       console.log("방송 정보 요청 성공");
       console.log(data);
-      this.consultingInfo = data.content;
+      this.SET_CONSULTING_INFO(data.content);
       console.log(this.consultingInfo.title);
     })
     .catch((error)=> {
@@ -157,11 +157,11 @@ export default {
     console.log(this.mySessionId);
     this.INIT_CONSULTING_INFO();
     this.INIT_PARTICIPANTS();
+    this.SET_CHATS([]);
     this.joinSession();
       // 방장인지 체크
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
-      alert("방장 어서오고");
     }
   },
   beforeRouteLeave(to,from,next) {
@@ -170,7 +170,7 @@ export default {
     next();
   },
   methods: {
-    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS"]),
+    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_CHATS"]),
 
     // 뒤로가기 방지
     preventBack: function() {
@@ -180,27 +180,7 @@ export default {
       window.onpopstate = function () {
           history.go(1);
       };
-
-
     },
-
-    send() {
-			this.session.signal({
-				data: JSON.stringify({
-					message: this.message,  // Any string (optional)
-					userName: this.myUserName,
-				}),
-				to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-				type: 'my-chat'             // The type of message (optional)
-			})
-				.then(() => {
-					console.log('Message successfully sent');
-					this.message = "";
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		},
 
 		// 세션(화상회의) 시작
 		joinSession() {
@@ -254,8 +234,10 @@ export default {
           const msg = {
             userName: data.userName,
             content: data.message,
+            created_at:data.created_at,
           }
           this.recvList.push(msg)
+          this.SET_CHATS(this.recvList);
         }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
