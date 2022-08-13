@@ -29,8 +29,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.email = :email and u.birthday = :birthday")
     Optional<User> findByEmailBirthday(String email, LocalDate birthday);
 
-    @Query("select distinct u from User u join fetch u.categories uc " +
+    @Query("select distinct u from User u join fetch u.categories uc join fetch uc.userCategoryMapper.category fc " +
             "where u.nickname like concat('%',:keyword,'%') " +
-            "or uc.userCategoryMapper.category.name like concat('%',:keyword,'%')")
+            "or fc.name like concat('%',:keyword,'%')")
     List<User> findByKeyword(String keyword) throws SQLException;
 }
