@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import MainView from "@/views/MainView.vue";
-import AuthHandler from "@/views/handler/AuthHandler";
+import GoogleAuthHandler from "@/views/handler/GoogleAuthHandler";
+import NaverAuthHandler from "@/views/handler/NaverAuthHandler";
 
 Vue.use(VueRouter);
 
@@ -30,7 +31,12 @@ const routes = [
       {
         path: "google/redirect",
         name: "google",
-        component: AuthHandler,
+        component: GoogleAuthHandler,
+      },
+      {
+        path: "naver/redirect",
+        name: "naver",
+        component: NaverAuthHandler,
       }
     ],
   },
@@ -85,7 +91,7 @@ const routes = [
   {
     path: "/consulting/onair",
     name: "consulting-onair",
-    component: () => import("@/views/ConsultingView.vue"),
+    component: () => import("@/views/ConsultingFormView.vue"),
   },
   {
     path: "/board",

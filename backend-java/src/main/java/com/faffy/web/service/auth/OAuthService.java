@@ -1,10 +1,9 @@
 package com.faffy.web.service.auth;
 
-import com.faffy.web.config.auth.dto.GetSocialOAuthRes;
-import com.faffy.web.config.auth.dto.GoogleOAuthToken;
-import com.faffy.web.config.auth.dto.GoogleUser;
+import com.faffy.web.config.auth.dto.*;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.UserRepository;
+import com.faffy.web.jpa.type.Gender;
 import com.faffy.web.jpa.type.LoginType;
 import com.faffy.web.jpa.type.SocialLoginType;
 import com.faffy.web.service.token.JwtTokenProvider;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,27 +27,34 @@ public class OAuthService {
     @Autowired
     UserRepository userRepository;
     private final GoogleOauth googleOauth;
-    private final HttpServletResponse response;
+    private final NaverOauth naverOauth;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public String request(SocialLoginType socialLoginType) throws IOException {
+    public Map<String, String> request(SocialLoginType socialLoginType) throws IOException {
+        Map<String, String> resultMap = new HashMap<>();
         String redirectURL;
         switch (socialLoginType){
-            case GOOGLE:{
-                //각 소셜 로그인을 요청하면 소셜로그인 페이지로 리다이렉트
-                redirectURL= googleOauth.getOauthRedirectURL();
-            }break;
+            //각 소셜 로그인을 요청하면 소셜로그인 페이지로 리다이렉트
+            case GOOGLE: {
+                redirectURL = googleOauth.getOauthRedirectURL();
+                resultMap.put("redirectURL", redirectURL);
+                break;
+            }
+            case NAVER:{
+                resultMap = naverOauth.getOauthRedirectURL();
+                break;
+            }
             default:{
                 throw new IllegalArgumentException("알 수 없는 소셜 로그인 형식입니다.");
             }
         }
 
-        System.out.println("구글 로그인으로 리다이렉트");
+        System.out.println("소셜 로그인으로 리다이렉트");
 //        response.sendRedirect(redirectURL);
-        return redirectURL;
+        return resultMap;
     }
 
-    public GetSocialOAuthRes oAuthLogin(SocialLoginType socialLoginType, String code) throws Exception {
+    public GetSocialOAuthRes oAuthLogin(SocialLoginType socialLoginType, String code, String state) throws Exception {
 
         switch (socialLoginType){
             case GOOGLE:{
@@ -63,7 +72,6 @@ public class OAuthService {
                 String user_id=googleUser.getEmail();
                 //우리 서버의 db와 대조하여 해당 user가 존재하는 지 확인한다.
                 User user = userRepository.findByEmailAndLoginType(user_id, LoginType.GOOGLE).orElse(null);
-//                int user_num=accountProvider.getUserNum(user_id);
 
                 GetSocialOAuthRes res = null;
                 if(user != null) {
@@ -92,6 +100,58 @@ public class OAuthService {
 
                     String jwtToken = jwtTokenProvider.createToken(String.valueOf(newUser.getNo()), newUser.getRoles());
                     res = new GetSocialOAuthRes(jwtToken, newUser.getNo(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), false, newUser);
+                }
+                return res;
+            }
+            case NAVER:{
+                ResponseEntity<String> accessTokenResponse= naverOauth.requestAccessToken(code, state);
+                NaverOAuthToken oAuthToken=naverOauth.getAccessToken(accessTokenResponse);
+
+                ResponseEntity<String> userInfoResponse=naverOauth.requestUserInfo(oAuthToken);
+                NaverUser naverUser= naverOauth.getUserInfo(userInfoResponse);
+                System.out.println(naverUser);
+
+                String user_id=naverUser.getEmail();
+                User user = userRepository.findByEmailAndLoginType(user_id, LoginType.NAVER).orElse(null);
+
+                GetSocialOAuthRes res = null;
+                if(user != null) {
+                    String jwtToken = jwtTokenProvider.createToken(String.valueOf(user.getNo()), user.getRoles());
+                    res = new GetSocialOAuthRes(jwtToken, user.getNo(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), true, user);
+                }else {
+//                    throw new Exception("Account does not exists.");
+                    System.out.println("--------소셜 회원가입--------");
+
+                    List<String> roles = new ArrayList<>();
+                    roles.add("ROLE_USER");
+                    //성별 정보
+                    Gender gender = null;
+                    if(naverUser.getGender() != null)
+                        gender = naverUser.getGender().equals("M") ? Gender.Male : Gender.Female;
+                    //생년월일 정보
+                    String birthdate = null;
+                    LocalDate birthday = null;
+                    if(naverUser.getBirthday() != null && naverUser.getBirthyear() != null) {
+                        birthdate = naverUser.getBirthyear() + "-" + naverUser.getBirthday();
+                        birthday = LocalDate.parse(birthdate);
+                    }
+
+                    User newUser = User.builder()
+                            .email(naverUser.getEmail())
+                            .name(naverUser.getName())
+                            .nickname(naverUser.getName())
+                            .roles(roles)
+                            .loginType(LoginType.NAVER)
+                            .build();
+                    System.out.println("User 빌드 완료");
+                    try {
+                        userRepository.save(newUser);
+                    }catch(Exception e){
+                        throw new Exception("중복된 닉네임이 있습니다.");
+                    }
+
+                    String jwtToken = jwtTokenProvider.createToken(String.valueOf(newUser.getNo()), newUser.getRoles());
+                    res = new GetSocialOAuthRes(jwtToken, newUser.getNo(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), true, newUser);
                 }
                 return res;
             }

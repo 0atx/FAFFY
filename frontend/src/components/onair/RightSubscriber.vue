@@ -31,18 +31,25 @@
               <v-icon> mdi-chat </v-icon>
             </v-btn>
           </v-list-item-title>
-          <v-list-item-title>컨설턴트 : {{ host.nickname }}</v-list-item-title>
-          <v-list-item-subtitle>참여 인원 : {{ participants.length }} / {{ participantsLimit }}</v-list-item-subtitle>
+          <!-- <v-list-item-title>컨설턴트 : {{ host.nickname }}</v-list-item-title> -->
+          <v-list-item-title>참여 인원 : {{ participants.length+1 }} / {{ participantsLimit }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
     <div class="overflow-auto" style="height: 80vh">
       <v-list>
+        <v-list-item class="participant">
+          <profile-img-avatar :user_no="loginUser.no" />
+          <v-list-item-content @click="moveProfile(loginUser.no)">
+            <v-list-item-title v-text="loginUser.nickname"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item
           class="participant"
-          v-for="participant in participants"
-          :key="participant.no"
+          v-for="(participant,i) in participants"
+          :key="i"
         >
 
         <profile-img-avatar :user_no="participant.no" />
@@ -58,37 +65,19 @@
 
 <script>
 import ProfileImgAvatar from "@/components/common/ProfileImgAvatar.vue";
+import {mapState} from "vuex";
 
 export default {
 	name: 'rightSubscriber',
+  computed:{
+    ...mapState("authStore",["loginUser"]),
+    ...mapState("consultingStore",["participants"]),
+  },
   components: {
     ProfileImgAvatar
   },
   data() {
     return {
-      // 임시 데이터
-      host: { no:7, nickname: '박기범' },
-      participants: [
-        { no: 1, nickname: '이준성' },
-        { no: 2, nickname: '김명석' },
-        { no: 3, nickname: '김수만' },
-        { no: 4, nickname: '류경하' },
-        { no: 5, nickname: '박윤하' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-        { no: 6, nickname: '이용우' },
-      ],
       participantsLimit: 10,
     }
   },
