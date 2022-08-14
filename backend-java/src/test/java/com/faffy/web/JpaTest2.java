@@ -119,23 +119,23 @@ public class JpaTest2 {
     }
 
 
-    @Test
-    @Order(20)
-    @DisplayName("정보 수정2")
-    void updateUser2() {
-        try {
-            User user = userService.getUserByNickname("jun1");
-            UserDto userDto = UserDto.builder().no(1).email(user.getEmail()).name("준성").nickname("jun")
-                    .gender(user.getGender()).password("444100").info("안녕하세요 이준성입니다.").build();
-
-            userService.updateUser(userDto);
-            System.out.println("수정완료");
-
-        } catch (Exception e) {
-            System.out.println( e.getMessage());
-        }
-
-    }
+//    @Test
+//    @Order(20)
+//    @DisplayName("정보 수정2")
+//    void updateUser2() {
+//        try {
+//            User user = userService.getUserByNickname("jun1");
+//            UserDto userDto = UserDto.builder().no(1).email(user.getEmail()).name("준성").nickname("jun")
+//                    .gender(user.getGender()).password("444100").info("안녕하세요 이준성입니다.").build();
+//
+//            userService.updateUser(userDto);
+//            System.out.println("수정완료");
+//
+//        } catch (Exception e) {
+//            System.out.println( e.getMessage());
+//        }
+//
+//    }
 
     @Test
     @DisplayName("방송 더미 데이터 삽입")
