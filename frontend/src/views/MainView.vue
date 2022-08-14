@@ -3,8 +3,24 @@
 
     <!-- 메인 페이지 상단 방송 정보 출력 -->
     <div id="topContent" v-if="topContentLoaded">
+      <v-carousel
+        v-if="bestConsultings.length == 0"
+        style="width:90%; margin:0 auto;"
+        cycle
+        height="auto"
+        :show-arrows="false"
+        hide-delimiters
+        >
+        <v-carousel-item
+          style="width:100%; height:250px; margin:0 auto;"
+          v-for="(banner, i) in banners"
+          :key="i"
+          :src="require(`@/assets/images/${banner.name}`)"
+        >
+        </v-carousel-item>
+      </v-carousel>
       <carousel-3d
-        id="carousel"
+        v-else
         :autoplay="true"
         :autoplay-timeout="5000"
         :controls-visible="true"
@@ -18,7 +34,6 @@
         :height="250"
         :display="5"
       >
-
         <slide v-for="(slide, i) in bestConsultings" :index="i" :key="i">
           <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
             <div style="display:flex">
@@ -30,8 +45,8 @@
 
               <!-- 방송 정보 -->
               <v-card
-              tile
-              style="width:250px; height:250px; background-color:white"
+                tile
+                style="width:250px; height:250px; background-color:white"
               >
                 <v-list-item>
                   <v-list-item-content>
@@ -99,8 +114,15 @@
         </div>
         <div style="height: 500px; display:flex; flex-wrap:nowrap; justify-content: space-evenly;">
           <!-- <div v-if="midContentLoaded"> -->
+          <v-col style="height:500px; display:flex; justify-content:center; align-items:center;" v-if="latestConsultings.length == 0" cols="12">
+            <div style="text-align:center;">
+              <v-icon color="#333" large block> mdi-broadcast-off </v-icon>
+              <h2>현재 진행중인 방송이 없습니다.</h2>
+            </div>
+          </v-col>
           <!-- 방송 정보 카드 -->
             <v-card
+              v-else
               tile
               v-for="(consult, i) in latestConsultings"
               :key="consult.title"
@@ -122,15 +144,15 @@
                       <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
                         {{ consult.title }}
                       </v-list-item-title>
-                    </div>
 
-                    <!-- 컨설턴트 닉네임 / 참여 인원 -->
-                    <v-list-item-subtitle class="mb-1">
-                      {{ consult.nickname }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle style="font-size: 12px;">
-                      <v-icon small>mdi-account-multiple</v-icon> {{ consult.viewCount }} / {{ consult.roomSize }}
-                    </v-list-item-subtitle>
+                      <!-- 컨설턴트 닉네임 / 참여 인원 -->
+                      <v-list-item-subtitle class="mb-1">
+                        {{ consult.nickname }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle style="font-size: 12px;">
+                        <v-icon small>mdi-account-multiple</v-icon> {{ consult.viewCount }} / {{ consult.roomSize }}
+                      </v-list-item-subtitle>
+                    </div>
                   </div>
 
                   <!-- 방송 카테고리 -->
@@ -316,7 +338,14 @@ export default {
       //   //   src: "https://picsum.photos/500/300?image=35"
       //   // }
       // ],
-
+      banners: [
+        { name: "banner_1.png" },
+        { name: "banner_2.png" },
+        { name: "banner_3.png" },
+        { name: "banner_4.png" },
+        { name: "banner_5.png" },
+        { name: "banner_6.png" },
+      ],
       consults: [
         {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -434,6 +463,7 @@ export default {
     .catch((error)=> {
       console.log(error);
     })
+
     // 중단 생성 순 목록
     consulting.getLatestConsultings(5)
     .then((data)=> {
@@ -590,12 +620,14 @@ a {
   height:100%;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
+
 .imgBoard img {
 	width: 100%;
 	filter: saturate(50%);
 	transition: all 0.3s ease 0.1s;
 	backface-visibility: hidden;
 }
+
 .imgBoard figcaption {
 	position: absolute;
 	top: 50%; left: 0;
@@ -612,15 +644,18 @@ a {
 	transform: rotatex(90deg) translate(0, -50%);
 	transform-origin: 0% 0%;
 }
+
 .imgBoard figcaption h3 {
   line-height: 1em;
 	font-weight: 800;
 }
+
 .imgBoard figcaption p {
   font-size: 0.8em;
   font-weight: 500;
   margin: 0 0 15px;
 }
+
 .imgBoard figcaption .read {
 	border: 2px solid #fff;
 	padding: 0.5em 1em;
@@ -629,6 +664,7 @@ a {
 	text-decoration: none;
 	transition: all 0.3s ease;
 }
+
 .imgBoard figcaption .read:hover {
 	background: #fff;
 	color: #000 !important;
@@ -639,6 +675,7 @@ a {
 	opacity: 0;
 	transition-delay: 0;
 }
+
 .imgBoard:hover figcaption {
 	transform: rotatex(0deg) translate(0, -50%);
   background-color: #000;

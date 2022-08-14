@@ -1,27 +1,24 @@
 <template>
   <v-app id="faffy">
-    <Header :isOnAir="isOnAir" />
+    <Header v-show="show" :isOnAir="isOnAir" />
     <Loading v-if="loading"/>
     <router-view v-show="!loading" :key="$route.path"></router-view>
-    <Footer v-if="show" />
   </v-app>
 </template>
 
 <script>
 import Header from '@/components/common/Header.vue'
 import Loading from '@/components/common/LoadingView.vue'
-import Footer from '@/components/common/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
     Loading,
-    Footer
   },
   data() {
     return {
-      show: false,
+      show: true,
       isOnAir: false,
       loading: false,
     };
@@ -30,14 +27,22 @@ export default {
     $route(to) {
       if (
         !(
+          to.name == "404"
+        )
+      ) {
+        this.show = true;
+      } else {
+        this.show = false;
+      }
+
+      if (
+        !(
           to.name == "consulting-onair" ||
           to.name == "consulting-ready"
         )
       ) {
-        this.show = true;
         this.isOnAir = false;
       } else {
-        this.show = false;
         this.isOnAir = true;
         // this.onLoading();
       }
@@ -48,7 +53,7 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 5000);
+      }, 3000);
     }
   }
 }
