@@ -1,4 +1,5 @@
 import { follow, consulting, userBoard } from "@/api/user.js";
+import axios from "axios";
 
 const profileStore = {
   namespaced: true,
@@ -10,6 +11,7 @@ const profileStore = {
     consultingList: [],
     userBoardList: [],
     historyDetail: {},
+    snapshotList: [],
   },
   getCurrentProfile: function (state) {
     return state.userProfile;
@@ -19,6 +21,7 @@ const profileStore = {
     consultingList: state => state.consultingList.reverse(),
     userBoardList: state => state.userBoardList.reverse(),
     historyDetail: state => state.historyDetail,
+    snapshotList: state => state.snapshotList,
   },
   mutations: {
     SET_USER_PROFILE: (state, userProfile) => {
@@ -42,6 +45,12 @@ const profileStore = {
     SET_HISTORY_DETAIL: (state, historyDetail) => {
       state.historyDetail = historyDetail
     },
+    PUSH_SNAPSHOT: (state, snapshot) => {
+      state.snapshotList.push(snapshot)
+    },
+    RESET_SNAPSHOT: (state) => {
+      state.snapshotList = []
+    }
 
   },
   actions: {
@@ -121,23 +130,50 @@ const profileStore = {
         }
       );
     },
-    async loadHistoryDetail({ commit }, payload) {
+    loadHistoryDetail({ commit, dispatch, state }, payload) {
       console.log("상세 히스토리 불러오기");
-      console.log('payload2', payload)
-      consulting.getHistoryDetail(
-        payload,
-        (response) => {
-          console.log("상세 히스토리 불러오기 성공");
-          console.log(response.data)
-          commit("SET_HISTORY_DETAIL", response.data);
-        },
-        (response) => {
-          console.log("상세 히스토리 불러오기 실패");
-          console.log(response);
-          commit("SET_HISTORY_DETAIL", {});
-        }
-      );
+      console.log('paytlaod2', payload)
+      axios({
+        url: `http://localhost:8082/api/users/profile/${payload.user_no}/history/${payload.consulting_no}`,
+        method: 'get',
+      })
+        .then(res => {
+          console.log("상세 히스토리 조회 성공")
+          console.log(res)
+          commit("SET_HISTORY_DETAIL", res.data)
+          dispatch('resetSnapshotList')
+        })
+        .then(res => {
+          console.log('기존 스냅샷 리스트 초기화 성공')
+          console.log(res)
+          state.historyDetail.consultingDto.snapshotNoList.forEach((snapshotNo) => {
+            console.log('반복문', snapshotNo)
+            dispatch('loadSnapshotList', snapshotNo)
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
+    loadSnapshotList({ commit }, snapshotNo) {
+      console.log("스냅샷 불러오기", snapshotNo);
+      axios({
+        url: `http://localhost:8082/api/consultings/snapshot/${snapshotNo}`,
+        method: 'get',
+        responseType: 'blob',
+      })
+        .then(res => {
+          console.log('스냅샷 불러오기 성공', res)
+          const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] } ))
+          commit('PUSH_SNAPSHOT', url)
+        })
+        .catch(err => {
+          console.log('스냅샷 불러오기 실패', err)
+        })
+    },
+    resetSnapshotList({ commit }) {
+      commit('RESET_SNAPSHOT')
+    }
   },
 };
 
