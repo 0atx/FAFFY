@@ -16,10 +16,13 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
-        <h2>검색 결과가 없습니다.</h2>
+      <v-col style="height:500px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
+        <div style="text-align:center;">
+          <v-icon color="#333" large block> mdi-broadcast-off </v-icon>
+          <h2>'{{ keyword }}'에 대한 검색 결과가 없습니다.</h2>
+        </div>
       </v-col>
-      <v-col cols="3" v-for="consulting in currentPage" :key="consulting.host">
+      <v-col v-else cols="3" v-for="consulting in currentPage" :key="consulting.host">
         <v-card outlined elevation="0" class="mx-auto" max-width="344">
           <!--방송화면 or 썸네일 -->
           <v-img
@@ -129,6 +132,9 @@ const searchStore = "searchStore"
 
 export default {
   name: 'ConsultingSearchconsulting',
+  props: {
+    keyword: String,
+  },
   data() {
     return {
       page: 1,

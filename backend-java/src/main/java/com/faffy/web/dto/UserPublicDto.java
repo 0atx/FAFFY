@@ -32,13 +32,14 @@ public class UserPublicDto {
     private String info;
     private String introduce;
 
+    private String loginType;
     private String instaLink;
     private String facebookLink;
     private String youtubeLink;
 
     @Builder
     public UserPublicDto(int no, String email, String name, String nickname, LocalDate birthday, Gender gender, String info, List<String> roles,
-                         String introduce, String instaLink, String facebookLink, String youtubeLink, List<UserCategory> categories) {
+                         String introduce, String instaLink, String facebookLink, String youtubeLink, List<UserCategory> categories, LoginType loginType) {
         List<String> Categories = new ArrayList<>();
         for(UserCategory uc : categories){
             Categories.add(uc.getUserCategoryMapper().getCategory().getName());
@@ -57,5 +58,6 @@ public class UserPublicDto {
         this.facebookLink = facebookLink;
         this.youtubeLink = youtubeLink;
         this.categories = Categories;
+        this.loginType = loginType.toString();
     }
 }
