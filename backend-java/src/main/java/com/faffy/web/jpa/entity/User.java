@@ -113,17 +113,17 @@ public class User extends BaseEntity implements UserDetails {
      * @return 수정된 User
      * @throws IllegalInputException null 혹은 빈 값이면 안되는 입력이 들어올 경우
      */
-    public void updateUser(UserDto userDto) throws IllegalInputException {
+    public void updateUser(UserUpdateDto userDto) throws IllegalInputException {
         this.nickname = userDto.getNickname();
         this.name = userDto.getName();
         this.password = userDto.getPassword();
-        this.info = userDto.getInfo();
+        if(this.info != null) this.info = userDto.getInfo();
+        if(this.gender != null) this.gender = Gender.values()[Integer.parseInt(userDto.getGender())];
         if(!userDto.getBirthday().equals("null")) this.birthday = LocalDate.parse(userDto.getBirthday());
-        this.introduce = userDto.getIntroduce();
-        this.instaLink = userDto.getInstaLink();
-        this.facebookLink = userDto.getFacebookLink();
-        this.youtubeLink = userDto.getYoutubeLink();
-
+        if(this.introduce != null) this.introduce = userDto.getIntroduce();
+        if(this.instaLink != null) this.instaLink = userDto.getInstaLink();
+        if(this.facebookLink != null) this.facebookLink = userDto.getFacebookLink();
+        if(this.youtubeLink != null) this.youtubeLink = userDto.getYoutubeLink();
     }
 
     /**
@@ -151,6 +151,7 @@ public class User extends BaseEntity implements UserDetails {
                 .instaLink(this.instaLink)
                 .youtubeLink(this.youtubeLink)
                 .categories(this.categories)
+                .loginType(this.loginType)
                 .build();
         return userPublicDto;
     }
