@@ -160,7 +160,7 @@ body {
             width: 100vw;
             height: 100vh;
             vertical-align: middle;
-            background: $bg-01;
+            //background: $bg-01;
         }
 
         // All elements' containers
@@ -456,7 +456,8 @@ body {
                     position: absolute;
                     width: 600px;
                     height: 600px;
-                    background-color: rgba($bg-02, 0.3);
+                    //background-color: rgba($bg-02, 0.3);
+                    background: $bg-01;
                     border-radius: 100%;
                     box-shadow: $circleShadow;
                     animation: circle 0.8s 0.4s cubic-bezier(1, 0.06, 0.25, 1) backwards;
