@@ -118,6 +118,15 @@ const routes = [
     name: "search",
     component: () => import("@/views/SearchResultView.vue"),
   },
+  {
+    path: "*",
+    redirect: "/404",
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("@/views/PageNotFoundView.vue"),
+  },
 
 ];
 

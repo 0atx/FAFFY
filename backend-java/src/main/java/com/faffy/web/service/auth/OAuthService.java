@@ -140,6 +140,8 @@ public class OAuthService {
                             .email(naverUser.getEmail())
                             .name(naverUser.getName())
                             .nickname(naverUser.getName())
+                            .gender(gender)
+                            .birthday(birthday)
                             .roles(roles)
                             .loginType(LoginType.NAVER)
                             .build();

@@ -72,7 +72,7 @@ public interface UserService {
      * @throws DataNotFoundException user_no로 회원 정보를 찾을 수 없는 경우
      * @throws Exception DataIntegrity를 위배한 경우(Unique 위배)
      */
-    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException ,Exception;
+    public User updateUser(UserUpdateDto userDto) throws DataNotFoundException, IllegalInputException ,Exception;
 
 //    /**
 //     * 파일 업로드 되는지 확인용 서비스
