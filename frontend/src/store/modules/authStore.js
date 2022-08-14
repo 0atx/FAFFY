@@ -6,6 +6,7 @@ const authStore = {
     isLogin: false,
     loginUser: null,
     followingList:[],
+    naverState: null,
   },
   getters: {
     checkUserInfo: function (state) {
@@ -19,6 +20,9 @@ const authStore = {
     },
     SET_FOLLOWING_LIST:(state,followingList) => {
       state.followingList = followingList;
+    },
+    SET_NAVER_STATE:(state, data) => {
+      state.naverState = data;
     }
   },
   actions: {

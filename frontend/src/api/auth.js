@@ -19,11 +19,11 @@ const auth = {
       .then(success)
       .catch(fail);
   },
-  socialCallback: async function (platform, code, success, fail){
+  socialCallback: async function (platform, data, success, fail){
     await api
-      .get(
+      .post(
         `/auth/login/${platform}/callback`,
-        {params: {code}}
+        JSON.stringify(data)
       )
       .then(success)
       .catch(fail);
