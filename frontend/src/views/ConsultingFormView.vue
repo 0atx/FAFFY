@@ -35,8 +35,94 @@
           </div>
         </div>
         <!-- 비디오 표시 영역 END -->
+        <!-- 중단 옵션 영역 -->
+        <div id="centerOption" class="grey lighten-2">
+            <div id="optionButton" class="grey lighten-1">
+              <v-tooltip bottom v-if="audioValue">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone</v-icon></v-btn>
+                </template>
+                <span>음소거</span>
+              </v-tooltip>
+              <v-tooltip bottom v-else>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone-off</v-icon></v-btn>
+                </template>
+              <span>음소거 해제</span>
+              </v-tooltip>
 
-        <center-option />
+              <v-tooltip bottom v-if="camValue">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video</v-icon></v-btn>
+                </template>
+                <span>비디오 중지</span>
+              </v-tooltip>
+              <v-tooltip bottom v-else>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video-off</v-icon></v-btn>
+                </template>
+                <span>비디오 시작</span>
+              </v-tooltip>
+
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
+                </template>
+                <span>사진 촬영</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
+                </template>
+                <span>앨범</span>
+              </v-tooltip>
+
+              <!-- <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleMirror">mdi-reflect-horizontal</v-icon></v-btn>
+                </template>
+                <span>좌우 반전</span>
+              </v-tooltip> -->
+
+              <v-tooltip bottom v-if="mosaicValue">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
+                </template>
+                <span>모자이크 해제</span>
+              </v-tooltip>
+              <v-tooltip bottom v-else>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleMosaic"><v-icon size="30" color="#fff" >mdi-blur-off</v-icon></v-btn>
+                </template>
+                <span>모자이크</span>
+              </v-tooltip>
+
+
+              <v-tooltip bottom v-if="!screenOV">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="startScreenShare"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
+                </template>
+                <span>화면 공유 시작</span>
+              </v-tooltip>
+              <v-tooltip bottom v-else>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="stopScreenShare"><v-icon size="30" color="#fff">mdi-monitor-off</v-icon></v-btn>
+                </template>
+                <span>화면 공유 해제</span>
+              </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="leaveConsulting">mdi-close</v-icon></v-btn>
+                </template>
+                <span>방송 나가기</span>
+              </v-tooltip>
+
+            </div>
+          </div>
+        <!-- 중단 옵션 영역 END -->
+
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
       </div>
       <div style="width:20%;" id="drawer"  v-if="session">
@@ -47,7 +133,7 @@
 </template>
 
 <script>
-import CenterOption from '@/components/onair/CenterOption.vue'
+// import CenterOption from '@/components/onair/CenterOption.vue'
 import BottomInfo from '@/components/onair/BottomInfo.vue'
 import ChatSubscriberTab from '@/components/onair/ChatSubscriberTab.vue'
 import UserVideo from '@/components/video/UserVideo';
@@ -63,7 +149,7 @@ import {mapState,mapMutations} from "vuex";
 export default {
   name: 'ConsultingFormView',
   components: {
-    CenterOption,
+    // CenterOption,
     BottomInfo,
     ChatSubscriberTab,
     UserVideo,
@@ -79,6 +165,7 @@ export default {
 			subscribers: [],
 			camValue: true,
 			audioValue: true,
+      mosaicValue:false,
       isHost:false,
 			mySessionId: "",
 			myUserName: "",
@@ -126,15 +213,11 @@ export default {
     console.log(this.nickname);
     console.log(this.consulting_no);
 
-    //테스트 코드
+    // 비정상 접근 감지
     if (this.nickname == undefined) {
-      if ( !confirm("이상하게 들어왔는데 입장합니까"))
-        this.$router.push('/');
-      else {
-        this.mySessionId = ""+this.consulting_no;
-        this.nickname = "temp";
-        this.consulting_no = this.mySessionId;
-      }
+      alert("비정상적인 접근입니다.");
+      this.$router.push('/');
+
       return;
     }
 
@@ -168,6 +251,7 @@ export default {
     console.log("leave!!");
     this.leaveSession();
     next();
+    location.reload();
   },
   methods: {
     ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_CHATS"]),
@@ -261,6 +345,9 @@ export default {
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
 						});
+            console.log("-----------")
+            console.log(publisher);
+            console.log("-----------")
 
 						this.mainStreamManager = publisher;
 						this.publisher = publisher;
@@ -297,6 +384,70 @@ export default {
     updateMainVideoStreamManager(stream) {
 			if (this.mainStreamManager === stream) return;
 			this.mainStreamManager = stream;
+		},
+
+    // Audio On / Off
+		toggleAudio() {
+			this.audioValue = !this.audioValue;
+			this.publisher.publishAudio(this.audioValue);
+		},
+    // CAM On / Off
+		toggleCam() {
+			this.camValue = !this.camValue;
+			this.publisher.publishVideo(this.camValue);
+		},
+    toggleMirror() {
+      this.mirror = !this.mirror;
+      this.publisher.mirror = this.mirror;
+    },
+    toggleMosaic() {
+      this.mosaicValue = !this.mosaicValue;
+    },
+
+    // 화면 공유 시작
+		startScreenShare() {
+			this.screenOV = new OpenVidu();
+			this.screenSession = this.screenOV.initSession();
+			this.screenShareName = this.myUserName + "'s Screen",
+
+				this.getToken(this.mySessionId).then(token => {
+					console.log(token);
+					this.screenSession.connect(token, { clientData: this.screenShareName })
+						.then(() => {
+							let publisher = this.screenOV.initPublisher("html-element-id", { videoSource: "screen", publishAudio: false });
+
+							try {
+								publisher.once('accessAllowed', () => {
+									let test = publisher.stream.getMediaStream().getVideoTracks();
+									console.log(test);
+									publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+										console.log('User pressed the "Stop sharing" button');
+										this.stopScreenShare();
+									});
+									this.screenSession.publish(publisher);
+								});
+
+								publisher.once('accessDenied', (event) => {
+									console.error(event, 'ScreenShare: Access Denied');
+									this.stopScreenShare();
+								});
+							} catch (error) {
+								console.log(error);
+							}
+
+						})
+				}).catch(error => {
+					console.error(error);
+					this.screenOV = undefined;
+					this.screenSession = undefined;
+				})
+
+		},
+		// 화면 공유 종료
+		stopScreenShare() {
+			this.screenSession.disconnect();
+			this.screenOV = undefined;
+			this.screenSession = undefined;
 		},
     /**
 		 * --------------------------
@@ -399,8 +550,12 @@ export default {
 			window.removeEventListener('beforeunload', this.leaveSession);
       this.leaveTrigger=true;
       this.$router.push({name:"main"});
-
 		},
+    leaveConsulting() {
+      if (confirm("정말로 퇴장하시겠습니까?")) {
+        this.leaveSession();
+      }
+    }
   }
 }
 </script>
@@ -414,5 +569,33 @@ export default {
   width:100%;
   background-color: paleturquoise;
   text-align: center;
+}
+#centerOption {
+  width:100%;
+  padding: 10px;
+  padding-bottom: 20px;
+}
+
+#optionButton {
+  width:60%;
+  height: 70px;
+  margin: 0 20%;
+  text-align: center;
+  padding-top: 12px;
+  border-radius: 40px;
+}
+
+.onButton {
+  width:45px;
+  height:45px;
+  background-color:#0c0f66;
+  margin: 0 10px;
+}
+
+.offButton {
+  width:45px;
+  height:45px;
+  background-color:#ff7451;
+  margin: 0 10px;
 }
 </style>
