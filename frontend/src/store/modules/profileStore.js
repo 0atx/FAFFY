@@ -126,7 +126,6 @@ const profileStore = {
         (response) => {
           console.log("작성 게시글 불러오기 실패");
           console.log(response);
-          commit("SET_USER_BOARD_LIST", []);
         }
       );
     },
@@ -143,11 +142,10 @@ const profileStore = {
           commit("SET_HISTORY_DETAIL", res.data)
           dispatch('resetSnapshotList')
         })
-        .then(res => {
+        .then(() => {
           console.log('기존 스냅샷 리스트 초기화 성공')
-          console.log(res)
           state.historyDetail.consultingDto.snapshotNoList.forEach((snapshotNo) => {
-            console.log('반복문', snapshotNo)
+            console.log(`${snapshotNo}번 스냅샷 불러오기`)
             dispatch('loadSnapshotList', snapshotNo)
           })
         })
@@ -156,14 +154,13 @@ const profileStore = {
         })
     },
     loadSnapshotList({ commit }, snapshotNo) {
-      console.log("스냅샷 불러오기", snapshotNo);
       axios({
         url: `http://localhost:8082/api/consultings/snapshot/${snapshotNo}`,
         method: 'get',
         responseType: 'blob',
       })
         .then(res => {
-          console.log('스냅샷 불러오기 성공', res)
+          console.log(`${snapshotNo}번 스냅샷 불러오기 성공`, res)
           const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] } ))
           commit('PUSH_SNAPSHOT', url)
         })
