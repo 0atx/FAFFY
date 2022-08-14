@@ -6,14 +6,13 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="users.length == 0" cols="12">
-          <h2>검색 결과가 없습니다.</h2>
+        <v-col style="height:350px; display:flex; justify-content:center; align-items:center;" v-if="users.length == 0" cols="12">
+          <div style="text-align:center;">
+            <v-icon color="#333" large block> mdi-account-off-outline </v-icon>
+            <h2>'{{ keyword }}'에 대한 검색 결과가 없습니다.</h2>
+          </div>
         </v-col>
         <v-simple-table v-else>
-          <template slot="no-data">
-            <tr style="visibility: hidden;" />
-            <div class="text-h2">검색 결과가 없습니다.</div>
-          </template>
           <template v-slot:default>
             <thead>
               <tr>
@@ -105,6 +104,9 @@
 <script>
 export default {
   name: 'UserSearchResult',
+  props: {
+    keyword: String,
+  },
   data() {
     return {
       page: 1,

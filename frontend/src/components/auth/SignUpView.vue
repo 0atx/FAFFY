@@ -309,7 +309,7 @@ export default {
               timeout: 2000,
               color: "#0c0f66",
             });
-            this.$router.push("/");
+            this.$router.push("/auth/sign-in");
           },
           (response) => {
             console.log("요청 실패");
