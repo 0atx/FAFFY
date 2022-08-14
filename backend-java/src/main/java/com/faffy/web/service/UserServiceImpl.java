@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(UserDto userDto) throws DataNotFoundException, IllegalInputException {
+    public User updateUser(UserUpdateDto userDto) throws DataNotFoundException, IllegalInputException {
         try {
             User user;
             if (userDto.getNo() == 0) {
