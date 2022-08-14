@@ -64,6 +64,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+const profileStore = "profileStore";
+
 export default {
   name: "BoardView",
   data() {
@@ -75,107 +78,107 @@ export default {
         { text: "조회수", value: "hit" },
       ],
       // 임시 게시글 기록, DB에서 받아와서 넘겨줘야 함
-      boards: [
-        {
-          no: 1,
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Free',
-          title: "f게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Info',
-          title: "i게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Free',
-          title: "f게ww시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Info',
-          title: "i게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Free',
-          title: "f게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Info',
-          title: "i게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'QnA',
-          title: "q게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Free',
-          title: "f게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-        {
-          category: 'Info',
-          title: "i게시글 제목입니다.",
-          comments: "[13]",
-          date: "2022-08-01",
-          hit: "56",
-        },
-      ],
+      // boards: [
+      //   {
+      //     no: 1,
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Free',
+      //     title: "f게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Info',
+      //     title: "i게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Free',
+      //     title: "f게ww시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Info',
+      //     title: "i게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Free',
+      //     title: "f게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Info',
+      //     title: "i게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'QnA',
+      //     title: "q게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Free',
+      //     title: "f게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      //   {
+      //     category: 'Info',
+      //     title: "i게시글 제목입니다.",
+      //     comments: "[13]",
+      //     date: "2022-08-01",
+      //     hit: "56",
+      //   },
+      // ],
 
       // pagination 관련 변수
       page: 1,
@@ -194,8 +197,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(profileStore, ['userBoardList']),
     boardType () {
-      return this.boards.filter(board => board.category === this.types[this.selected])
+      return this.userBoardList.filter(board => board.category === this.types[this.selected])
     }
   }
 };

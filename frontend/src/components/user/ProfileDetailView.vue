@@ -42,16 +42,16 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-center">
+                    <th class="text-start">
                       카테고리
                     </th>
-                    <th class="text-center">
+                    <th class="text-start">
                       제목
                     </th>
-                    <th class="text-center">
+                    <th class="text-start">
                       진행자
                     </th>
-                    <th class="text-center">
+                    <th class="text-start">
                       방송일
                     </th>
                   </tr>
@@ -59,9 +59,10 @@
                 <!--각각의 게시글, 클릭하면 상세조회로 이동-->
                 <tbody>
                   <tr
-                    v-for="consulting in consultingHistory.slice(0, 5)"
+                    v-for="consulting in consultingHistory.slice(0, 4)"
                     :key="consulting.consulting_no"
                     style="cursor: pointer"
+                    @click="historyDetail(consulting.consulting_no)"
                   >
                     <td>{{ checkUserInfo.nickname === consulting.consultant ? "진행" : "참여" }}</td>
                     <td>{{ consulting.title }}</td>
@@ -100,10 +101,43 @@
           예정입니다. <br />ex) 카테고리(Q&A, 자유) | 게시글 제목 ㅁ댓글 갯수 or
           작성 일자 -->
           <div v-if="isBoardExist">
-            {{ userBoardList.slice(0, 5) }}
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-start">
+                      카테고리
+                    </th>
+                    <th class="text-start">
+                      제목
+                    </th>
+                    <th class="text-start">
+                      작성일
+                    </th>
+                    <th class="text-start">
+                      조회수
+                    </th>
+                  </tr>
+                </thead>
+                <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+                <tbody>
+                  <tr
+                    v-for="board in userBoardList.slice(0, 4)"
+                    :key="board.no"
+                    style="cursor: pointer"
+                    @click="boardDetail(board.no)"
+                  >
+                    <td>{{ board.category }}</td>
+                    <td>{{ board.title }}</td>
+                    <td>{{ board.date }}</td>
+                    <td>{{ board.hit }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </div>
           <div v-else>
-            작성한 게시글이 없습니다.
+            작성 게시글이 없습니다.
           </div>
         </div>
       </div>
@@ -137,6 +171,14 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    historyDetail(consulting_no) {
+      this.$router.push({ name: 'user-history-detail', params: { consultNo: consulting_no }})
+    },
+    boardDetail(boardNo) {
+      this.$router.push({ name: 'board-detail', params: { boardNo: boardNo }})
+    }
   },
   metaInfo() {
     return {
