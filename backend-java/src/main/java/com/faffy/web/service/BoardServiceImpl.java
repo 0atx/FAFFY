@@ -11,6 +11,7 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.BoardFileRepository;
 import com.faffy.web.jpa.repository.BoardRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
+import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.FileType;
 import com.faffy.web.service.file.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,6 +201,16 @@ public class BoardServiceImpl implements BoardService {
             dtoList.add(b.toBoardGetDto());
         }
         return dtoList;
+    }
+
+    @Override
+    public List<BoardGetDto> getBoardWithUserNo(int userNo) {
+        List<Board> boardList = boardRepository.findByUserNo(userNo);
+        List<BoardGetDto> res = new ArrayList<>();
+        for(Board b : boardList){
+            res.add(b.toBoardGetDto());
+        }
+        return res;
     }
 
 }
