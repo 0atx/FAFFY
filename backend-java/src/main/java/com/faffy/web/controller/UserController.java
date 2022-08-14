@@ -107,6 +107,7 @@ public class UserController {
     @ApiOperation(value="회원 가입",notes="유저 정보를 받아 db에 유저를 추가합니다.")
     @PostMapping("")
     public ResponseEntity addUser(@Valid @RequestBody UserDto userDto) {
+        logger.info("user dto : {}",userDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
 
@@ -292,7 +293,7 @@ public class UserController {
      */
     @ApiOperation(value="회원정보 수정",notes="입력한 유저정보로 수정합니다. (바꾸지 않을 정보도 입력)", produces = "multipart/form-data")
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateUser(@ModelAttribute UserDto userDto) {
+    public ResponseEntity<Map<String, Object>> updateUser(@ModelAttribute UserUpdateDto userDto) {
         logger.info("user dto : {}",userDto);
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;

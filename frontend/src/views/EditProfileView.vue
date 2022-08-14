@@ -10,199 +10,143 @@
           <p class="text-h6" style="font-weight: 600">Edit</p>
         </div>
         <div id="editInfo">
-          <v-form
-            ref="form"
-            method="post"
-            enctype="multipart/form-data"
-            @submit.prevent="requestEdit"
-          >
+          <v-form ref="form" method="post" enctype="multipart/form-data" @submit.prevent="requestEdit">
             <!-- 프로필 이미지 src 변수로 받아와서 적용시켜줘야 함 -->
             <div style="text-align: center">
-              <v-avatar
-                id="avatar"
-                color="#fff"
-                class="mt-8 mb-4"
-                size="250"
-                rounded
-              >
+              <v-avatar id="avatar" color="#fff" class="mt-8 mb-4" size="250" rounded>
                 <v-img v-if="url" :src="url" @error="replaceByDefault"></v-img>
                 <v-img v-else src="@/assets/images/default_profile.png"></v-img>
               </v-avatar>
             </div>
 
-            <v-file-input
-              @change="fileChanged"
-              v-model="form.file"
-              accept="image/*"
-              label="프로필 이미지 선택"
-              prepend-icon=""
-              append-icon="mdi-camera"
-              color="#0c0f66"></v-file-input>
+            <v-file-input @change="fileChanged" v-model="form.file" accept="image/*" label="프로필 이미지 선택" prepend-icon=""
+              append-icon="mdi-camera" color="#0c0f66"></v-file-input>
             <v-btn id="deleteProfileImgBtn" class="mb-4" block rounded elevation="0" @click="deleteProfileImg">
               프로필 이미지 삭제
             </v-btn>
 
             <!-- 이메일 -->
-            <v-text-field
-              type="email"
-              v-model="form.email"
-              label="이메일"
-              disabled
-            />
+            <v-text-field type="email" v-model="form.email" label="이메일" disabled />
 
             <!-- 이름 -->
-            <v-text-field
-              type="text"
-              v-model="form.name"
-              label="이름"
-              disabled
-            />
+            <v-text-field type="text" v-model="form.name" label="이름" disabled />
 
             <div id="check">
               <div id="checkInput">
                 <!-- 별명 입력 -->
-                <v-text-field
-                  v-model="form.nickname"
-                  type="text"
-                  :rules="rules.nickname()"
-                  hint="2~10자 특수문자를 제외한 별명을 입력하세요."
-                  persistent-hint
-                  label="별명"
-                  required
-                  color="#0c0f66"
-                  @input="checkingNickname"
-                  @keydown.enter="onInputKeyword"
-                  ref="nickname"
-                />
+                <v-text-field v-model="form.nickname" type="text" :rules="rules.nickname()"
+                  hint="2~10자 특수문자를 제외한 별명을 입력하세요." persistent-hint label="별명" required color="#0c0f66"
+                  @input="checkingNickname" @keydown.enter="onInputKeyword" ref="nickname" />
               </div>
 
               <!-- 별명 중복 확인 -->
-              <v-btn
-                id="checkNicknameBtn"
-                class="mt-2"
-                icon
-                :ripple="false"
-              >
-                <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'"
-                  >mdi-check</v-icon
-                >
+              <v-btn id="checkNicknameBtn" class="mt-2" icon :ripple="false">
+                <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
               </v-btn>
             </div>
 
             <!-- 비밀번호 입력 -->
-            <v-text-field
-              v-model="form.password"
-              type="password"
-              :rules="
+            <v-text-field v-if="this.loginUser.loginType === 'SITE'"
+                v-model="form.password" type="password" :rules="
                 form.password != undefined && form.password != ''
                   ? rules.password()
                   : [true]
-              "
-              hint="비밀번호를 변경할 경우에만 입력하세요. 8~16자 영문 대 소문자, 숫자, 특수문자 포함"
-              persistent-hint
-              label="비밀번호"
-              color="#0c0f66"
-              @keydown.enter="onInputKeyword"
-            />
+              " hint="비밀번호를 변경할 경우에만 입력하세요. 8~16자 영문 대 소문자, 숫자, 특수문자 포함" persistent-hint label="비밀번호" color="#0c0f66"
+              @keydown.enter="onInputKeyword"/>
+            <v-text-field v-else
+                v-model="form.password" type="password" :rules="
+                form.password != undefined && form.password != ''
+                  ? rules.password()
+                  : [true]
+              " hint="비밀번호를 변경할 경우에만 입력하세요. 8~16자 영문 대 소문자, 숫자, 특수문자 포함" persistent-hint label="비밀번호" color="#0c0f66"
+              @keydown.enter="onInputKeyword" readonly/>
 
             <!-- 비밀번호 확인 -->
-            <v-text-field
-              v-model="form.confirmPw"
-              type="password"
-              :rules="
+            <v-text-field v-if="this.loginUser.loginType === 'SITE'"
+                v-model="form.confirmPw" type="password" :rules="
                 form.password != undefined && form.password != ''
                   ? [rules.matchValue(form.password)]
                   : [true]
-              "
-              hint="변경할 비밀번호를 재입력해주세요."
-              persistent-hint
-              label="비밀번호 확인"
-              color="#0c0f66"
-              @keydown.enter="onInputKeyword"
-            />
+              " hint="변경할 비밀번호를 재입력해주세요." persistent-hint label="비밀번호 확인" color="#0c0f66"
+              @keydown.enter="onInputKeyword"/>
+            <v-text-field v-else
+                v-model="form.confirmPw" type="password" :rules="
+                form.password != undefined && form.password != ''
+                  ? [rules.matchValue(form.password)]
+                  : [true]
+              " hint="변경할 비밀번호를 재입력해주세요." persistent-hint label="비밀번호 확인" color="#0c0f66"
+              @keydown.enter="onInputKeyword" readonly/>
 
             <!-- 생년월일 -->
-            <v-text-field
-              v-model="form.birthday"
-              label="생년월일"
-              disabled
-            ></v-text-field>
+            <br/>
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <!-- 생년월일 입력 -->
+                <v-text-field
+                  v-model="form.birthday"
+                  :rules="rules.birth()"
+                  label="생년월일"
+                  append-icon="mdi-calendar"
+                  readonly
+                  color="#0c0f66"
+                  hide-details
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="form.birthday"
+                color="#0c0f66"
+                :active-picker.sync="activePicker"
+                locale="ko=KR"
+                max="2001-01-01"
+                min="1922-01-01"
+                @change="save"
+              ></v-date-picker>
+            </v-menu>
 
-            <!-- 성별 -->
-            <v-text-field
-              v-model="form.gender"
-              label="성별"
-              disabled
-            ></v-text-field>
+            <!-- 성별 입력 -->
+            <v-radio-group row v-model="form.gender" label="성별" :rules="rules.gender()">
+              <v-radio label="남자" value="0" color="#0c0f66"></v-radio>
+              <v-radio label="여자" value="1" color="#0c0f66"></v-radio>
+            </v-radio-group>
 
             <!-- 한 줄 자기소개 -->
-            <v-textarea
-              v-model="form.info"
-              label="한 줄 자기소개"
-              color="#0c0f66"
-              rows="2"
-              no-resize
-              maxlength="50"
-              counter="50"
-            ></v-textarea>
+            <v-textarea v-model="form.info" label="한 줄 자기소개" color="#0c0f66" rows="2" no-resize maxlength="50"
+              counter="50"></v-textarea>
 
             <!-- 상세 자기소개 -->
-            <v-textarea
-              v-model="form.introduce"
-              label="상세 자기소개"
-              rows="4"
-              clearable
-              no-resize
-              clear-icon="mdi-close-circle"
-              color="#0c0f66"
-              maxlength="300"
-              counter="300"
-            ></v-textarea>
+            <v-textarea v-model="form.introduce" label="상세 자기소개" rows="4" clearable no-resize
+              clear-icon="mdi-close-circle" color="#0c0f66" maxlength="300" counter="300"></v-textarea>
 
             <!-- 관심 카테고리 -->
             <v-label>관심 분야</v-label>
             <v-chip-group v-model="form.categories" column multiple>
-              <v-chip
-                v-for="(c, i) in categoryList"
-                :key="i"
-                class="chip"
-                :value="c.name"
-                filter
-                color="#0c0f66"
-              >
-                {{ c.name }}</v-chip
-              >
+              <v-chip v-for="(c, i) in categoryList" :key="i" class="chip" :value="c.name" filter color="#0c0f66">
+                {{ c.name }}</v-chip>
             </v-chip-group>
 
             <!-- SNS 링크 instagram -->
-            <v-text-field
-              v-model="form.instaLink"
-              label="인스타그램 링크"
-              :rules="rules.instagram()"
-              placeholder="https://www.instagram.com/faffy"
-              color="#0c0f66"
-              @keydown.enter="onInputKeyword"
-            ></v-text-field>
+            <v-text-field v-model="form.instaLink" label="인스타그램 링크" :rules="rules.instagram()"
+              placeholder="https://www.instagram.com/faffy" color="#0c0f66" @keydown.enter="onInputKeyword">
+            </v-text-field>
 
             <!-- SNS 링크 facebook -->
-            <v-text-field
-              v-model="form.facebookLink"
-              label="페이스북 링크"
-              :rules="rules.facebook()"
-              placeholder="https://www.facebook.com/faffy"
-              color="#0c0f66"
-              @keydown.enter="onInputKeyword"
-            ></v-text-field>
+            <v-text-field v-model="form.facebookLink" label="페이스북 링크" :rules="rules.facebook()"
+              placeholder="https://www.facebook.com/faffy" color="#0c0f66" @keydown.enter="onInputKeyword">
+            </v-text-field>
 
             <!-- SNS 링크 youtube -->
-            <v-text-field
-              v-model="form.youtubeLink"
-              label="유튜브 링크"
-              :rules="rules.youtube()"
-              placeholder="https://www.youtube.com/c/faffy"
-              color="#0c0f66"
-              @keydown.enter="onInputKeyword"
-            ></v-text-field>
+            <v-text-field v-model="form.youtubeLink" label="유튜브 링크" :rules="rules.youtube()"
+              placeholder="https://www.youtube.com/c/faffy" color="#0c0f66" @keydown.enter="onInputKeyword">
+            </v-text-field>
 
             <dark-button :btnValue="editValue" @click="requestEdit" />
             <v-btn id="quitBtn" class="mt-4 mb-2" block rounded elevation="0">
@@ -272,9 +216,9 @@ export default {
     }
     this.form = { ...this.loginUser };
     if(this.form.gender === 'Female') {
-      this.form.gender = '여자'
+      this.form.gender = "1";
     } else {
-      this.form.gender = '남자'
+      this.form.gender = "0";
     }
     console.log(this.form);
     if (this.form.categories == undefined)
@@ -351,6 +295,7 @@ export default {
       if (this.form.password != undefined)
         formData.append("password", this.form.password);
       if (this.form.file != null) formData.append("file", this.form.file);
+      formData.append("gender", this.form.gender);
       formData.append("introduce", this.form.introduce);
       formData.append("birthday", this.form.birthday);
       formData.append("instaLink", this.form.instaLink);
