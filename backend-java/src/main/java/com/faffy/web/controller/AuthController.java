@@ -41,18 +41,21 @@ public class AuthController {
      * @throws IOException
      */
     @GetMapping("/login/{socialLoginType}")
-    public ResponseEntity<String> socialLoginRedirect(@PathVariable String socialLoginType) throws IOException {
+    public ResponseEntity<Map<String, String>> socialLoginRedirect(@PathVariable String socialLoginType) throws IOException {
         SocialLoginType type= SocialLoginType.valueOf(socialLoginType.toUpperCase());
         return new ResponseEntity<>(oAuthService.request(type), HttpStatus.OK);
     }
 
-    @GetMapping("/login/{socialLoginType}/callback")
+    @PostMapping("/login/{socialLoginType}/callback")
     public ResponseEntity callback (
             @PathVariable(name = "socialLoginType") String socialLoginPath,
-            @RequestParam(name = "code") String code) throws Exception {
+            @RequestBody Map<String, String> data) throws Exception {
+        String code = data.get("code");
+        String state = data.getOrDefault("state", null);
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ code);
+        System.out.println(">> 내가 설정한 state :"+ state);
         SocialLoginType socialLoginType= SocialLoginType.valueOf(socialLoginPath.toUpperCase());
-        GetSocialOAuthRes getSocialOAuthRes=oAuthService.oAuthLogin(socialLoginType,code);
+        GetSocialOAuthRes getSocialOAuthRes=oAuthService.oAuthLogin(socialLoginType, code, state);
 
         //토큰, 유저 정보를 담아 홈으로 리다이렉트
         UserPublicDto user = getSocialOAuthRes.getUser().toPublicDto();

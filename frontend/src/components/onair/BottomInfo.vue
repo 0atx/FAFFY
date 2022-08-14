@@ -13,10 +13,10 @@
               <!-- 방송 제목 -->
               <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:10px;">
                 <v-list-item-title style="font-weight: 600; font-size:22px;" class="mt-1 mb-1">
-                  방송 제목
+                  {{consultingInfo.title}}
                 </v-list-item-title>
                 <v-list-item-subtitle style="font-size:16px; text-align:right">
-                  {{ time }} 현재시간 - 방송 시작 시간으로 바꿔야 함 <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
+                  방송 시작 : {{ consultingInfo.startTime }}  <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
                 </v-list-item-subtitle>
               </div>
 
@@ -27,7 +27,7 @@
                   style="display: table-cell; vertical-align: middle;"
                 >
                   <img
-                    src="`${IMG_BASE_URL}/` + loginUser.no"
+                    :src="`${IMG_BASE_URL}/${consultingInfo.consultant_no}`"
                     @error="replaceByDefault"
                   />
                 </v-list-item-avatar>
@@ -35,18 +35,18 @@
                 <div id="item">
                   <div style="display:flex; width:200px;">
                     <v-list-item-subtitle style="font-size:17px;">
-                      별명짓기귀찮다<follow-button :user_no="2"/>
+                      {{consultingInfo.consultant}}<follow-button :user_no="consultingInfo.consultant_no"/>
                     </v-list-item-subtitle>
 
                   </div>
-                  <div style="display:flex;  width:160px;">
+                  <!-- <div style="display:flex;  width:160px;">
                     <v-list-item-subtitle style="font-size: 13px;">
                       팔로잉 24
                     </v-list-item-subtitle>
                     <v-list-item-subtitle style="font-size: 13px;">
                       팔로워 13
                     </v-list-item-subtitle>
-                  </div>
+                  </div> -->
                 </div>
               </div>
 
@@ -84,6 +84,9 @@ import FollowButton from "@/components/user/FollowButton.vue";
 const authStore = "authStore";
 export default {
 	name: 'BottomInfo',
+  props:{
+    consultingInfo:Object,
+  },
   components: {
     FollowButton
   },

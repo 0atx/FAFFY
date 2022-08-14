@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @CrossOrigin("*")
-public class GoogleOauth implements SocialOauth{
+public class GoogleOauth{
     private String GOOGLE_SNS_LOGIN_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private String GOOGLE_DATA_ACCESS_SCOPE =
         "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid";
@@ -33,7 +33,6 @@ public class GoogleOauth implements SocialOauth{
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
 
-    @Override
     public String getOauthRedirectURL() {
         Map<String,Object> params = new HashMap<>();
         params.put("scope",GOOGLE_DATA_ACCESS_SCOPE);
