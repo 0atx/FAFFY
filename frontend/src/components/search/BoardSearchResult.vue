@@ -2,13 +2,24 @@
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">게시판 검색 결과</h2>
-      <v-btn v-if="boards.length != 0" text>인기 순</v-btn>
+      <v-col
+        class="d-flex"
+        cols="2"
+      >
+        <v-select
+          :items="items"
+          label="정렬 기준"
+          dense
+          solo
+          v-model="sortBy"
+        ></v-select>
+      </v-col>
     </v-row>
 
     <!-- 게시글 검색 목록 -->
     <v-row>
       <v-col cols="12">
-        <v-col style="height:350px; display:flex; justify-content:center; align-items:center;" v-if="boards.length == 0" cols="12">
+        <v-col style="height:350px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
           <div style="text-align:center;">
             <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
             <h2>'{{ keyword }}'에 대한 검색 결과가 없습니다.</h2>
@@ -19,7 +30,7 @@
             <thead>
               <tr>
                 <th class="text-start" style="width: 15%;">
-                  분류
+                  카테고리
                 </th>
                 <th class="text-start" style="width: 30%;">
                   제목
@@ -39,7 +50,7 @@
             <tbody>
               <tr
                 v-for="board in currentPage"
-                :key="board.content.no"
+                :key="board.no"
                 @click="boardDetail(board.no)"
                 style="cursor: pointer"
               >
@@ -56,7 +67,7 @@
     </v-row>
 
     <!-- 페이지네이션 -->
-    <v-row v-if="boards.length != 0">
+    <v-row v-if="isResultExist">
       <v-col cols="12">
         <v-pagination
           v-model="page"
@@ -73,6 +84,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
+const searchStore = "searchStore"
+
 export default {
   name: 'BoardSearchResult',
   props: {
@@ -84,137 +99,46 @@ export default {
       itemsPerPage: 5,
       totalVisible: 7,
       typeList: { 'Free': '자유', 'QnA': '질문', 'Info': '정보' },
-      boards: [
-        {
-          no: 1,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 1,
-          }
-        },
-        {
-          no: 2,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 2,
-          }
-        },
-        {
-          no: 3,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 3,
-          },
-        },
-        {
-          no: 4,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 4,
-          }
-        },
-        {
-          no: 5,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 5,
-          }
-        },
-        {
-          no: 6,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 6,
-          },
-        },
-        {
-          no: 7,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 7,
-          }
-        },
-        {
-          no: 8,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 8,
-          }
-        },
-        {
-          no: 9,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 9,
-          },
-        },
-      ],
+      items: ['카테고리', '제목', '작성일자', '조회수'],
+      sortBy: '',
+      type: { '카테고리': 'category', '제목': 'title', '작성일자': 'dateTime', '조회수': 'hit' }
     }
   },
   computed: {
+    ...mapGetters(searchStore, ['boardResult']),
     totalPages() {
-      return this.boards.length % this.itemsPerPage > 0 ? parseInt(this.boards.length/this.itemsPerPage)+1 : parseInt(this.boards.length/this.itemsPerPage)
+      return this.boardResult.length % this.itemsPerPage > 0 ? parseInt(this.boardResult.length/this.itemsPerPage)+1 : parseInt(this.boardResult.length/this.itemsPerPage)
     },
     // 페이지네이션 - 현재 페이지 게시물
     currentPage() {
       const start = (this.page-1)*this.itemsPerPage
       const end = start+this.itemsPerPage
-      return this.boards.slice(start, end)
+      return this.boardResult.slice(start, end)
     },
+    isResultExist() {
+      return !_.isEmpty(this.boardResult)
+    }
+  },
+  methods: {
+    boardDetail(boardNo) {
+      this.$router.push({ name: 'board-detail', params: { boardNo: boardNo }})
+    },
+    sortResult(sortBy) {
+      this.boardResult.sort((a, b) => {
+        if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
+          return 1
+        } else if (b[this.type[sortBy]] < a[this.type[sortBy]]) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+    }
+  },
+  watch: {
+    sortBy() {
+      this.sortResult(this.sortBy)
+    }
   }
 }
 </script>
