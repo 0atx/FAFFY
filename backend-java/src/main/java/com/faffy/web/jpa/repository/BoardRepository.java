@@ -29,4 +29,7 @@ public interface BoardRepository extends JpaRepository<Board,Integer> {
             "or b.content like concat('%', :keyword, '%') " +
             "or b.user.nickname like concat('%', :keyword, '%')")
     List<Board> findByKeyword(String keyword) throws SQLException;
+
+    @Query("select b from Board b where b.user.no = :userNo")
+    List<Board> findByUserNo(int userNo);
 }
