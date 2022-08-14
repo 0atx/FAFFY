@@ -6,7 +6,44 @@ const searchStore = {
   state: {
     consultingResult: [],
     boardResult: [],
-    userResult: [],
+    userResult: [
+      {
+        no: 1,
+        img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
+        nickname: '이준성',
+        email: 'ssafy@ssafy.com',
+        followings: 5,
+        followers: 10,
+        categories: ['힙합', '시크', '모던'],
+      },
+      {
+        no: 2,
+        img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
+        nickname: '류경하',
+        email: 'ssafy@ssafy.com',
+        followings: 15,
+        followers: 17,
+        categories: ['힙합', '시크', '모던'],
+      },
+      {
+        no: 3,
+        img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
+        nickname: '김명석',
+        email: 'ssafy@ssafy.com',
+        followings: 21,
+        followers: 13,
+        categories: ['힙합', '시크', '모던'],
+      },
+      {
+        no: 4,
+        img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
+        nickname: '김수만',
+        email: 'ssafy@ssafy.com',
+        followings: 213,
+        followers: 100,
+        categories: ['힙합', '시크'],
+      },
+    ],
   },
   getters: {
     consultingResult: state => state.consultingResult,
@@ -35,7 +72,7 @@ const searchStore = {
           console.log('검색 성공', res)
           commit('SET_CONSULTING_RESULT', res.data.consulting.content)
           commit('SET_BOARD_RESULT', res.data.board.content)
-          commit('SET_USER_RESULT', res.data.user.content)
+          // commit('SET_USER_RESULT', res.data.user.content)
         })
         .catch(err => {
           console.log(err)
