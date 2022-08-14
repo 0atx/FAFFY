@@ -2,7 +2,6 @@
 <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">유저 검색 결과 </h2>
-      <p></p>
       <v-col
         class="d-flex"
         cols="2"

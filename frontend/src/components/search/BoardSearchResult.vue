@@ -2,7 +2,18 @@
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">게시판 검색 결과</h2>
-      <v-btn v-if="boardResult.length != 0" text>인기 순</v-btn>
+      <v-col
+        class="d-flex"
+        cols="2"
+      >
+        <v-select
+          :items="items"
+          label="정렬 기준"
+          dense
+          solo
+          v-model="sortBy"
+        ></v-select>
+      </v-col>
     </v-row>
 
     <!-- 게시글 검색 목록 -->
@@ -16,7 +27,7 @@
             <thead>
               <tr>
                 <th class="text-start" style="width: 15%;">
-                  분류
+                  카테고리
                 </th>
                 <th class="text-start" style="width: 30%;">
                   제목
@@ -82,6 +93,9 @@ export default {
       itemsPerPage: 5,
       totalVisible: 7,
       typeList: { 'Free': '자유', 'QnA': '질문', 'Info': '정보' },
+      items: ['카테고리', '제목', '작성일자', '조회수'],
+      sortBy: '',
+      type: { '카테고리': 'category', '제목': 'title', '작성일자': 'dateTime', '조회수': 'hit' }
     }
   },
   computed: {
@@ -102,6 +116,22 @@ export default {
   methods: {
     boardDetail(boardNo) {
       this.$router.push({ name: 'board-detail', params: { boardNo: boardNo }})
+    },
+    sortResult(sortBy) {
+      this.boardResult.sort((a, b) => {
+        if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
+          return 1
+        } else if (b[this.type[sortBy]] < a[this.type[sortBy]]) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+    }
+  },
+  watch: {
+    sortBy() {
+      this.sortResult(this.sortBy)
     }
   }
 }
