@@ -39,7 +39,7 @@
             <div style="display:flex">
               <!-- 방송 진행자 이미지 정보 -->
               <!-- <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="slide.src"> -->
-              <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`${API_BASE_URL}/users/profile/image/${slide.profileImageNo}`"
+              <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`${API_BASE_URL}/users/profile/image/${slide.consultant_no}`"
               @error="replaceByDefault"
               >
 
@@ -133,7 +133,7 @@
               <!-- 방송 진행자 이미지 정보 -->
               <v-img
                 height="200"
-                :src="`${API_BASE_URL}/users/profile/image/${consult.profileImageNo}`"
+                :src="`${API_BASE_URL}/users/profile/image/${consult.consultant_no}`"
               ></v-img>
               <v-list-item>
                 <v-list-item-content>
