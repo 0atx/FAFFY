@@ -50,11 +50,6 @@ const consulting = {
     .then(success)
     .catch(fail);
   },
-  getHistoryDetail: async function (payload, success, fail) {
-    await api.get(`/users/profile/${payload.user_no}/history/${payload.consulting_no}`)
-    .then(success)
-    .catch(fail);
-  },
 };
 const userBoard = {
   getUserBoardList: async function (user_no, success, fail) {
