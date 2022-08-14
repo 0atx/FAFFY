@@ -4,11 +4,11 @@
       <h1>"{{ keyword }}" 에 대한 검색 결과입니다.</h1>
     </div>
     <!--방송 검색 결과-->
-    <consulting-search-result />
+    <consulting-search-result :keyword="keyword" />
     <!--게시판 검색 결과-->
-    <board-search-result />
+    <board-search-result :keyword="keyword" />
     <!--유저 검색 결과-->
-    <user-search-result />
+    <user-search-result :keyword="keyword" />
   </v-container>
 </template>
 
