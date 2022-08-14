@@ -50,15 +50,15 @@
                 </div>
 
                 <!-- 컨설턴트 한 줄 자기소개 -->
-                <v-list-item id="introduce"
-                  >{{ historyDetail.userInfoDto.introduce }}</v-list-item
-                >
+                <v-list-item id="introduce">
+                  {{ historyDetail.userInfoDto.introduce }}
+                </v-list-item>
 
                 <!-- 컨설턴트 관심 카테고리
                 여러 개 설정 가능하지만 여기에선 3개만 보여주게 해야 이쁨 -->
                 <v-chip-group column>
                   <category-chips
-                    v-for="category in userCategorys"
+                    v-for="category in userCategories"
                     :key="category"
                     :category="category"
                   />
@@ -83,7 +83,8 @@
               1. 컨설턴트가 본인이라면 아무것도 안 보임
               2. 본인이 아니고 팔로우를 하지 않았다면 팔로우 버튼
               3. 본인이 아니고 팔로우를 한 상태라면 팔로잉 버튼(누르면 팔로우 취소) -->
-              <v-btn class="mr-2" outlined rounded text> 팔로우 </v-btn>
+              <!-- <v-btn class="mr-2" outlined rounded text v-if="checkUserInfo.no !== historyDetail.userInfoDto.no"> 팔로우 </v-btn> -->
+              <follow-button v-if="checkUserInfo.no !== historyDetail.userInfoDto.no" :user_no="historyDetail.userInfoDto.no"></follow-button>
             </v-card-actions>
           </v-card>
 
@@ -139,13 +140,12 @@
         <div class="mt-10">
           <p class="text-h6" style="margin: 0px; font-weight: 600">스냅샷</p>
           <hr />
-          <v-row style="margin: 0px">
+          <v-row style="margin: 0px" v-if="isSnapshotExist">
             <!-- 이미지 리스트 불러와서 숫자 놀이 해야함ㅎㅎ -->
-            <v-col v-for="n in 9" :key="n" class="d-flex child-flex" cols="4">
+            <v-col v-for="snapshot in snapshotList" :key="snapshot" class="d-flex child-flex" cols="4" >
               <v-card>
                 <v-img
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                  :src="snapshot"
                   aspect-ratio="1"
                   class="grey lighten-2"
                 >
@@ -165,6 +165,9 @@
               </v-card>
             </v-col>
           </v-row>
+          <v-row style="margin: 0px" v-else>
+            스냅샷이 존재하지 않습니다.
+          </v-row>
         </div>
       </div>
     </div>
@@ -174,44 +177,39 @@
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
 import { mapActions, mapGetters } from 'vuex';
+import FollowButton from '@/components/user/FollowButton.vue'
+import _ from 'lodash';
 const profileStore = "profileStore";
+const authStore = "authStore";
 
 export default {
   name: "HistoryDetailView",
-  components: { CategoryChips },
+  components: { CategoryChips, FollowButton },
   data() {
     return {
       userNo: this.$route.params.no,
-
-
-      // 임시 방송 기록, DB에서 받아와서 넘겨줘야 함
-      consult: [
-        {
-          title: "방송 제목입니다.",
-          intro: "카테고리 넣고 상세 페이지에는 그 날 입었던 옷들 기록?",
-          consultant: "별명짓기귀찮다",
-          date: "2022-08-01",
-        },
-      ],
-      // 임의로 설정한 유저 관심 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      userCategorys: ["캐주얼", "모던", "시크"],
-      // 임의로 설정한 방송 관심 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      consultCategorys: ["모던", "미니멀"],
     };
   },
   methods: {
     ...mapActions(profileStore, ['loadHistoryDetail']),
   },
   computed: {
-    ...mapGetters(profileStore, ['historyDetail']),
+    ...mapGetters(profileStore, ['historyDetail', 'snapshotList']),
+    ...mapGetters(authStore, ['checkUserInfo']),
+    userCategories() {
+      return this.historyDetail.userInfoDto.categories.slice(0, 3)
+    },
+    isSnapshotExist() {
+      return !_.isEmpty(this.snapshotList)
+    }
   },
-  created() {
+  async created() {
     const payload = {
       user_no: Number(this.$route.params.no),
       consulting_no: Number(this.$route.params.consultNo),
     }
-    console.log('payload', payload)
-    this.loadHistoryDetail(payload)
+    await this.loadHistoryDetail(payload)
+    console.log(this.historyDetail)
   }
 };
 </script>
