@@ -56,11 +56,13 @@ public class MainController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value="메인 화면에서 진행 중인 방송 불러오기", notes="참여자 수가 높은 순으로 방송정보를 (4개) 반환한다.")
+    @ApiOperation(value="메인 화면에서 진행 중인 방송 불러오기", notes="참여자 수가 높은 순으로 방송정보를 반환한다.")
     @GetMapping("/consulting/hit")
-    public ResponseEntity<List<ConsultingGetDto>> getConsultingsByViewCount() {
-        List<ConsultingGetDto> res = consultingService.getConsultingsByViewCount(PageRequest.of(0, 4));
-        return new ResponseEntity<>(res, HttpStatus.OK);
+    public ResponseEntity getConsultingsByViewCount(@RequestParam int size) {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ConsultingGetDto> res = consultingService.getConsultingsByViewCount(PageRequest.of(0, size));
+        resultMap.put("content", res);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @ApiOperation(value="메인 화면에서 검색 결과 반환", notes="해당 키워드의 유저, 방송, 게시물 목록을 반환한다.")
