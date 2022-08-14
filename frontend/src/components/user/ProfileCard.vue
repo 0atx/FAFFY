@@ -209,6 +209,14 @@ export default {
   pointer-events: none;
 }
 
+#email {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
 #category {
   height: 140px;
 }

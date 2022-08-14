@@ -141,10 +141,10 @@
           <hr />
           <v-row style="margin: 0px">
             <!-- 이미지 리스트 불러와서 숫자 놀이 해야함ㅎㅎ -->
-            <!-- <v-col v-for="n in Math.min(9, snapshotList.length)" :key="n" class="d-flex child-flex" cols="4">
+            <v-col v-for="snapshot in snapshotList" :key="snapshot" class="d-flex child-flex" cols="4" >
               <v-card>
                 <v-img
-                  :src="`${snapshotList[n]}`"
+                  :src="snapshot"
                   aspect-ratio="1"
                   class="grey lighten-2"
                 >
@@ -162,25 +162,6 @@
                   </template>
                 </v-img>
               </v-card>
-            </v-col> -->
-            <v-col v-for="snapshot in snapshotList" :key="snapshot" class="d-flex child-flex" cols="4">
-              <v-img
-              :src="snapshot"
-              aspect-ratio="1"
-              class="grey lighten-2">
-              </v-img>
-                <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        indeterminate
-                        color="grey lighten-5"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
             </v-col>
           </v-row>
         </div>
@@ -192,6 +173,7 @@
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import _ from 'lodash';
 const profileStore = "profileStore";
 
 export default {
@@ -210,6 +192,9 @@ export default {
     ...mapMutations(profileStore, ['SET_SNAPSHOT']),
     userCategories() {
       return this.historyDetail.userInfoDto.categories.slice(0, 3)
+    },
+    isSnapshotExist() {
+      return !_.isEmpty(this.snapshotList)
     }
   },
   async created() {
@@ -217,7 +202,6 @@ export default {
       user_no: Number(this.$route.params.no),
       consulting_no: Number(this.$route.params.consultNo),
     }
-    console.log('payload', payload)
     await this.loadHistoryDetail(payload)
   }
 };
