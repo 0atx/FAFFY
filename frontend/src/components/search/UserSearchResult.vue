@@ -1,12 +1,23 @@
 <template>
 <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
-      <h2 class="ml-4">유저 검색 결과</h2>
-      <v-btn v-if="users.length != 0" text>인기 순</v-btn>
+      <h2 class="ml-4">유저 검색 결과 </h2>
+      <v-col
+        class="d-flex"
+        cols="2"
+      >
+        <v-select
+          :items="items"
+          label="정렬 기준"
+          dense
+          solo
+          v-model="sortBy"
+        ></v-select>
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-col style="height:350px; display:flex; justify-content:center; align-items:center;" v-if="users.length == 0" cols="12">
+        <v-col style="height:350px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
           <div style="text-align:center;">
             <v-icon color="#333" large block> mdi-account-off-outline </v-icon>
             <h2>'{{ keyword }}'에 대한 검색 결과가 없습니다.</h2>
@@ -38,18 +49,20 @@
               <tr
                 v-for="user in currentPage"
                 :key="user.nickname"
+                @click="userDetail(user.no)"
+                style="cursor: pointer"
               >
                 <td class="d-flex flex-row align-center">
 
                   <!--프로필 이미지 + 닉네임 -->
-                  <v-avatar
-                    size="36px">
-                    <img
-                      alt="Avatar"
-                      :src="user.img"
-                    >
-                  </v-avatar>
+                    <v-avatar color="#fff" size="36px" rounded>
+                      <img
+                        :src="`${API_BASE_URL}/users/profile/image/${user.no}`"
+                        @error="replaceByDefault"
+                      />
+                    </v-avatar>
                   <div class="ml-2">{{ user.nickname }}</div>
+
                 </td>
 
                 <!-- 이메일 -->
@@ -85,7 +98,7 @@
     </v-row>
 
     <!-- 페이지네이션 -->
-    <v-row v-if="users.length != 0">
+    <v-row v-if="isResultExist">
       <v-col cols="12">
         <v-pagination
           v-model="page"
@@ -102,6 +115,13 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { mapGetters } from 'vuex'
+import { API_BASE_URL } from "@/config";
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
+
+const searchStore = "searchStore"
+
 export default {
   name: 'UserSearchResult',
   props: {
@@ -112,56 +132,48 @@ export default {
       page: 1,
       itemsPerPage: 5,
       totalVisible: 7,
-      users: [
-        {
-          no: 1,
-          img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
-          nickname: '이준성',
-          email: 'ssafy@ssafy.com',
-          followings: 5,
-          followers: 10,
-          categories: ['힙합', '시크', '모던'],
-        },
-        {
-          no: 1,
-          img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
-          nickname: '류경하',
-          email: 'ssafy@ssafy.com',
-          followings: 15,
-          followers: 17,
-          categories: ['힙합', '시크', '모던'],
-        },
-        {
-          no: 1,
-          img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
-          nickname: '김명석',
-          email: 'ssafy@ssafy.com',
-          followings: 21,
-          followers: 13,
-          categories: ['힙합', '시크', '모던'],
-        },
-        {
-          no: 1,
-          img: 'https://mblogthumb-phinf.pstatic.net/20151215_146/rlatnals8712_1450141030738pC6eR_PNG/20151215_094901.png?type=w2',
-          nickname: '김수만',
-          email: 'ssafy@ssafy.com',
-          followings: 213,
-          followers: 100,
-          categories: ['힙합', '시크'],
-        },
-      ]
+      API_BASE_URL: API_BASE_URL,
+      items: ['닉네임', '팔로워'],
+      sortBy: '',
+      type: { '닉네임': 'nickname', '팔로워': 'followers' }
     }
   },
   computed: {
+    ...mapGetters(searchStore, ['userResult']),
     totalPages() {
-      return this.users.length % this.itemsPerPage > 0 ? parseInt(this.users.length/this.itemsPerPage)+1 : parseInt(this.users.length/this.itemsPerPage)
+      return this.userResult.length % this.itemsPerPage > 0 ? parseInt(this.userResult.length/this.itemsPerPage)+1 : parseInt(this.userResult.length/this.itemsPerPage)
     },
     // 페이지네이션 - 현재 페이지 게시물
     currentPage() {
       const start = (this.page-1)*this.itemsPerPage
       const end = start+this.itemsPerPage
-      return this.users.slice(start, end)
+      return this.userResult.slice(start, end)
     },
+    isResultExist() {
+      return !_.isEmpty(this.userResult)
+    }
+  },
+  methods: {
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
+    userDetail(userNo) {
+      this.$router.push({ name: 'user-detail', params: { no: userNo }})
+    },
+    sortResult(sortBy) {
+      this.userResult.sort((a, b) => {
+        if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
+          return 1
+        } else if (b[this.type[sortBy]] < a[this.type[sortBy]]) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+    }
+  },
+  watch: {
+    sortBy() {
+      this.sortResult(this.sortBy)
+    }
   }
 }
 </script>
