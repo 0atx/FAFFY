@@ -98,6 +98,9 @@
 <script>
 export default {
 	name: 'CenterOption',
+  props:{
+    shareSession:Object
+  },
   components: {
 
   },
