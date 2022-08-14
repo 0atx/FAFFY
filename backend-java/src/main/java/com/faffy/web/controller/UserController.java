@@ -47,6 +47,8 @@ public class UserController {
     @Autowired
     ConsultingService consultingService;
     @Autowired
+    BoardService boardService;
+    @Autowired
     EmailService emailService;
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -267,6 +269,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (IllegalInputException e) {
+            System.out.println("프로필 이미지 불러오기 실패!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -392,6 +395,25 @@ public class UserController {
         }catch (IllegalInputException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ApiOperation(value="작성자의 게시글 목록 불러오기", notes="해당 유저가 작성한 게시글의 목록을 반환")
+    @GetMapping("/board/{no}")
+    public ResponseEntity<Map<String, Object>> getHistoryDetail(@PathVariable int no,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size){
+        HashMap<String, Object> map = new HashMap<>();
+        List<BoardGetDto> dtoList = boardService.getBoardWithUserNo(no);
+
+        Pageable paging = PageRequest.of(page, size, Sort.by("dateTime").descending());
+        int start = (int)paging.getOffset();
+        int end = Math.min(start+paging.getPageSize(), dtoList.size());
+        Page<BoardGetDto> res = new PageImpl<>(dtoList.subList(start, end), paging, dtoList.size());
+        map.put("content", res.getContent());
+        map.put("currentPage", res.getNumber());
+        map.put("totalItems", res.getTotalElements());
+        map.put("totalPages", res.getTotalPages());
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("/validation/nickname/{nickname}")
