@@ -60,4 +60,6 @@ public interface BoardService {
     List<Integer> getBoardsImageNoByDate(Pageable pageable);
 
     List<BoardGetDto> searchByKeyword(String keyword) throws Exception;
+
+    List<BoardGetDto> getBoardWithUserNo(int userNo);
 }
