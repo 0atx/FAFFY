@@ -83,7 +83,8 @@
               1. 컨설턴트가 본인이라면 아무것도 안 보임
               2. 본인이 아니고 팔로우를 하지 않았다면 팔로우 버튼
               3. 본인이 아니고 팔로우를 한 상태라면 팔로잉 버튼(누르면 팔로우 취소) -->
-              <v-btn class="mr-2" outlined rounded text> 팔로우 </v-btn>
+              <!-- <v-btn class="mr-2" outlined rounded text v-if="checkUserInfo.no !== historyDetail.userInfoDto.no"> 팔로우 </v-btn> -->
+              <follow-button v-if="checkUserInfo.no !== historyDetail.userInfoDto.no" :user_no="historyDetail.userInfoDto.no"></follow-button>
             </v-card-actions>
           </v-card>
 
@@ -139,7 +140,7 @@
         <div class="mt-10">
           <p class="text-h6" style="margin: 0px; font-weight: 600">스냅샷</p>
           <hr />
-          <v-row style="margin: 0px">
+          <v-row style="margin: 0px" v-if="isSnapshotExist">
             <!-- 이미지 리스트 불러와서 숫자 놀이 해야함ㅎㅎ -->
             <v-col v-for="snapshot in snapshotList" :key="snapshot" class="d-flex child-flex" cols="4" >
               <v-card>
@@ -164,6 +165,9 @@
               </v-card>
             </v-col>
           </v-row>
+          <v-row style="margin: 0px" v-else>
+            스냅샷이 존재하지 않습니다.
+          </v-row>
         </div>
       </div>
     </div>
@@ -172,24 +176,26 @@
 
 <script>
 import CategoryChips from "@/components/common/CategoryChips.vue";
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import FollowButton from '@/components/user/FollowButton.vue'
 import _ from 'lodash';
 const profileStore = "profileStore";
+const authStore = "authStore";
 
 export default {
   name: "HistoryDetailView",
-  components: { CategoryChips },
+  components: { CategoryChips, FollowButton },
   data() {
     return {
       userNo: this.$route.params.no,
     };
   },
   methods: {
-    ...mapActions(profileStore, ['loadHistoryDetail', 'loadSnapshotList', 'resetSnapshotList']),
+    ...mapActions(profileStore, ['loadHistoryDetail']),
   },
   computed: {
     ...mapGetters(profileStore, ['historyDetail', 'snapshotList']),
-    ...mapMutations(profileStore, ['SET_SNAPSHOT']),
+    ...mapGetters(authStore, ['checkUserInfo']),
     userCategories() {
       return this.historyDetail.userInfoDto.categories.slice(0, 3)
     },
@@ -203,6 +209,7 @@ export default {
       consulting_no: Number(this.$route.params.consultNo),
     }
     await this.loadHistoryDetail(payload)
+    console.log(this.historyDetail)
   }
 };
 </script>
