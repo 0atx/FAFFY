@@ -2,7 +2,18 @@
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">방송 검색 결과</h2>
-      <v-btn v-if="isResultExist" class="sortBtn" text>인기 순</v-btn>
+      <v-col
+        class="d-flex"
+        cols="2"
+      >
+        <v-select
+          :items="items"
+          label="정렬 기준"
+          dense
+          solo
+          v-model="sortBy"
+        ></v-select>
+      </v-col>
     </v-row>
     <v-row>
       <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
@@ -120,23 +131,12 @@ export default {
   name: 'ConsultingSearchconsulting',
   data() {
     return {
-      // consultings: [
-      //           { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하2', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성2', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석2', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만2', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '류경하3', memberLimit: 10, currentMember: 6, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '이준성3', memberLimit: 40, currentMember: 13, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김명석3', memberLimit: 27, currentMember: 14, categories: ['힙합', '빈티지'], show: false},
-      //   { no: 1, img: 'http://www.yomidog.com/preSaleUpFile/190724_%EC%84%B1%EB%B6%81%ED%8F%AC%EB%A9%94_638.JPG', title: '강아지라네', host: '김수만3', memberLimit: 33, currentMember: 33, categories: ['힙합', '빈티지'], show: false},
-      // ],
       page: 1,
       itemsPerPage: 4,
       totalVisible: 7,
+      sortBy: '',
+      items: ['제목', '현재 인원', '전체 인원'],
+      type: { '제목': 'title', '현재 인원': 'viewCount', '전체 인원': 'roomSize' }
     }
   },
   computed: {
@@ -152,6 +152,24 @@ export default {
     isResultExist() {
       return !_.isEmpty(this.consultingResult)
     },
+  },
+  methods: {
+    sortResult(sortBy) {
+      this.boardResult.sort((a, b) => {
+        if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
+          return 1
+        } else if (b[this.type[sortBy]] < a[this.type[sortBy]]) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+    }
+  },
+  watch: {
+    sortBy() {
+      this.sortResult(this.sortBy)
+    }
   }
 }
 </script>
