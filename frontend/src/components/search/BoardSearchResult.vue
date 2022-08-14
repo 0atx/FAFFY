@@ -2,13 +2,13 @@
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">게시판 검색 결과</h2>
-      <v-btn v-if="boards.length != 0" text>인기 순</v-btn>
+      <v-btn v-if="boardResult.length != 0" text>인기 순</v-btn>
     </v-row>
 
     <!-- 게시글 검색 목록 -->
     <v-row>
       <v-col cols="12">
-        <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="boards.length == 0" cols="12">
+        <v-col style="height:100px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
           <h2>검색 결과가 없습니다.</h2>
         </v-col>
         <v-simple-table v-else>
@@ -36,7 +36,7 @@
             <tbody>
               <tr
                 v-for="board in currentPage"
-                :key="board.content.no"
+                :key="board.no"
                 @click="boardDetail(board.no)"
                 style="cursor: pointer"
               >
@@ -53,7 +53,7 @@
     </v-row>
 
     <!-- 페이지네이션 -->
-    <v-row v-if="boards.length != 0">
+    <v-row v-if="isResultExist">
       <v-col cols="12">
         <v-pagination
           v-model="page"
@@ -70,6 +70,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
+const searchStore = "searchStore"
+
 export default {
   name: 'BoardSearchResult',
   data() {
@@ -78,137 +82,27 @@ export default {
       itemsPerPage: 5,
       totalVisible: 7,
       typeList: { 'Free': '자유', 'QnA': '질문', 'Info': '정보' },
-      boards: [
-        {
-          no: 1,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 1,
-          }
-        },
-        {
-          no: 2,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 2,
-          }
-        },
-        {
-          no: 3,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 3,
-          },
-        },
-        {
-          no: 4,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 4,
-          }
-        },
-        {
-          no: 5,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 5,
-          }
-        },
-        {
-          no: 6,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 6,
-          },
-        },
-        {
-          no: 7,
-          category: 'Free',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 7,
-          }
-        },
-        {
-          no: 8,
-          category: 'QnA',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 8,
-          }
-        },
-        {
-          no: 9,
-          category: 'Info',
-          title: '게시글 제목입니다.',
-          user: {
-            nickname: '별명짓기귀찮다'
-            },
-          dateTime: '2022-08-01',
-          hit: '56',
-          content: {
-            no: 9,
-          },
-        },
-      ],
     }
   },
   computed: {
+    ...mapGetters(searchStore, ['boardResult']),
     totalPages() {
-      return this.boards.length % this.itemsPerPage > 0 ? parseInt(this.boards.length/this.itemsPerPage)+1 : parseInt(this.boards.length/this.itemsPerPage)
+      return this.boardResult.length % this.itemsPerPage > 0 ? parseInt(this.boardResult.length/this.itemsPerPage)+1 : parseInt(this.boardResult.length/this.itemsPerPage)
     },
     // 페이지네이션 - 현재 페이지 게시물
     currentPage() {
       const start = (this.page-1)*this.itemsPerPage
       const end = start+this.itemsPerPage
-      return this.boards.slice(start, end)
+      return this.boardResult.slice(start, end)
     },
+    isResultExist() {
+      return !_.isEmpty(this.boardResult)
+    }
+  },
+  methods: {
+    boardDetail(boardNo) {
+      this.$router.push({ name: 'board-detail', params: { boardNo: boardNo }})
+    }
   }
 }
 </script>

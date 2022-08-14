@@ -16,6 +16,8 @@
 import BoardSearchResult from '@/components/search/BoardSearchResult.vue'
 import ConsultingSearchResult from '@/components/search/ConsultingSearchResult.vue'
 import UserSearchResult from '@/components/search/UserSearchResult.vue'
+import { mapActions } from 'vuex';
+const searchStore = "searchStore";
 
 export default {
   name: 'SearchResultView',
@@ -30,10 +32,14 @@ export default {
     ConsultingSearchResult,
     UserSearchResult
   },
+  methods: {
+    ...mapActions(searchStore, ['searchKeyword']),
+  },
   created() {
     console.log(this.keyword+'로 방송을 검색')
     console.log(this.keyword+'로 게시글을 검색')
     console.log(this.keyword+'로 유저목록을 검색')
+    this.searchKeyword(this.keyword)
   },
 }
 </script>
