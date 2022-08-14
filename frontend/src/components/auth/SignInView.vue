@@ -148,7 +148,8 @@ export default {
     ...mapMutations(authStore, [
       "SET_IS_LOGIN",
       "SET_USER_INFO",
-      "SET_FOLLOWING_LIST"
+      "SET_FOLLOWING_LIST",
+      "SET_NAVER_STATE",
     ]),
     ...mapActions(authStore,["loadFollowing"]),
     async save() {
@@ -200,8 +201,8 @@ export default {
       auth.socialLogin(
         "google",
         (response) => {
-          console.log("success:"+response.data);
-          window.location.href= response.data;
+          // console.log("success:"+response.data);
+          window.location.href= response.data.redirectURL;
         },
         () => {
           console.log("구글 로그인 실패");
@@ -209,7 +210,16 @@ export default {
       )
     },
     naverLogin(){
-
+      auth.socialLogin(
+        "naver",
+        (response) => {
+          this.SET_NAVER_STATE(response.data.state);
+          window.location.href= response.data.redirectURL;
+        },
+        () => {
+          console.log("네이버 로그인 실패");
+        }
+      )
     }
   },
   metaInfo() {
