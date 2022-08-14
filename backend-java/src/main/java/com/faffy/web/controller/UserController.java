@@ -267,6 +267,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (IllegalInputException e) {
+            System.out.println("프로필 이미지 불러오기 실패!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -59,6 +59,11 @@ const consulting = {
       .then(response=>resolve(response.data))
       .catch(error=> reject(error.response));
     })
+    // return new Promise((resolve,reject)=> {
+    //   api.get(`/main/consulting/hit?size=${size}`)
+    //   .then(response=>resolve(response.data))
+    //   .catch(error=> reject(error.response));
+    // })
   }
 }
 
