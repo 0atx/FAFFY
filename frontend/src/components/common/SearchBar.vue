@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     onInputKeyword(e) {
-      this.keyword = e.target.value;
+      // this.keyword = e.target.value;
       console.log(this.keyword);
       e.target.value = '';
       console.log(this.$route.name)

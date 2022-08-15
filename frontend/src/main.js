@@ -7,7 +7,9 @@ import VuetifyDialog from 'vuetify-dialog'
 import 'vuetify-dialog/dist/vuetify-dialog.css'
 import router from './router'
 import store from "./store";
+import axios from 'axios'
 
+Vue.use(axios)
 Vue.use(VueMeta)
 Vue.use(Carousel3d)
 Vue.use(VuetifyDialog, {
@@ -16,6 +18,7 @@ Vue.use(VuetifyDialog, {
   }
 })
 
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
 new Vue({

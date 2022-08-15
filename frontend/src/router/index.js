@@ -119,6 +119,11 @@ const routes = [
     component: () => import("@/views/SearchResultView.vue"),
   },
   {
+    path: "/consultings",
+    name: "consultings",
+    component: () => import("@/views/ConsultingListView.vue"),
+  },
+  {
     path: "*",
     redirect: "/404",
   },
