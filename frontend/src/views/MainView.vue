@@ -188,7 +188,7 @@
           <div>
             <!-- 좌측 상단 인기 글 -->
             <div class="mb-4" style="width: 900px;">
-              <router-link style="font-weight:600;" class="text-h6" to="/auth/sign-in">인기 게시글<v-icon color="black"
+              <router-link style="font-weight:600;" class="text-h6" to="/board">인기 게시글<v-icon color="black"
                   class="mb-1"> mdi-chevron-right </v-icon>
               </router-link>
               <v-data-table class="table" :headers="headers" hide-default-footer :items="hitBoardList"
@@ -202,7 +202,7 @@
             </div>
             <!-- 좌측 하단 최신 글 -->
             <div class="mb-4" style="width: 900px;">
-              <router-link style="font-weight:600;" class="text-h6" to="/auth/sign-in">최신 게시글<v-icon color="black"
+              <router-link style="font-weight:600;" class="text-h6" to="/board">최신 게시글<v-icon color="black"
                   class="mb-1"> mdi-chevron-right </v-icon>
               </router-link>
               <v-data-table class="table" :headers="headers" hide-default-footer :items="latestBoardList"
@@ -217,7 +217,7 @@
           </div>
           <!-- 우측 이미지 게시글 -->
           <div style="width: 500px; ">
-            <router-link style="font-weight:600;" class="text-h6 ml-3" to="/auth/sign-in">게시글3<v-icon color="black"
+            <router-link style="font-weight:600;" class="text-h6 ml-3" to="/board">게시글3<v-icon color="black"
                 class="mb-1"> mdi-chevron-right </v-icon>
             </router-link>
             <v-row style="margin: 0px;">
