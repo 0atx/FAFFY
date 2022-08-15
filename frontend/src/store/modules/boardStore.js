@@ -111,7 +111,7 @@ const boardStore = {
           console.log('실패', err)
         })
     },
-    deleteBoard({ commit }, boardNo) {
+    deleteBoard({ dispatch, commit }, boardNo) {
       axios({
         url: 'http://localhost:8082/api/boards/',
         method: 'delete',
@@ -129,6 +129,13 @@ const boardStore = {
           // });
           alert('게시글이 삭제되었습니다.')
           commit('SET_BOARD', {})
+        })
+        .then(() => {
+          console.log('새로 게시글 리스트 불러오기')
+          dispatch('fetchBoardList')
+        })
+        .then(() => {
+          console.log('게시판으로 이동하기')
           router.push({ name: 'board' })
         })
         .catch(err => {
