@@ -3,35 +3,69 @@
     <div style="display:flex;width:100%;">
       <div style="width: 80%;">
         <!-- 비디오 표시 영역-->
-        <div id="topVideo" class="grey lighten-2 pt-8" v-if="session">
-          <div id="mainVideo" class="mb-3">
-            <user-video id="myWebcam" :stream-manager="publisher"/>
-          </div>
-          <div>
-            <v-sheet
-              id="subVideo"
-              max-width="100%"
-              class="grey lighten-2"
-            >
-              <v-slide-group
-                v-model="model"
-                show-arrows
+        <!-- 방장 기준일때 -->
+        <div v-if="isHost">
+          <div id="topVideo" class="grey lighten-2 pt-8" v-if="session">
+            <div id="mainVideo" class="mb-3">
+              <user-video id="myWebcam" :stream-manager="publisher"/>
+            </div>
+            <div>
+              <v-sheet
+                id="subVideo"
+                max-width="100%"
+                class="grey lighten-2"
               >
-                <!-- <v-slide-item
-                  v-for="n in 15"
-                  :key="n"
-                  style="margin: 13px;"
-                  width="250"
-                > -->
-                <v-slide-item
-                  v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
-                  style="margin: 13px;"
-                  width="250"
+                <v-slide-group
+                  v-model="model"
+                  show-arrows
                 >
-                <user-video :stream-manager="sub"/>
-                </v-slide-item>
-              </v-slide-group>
-            </v-sheet>
+                  <v-slide-item
+                    v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
+                    style="margin: 13px;"
+                    width="250"
+                  >
+                  <user-video :stream-manager="sub"/>
+                  </v-slide-item>
+                </v-slide-group>
+              </v-sheet>
+            </div>
+          </div>
+        </div>
+        <!-- 참가자 기준일때 -->
+        <div v-else>
+          <div id="topVideo" class="grey lighten-2 pt-8" v-if="session">
+            <div id="mainVideo" class="mb-3" >
+              <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                <user-video id="myWebcam" v-if="checkHost(sub)" :stream-manager="sub"/>
+              </div>
+            </div>
+            <div>
+              <v-sheet
+                id="subVideo"
+                max-width="100%"
+                class="grey lighten-2"
+              >
+                <v-slide-group
+                  v-model="model"
+                  show-arrows
+                >
+                  <v-slide-item
+                   style="margin: 13px;"
+                    width="250"
+                  >
+                  <user-video v-if="!isHost" :stream-manager="publisher"/>
+                  </v-slide-item>
+                  <v-slide-item
+                    v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
+                    style="margin: 13px;"
+                    width="250"
+                  >
+                  <user-video v-if="!checkHost(sub)" :stream-manager="sub"/>
+                  </v-slide-item>
+
+                </v-slide-group>
+              </v-sheet>
+            </div>
           </div>
         </div>
         <!-- 비디오 표시 영역 END -->
@@ -63,14 +97,12 @@
                 </template>
                 <span>비디오 시작</span>
               </v-tooltip>
-
-
-              <v-tooltip bottom>
+              <!-- <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
                 </template>
                 <span>사진 촬영</span>
-              </v-tooltip>
+              </v-tooltip> -->
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
@@ -555,7 +587,11 @@ export default {
       if (confirm("정말로 퇴장하시겠습니까?")) {
         this.leaveSession();
       }
-    }
+    },
+    checkHost(sub) {
+      let namecode = JSON.parse(sub.stream.connection.data).clientData.split(':');
+      return namecode[0] == this.consultingInfo.consultant_no;
+    },
   }
 }
 </script>
