@@ -176,6 +176,7 @@
         <!-- 중단 옵션 영역 END -->
 
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
+
       </div>
       <div style="width:20%;" id="drawer" v-if="drawer && session">
         <chat-subscriber-tab :session="session" v-if="drawer" @hideDrawer="hideDrawer"/>
