@@ -1,8 +1,8 @@
 <template>
   <div id="tab">
-    <div class="mx-2">
-      <right-subscriber @change="switchTab" v-if="tab==='participants'" />
-      <right-chat :session="session" @change="switchTab" v-else/>
+    <div>
+      <right-subscriber @change="switchTab" @hideDrawer="$emit('hideDrawer')" v-if="tab==='participants'" />
+      <right-chat :session="session" @change="switchTab" @hideDrawer="$emit('hideDrawer')" v-else/>
     </div>
   </div>
 </template>
@@ -42,6 +42,7 @@ export default {
 
 <style scoped>
 #tab {
+  height:100vh;
   position: sticky;
   top: 0;
   right: 0;

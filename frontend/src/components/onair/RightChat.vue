@@ -1,5 +1,5 @@
 <template>
-	<div id="rightChat" style="height: 80vh">
+	<div id="rightChat" style="height: 100vh;background:white;">
     <!--
     <v-card class="overflow-auto" style="height: 65vh; width: 100%"> -->
       <!-- :key 는 나중에 생성시간이나 id 등 고유값을 가지는 것으로 변경-->
@@ -31,10 +31,13 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 pt-1">
+            <v-btn id="icon" icon small elevation="0" :ripple="false" class="mb-1 pr-2" @click="$emit('hideDrawer')">
+              <v-icon size="22">mdi-arrow-right</v-icon>
+            </v-btn>
             채팅
             <v-btn
               id="tapBtn"
-              class="mb-1" style="margin-left:71%; cursor: pointer"
+              class="mb-1" style="margin-left:58%; cursor: pointer"
               elevation="0"
               icon
               small
@@ -49,29 +52,29 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
-    <div class="overflow-auto" style="height: 72vh; width: 100%">
-      <v-card class="mb-2"  elevation="0" style="height: 70vh; width: 100%">
-        <v-card :style="chat.nickname == loginUser.nickname ? 'width: 100%; text-align:right' : 'width:100%'" class="mx-auto" outlined color="transparent" id="chat" v-for="chat in chats" :key="chat.no">
+    <div id="chatArea" class="overflow-auto" style="height: 80vh; width: 100%">
+      <v-card class="mb-2"  elevation="0" style="width: 100%">
+        <v-card :style="chat.userName == loginUser.nickname ? 'width: 100%; text-align:right; padding-right:4px' : 'width:100%'" class="mx-auto" outlined color="transparent" id="chat" v-for="chat in chats" :key="chat.no">
           <div
             :class="chat.nickname == loginUser.nickname ? 'ml-2 mr-2' : 'ml-1 mr-2'"
             style="font-size: 0.8rem;"
           >{{ chat.userName }}</div>
           <v-chip
-            :color="chat.nickname == loginUser.nickname ? '#ff7451' : '#0c0f66'"
+            :color="chat.userName == loginUser.nickname ? '#ff7451' : '#0c0f66'"
             dark
-            style="height:auto;white-space: normal;pointer-events: none;"
+            style="height:40px;white-space: normal;pointer-events: none;"
             class="pa-3"
           >
             {{ chat.content }}
           </v-chip>
           <div
-            class="ml-1 mr-1 mb-2"
+            class="ml-1 mr-1 mb-1"
             style="font-size: 0.5rem;vertical-align: start;"
           >{{ chat.created_at }}</div>
         </v-card>
       </v-card>
     </div>
-    <div id="chatForm" style="height: 5vh;width: 19%" class="p0" cols="12">
+    <div id="chatForm" style="height: 10vh;width: 20%; padding:0px 5px; padding-top:5px;" class="p0" cols="12">
       <v-text-field
         placeholder="채팅 입력하기"
         color="#0c0f66"
@@ -85,7 +88,7 @@
         @click:append="send"
         v-model="message">
       </v-text-field>
-      </div>
+    </div>
 
   </div>
 </template>
@@ -105,6 +108,7 @@ export default {
     console.log("탭이에요");
     console.log(this.session);
     console.log("탭이에요end");
+    document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
   },
   data() {
     return {
@@ -145,6 +149,7 @@ export default {
 				.then(() => {
 					console.log('Message successfully sent');
 					this.message = "";
+          document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
 				})
 				.catch(error => {
 					console.error(error);
@@ -158,7 +163,8 @@ export default {
 <style scoped>
 #rightChat {
   width:100%;
-  height:100%;
+  background-color: white;
+  border: 1px solid rgb(214, 214, 214);
   /* background-color: palevioletred; */
 }
 
@@ -180,6 +186,10 @@ div {
 }
 
 #tapBtn::before {
+  background-color: transparent;
+}
+
+#icon::before {
   background-color: transparent;
 }
 

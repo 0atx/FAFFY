@@ -17,10 +17,13 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 pt-1">
+            <v-btn id="icon" icon small elevation="0" :ripple="false" class="mb-1 pr-2" @click="$emit('hideDrawer')">
+              <v-icon size="22">mdi-arrow-right</v-icon>
+            </v-btn>
             참여자 목록
             <v-btn
               id="tapBtn"
-              class="mb-1" style="margin-left:45%; cursor: pointer"
+              class="mb-1" style="margin-left:32%; cursor: pointer"
               elevation="0"
               icon
               small
@@ -37,8 +40,8 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
-    <div class="overflow-auto" style="height: 80vh">
-      <v-list>
+    <div class="overflow-auto" style="margin-top:2px; margin-bottom: 3px;">
+      <v-list style="height: 86vh;">
         <v-list-item class="participant">
           <profile-img-avatar :user_no="loginUser.no" />
           <v-list-item-content @click="moveProfile(loginUser.no)">
@@ -93,8 +96,8 @@ export default {
 <style scoped>
 #rightSub {
   width:100%;
-  height:100%;
-  /* background-color: palegoldenrod; */
+  background-color: white;
+  border: 1px solid rgb(214, 214, 214);
 }
 
 .participant {
@@ -117,6 +120,10 @@ export default {
 }
 
 #tapBtn::before {
+  background-color: transparent;
+}
+
+#icon::before {
   background-color: transparent;
 }
 
