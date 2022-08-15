@@ -176,27 +176,28 @@
         <!-- 중단 옵션 영역 END -->
 
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
-
       </div>
       <div style="width:20%;" id="drawer" v-if="drawer && session">
         <chat-subscriber-tab :session="session" v-if="drawer" @hideDrawer="hideDrawer"/>
       </div>
 
       <!-- 스냅샷 캔버스 -->
+
       <template>
         <v-row justify="center">
           <v-dialog eager
-            v-model="dialog"
+            v-model="snapshotDialog"
             persistent
-            max-width="400"
-            max-height="600"
+            max-width="800"
+            max-height="800"
           >
             <v-card>
               <v-card-title class="text-h5">
                 캡쳐 완료!
               </v-card-title>
               <v-card-text>
-                <canvas id="drawCanvas" width="320" height="240" style="border:1px solid black" ref="snapshot_canvas"/>
+                <canvas id="drawCanvas" width="320" height="240" style="border:1px; solid black" ref="snapshot_canvas"/>
+
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -210,9 +211,40 @@
                 <v-btn
                   color="green darken-1"
                   text
-                  @click="dialog = false"
+                  @click="snapshotDialog = false"
                 >
                   취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 앨범 -->
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="albumDialog"
+            persistent
+            max-width="1000"
+            max-height="800"
+          >
+            <v-card>
+              <v-card-title class="text-h5">
+                앨범
+              </v-card-title>
+              <v-card-text>
+                이미지보이ㅡㄴ곳
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="albumDialog = false"
+                >
+                  닫기
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -279,7 +311,10 @@ export default {
 
       // 스냅샷 영역
       canvas:null,
-      dialog:false,
+      snapshotDialog:false,
+
+      // 앨범
+      albumDialog:false,
 
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
@@ -287,7 +322,7 @@ export default {
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo","isShare"]),
+    ...mapState("consultingStore",["participants","consultingInfo"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -327,6 +362,7 @@ export default {
     this.myUserName=this.loginUser.no+":"+this.loginUser.nickname;
 
     // 방송 정보 요청 후 값 세팅
+    // this.getConsultingInfo();
     consulting.getConsulting(this.consulting_no)
     .then((data)=> {
       console.log("방송 정보 요청 성공");
@@ -453,6 +489,9 @@ export default {
           }
           this.recvList.push(msg)
           this.SET_CHATS(this.recvList);
+          // 파일 signal일 경우
+        } else if (event.type=="signal:upload") {
+          this.getConsultingInfo();
         }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
@@ -641,7 +680,7 @@ export default {
 			});
 		},
     showAlbum() {
-      this.dialog = true;
+      this.albumDialog = true;
     },
     async NAGA() {
       console.log("NAGA!");
@@ -712,17 +751,10 @@ export default {
       return namecode[1] == this.nickname + '님의 화면';
     },
     captureSignal(video) {
-      this.dialog = true;
-      console.log(video);
-      // var video = this.$refs.ov_video.$refs.video;
-
-      // var canvas = document.getElementById("drawCanvas");
-      // let canvas = this.$refs.ov_video.$refs.video;
-
-      console.log(this.canvas);
+      this.snapshotDialog = true;
 			let context = this.canvas.getContext("2d");
 
-			context.drawImage(video, 0, 0, 320, 240);
+			context.drawImage(video, 0, 0, 320,240);
       console.log("캡쳐 완료");
     },
     upload() {
@@ -764,9 +796,21 @@ export default {
       .catch(response => {
         console.log(response);
       })
-      this.dialog = false;
+      this.snapshotDialog = false;
     },
-
+    async getConsultingInfo() {
+      await consulting.getConsulting(this.consulting_no)
+      .then((data)=> {
+        console.log("방송 정보 요청 성공");
+        console.log(data);
+        this.SET_CONSULTING_INFO(data.content);
+        console.log(this.consultingInfo.title);
+      })
+      .catch((error)=> {
+        console.log("방송 정보 요청 실패");
+        console.log(error);
+      })
+    }
   }
 }
 </script>
