@@ -12,14 +12,14 @@
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
                 <div style="margin: 0 5%;">
-                  <user-video id="myWebcam" style="width: 500px; height: 360px;" :stream-manager="publisher"/>
+                  <user-video id="myWebcam" style="width: 500px; height: 360px;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkScreen(sub)" style="height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
-                <user-video id="myWebcam" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="publisher"/>
+                <user-video id="myWebcam" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
               </div>
             </div>
             <div>
@@ -37,7 +37,7 @@
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px;" :stream-manager="sub"/>
+                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
                 </v-slide-group>
               </v-sheet>
@@ -53,15 +53,15 @@
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
                 <div style="margin: 0 2%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
             </div>
@@ -79,13 +79,13 @@
                   <v-slide-item
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!isHost" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="publisher"/>
+                  <user-video v-if="!isHost" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
                   <v-slide-item
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!checkHost(sub) && !checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub"/>
+                  <user-video v-if="!checkHost(sub) && !checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
 
                 </v-slide-group>
@@ -103,6 +103,7 @@
                 </template>
                 <span>음소거</span>
               </v-tooltip>
+
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone-off</v-icon></v-btn>
@@ -122,27 +123,15 @@
                 </template>
                 <span>비디오 시작</span>
               </v-tooltip>
-              <!-- <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
-                </template>
-                <span>사진 촬영</span>
-              </v-tooltip> -->
+
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="showAlbum"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
                 </template>
                 <span>앨범</span>
               </v-tooltip>
 
-              <!-- <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleMirror">mdi-reflect-horizontal</v-icon></v-btn>
-                </template>
-                <span>좌우 반전</span>
-              </v-tooltip> -->
-
-              <v-tooltip bottom v-if="!mosaicValue">
+              <v-tooltip bottom v-if="mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
                 </template>
@@ -180,10 +169,49 @@
         <!-- 중단 옵션 영역 END -->
 
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
+
       </div>
       <div style="width:20%;" id="drawer" v-if="drawer && session">
         <chat-subscriber-tab :session="session" v-if="drawer" @hideDrawer="hideDrawer"/>
       </div>
+
+      <!-- 스냅샷 캔버스 -->
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="dialog"
+            persistent
+            max-width="400"
+            max-height="600"
+          >
+            <v-card>
+              <v-card-title class="text-h5">
+                캡쳐 완료!
+              </v-card-title>
+              <v-card-text>
+                <canvas id="drawCanvas" width="320" height="240" style="border:1px solid black" ref="snapshot_canvas"/>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="upload"
+                >
+                  업로드
+                </v-btn>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="dialog = false"
+                >
+                  취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
     </div>
   </div>
 </template>
@@ -242,6 +270,10 @@ export default {
       page: 1,
       itemsPerPage: 4,
 
+      // 스냅샷 영역
+      canvas:null,
+      dialog:false,
+
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
     }
@@ -264,7 +296,7 @@ export default {
   mounted() {
     // 뒤로가기 막기
     this.preventBack();
-
+    this.canvas = this.$refs.snapshot_canvas;
     // this.mySessionId = this.host_no;
     console.log("넘겨받은 값");
     this.nickname = this.$route.params.nickname;
@@ -605,6 +637,9 @@ export default {
 					.catch(error => reject(error.response));
 			});
 		},
+    showAlbum() {
+      this.dialog = true;
+    },
     async NAGA() {
       console.log("NAGA!");
       this.session.signal({
@@ -673,6 +708,48 @@ export default {
       let namecode = JSON.parse(sub.stream.connection.data).clientData.split(':');
       return namecode[1] == this.nickname + '님의 화면';
     },
+    captureSignal(video) {
+      this.dialog = true;
+      console.log(video);
+      // var video = this.$refs.ov_video.$refs.video;
+
+      // var canvas = document.getElementById("drawCanvas");
+      // let canvas = this.$refs.ov_video.$refs.video;
+
+      console.log(this.canvas);
+			let context = this.canvas.getContext("2d");
+
+			context.drawImage(video, 0, 0, 320, 240);
+      console.log("캡쳐 완료");
+    },
+    upload() {
+      console.log("#######################");
+      const imgBase64 = this.canvas.toDataURL('image/jpeg','multipart/form-data');
+			const decodImg = atob(imgBase64.split(',')[1]);
+
+			let array = [];
+			for (let i = 0; i < decodImg.length; i++) {
+				array.push(decodImg.charCodeAt(i));
+			}
+
+			const file = new Blob([ new Uint8Array(array) ], {
+				type : 'image/jpeg'
+			});
+			const fileName = 'web_snapshot_'+Date.now()+'.jpg';
+			let formData = new FormData();
+			formData.append('file', file, fileName);
+      formData.append('consulting_no',this.consulting_no);
+      console.log(formData);
+
+      consulting.uploadSnapshop(formData)
+      .then(response=> {
+        console.log(response);
+      })
+      .catch(response => {
+        console.log(response);
+      })
+      this.dialog = false;
+    }
   }
 }
 </script>
