@@ -76,14 +76,14 @@ public class MainController {
                                                                      @RequestParam(defaultValue = "10") int consultingSize){
         HashMap<String, Object> map = new HashMap<>();
         try {
-            List<UserPublicDto> userDtoList = userService.searchByKeyword(keyword);
+            List<UserGetDetailDto> userDtoList = userService.searchByKeyword(keyword);
             List<BoardGetDto> boardDtoList = boardService.searchByKeyword(keyword);
             List<ConsultingGetDto> consultingDtoList = consultingService.searchByKeyword(keyword);
 
             Pageable paging = PageRequest.of(userPage, userSize);
             int start = (int) paging.getOffset();
             int end = Math.min(start + paging.getPageSize(), userDtoList.size());
-            Page<UserPublicDto> userRes = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
+            Page<UserGetDetailDto> userRes = new PageImpl<>(userDtoList.subList(start, end), paging, userDtoList.size());
             HashMap<String, Object> tmpMap = new HashMap<>();
             tmpMap.put("content", userRes.getContent());
             tmpMap.put("currentPage", userRes.getNumber());
