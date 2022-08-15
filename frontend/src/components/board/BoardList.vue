@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
@@ -143,7 +143,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(boardStore, ['fetchBoards']),
     // 상세조회 페이지 이동
     boardDetail(boardNo) {
       console.log(`${boardNo}번 글로 이동`)
