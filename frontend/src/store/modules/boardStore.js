@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from '@/router'
+import { API_BASE_URL } from "@/config";
 
 const boardStore = {
   namespaced: true,
@@ -34,7 +35,7 @@ const boardStore = {
   actions: {
     fetchBoardList({ commit }) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'get',
         headers: {
           'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
@@ -49,7 +50,7 @@ const boardStore = {
     },
     createBoard({ dispatch }, board) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
         "Content-Type": "multipart/form-data" },
@@ -78,7 +79,7 @@ const boardStore = {
     },
     fetchBoard({ commit, dispatch }, boardNo) {
       axios({
-        url: `http://localhost:8082/api/boards/${boardNo}`,
+        url: API_BASE_URL + `/boards/${boardNo}`,
         method: 'get',
         headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
@@ -98,7 +99,7 @@ const boardStore = {
     },
     createComment(context, commentForm) {
       axios({
-        url: 'http://localhost:8082/api/comments',
+        url: API_BASE_URL + '/comments',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: commentForm
@@ -113,7 +114,7 @@ const boardStore = {
     },
     deleteBoard({ dispatch, commit }, boardNo) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: {
@@ -144,7 +145,7 @@ const boardStore = {
     },
     deleteComment(context, commentNo) {
       axios({
-        url: `http://localhost:8082/api/comments/${commentNo}`,
+        url: API_BASE_URL + `/comments/${commentNo}`,
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
       })
@@ -164,7 +165,7 @@ const boardStore = {
     },
     updateBoard(context, formData) {
       axios({
-        url: 'http://localhost:8082/api/boards',
+        url: API_BASE_URL + '/boards',
         method: 'put',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
       "Content-Type": "multipart/form-data" },
@@ -180,7 +181,7 @@ const boardStore = {
     },
     fetchImage({ commit }, fileNo) {
       axios({
-        url: `http://localhost:8082/api/boards/file/${fileNo}`,
+        url: API_BASE_URL + `/boards/file/${fileNo}`,
         method: 'get',
         responseType: 'blob',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
