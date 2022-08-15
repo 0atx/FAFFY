@@ -1,18 +1,32 @@
 <template>
   <div id="view">
     <div style="display:flex;width:100%;">
-      <div style="width: 80%;">
+      <div style="width: 100%;">
         <!-- 비디오 표시 영역-->
         <!-- 방장 기준일때 -->
         <div v-if="isHost">
-          <div id="topVideo" class="grey lighten-2 pt-8" v-if="session">
-            <div id="mainVideo" class="mb-3">
-              <user-video id="myWebcam" :stream-manager="publisher"/>
+          <div id="topVideo" class="grey lighten-2 pt-4" v-if="session">
+            <v-btn class="text-h6" id="icon" style="float:right; margin-right:1%; padding: 0px 8px; background-color:white" elevation="0" :ripple="false" v-if="!drawer" @click="drawer=!drawer">
+              <v-icon class="mt-1 mr-1" color="#666" size="22">mdi-arrow-left</v-icon> 참여자 / 채팅
+            </v-btn>
+            <div style="width: 100%; height:360px;">
+              <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
+                <div style="margin: 0 5%;">
+                  <user-video id="myWebcam" style=" width: 500px; height: 360px; object-fit: fill;" :stream-manager="publisher"/>
+                </div>
+                <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                  <user-video id="myWebcam" style="object-fit: fill;" v-if="checkScreen(sub)" :stream-manager="sub"/>
+                </div>
+              </div>
+              <div v-else id="mainVideo" class="mb-3">
+                <user-video id="myWebcam" style="width: 500px; height: 360px; object-fit: fill; margin:0 auto;" :stream-manager="publisher"/>
+              </div>
             </div>
             <div>
               <v-sheet
                 id="subVideo"
                 max-width="100%"
+                height="280"
                 class="grey lighten-2"
               >
                 <v-slide-group
@@ -22,9 +36,8 @@
                   <v-slide-item
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
-                    width="250"
                   >
-                  <user-video :stream-manager="sub"/>
+                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub"/>
                   </v-slide-item>
                 </v-slide-group>
               </v-sheet>
@@ -33,10 +46,23 @@
         </div>
         <!-- 참가자 기준일때 -->
         <div v-else>
-          <div id="topVideo" class="grey lighten-2 pt-8" v-if="session">
-            <div id="mainVideo" class="mb-3" >
-              <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                <user-video id="myWebcam" v-if="checkHost(sub)" :stream-manager="sub"/>
+          <div id="topVideo" class="grey lighten-2 pt-4" v-if="session">
+            <v-btn class="text-h6" id="icon" style="float:right; margin-right:1%; padding: 0px 8px; background-color:white" elevation="0" :ripple="false" v-if="!drawer" @click="drawer=!drawer">
+              <v-icon class="mt-1 mr-1" color="#666" size="22">mdi-arrow-left</v-icon> 참여자 / 채팅
+            </v-btn>
+            <div style="width: 100%; height:360px;">
+              <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
+                <div style="margin: 0 5%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; object-fit: fill;" :stream-manager="sub"/>
+                </div>
+                <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="object-fit: fill;" :stream-manager="sub"/>
+                </div>
+              </div>
+              <div v-else id="mainVideo" class="mb-3">
+                <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; object-fit: fill; margin:0 auto;" :stream-manager="sub"/>
+                </div>
               </div>
             </div>
             <div>
@@ -44,23 +70,22 @@
                 id="subVideo"
                 max-width="100%"
                 class="grey lighten-2"
+                height="280"
               >
                 <v-slide-group
                   v-model="model"
                   show-arrows
                 >
                   <v-slide-item
-                   style="margin: 13px;"
-                    width="250"
+                    style="margin: 13px;"
                   >
-                  <user-video v-if="!isHost" :stream-manager="publisher"/>
+                  <user-video v-if="!isHost" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="publisher"/>
                   </v-slide-item>
                   <v-slide-item
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
-                    width="250"
                   >
-                  <user-video v-if="!checkHost(sub)" :stream-manager="sub"/>
+                  <user-video v-if="!checkHost(sub) && !checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub"/>
                   </v-slide-item>
 
                 </v-slide-group>
@@ -117,27 +142,26 @@
                 <span>좌우 반전</span>
               </v-tooltip> -->
 
-              <v-tooltip bottom v-if="mosaicValue">
+              <v-tooltip bottom v-if="!mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
                 </template>
-                <span>모자이크 해제</span>
+                <span>모자이크</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleMosaic"><v-icon size="30" color="#fff" >mdi-blur-off</v-icon></v-btn>
                 </template>
-                <span>모자이크</span>
+                <span>모자이크 해제</span>
               </v-tooltip>
 
-
-              <v-tooltip bottom v-if="!screenOV">
+              <v-tooltip bottom v-if="!screenOV && isHost">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="startScreenShare"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
                 </template>
                 <span>화면 공유 시작</span>
               </v-tooltip>
-              <v-tooltip bottom v-else>
+              <v-tooltip bottom v-else-if="screenOV && isHost">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="stopScreenShare"><v-icon size="30" color="#fff">mdi-monitor-off</v-icon></v-btn>
                 </template>
@@ -157,8 +181,8 @@
 
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
       </div>
-      <div style="width:20%;" id="drawer"  v-if="session">
-        <chat-subscriber-tab :session="session"/>
+      <div style="width:20%;" id="drawer" v-if="drawer && session">
+        <chat-subscriber-tab :session="session" v-if="drawer" @hideDrawer="hideDrawer"/>
       </div>
     </div>
   </div>
@@ -189,16 +213,19 @@ export default {
   },
   data() {
     return {
+      drawer: true,
       //
       OV: undefined,
 			session: undefined,
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
+      subsNoScreen: [],
 			camValue: true,
 			audioValue: true,
       mosaicValue:false,
       isHost:false,
+      isShare:false,
 			mySessionId: "",
 			myUserName: "",
       consulting_no:"",
@@ -221,7 +248,7 @@ export default {
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo"]),
+    ...mapState("consultingStore",["participants","consultingInfo","isShare"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -247,7 +274,11 @@ export default {
 
     // 비정상 접근 감지
     if (this.nickname == undefined) {
-      alert("비정상적인 접근입니다.");
+      this.$dialog.message.info('비정상적인 접근입니다.', {
+        position: "top",
+        timeout: 2000,
+        color: "#ff7451",
+      });
       this.$router.push('/');
 
       return;
@@ -286,7 +317,11 @@ export default {
     location.reload();
   },
   methods: {
-    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_CHATS"]),
+    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS"]),
+
+    hideDrawer() {
+      this.drawer = !this.drawer
+    },
 
     // 뒤로가기 방지
     preventBack: function() {
@@ -310,19 +345,40 @@ export default {
 			// 수신되는 모든 스트림들에 대해서
 			this.session.on('streamCreated', ({ stream }) => {
 				const subscriber = this.session.subscribe(stream);
-				this.subscribers.push(subscriber);
-        this.participants.push()
+
+        let namecode = JSON.parse(stream.connection.data).clientData.split(':');
+        console.log("네임코드 확인 중!!! : ", namecode[1]);
+        console.log(this.nickname + '님의 화면');
+
+        if(!(namecode[1] == this.nickname + '님의 화면')) {
+          this.subscribers.push(subscriber);
+          this.subsNoScreen.push(subscriber);
+        } else {
+          this.subscribers.push(subscriber);
+          this.isShare = true;
+          this.SET_SHARESCREEN(this.isShare);
+          console.log("Screen 시작 : " + this.isShare);
+        }
+
         console.log("subscrobers stream");
-        this.SET_PARTICIPANTS(this.subscribers);
+        this.SET_PARTICIPANTS(this.subsNoScreen);
 			});
 
 			// 끝낸 모든 스트림들에 대해서
 			this.session.on('streamDestroyed', ({ stream }) => {
 				const index = this.subscribers.indexOf(stream.streamManager, 0);
-				if (index >= 0) {
+				let namecode = JSON.parse(stream.connection.data).clientData.split(':');
+
+        if(namecode[1] == this.nickname + '님의 화면') {
+          this.isShare = false;
+          this.SET_SHARESCREEN(this.isShare);
+          console.log("Screen 종료 : " + this.isShare);
+        }
+
+        if (index >= 0) {
 					this.subscribers.splice(index, 1);
 				}
-        this.SET_PARTICIPANTS(this.subscribers);
+        this.SET_PARTICIPANTS(this.subsNoScreen);
 
 			});
 
@@ -341,7 +397,11 @@ export default {
         // 방송 종료 signal일 경우
         if (event.type == "signal:naga") {
           if (!this.isHost) {
-            alert(data.message);
+            this.$dialog.message.info(data.message, {
+              position: "top",
+              timeout: 2000,
+              color: "#ff7451",
+            });
             console.log("okay bye");
             this.leaveSession();
           }
@@ -372,7 +432,7 @@ export default {
 							videoSource: undefined, // The source of video. If undefined default webcam
 							publishAudio: this.camValue,  	// Whether you want to start publishing with your audio unmuted or not
 							publishVideo: this.audioValue,  	// Whether you want to start publishing with your video enabled or not
-							resolution: '320x240',  // The resolution of your video
+							resolution: '500x400',  // The resolution of your video
 							frameRate: 30,			// The frame rate of your video
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
@@ -390,6 +450,9 @@ export default {
 
             console.log("방장체크"+this.nickname);
             console.log("내닉넴:"+this.loginUser.nickname);
+            console.log("-----------")
+            console.log("subs", this.subscribers);
+            console.log("-----------")
             if (!this.isHost){
               const log = {
                 consulting_no:this.mySessionId,
@@ -440,7 +503,7 @@ export default {
 		startScreenShare() {
 			this.screenOV = new OpenVidu();
 			this.screenSession = this.screenOV.initSession();
-			this.screenShareName = this.myUserName + "'s Screen",
+			this.screenShareName = this.myUserName + "님의 화면",
 
 				this.getToken(this.mySessionId).then(token => {
 					console.log(token);
@@ -472,6 +535,7 @@ export default {
 					console.error(error);
 					this.screenOV = undefined;
 					this.screenSession = undefined;
+          this.screenShareName = undefined;
 				})
 
 		},
@@ -480,6 +544,7 @@ export default {
 			this.screenSession.disconnect();
 			this.screenOV = undefined;
 			this.screenSession = undefined;
+      this.screenShareName = undefined;
 		},
     /**
 		 * --------------------------
@@ -583,14 +648,30 @@ export default {
       this.leaveTrigger=true;
       this.$router.push({name:"main"});
 		},
-    leaveConsulting() {
-      if (confirm("정말로 퇴장하시겠습니까?")) {
+    async leaveConsulting() {
+      const res = await this.$dialog.confirm({
+        text: '<br>정말로 퇴장하시겠습니까?',
+        icon: true,
+        actions: {
+          false : {
+            text: '취소', color: '#ff7451'
+          },
+          true : {
+            text: '확인', color: '#0c0f66'
+          },
+        }
+      });
+      if (res) {
         this.leaveSession();
       }
     },
     checkHost(sub) {
       let namecode = JSON.parse(sub.stream.connection.data).clientData.split(':');
       return namecode[0] == this.consultingInfo.consultant_no;
+    },
+    checkScreen(sub) {
+      let namecode = JSON.parse(sub.stream.connection.data).clientData.split(':');
+      return namecode[1] == this.nickname + '님의 화면';
     },
   }
 }
@@ -601,15 +682,16 @@ export default {
   background-color: white;
   text-align: left;
 }
+
 #topVideo {
   width:100%;
   background-color: paleturquoise;
   text-align: center;
 }
+
 #centerOption {
   width:100%;
-  padding: 10px;
-  padding-bottom: 20px;
+  padding: 13px 10px;
 }
 
 #optionButton {
@@ -634,4 +716,15 @@ export default {
   background-color:#ff7451;
   margin: 0 10px;
 }
+
+#drawer {
+  position: fixed;
+  top: 50;
+  right: 0;
+}
+
+#icon::before {
+  background-color: transparent;
+}
+
 </style>

@@ -71,9 +71,21 @@ export default {
       this.$router.push({ name: 'board' })
     },
     // 게시글 삭제
-    requestDeleteBoard(boardNo) {
+    async requestDeleteBoard(boardNo) {
       console.log(`${boardNo}번 글을 삭제합니다.`)
-      if (confirm('정말로 삭제하시겠습니까?')) {
+      const res = await this.$dialog.confirm({
+          text: '<br>정말로 삭제하시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+      if (res) {
         this.deleteBoard(boardNo)
       }
     },

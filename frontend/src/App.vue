@@ -1,6 +1,6 @@
 <template>
   <v-app id="faffy">
-    <Header v-show="show" :isOnAir="isOnAir" />
+    <Header v-if="show" :isOnAir="isOnAir" />
     <Loading v-if="loading"/>
     <router-view v-show="!loading" :key="$route.path"></router-view>
   </v-app>
@@ -27,12 +27,15 @@ export default {
     $route(to) {
       if (
         !(
-          to.name == "404"
+          to.name == "404" ||
+          to.name == "consulting-onair"
         )
       ) {
         this.show = true;
+        this.isOnAir = false;
       } else {
         this.show = false;
+        this.isOnAir = true;
       }
 
       if (
