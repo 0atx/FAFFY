@@ -181,6 +181,16 @@ export default {
     resetSearch() {
       this.keyword = ''
       this.searchCategory = ''
+      this.page = 1
+      if (this.type === '자유') {
+        this.now = this.freeBoards
+      } else if (this.type === '질문') {
+        this.now = this.qnaBoards
+      } else if (this.type === '정보') {
+        this.now = this.infoBoards
+      } else {
+        this.now = this.boardList
+      }
     },
     // 게시글 생성
     createBoard() {
