@@ -12,14 +12,14 @@
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
                 <div style="margin: 0 5%;">
-                  <user-video id="myWebcam" style="width: 500px; height: 360px;" :stream-manager="publisher"/>
+                  <user-video id="myWebcam" style="width: 500px; height: 360px;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkScreen(sub)" style="height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
-                <user-video id="myWebcam" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="publisher"/>
+                <user-video id="myWebcam" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
               </div>
             </div>
             <div>
@@ -37,7 +37,7 @@
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px;" :stream-manager="sub"/>
+                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
                 </v-slide-group>
               </v-sheet>
@@ -53,15 +53,15 @@
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
                 <div style="margin: 0 2%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="height: 360px;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                 </div>
               </div>
             </div>
@@ -79,13 +79,13 @@
                   <v-slide-item
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!isHost" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="publisher"/>
+                  <user-video v-if="!isHost" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="publisher" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
                   <v-slide-item
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!checkHost(sub) && !checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub"/>
+                  <user-video v-if="!checkHost(sub) && !checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub" v-on:capture-event="captureSignal"/>
                   </v-slide-item>
 
                 </v-slide-group>
@@ -103,6 +103,7 @@
                 </template>
                 <span>음소거</span>
               </v-tooltip>
+
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone-off</v-icon></v-btn>
@@ -122,27 +123,22 @@
                 </template>
                 <span>비디오 시작</span>
               </v-tooltip>
-              <!-- <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-camera</v-icon></v-btn>
-                </template>
-                <span>사진 촬영</span>
-              </v-tooltip> -->
+
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="showAlbum"><v-icon size="30" color="#fff">mdi-image-multiple</v-icon></v-btn>
                 </template>
                 <span>앨범</span>
               </v-tooltip>
-
-              <!-- <v-tooltip bottom>
+<!--
+              <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleMirror">mdi-reflect-horizontal</v-icon></v-btn>
                 </template>
                 <span>좌우 반전</span>
               </v-tooltip> -->
 
-              <v-tooltip bottom v-if="!mosaicValue">
+              <v-tooltip bottom v-if="mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
                 </template>
@@ -180,10 +176,87 @@
         <!-- 중단 옵션 영역 END -->
 
         <bottom-info v-if="consultingInfo" :consultingInfo="consultingInfo"/>
+
       </div>
       <div style="width:20%;" id="drawer" v-if="drawer && session">
         <chat-subscriber-tab :session="session" v-if="drawer" @hideDrawer="hideDrawer"/>
       </div>
+
+      <!-- 스냅샷 캔버스 -->
+
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="snapshotDialog"
+            persistent
+            max-width="400"
+            max-height="600"
+          >
+            <v-card>
+              <v-card-title class="text-h5">
+                캡쳐 완료!
+              </v-card-title>
+              <v-card-text>
+                <canvas id="drawCanvas" width="320" height="240" style="border:1px; solid black" ref="snapshot_canvas"/>
+
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="upload"
+                >
+                  업로드
+                </v-btn>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="snapshotDialog = false"
+                >
+                  취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 앨범 -->
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="albumDialog"
+            persistent
+            max-width="1000"
+            max-height="800"
+          >
+            <v-card>
+              <v-card-title class="text-h5">
+                앨범
+              </v-card-title>
+              <v-card-text>
+                <div v-for="img_no in snapshotList" :key="img_no">
+                  <img
+                      :src="`${IMG_BASE_URL}/` + img_no"
+                      :alt="스냅샷"
+                  />
+                </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="albumDialog = false"
+                >
+                  닫기
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
     </div>
   </div>
 </template>
@@ -196,6 +269,7 @@ import UserVideo from '@/components/video/UserVideo';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import {consulting} from "@/api/consulting.js";
+import { API_BASE_URL } from "@/config";
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -242,13 +316,21 @@ export default {
       page: 1,
       itemsPerPage: 4,
 
+      // 스냅샷 영역
+      canvas:null,
+      snapshotDialog:false,
+
+      // 앨범
+      albumDialog:false,
+      IMG_BASE_URL: API_BASE_URL + "/consultings/snapshot",
+
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
     }
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo","isShare"]),
+    ...mapState("consultingStore",["participants","consultingInfo","snapshotList"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -264,7 +346,7 @@ export default {
   mounted() {
     // 뒤로가기 막기
     this.preventBack();
-
+    this.canvas = this.$refs.snapshot_canvas;
     // this.mySessionId = this.host_no;
     console.log("넘겨받은 값");
     this.nickname = this.$route.params.nickname;
@@ -294,11 +376,13 @@ export default {
       console.log(data);
       this.SET_CONSULTING_INFO(data.content);
       console.log(this.consultingInfo.title);
+      this.getSnapshotList();
     })
     .catch((error)=> {
       console.log("방송 정보 요청 실패");
       console.log(error);
     })
+
     console.log("조인 전에")
     console.log(this.mySessionId);
     this.INIT_CONSULTING_INFO();
@@ -317,7 +401,8 @@ export default {
     location.reload();
   },
   methods: {
-    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS"]),
+    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS",
+    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST"]),
 
     hideDrawer() {
       this.drawer = !this.drawer
@@ -414,6 +499,9 @@ export default {
           }
           this.recvList.push(msg)
           this.SET_CHATS(this.recvList);
+          // 파일 signal일 경우
+        } else if (event.type=="signal:upload") {
+          this.getSnapshotList();
         }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
@@ -491,10 +579,6 @@ export default {
 			this.camValue = !this.camValue;
 			this.publisher.publishVideo(this.camValue);
 		},
-    toggleMirror() {
-      this.mirror = !this.mirror;
-      this.publisher.mirror = this.mirror;
-    },
     toggleMosaic() {
       this.mosaicValue = !this.mosaicValue;
     },
@@ -605,6 +689,9 @@ export default {
 					.catch(error => reject(error.response));
 			});
 		},
+    showAlbum() {
+      this.albumDialog = true;
+    },
     async NAGA() {
       console.log("NAGA!");
       this.session.signal({
@@ -673,6 +760,66 @@ export default {
       let namecode = JSON.parse(sub.stream.connection.data).clientData.split(':');
       return namecode[1] == this.nickname + '님의 화면';
     },
+    captureSignal(video) {
+      this.snapshotDialog = true;
+			let context = this.canvas.getContext("2d");
+
+			context.drawImage(video, 0, 0, 320,240);
+      console.log("캡쳐 완료");
+    },
+    upload() {
+      const imgBase64 = this.canvas.toDataURL('image/jpeg','multipart/form-data');
+			const decodImg = atob(imgBase64.split(',')[1]);
+
+			let array = [];
+			for (let i = 0; i < decodImg.length; i++) {
+				array.push(decodImg.charCodeAt(i));
+			}
+
+			const file = new Blob([ new Uint8Array(array) ], {
+				type : 'image/jpeg'
+			});
+			const fileName = 'web_snapshot_'+Date.now()+'.jpg';
+			let formData = new FormData();
+			formData.append('file', file, fileName);
+      formData.append('consulting_no',this.consulting_no);
+      console.log(formData);
+
+      consulting.uploadSnapshot(formData)
+      .then(response=> {
+        console.log(response);
+        this.session.signal({
+          data: JSON.stringify({
+          message:"파일 업로드 완료"
+          }),
+          to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: 'upload'             // The type of message (optional)
+          })
+            .then(() => {
+              console.log('upload Message successfully sent');
+              this.message = "";
+            })
+            .catch(error => {
+              console.error(error);
+				});
+      })
+      .catch(response => {
+        console.log(response);
+      })
+      this.snapshotDialog = false;
+    },
+    async getSnapshotList() {
+      await consulting.getConsultingSnapshots(this.consulting_no)
+      .then((data)=> {
+        console.log("스냅샷 불러오기 성공");
+        console.log(data);
+        this.SET_SNAPSHOT_LIST(data.content);
+      })
+      .catch((error)=> {
+        console.log("스냅샷 불러오기 실패");
+        console.log(error);
+      })
+    }
   }
 }
 </script>

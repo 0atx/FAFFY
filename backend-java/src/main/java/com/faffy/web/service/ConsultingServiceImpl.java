@@ -223,4 +223,13 @@ public class ConsultingServiceImpl implements ConsultingService {
         return dtoList;
     }
 
+    @Override
+    public List<Integer> getSnapshotList(int consulting_no) throws Exception {
+        Consulting consulting = getConsulting(consulting_no);
+        List<Integer> snapshotList = new ArrayList<>();
+        for (ConsultingFile file : consulting.getSnapshots()) {
+            snapshotList.add(file.getFile().getNo());
+        }
+        return snapshotList;
+    }
 }

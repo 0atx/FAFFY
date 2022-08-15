@@ -34,7 +34,7 @@ const consulting = {
       .catch(error=>reject(error.response));
     })
   },
-  uploadSnapshop : async function(formData) {
+  uploadSnapshot : async function(formData) {
     return new Promise((resolve, reject) => {
       api.post(`/consultings/snapshot`,formData,    { headers: { 'Content-Type': 'multipart/form-data' }})
       .then(response=>resolve(response.data))
@@ -45,6 +45,13 @@ const consulting = {
           reject(error.response);
       });
     });
+  },
+  getConsultingSnapshots:async function(consulting_no) {
+    return new Promise((resolve,reject)=> {
+      api.get(`/consultings/snapshots/${consulting_no}`)
+      .then(response=>resolve(response.data))
+      .catch(error=> reject(error.response));
+    })
   },
   getLatestConsultings:async function(size) {
     return new Promise((resolve,reject)=> {
