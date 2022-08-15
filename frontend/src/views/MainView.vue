@@ -208,7 +208,7 @@
               <v-data-table class="table" :headers="headers" hide-default-footer :items="latestBoardList"
                 :items-per-page="5">
                 <template v-slot:[`item.title`]="{ item }">
-                  <router-link :to="{ name: 'board-detail', params: { no: item.no } }">
+                  <router-link :to="{ name: 'board-detail', params: { boardNo: item.no } }">
                     {{ item.title }}
                   </router-link>
                 </template>
@@ -272,9 +272,6 @@ export default {
       latestConsultings:[],
       topContentLoaded:false,
       midContentLoaded:false,
-      hitBoardList: [],
-      latestBoardList: [],
-      imgBoardList: [],
       banners: [
         { name: "banner_1.png" },
         { name: "banner_2.png" },
@@ -283,6 +280,9 @@ export default {
         { name: "banner_5.png" },
         { name: "banner_6.png" },
       ],
+      hitBoardList: [],
+      latestBoardList: [],
+      imgBoardList: [],
       // slides: [
       //   {
       //     consultant:"park2",
