@@ -41,7 +41,9 @@ export default {
     ...mapGetters(boardStore, ['currentBoard']),
   },
   mounted() {
-    this.setContent()
+    this.setContent();
+    
+    console.log(this.boardNo);
   },
   methods: {
     ...mapActions(boardStore, ['fetchBoard', 'deleteBoard']),
