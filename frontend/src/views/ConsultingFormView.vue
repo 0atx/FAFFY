@@ -130,6 +130,13 @@
                 </template>
                 <span>앨범</span>
               </v-tooltip>
+<!--
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleMirror">mdi-reflect-horizontal</v-icon></v-btn>
+                </template>
+                <span>좌우 반전</span>
+              </v-tooltip> -->
 
               <v-tooltip bottom v-if="mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
@@ -523,10 +530,6 @@ export default {
 			this.camValue = !this.camValue;
 			this.publisher.publishVideo(this.camValue);
 		},
-    toggleMirror() {
-      this.mirror = !this.mirror;
-      this.publisher.mirror = this.mirror;
-    },
     toggleMosaic() {
       this.mosaicValue = !this.mosaicValue;
     },
@@ -723,7 +726,6 @@ export default {
       console.log("캡쳐 완료");
     },
     upload() {
-      console.log("#######################");
       const imgBase64 = this.canvas.toDataURL('image/jpeg','multipart/form-data');
 			const decodImg = atob(imgBase64.split(',')[1]);
 
@@ -744,12 +746,27 @@ export default {
       consulting.uploadSnapshop(formData)
       .then(response=> {
         console.log(response);
+        this.session.signal({
+          data: JSON.stringify({
+          message:"파일 업로드 완료"
+          }),
+          to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: 'upload'             // The type of message (optional)
+          })
+            .then(() => {
+              console.log('upload Message successfully sent');
+              this.message = "";
+            })
+            .catch(error => {
+              console.error(error);
+				});
       })
       .catch(response => {
         console.log(response);
       })
       this.dialog = false;
-    }
+    },
+
   }
 }
 </script>
