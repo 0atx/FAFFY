@@ -14,9 +14,10 @@
 </template>
 
 <script>
-import { mapState,mapActions } from "vuex";
+import { mapState,mapActions,mapMutations } from "vuex";
 import {follow} from "@/api/user.js";
 
+const profileStore = "profileStore";
 const authStore = "authStore";
 export default {
   name:"FollowBtn",
@@ -24,6 +25,7 @@ export default {
     user_no:Number,
   },
   computed: {
+    ...mapState(profileStore, ["userProfile"]),
     ...mapState(authStore, ["loginUser","isLogin","followingList"]),
 
     isMyProfile: function() {
@@ -47,6 +49,7 @@ export default {
   },
   methods: {
     ...mapActions(authStore,["loadFollowing"]),
+    ...mapMutations(profileStore, ["SET_USER_PROFILE_FOLLOWERCOUNT"]),
     async toggleFollow() {
       if(this.isMyProfile)
         return;
@@ -60,6 +63,7 @@ export default {
           console.log("성공");
           console.log(response);
           this.loadFollowing();
+          this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount-1);
         },
         (response)=> {
           console.log("실패");
@@ -75,6 +79,7 @@ export default {
           console.log("성공");
           console.log(response);
           this.loadFollowing();
+          this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount+1);
         },
         (response)=> {
           console.log("실패");
