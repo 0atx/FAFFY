@@ -47,7 +47,7 @@ const boardStore = {
           console.log(err)
         })
     },
-    createBoard(context, board) {
+    createBoard({ dispatch }, board) {
       axios({
         url: 'http://localhost:8082/api/boards/',
         method: 'post',
@@ -57,12 +57,17 @@ const boardStore = {
       })
         .then(res => {
           console.log(res)
-          this.$dialog.message.info('게시글이 등록되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
-          router.push({ name: 'board' })
+          // $dialog.message.info('게시글이 등록되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('게시글이 등록되었습니다.')
+          router.push({ name: 'board-detail', params: { boardNo: res.data.content.no } })
+        })
+        .then(res => {
+          console.log(res)
+          dispatch('fetchBoardList')
         })
         .catch(err => {
           console.log(err)
@@ -117,11 +122,12 @@ const boardStore = {
       })
         .then(res => {
           console.log('삭제 성공', res)
-          this.$dialog.message.info('게시글이 정상적으로 삭제되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
+          // this.$dialog.message.info('게시글이 정상적으로 삭제되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('게시글이 삭제되었습니다.')
           commit('SET_BOARD', {})
           router.push({ name: 'board' })
         })
@@ -137,11 +143,12 @@ const boardStore = {
       })
         .then(res => {
           console.log('댓글 삭제', res)
-          this.$dialog.message.info('댓글이 정상적으로 삭제되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
+          // this.$dialog.message.info('댓글이 정상적으로 삭제되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('댓글이 정상적으로 삭제되었습니다.')
           router.go(router.currentRoute)
         })
         .catch(err => {
