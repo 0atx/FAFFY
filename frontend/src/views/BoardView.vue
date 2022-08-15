@@ -72,6 +72,9 @@ export default {
   },
   created() {
     this.fetchBoardList()
+  },
+  mounted() {
+    window.scrollTo(0, 0);
   }
 }
 </script>
