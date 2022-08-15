@@ -59,6 +59,23 @@ public class ConsultingController {
         }
     }
 
+    @ApiOperation(value="방송 스냅샷 리스트 조회", notes="해당 방송 스냅샷 파일 번호 리스트 반환")
+    @GetMapping("/snapshots/{consulting_no}")
+    public ResponseEntity getConsultingSnapshotList(@PathVariable int consulting_no) {
+        HttpStatus status = HttpStatus.OK;
+        Map<String,Object> resultMap = new HashMap<>();
+
+        try {
+            List<Integer> snapshotList = consultingService.getSnapshotList(consulting_no);
+            resultMap.put("content",snapshotList);
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("msg",e.getMessage());
+        }
+
+        return new ResponseEntity(resultMap,status);
+    }
+
     @ApiOperation(value="방송 정보 조회", notes="해당 방송의 정보들을 반환")
     @GetMapping("/{no}")
     public ResponseEntity getConsulting(@PathVariable("no") int consulting_no) {

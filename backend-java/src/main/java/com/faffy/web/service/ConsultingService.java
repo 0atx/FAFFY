@@ -33,4 +33,5 @@ public interface ConsultingService {
     void finishConsulting(ConsultingFinishRequestDto deleteDto) throws  Exception;
 
     List<ConsultingGetDto> searchByKeyword(String keyword) throws Exception;
+    List<Integer> getSnapshotList(int consulting_no) throws Exception;
 }
