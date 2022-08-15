@@ -308,11 +308,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserPublicDto> searchByKeyword(String keyword) throws Exception{
+    public List<UserGetDetailDto> searchByKeyword(String keyword) throws Exception{
         List<User> users = userRepository.findByKeyword(keyword);
-        List<UserPublicDto> dtoList = new ArrayList<>();
+        List<UserGetDetailDto> dtoList = new ArrayList<>();
         for(User u : users){
-            dtoList.add(u.toPublicDto());
+            dtoList.add(u.toDetailDto());
         }
         return dtoList;
     }
