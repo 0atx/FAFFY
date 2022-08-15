@@ -5,6 +5,7 @@ const consultingStore = {
     consultingInfo:null,
     chats:[],
     isShare:false,
+    snapshotList:[],
   },
   mutations:
   {
@@ -39,6 +40,9 @@ const consultingStore = {
     },
     SET_SHARESCREEN:(state, status) => {
       state.isShare = status;
+    },
+    SET_SNAPSHOT_LIST:(state,list) => {
+      state.snapshotList = list;
     }
   }
 }

@@ -189,8 +189,8 @@
           <v-dialog eager
             v-model="snapshotDialog"
             persistent
-            max-width="800"
-            max-height="800"
+            max-width="400"
+            max-height="600"
           >
             <v-card>
               <v-card-title class="text-h5">
@@ -236,7 +236,12 @@
                 앨범
               </v-card-title>
               <v-card-text>
-                이미지보이ㅡㄴ곳
+                <div v-for="img_no in snapshotList" :key="img_no">
+                  <img
+                      :src="`${IMG_BASE_URL}/` + img_no"
+                      :alt="스냅샷"
+                  />
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -264,6 +269,7 @@ import UserVideo from '@/components/video/UserVideo';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import {consulting} from "@/api/consulting.js";
+import { API_BASE_URL } from "@/config";
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -316,6 +322,7 @@ export default {
 
       // 앨범
       albumDialog:false,
+      IMG_BASE_URL: API_BASE_URL + "/consultings/snapshot",
 
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
@@ -323,7 +330,7 @@ export default {
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo"]),
+    ...mapState("consultingStore",["participants","consultingInfo","snapshotList"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -363,18 +370,19 @@ export default {
     this.myUserName=this.loginUser.no+":"+this.loginUser.nickname;
 
     // 방송 정보 요청 후 값 세팅
-    // this.getConsultingInfo();
     consulting.getConsulting(this.consulting_no)
     .then((data)=> {
       console.log("방송 정보 요청 성공");
       console.log(data);
       this.SET_CONSULTING_INFO(data.content);
       console.log(this.consultingInfo.title);
+      this.getSnapshotList();
     })
     .catch((error)=> {
       console.log("방송 정보 요청 실패");
       console.log(error);
     })
+
     console.log("조인 전에")
     console.log(this.mySessionId);
     this.INIT_CONSULTING_INFO();
@@ -393,7 +401,8 @@ export default {
     location.reload();
   },
   methods: {
-    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS","INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS"]),
+    ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS",
+    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST"]),
 
     hideDrawer() {
       this.drawer = !this.drawer
@@ -492,7 +501,7 @@ export default {
           this.SET_CHATS(this.recvList);
           // 파일 signal일 경우
         } else if (event.type=="signal:upload") {
-          this.getConsultingInfo();
+          this.getSnapshotList();
         }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
@@ -776,7 +785,7 @@ export default {
       formData.append('consulting_no',this.consulting_no);
       console.log(formData);
 
-      consulting.uploadSnapshop(formData)
+      consulting.uploadSnapshot(formData)
       .then(response=> {
         console.log(response);
         this.session.signal({
@@ -799,16 +808,15 @@ export default {
       })
       this.snapshotDialog = false;
     },
-    async getConsultingInfo() {
-      await consulting.getConsulting(this.consulting_no)
+    async getSnapshotList() {
+      await consulting.getConsultingSnapshots(this.consulting_no)
       .then((data)=> {
-        console.log("방송 정보 요청 성공");
+        console.log("스냅샷 불러오기 성공");
         console.log(data);
-        this.SET_CONSULTING_INFO(data.content);
-        console.log(this.consultingInfo.title);
+        this.SET_SNAPSHOT_LIST(data.content);
       })
       .catch((error)=> {
-        console.log("방송 정보 요청 실패");
+        console.log("스냅샷 불러오기 실패");
         console.log(error);
       })
     }
