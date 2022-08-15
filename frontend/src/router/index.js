@@ -91,7 +91,7 @@ const routes = [
   {
     path: "/consulting/onair",
     name: "consulting-onair",
-    component: () => import("@/views/ConsultingFormView.vue"),
+    component: () => import("@/views/ConsultingView.vue"),
   },
   {
     path: "/board",
