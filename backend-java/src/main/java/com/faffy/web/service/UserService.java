@@ -101,5 +101,5 @@ public interface UserService {
 
     User getUserByEmailBirthday(String email, LocalDate birthday);
 
-    List<UserPublicDto> searchByKeyword(String keyword) throws Exception;
+    List<UserGetDetailDto> searchByKeyword(String keyword) throws Exception;
 }
