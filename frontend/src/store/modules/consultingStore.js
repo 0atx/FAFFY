@@ -4,6 +4,7 @@ const consultingStore = {
     participants:[],
     consultingInfo:null,
     chats:[],
+    isShare:false,
   },
   mutations:
   {
@@ -35,6 +36,9 @@ const consultingStore = {
     },
     SET_CHATS:(state,chatArray)=> {
       state.chats = chatArray;
+    },
+    SET_SHARESCREEN:(state, status) => {
+      state.isShare = status;
     }
   }
 }

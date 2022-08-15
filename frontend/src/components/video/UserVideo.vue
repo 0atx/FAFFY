@@ -1,15 +1,25 @@
 <template>
-<div v-if="streamManager" style="position:relative;">
-	<ov-video :stream-manager="streamManager" ref="ov_video"/>
-    <div class="nameTag">
-      <p>{{ clientData.nickname }}</p>
-      <button @click="capture">캡쳐</button>
+  <div>
+    <div v-if="streamManager" style="position:relative;">
+      <ov-video :stream-manager="streamManager" ref="ov_video"/>
+      <div v-if="!clientData.nickname.includes('화면')" class="nameTag">
+        <p>{{ clientData.nickname }}
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn @click="capture" x-small elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="ml-2"><v-icon color="#fff">mdi-camera</v-icon></v-btn>
+            </template>
+            <span>사진 촬영</span>
+          </v-tooltip>
+        </p>
+      </div>
+        <!--
+        <div>
+          <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
+          <button @click="upload">전송</button>
+        </div>
+        -->
     </div>
-    <!-- <div>
-    <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
-    <button @click="upload">전송</button>
-    </div> -->
-</div>
+  </div>
 </template>
 
 <script>
@@ -30,6 +40,7 @@ export default {
 	computed: {
 		clientData () {
 			const user = this.getConnectionData();
+      console.log("user: " + user.nickname)
 			return user;
 		},
 	},
@@ -122,8 +133,12 @@ div > p {
   background-color: #ff7451;
   color: white;
   font-size: 1vw;
-  /* position: absolute; */
+  position: absolute;
   top: 5%;
   left: 5%;
+}
+
+.v-btn::before {
+  background-color: transparent;
 }
 </style>
