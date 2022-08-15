@@ -67,7 +67,7 @@
                     <td>{{ checkUserInfo.nickname === consulting.consultant ? "진행" : "참여" }}</td>
                     <td>{{ consulting.title }}</td>
                     <td>{{ consulting.consultant }}</td>
-                    <td>{{ consulting.date }}</td>
+                    <td>{{ consulting.date.replaceAll('-', '.').slice(0, 10) }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -127,9 +127,9 @@
                     style="cursor: pointer"
                     @click="boardDetail(board.no)"
                   >
-                    <td>{{ board.category }}</td>
+                    <td>{{ type[board.category] }}</td>
                     <td>{{ board.title }}</td>
-                    <td>{{ board.date }}</td>
+                    <td>{{ board.dateTime.replaceAll('-', '.').slice(0, 10) }}</td>
                     <td>{{ board.hit }}</td>
                   </tr>
                 </tbody>
@@ -153,6 +153,11 @@ const authStore = "authStore";
 
 export default {
   name: "ProfileDetailView",
+  data() {
+    return {
+      type: {'Free': '자유', 'QnA': '질문', 'Info': '정보'},
+    }
+  },
   computed: {
     ...mapState(profileStore, ["userProfile"]),
     ...mapGetters(profileStore, ["userBoardList", "participatedList","consultingList"]),
@@ -168,9 +173,6 @@ export default {
     isBoardExist() {
       return !_.isEmpty(this.userBoardList)
     }
-  },
-  data() {
-    return {};
   },
   methods: {
     historyDetail(consulting_no) {
