@@ -50,6 +50,9 @@ const profileStore = {
     },
     RESET_SNAPSHOT: (state) => {
       state.snapshotList = []
+    },
+    SET_USER_PROFILE_FOLLOWERCOUNT: (state, followerCnt) => {
+      state.userProfile.followerCount = followerCnt;
     }
 
   },
