@@ -12,14 +12,14 @@
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
                 <div style="margin: 0 5%;">
-                  <user-video id="myWebcam" style=" width: 500px; height: 360px; object-fit: fill;" :stream-manager="publisher"/>
+                  <user-video id="myWebcam" style="width: 500px; height: 360px;" :stream-manager="publisher"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" style="object-fit: fill;" v-if="checkScreen(sub)" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
-                <user-video id="myWebcam" style="width: 500px; height: 360px; object-fit: fill; margin:0 auto;" :stream-manager="publisher"/>
+                <user-video id="myWebcam" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="publisher"/>
               </div>
             </div>
             <div>
@@ -37,7 +37,7 @@
                     v-for="sub in subscribers" :key="sub.stream.connection.connectionId"
                     style="margin: 13px;"
                   >
-                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px; object-fit: fill;" :stream-manager="sub"/>
+                  <user-video v-if="!checkScreen(sub)" style="width: 331px; height: 260px;" :stream-manager="sub"/>
                   </v-slide-item>
                 </v-slide-group>
               </v-sheet>
@@ -52,16 +52,16 @@
             </v-btn>
             <div style="width: 100%; height:360px;">
               <div v-if="isShare" style="display:flex; justify-content:center;" id="mainVideo" class="mb-3">
-                <div style="margin: 0 5%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; object-fit: fill;" :stream-manager="sub"/>
+                <div style="margin: 0 2%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px;" :stream-manager="sub"/>
                 </div>
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="object-fit: fill;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && checkScreen(sub)" style="height: 360px;" :stream-manager="sub"/>
                 </div>
               </div>
               <div v-else id="mainVideo" class="mb-3">
                 <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId">
-                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; object-fit: fill; margin:0 auto;" :stream-manager="sub"/>
+                  <user-video id="myWebcam" v-if="checkHost(sub) && !checkScreen(sub)" style="width: 500px; height: 360px; margin:0 auto;" :stream-manager="sub"/>
                 </div>
               </div>
             </div>
