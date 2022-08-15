@@ -15,8 +15,8 @@
                 <v-list-item-title style="font-weight: 600; font-size:22px;" class="mt-1 mb-1">
                   {{consultingInfo.title}}
                 </v-list-item-title>
-                <v-list-item-subtitle style="font-size:16px; text-align:right">
-                  방송 시작 : {{ consultingInfo.startTime }}  <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
+                <v-list-item-subtitle style="font-size:16px; width:90px;">
+                  <div style="width:90px; float:right;"><v-icon style="margin-bottom:1px;" color="#666" small> mdi-broadcast </v-icon> {{ time }}</div>  <!-- db 왓다갓다 할 바엔 그냥 여기서 카운트하는게 나을듯 -->
                 </v-list-item-subtitle>
               </div>
 
@@ -114,8 +114,15 @@ export default {
     replaceByDefault: defaultProfileSetter.replaceByDefault,
 
     updateTime() {
+      //19:37:00방송 시작 : 2022-08-14T19:28:19
+      var startDate = this.consultingInfo.startTime.replaceAll('-', '/').replace('T', ' ');
+      var sd = new Date(startDate);
       var cd = new Date();
-      this.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ":" + this.zeroPadding(cd.getSeconds(), 2);
+
+      var diffHour = Math.floor(((cd.getTime() - sd.getTime()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var diffMin = Math.floor(((cd.getTime() - sd.getTime()) % (1000 * 60 * 60)) / (1000 * 60));
+      var diffSec = Math.floor(((cd.getTime() - sd.getTime()) % (1000 * 60)) / (1000));
+      this.time = this.zeroPadding(diffHour, 2) + ':' + this.zeroPadding(diffMin, 2) + ":" + this.zeroPadding(diffSec, 2);
     },
 
     zeroPadding(num, digit) {
@@ -148,7 +155,7 @@ export default {
 }
 
 img {
-  object-fit: cover;
+  object-fit: fill;
 }
 
 #categoryChips {

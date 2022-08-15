@@ -5,7 +5,7 @@
 <template>
   <v-card id="header" class="overflow-hidden">
     <v-app-bar
-      style="padding: 0px 10% 0px 10%;"
+      id="appBar"
       color="white"
     >
 
@@ -13,7 +13,6 @@
       <img
         class="logo"
         alt="faffy logo"
-        style="cursor:pointer; padding-bottom:2px;"
         src="@/assets/images/faffy_logo.png"
         @click="toMain"
       >
@@ -22,7 +21,7 @@
 
       <!-- 검색 바 -->
       <search-bar
-        style="margin-left:9%"
+        id="searchBar"
       />
 
       <v-spacer></v-spacer>
@@ -31,7 +30,6 @@
       <div style="display:flex;align-items:center" v-if="loginUser">
         <v-btn
           v-if="!isOnAir"
-          style="font-size:16px;width:80px"
           class="mr-1"
           id="consultBtn"
           rounded
@@ -44,7 +42,6 @@
 
         <v-btn
           v-else
-          style="font-size:16px;width:80px"
           class="mr-1"
           id="consultBtn"
           rounded
@@ -56,7 +53,6 @@
         </v-btn>
 
         <v-btn
-          style="font-size:16px;width:80px"
           class="mr-1"
           id="signOutBtn"
           rounded
@@ -74,7 +70,7 @@
           :ripple="false"
           @click="toMyProfile"
         >
-          <profile-img-avatar class="ml-8" :user_no="loginUser.no" />
+          <profile-img-avatar id="avatar" class="ml-8" :user_no="loginUser.no" />
         </v-btn>
       </div>
 
@@ -155,6 +151,67 @@ export default {
   z-index: 2;
 }
 
+#appBar {
+  padding: 0px 10%;
+}
+
+.logo {
+  cursor:pointer;
+  padding-bottom:2px;
+}
+
+#searchBar {
+  margin-left: 9%;
+}
+
+@media (max-width: 600px) {
+  img {
+    width: 60px;
+  }
+
+  #signInBtn {
+    width: 40px;
+  }
+
+  #signUpBtn {
+    width: 40px;
+  }
+
+  #consultBtn {
+    background-color: #fff;
+    color: #0c0f66;
+    font-size:14px;
+    width:70px !important;
+    text-decoration: none;
+  }
+
+  #signOutBtn {
+    background-color: #fff;
+    font-size:14px;
+    width:70px !important;
+    color: #ff4c20;
+  }
+
+  .spacer {
+    width: 10px !important;
+    flex-grow: 0;
+  }
+
+  #searchBar {
+    margin-left: 0%;
+    width: 100px !important;
+  }
+
+  #appBar {
+    padding: 0 !important;
+  }
+
+  .v-toolbar__content {
+    padding: 4px 0px !important;
+  }
+
+}
+
 #signInBtn {
   background-color: #ff4c20;
   color: #fff;
@@ -168,11 +225,15 @@ export default {
 #consultBtn {
   background-color: #fff;
   color: #0c0f66;
+  font-size:16px;
+  width:80px;
   text-decoration: none;
 }
 
 #signOutBtn {
   background-color: #fff;
+  font-size:16px;
+  width:80px;
   color: #ff4c20;
 }
 

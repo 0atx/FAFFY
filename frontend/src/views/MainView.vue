@@ -489,6 +489,7 @@ export default {
 #view {
   background-color: white;
   padding: 0 5%;
+  width:100%;
   text-align: left;
 }
 
@@ -500,7 +501,7 @@ export default {
   align-items:center;
 }
 
-.carousel-ed-container template {
+.carousel-3d-container template {
   margin: 0;
 }
 
@@ -599,8 +600,8 @@ a {
   );
 }
 
-#introduce {
-  height: 80px;
+#intro {
+  height: 100px;
   display: flex;
   padding: 0;
   justify-content: flex-start;
