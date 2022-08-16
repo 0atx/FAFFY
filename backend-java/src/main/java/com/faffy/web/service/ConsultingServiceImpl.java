@@ -228,6 +228,7 @@ public class ConsultingServiceImpl implements ConsultingService {
         List<Consulting> consultings = consultingRepository.findByKeyword(keyword);
         List<ConsultingGetDto> dtoList = new ArrayList<>();
         for(Consulting c : consultings){
+            if(c.getEndTime() != null) continue;
             List<ConsultingCategory> categoryList = consultingCategoryRepository.findByConsulting(c);
             List<String> categories = new ArrayList<>();
             for(ConsultingCategory cc : categoryList){
