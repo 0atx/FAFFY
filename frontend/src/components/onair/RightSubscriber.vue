@@ -35,7 +35,7 @@
             </v-btn>
           </v-list-item-title>
           <!-- <v-list-item-title>컨설턴트 : {{ host.nickname }}</v-list-item-title> -->
-          <v-list-item-title>참여 인원 : {{ participants.length+1 }} / {{ participantsLimit }}</v-list-item-title>
+          <v-list-item-title>참여 인원 : {{ participants.length+1 }} / {{ consultingInfo.roomSize }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -74,15 +74,10 @@ export default {
 	name: 'rightSubscriber',
   computed:{
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants"]),
+    ...mapState("consultingStore",["participants","consultingInfo"]),
   },
   components: {
     ProfileImgAvatar
-  },
-  data() {
-    return {
-      participantsLimit: 10,
-    }
   },
   methods: {
     moveProfile(userNo) {
