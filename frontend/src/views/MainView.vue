@@ -194,7 +194,7 @@
               <v-data-table class="table" :headers="headers" hide-default-footer :items="hitBoardList"
                 :items-per-page="5">
                 <template v-slot:[`item.title`]="{ item }">
-                  <router-link :to="{ name: 'board-detail', params: { no: item.no } }">
+                  <router-link :to="{ name: 'board-detail', params: { boardNo: item.no } }">
                     {{ item.title }}
                   </router-link>
                 </template>
