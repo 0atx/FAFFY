@@ -42,10 +42,10 @@
 
                   <!-- 컨설턴트 닉네임 / 참여 인원 -->
                   <v-list-item-subtitle class="mb-1">
-                    {{ consulting.host }}
+                    {{ consulting.consultant }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle style="font-size: 12px;">
-                    <v-icon small>mdi-account-multiple</v-icon> {{ consulting.currentMember }} / {{ consulting.memberLimit }}
+                    <v-icon small>mdi-account-multiple</v-icon> {{ consulting.viewCount }} / {{ consulting.roomSize }}
                   </v-list-item-subtitle>
                 </div>
               </div>
@@ -68,7 +68,7 @@
               <v-expand-transition>
                 <div>
                   <v-card-text class="pt-0 pb-0 intro" v-show="!consulting.show">
-                    2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면
+                    {{consulting.intro}}
                     <v-btn
                       icon
                       class="iconBtn"
