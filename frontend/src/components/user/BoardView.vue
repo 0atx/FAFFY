@@ -18,12 +18,12 @@
             <v-tab
               :id="selected === 1 ? 'selectedBtn' : 'selectBtn'"
               @click="selected = 1"
-              >Q&A</v-tab
+              >자유</v-tab
             >
             <v-tab
               :id="selected === 2 ? 'selectedBtn' : 'selectBtn'"
               @click="selected = 2"
-              >자유</v-tab
+              >Q&A</v-tab
             >
             <v-tab
               :id="selected === 3 ? 'selectedBtn' : 'selectBtn'"
@@ -35,20 +35,50 @@
 
         <div>
           <!-- 카테고리별 작성 게시글 리스트 selected로 카테고리 구분해서 출력할 것 -->
-          <v-data-table
-            id="table"
-            :headers="headers"
-            hide-default-footer
-            :items="boardType"
-            :items-per-page="itemsPerPage"
-            :page.sync="page"
-            @page-count="pageCount = $event"
-            @click:row="boardDetail"
-            style="cursor: pointer"
-          ></v-data-table>
+          <v-simple-table v-if="boardType.length != 0">
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-start" width="65%">
+                    제목
+                  </th>
+                  <th class="text-start" width="10%">
+                    댓글 수
+                  </th>
+                  <th class="text-start" width="15%">
+                    작성 일자
+                  </th>
+                  <th class="text-start" width="10%">
+                    조회수
+                  </th>
+                </tr>
+              </thead>
+              <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+              <tbody>
+                <tr
+                  v-for="(board,i) in boardType"
+                  :key="i"
+                  style="cursor: pointer"
+                  @click="boardDetail(board.no)"
+                >
+                  <td>{{ board.title }}</td>
+                  <td><v-icon small> mdi-comment-processing-outline </v-icon> {{ board.commentCount }}</td>
+                  <td>{{ board.dateTime.replaceAll('-', '.').slice(0, 10) }}</td>
+                  <td><v-icon small> mdi-eye </v-icon> {{ board.hit }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+
+          <v-col v-else style="height:600px; display:flex; justify-content:center; align-items:center;" cols="12">
+            <div style="text-align:center;">
+              <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+              <h4>{{ nodata }}</h4>
+            </div>
+          </v-col>
 
           <!-- pagination -->
-          <div class="text-center pt-4">
+          <div v-if="boardType.length != 0" class="text-center pt-4">
             <v-pagination
               circle
               color="#0c0f66"
@@ -72,7 +102,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "게시글 제목", align: "start", value: "title" },
+        { text: "제목", align: "start", value: "title" },
         { text: "댓글 수", value: "commentCount" },
         { text: "작성 일자", value: "dateTime" },
         { text: "조회수", value: "hit" },
@@ -82,10 +112,12 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
+      boardDate: [],
 
-      // 카테고리 판별하는 변수 Q&A : 1, 자유 : 2, 정보 : 3
+      // 카테고리 판별하는 변수 자유 : 1, Q&A : 2, 정보 : 3
       selected: 1,
-      types: {1: 'QnA', 2: 'Free', 3: 'Info'}
+      types: {1: 'Free', 2: 'QnA', 3: 'Info'},
+      nodata: '작성한 게시글이 없습니다.'
     };
   },
   methods: {
@@ -98,6 +130,13 @@ export default {
     ...mapGetters(profileStore, ['userBoardList']),
     boardType () {
       return this.userBoardList.filter(board => board.category === this.types[this.selected])
+    }
+  },
+  watch: {
+    selectd() {
+      for (var i = 0; i < this.userBoardList.length; i++) {
+        this.boardDate[i] = this.latestBoardList[i].dateTime = this.latestBoardList[i].dateTime.substr(0, 10).replaceAll('-','.');
+      }
     }
   }
 };

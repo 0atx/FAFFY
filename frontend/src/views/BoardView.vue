@@ -65,7 +65,7 @@ export default {
       }
 
       if(this.boardType === "정보") {
-        this.content = "최근 유행하는 패션 트렌드를 공유해주세요."
+        this.content = "최근 유행하는 패션 트렌드를 공유해보세요."
         return;
       }
     },

@@ -2,18 +2,20 @@
   <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">게시판 검색 결과</h2>
-      <v-col
-        class="d-flex"
-        cols="2"
+      <div
+        class="pt-0"
       >
         <v-select
+          style="width:50%; float:right;"
           :items="items"
           label="정렬 기준"
+          color="#0c0f66"
           dense
-          solo
+          outlined
+          hide-details
           v-model="sortBy"
         ></v-select>
-      </v-col>
+      </div>
     </v-row>
 
     <!-- 게시글 검색 목록 -->
@@ -99,7 +101,7 @@ export default {
       itemsPerPage: 5,
       totalVisible: 7,
       typeList: { 'Free': '자유', 'QnA': '질문', 'Info': '정보' },
-      items: ['카테고리', '제목', '작성일자', '조회수'],
+      items: ['제목', '조회수', '카테고리', '작성일자'],
       sortBy: '',
       type: { '카테고리': 'category', '제목': 'title', '작성일자': 'dateTime', '조회수': 'hit' }
     }
