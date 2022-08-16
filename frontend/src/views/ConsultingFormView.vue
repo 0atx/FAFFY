@@ -97,7 +97,7 @@
         <!-- 중단 옵션 영역 -->
         <div id="centerOption" class="grey lighten-2">
             <div id="optionButton" class="grey lighten-1">
-              <v-tooltip bottom v-if="audioValue">
+              <v-tooltip bottom v-if="!audioValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone</v-icon></v-btn>
                 </template>
@@ -111,7 +111,7 @@
               <span>음소거 해제</span>
               </v-tooltip>
 
-              <v-tooltip bottom v-if="camValue">
+              <v-tooltip bottom v-if="!camValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video</v-icon></v-btn>
                 </template>
@@ -138,7 +138,7 @@
                 <span>좌우 반전</span>
               </v-tooltip> -->
 
-              <v-tooltip bottom v-if="mosaicValue">
+              <v-tooltip bottom v-if="!mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
                 </template>
