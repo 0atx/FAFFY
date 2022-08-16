@@ -41,7 +41,8 @@ export default {
       //   this.$router.push({ name: 'search', params: { keyword: this.keyword }})
       // }
       this.$router.push({ name: 'search', params: { keyword: this.keyword }})
-      // 키워드랑 같이 검색 결과 페이지로 이동
+      // 키워드랑 같이 검색 결과 페이지로 이동, 이동 후 키워드 삭제
+      this.keyword = '';
     }
   }
 }
