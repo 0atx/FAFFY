@@ -26,7 +26,7 @@
         <v-card outlined elevation="0" class="mx-auto" max-width="344">
           <!--방송화면 or 썸네일 -->
           <v-img
-            :src="consulting.img"
+            :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`"
             height="200px"
           ></v-img>
 
@@ -128,6 +128,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import { API_BASE_URL } from "@/config";
 const searchStore = "searchStore"
 
 export default {
@@ -137,6 +138,7 @@ export default {
   },
   data() {
     return {
+      API_BASE_URL: API_BASE_URL,
       page: 1,
       itemsPerPage: 4,
       totalVisible: 7,
