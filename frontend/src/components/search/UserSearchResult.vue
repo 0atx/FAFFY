@@ -85,10 +85,10 @@
                 </td>
 
                 <!-- 팔로잉 수 -->
-                <td><v-icon small> mdi-heart </v-icon> {{ user.followings }} </td>
+                <td><v-icon small> mdi-heart </v-icon> {{ user.followingCount }} </td>
 
                 <!-- 팔로워 수 -->
-                <td><v-icon small> mdi-heart </v-icon> {{ user.followers }} </td>
+                <td><v-icon small> mdi-heart </v-icon> {{ user.followerCount }} </td>
 
               </tr>
             </tbody>
