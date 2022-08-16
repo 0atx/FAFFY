@@ -5,9 +5,8 @@
       <canvas :width="vwidth" :height="vheight" style="border-radius: 5px;" ref="canvas" :style="`display:${canvasDisplay}`"/>
       <canvas :width="vwidth" :height="vheight" style="border-radius: 5px; display:none" ref="canvasm" />
       <div v-if="!clientData.nickname.includes('화면')" class="nameTag" display="none">
+        <div style="display:none">안보이지롱{{mosaic}}</div>
         <p>{{ clientData.nickname }}
-          <button @click="mosaic">시동</button>
-
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn @click="capture" x-small elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="ml-2"><v-icon color="#fff">mdi-camera</v-icon></v-btn>
@@ -45,7 +44,8 @@ export default {
 	},
 
 	computed: {
-    ...mapState("consultingStore",["consultingInfo"]),
+    ...mapState("authStore",["loginUser"]),
+    ...mapState("consultingStore",["consultingInfo","participants","myMosaic"]),
 		clientData () {
 			const user = this.getConnectionData();
       console.log("user: " + user.nickname)
@@ -53,6 +53,9 @@ export default {
 		},
     isHost() {
       return this.clientData.no == this.consultingInfo.consultant_no;
+    },
+    isMyVideo() {
+      return this.clientData.no == this.loginUser.no;
     },
     canvasWidth() {
       if (this.clientData.no == this.consultingInfo.consultant_no)
@@ -96,6 +99,21 @@ export default {
 
       return v;
     },
+    mosaic() {
+      let v = false;
+      if (this.isMyVideo) {
+        v = this.myMosaic;
+      } else {
+        this.participants.forEach(element => {
+          if (element.no == this.clientData.no) {
+            v = element.mosaicValue;
+
+          }
+        });
+      }
+       this.changeMosaicValue(v);
+      return v;
+    }
 	},
   data() {
     return {
@@ -120,21 +138,22 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.video = this.$refs.ov_video.$refs.video;
-
-    }, 1000)
+      // this.video = this.$refs.ov_video.$refs.video;
+      this.mosaicStart();
+    }, 2000)
   },
 	methods: {
     // Mosaic On / Off
-		changeMosaicValue() {
-			this.mosaicValue = !this.mosaicValue;
+		changeMosaicValue(v) {
+			this.mosaicValue = v;
 			if (this.mosaicValue) {
-				console.log("Mosaic Off -> On");
-				console.log("on");
+        this.visibility="hidden";
+        this.mosaicStart();
 			}
 			else {
-				console.log("Mosaic On -> Off");
-				console.log("off");
+        this.visibility="visible";
+        this.mosaicStop();
+
 
 			}
 		},
@@ -146,8 +165,7 @@ export default {
         }
         return user;
 		},
-    async mosaic() {
-      console.log("mosaic 시동");
+    async mosaicStart() {
 			// video,v,str
       this.video = this.$refs.ov_video.$refs.video;
       console.log(this.video.srcObject);
@@ -156,37 +174,29 @@ export default {
       // console.log(this.video);
 
       if (this.model==undefined) {
-        console.log("model initializing");
         this.canvas = this.$refs.canvas;
         this.ctx = this.canvas.getContext("2d");
         this.canvasm = this.$refs.canvasm;
         this.ctxm = this.canvasm.getContext("2d");
         this.model = await blazeface.load();
       }
-      this.mosaicValue = !this.mosaicValue;
-      console.log(this.video.width);
-      console.log(this.video.height);
+      // this.mosaicValue = !this.mosaicValue;
+      // console.log(this.video.width);
+      // console.log(this.video.height);
 
-      if (this.mosaicValue) {
-        this.visibility="hidden";
+      // if (this.mosaicValue) {
         // 프레임마다 얼굴감지
-        console.log("interval go");
         this.interval = setInterval(() => {
           this.detectFaces(this.video)}, parseInt(1000/this.frame));
         // this.detectFaces(model,video,v,str)
-      } else {
-        console.log("interval stop");
-        this.visibility="visible";
+      // } else {
+      //   console.log("interval stop");
 
-        clearInterval(this.interval);
-      }
-
-
-
+      //   clearInterval(this.interval);
 		},
     async detectFaces(video) {
-			const prediction = await this.model.estimateFaces(video, false);
 			if (this.mosaicValue) {
+			const prediction = await this.model.estimateFaces(video, false);
 				// if (v.srcObject!=this.mosaicStream) {
 				// v.srcObject = this.mosaicStream;
 				// }
@@ -210,9 +220,15 @@ export default {
 				});
 			}
 		},
+    async mosaicStop() {
+        clearInterval(this.interval);
+    },
 
     capture() {
       var video = this.$refs.ov_video.$refs.video;
+
+      if (this.mosaicValue)
+        video = this.$refs.canvas;
       this.$emit('capture-event',video);
     },
 	},

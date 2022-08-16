@@ -274,7 +274,7 @@ import { API_BASE_URL } from "@/config";
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-import {OPENVIDU_URL,OPENVIIDU_SECRET} from "@/config";
+import {OPENVIDU_URL,OPENVIDU_SECRET} from "@/config";
 import {mapState,mapMutations} from "vuex";
 
 export default {
@@ -403,7 +403,7 @@ export default {
   },
   methods: {
     ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS",
-    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST"]),
+    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST","SET_MOSAIC"]),
 
     hideDrawer() {
       this.drawer = !this.drawer
@@ -460,7 +460,15 @@ export default {
           this.SET_SHARESCREEN(this.isShare);
           console.log("Screen 종료 : " + this.isShare);
         }
-
+        // 모자이크 종료시키기
+        let no = namecode[0];
+        let mosaicValue = false;
+        this.participants.forEach(element => {
+          if (element.no == no) {
+            console.log("퇴장 찾았다");
+            element.mosaicValue = mosaicValue;
+          }
+        });
         if (index >= 0) {
 					this.subscribers.splice(index, 1);
 				}
@@ -472,7 +480,7 @@ export default {
 			this.session.on('exception', ({ exception }) => {
 				console.warn(exception);
 			});
-			// 채팅 수신
+			// 시그널 수신
 			this.session.on('signal', (event) => {
         let data = JSON.parse(event.data);
         let type = event.type;
@@ -503,6 +511,17 @@ export default {
           // 파일 signal일 경우
         } else if (event.type=="signal:upload") {
           this.getSnapshotList();
+        } else if (event.type=="signal:mosaic") {
+          console.log("모자이크 신호 받았습니다");
+          console.log(data);
+          let no = data.no;
+          let mosaicValue = data.mosaicValue;
+          this.participants.forEach(element => {
+            if (element.no == no) {
+              console.log("찾았다");
+              element.mosaicValue = mosaicValue;
+            }
+          });
         }
 			});
 			// 유효한 유저 토큰으로 세션에 연결
@@ -511,7 +530,7 @@ export default {
 			// 'token' 매개 변수는 사백엔드에서 검색하여 반환해야 함
 			this.getToken(this.mySessionId).then(token => {
 
-				this.session.connect(token, { clientData: this.myUserName })
+				this.session.connect(token, { clientData: this.myUserName,mosaicValue:false, })
 					.then(() => {
 
 						// --- Get your own camera stream with the desired properties ---
@@ -582,6 +601,8 @@ export default {
 		},
     toggleMosaic() {
       this.mosaicValue = !this.mosaicValue;
+      this.SET_MOSAIC(this.mosaicValue);
+      this.mosaicSignal();
     },
 
     // 화면 공유 시작
@@ -656,7 +677,7 @@ export default {
 					}), {
 						auth: {
 							username: 'OPENVIDUAPP',
-							password: OPENVIIDU_SECRET,
+							password: OPENVIDU_SECRET,
 						},
 					})
 					.then(response => response.data)
@@ -682,7 +703,7 @@ export default {
 					.post(`${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
 						auth: {
 							username: 'OPENVIDUAPP',
-							password: OPENVIIDU_SECRET,
+							password: OPENVIDU_SECRET,
 						},
 					})
 					.then(response => response.data)
@@ -712,6 +733,7 @@ export default {
     },
     // 세션 종료
 		async leaveSession() {
+      // 무한루프 방지
       if (this.leaveTrigger) return;
       // 내가 방장일 경우 방송 종료
       if (this.isHost) {
@@ -723,6 +745,7 @@ export default {
         })
         this.NAGA();
       }
+      await this.mosaicSignal();
       // --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.disconnect();
 
@@ -765,7 +788,7 @@ export default {
       this.snapshotDialog = true;
 			let context = this.canvas.getContext("2d");
 
-			context.drawImage(video, 0, 0, 500,375);
+			context.drawImage(video, 0, 0, 500,400);
       console.log("캡쳐 완료");
     },
     upload() {
@@ -820,6 +843,22 @@ export default {
         console.log("스냅샷 불러오기 실패");
         console.log(error);
       })
+    },
+    async mosaicSignal() {
+      await this.session.signal({
+          data: JSON.stringify({
+            no:this.loginUser.no,
+            mosaicValue:this.mosaicValue,
+          }),
+          to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+          type: 'mosaic'             // The type of message (optional)
+          })
+            .then(() => {
+              console.log('mosaic signal successfully sent');
+            })
+            .catch(error => {
+              console.error(error);
+				});
     }
   }
 }
