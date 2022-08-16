@@ -238,8 +238,8 @@
               <v-col v-for="n in 4" :key="n" class="mt-2 d-flex child-flex" cols="6">
                 <figure class="imgBoard">
                   <!-- 게시글 이미지 -->
-                  <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                    :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`" aspect-ratio="1"
+                  <v-img :src= imgSrcList[n-1]
+                    :lazy-src= imgSrcList[n-1] aspect-ratio="1"
                     class="grey lighten-2">
                     <!-- 게시글 정보 -->
                     <figcaption>
@@ -296,6 +296,8 @@ export default {
       hitBoardList: [],
       latestBoardList: [],
       imgBoardList: [],
+      imgSrcList:[],
+      imgDetailList:[],
       consults: [
         {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -363,8 +365,9 @@ export default {
   },
   created: function () {
     this.getLatestBoardList(),
-      this.getHitBoardList(),
-      this.getImgBoardList()
+    this.getHitBoardList(),
+    this.getImgBoardList(),
+    this.getImgDetailList()
   },
 
   mounted() {
@@ -396,8 +399,8 @@ export default {
   },
   methods: {
     replaceByDefault: defaultProfileSetter.replaceByDefault,
-    getLatestBoardList() {
-      this.$axios.get('http://localhost:8082/api/main/board/date').then(response => {
+    getLatestBoardList() { // 최신 게시물
+      this.$axios.get(API_BASE_URL+'/main/board/date').then(response => {
         this.latestBoardList = response.data;
         // 날짜 형식 바꾸기
         for (var i = 0; i < this.latestBoardList.length; i++) {
@@ -415,8 +418,8 @@ export default {
         console.log(error)
       })
     },
-    getHitBoardList() {
-      this.$axios.get('http://localhost:8082/api/main/board/hit').then(response => {
+    getHitBoardList() { // 인기 게시물
+      this.$axios.get(API_BASE_URL+'/main/board/hit').then(response => {
         this.hitBoardList = response.data;
         // 날짜 형식 바꾸기
         for (var i = 0; i < this.latestBoardList.length; i++) {
@@ -433,13 +436,24 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-    }, getImgBoardList() {
-      this.$axios.get('http://localhost:8082/api/main/board/image').then(response => {
+    }, getImgBoardList() { // 이미지 게시물 (이미지만)
+      this.$axios.get(API_BASE_URL+'/main/board/image').then(response => {
         this.imgBoardList = response.data;
+        for (var i = 0; i < this.imgBoardList.length; i++) {
+          this.imgSrcList[i] = 'https://i7a802.p.ssafy.io/api/boards/file/'+this.imgBoardList[i];
+        }
         console.log(this.imgBoardList);
+        console.log(this.imgSrcList);
       }).catch(error => {
         console.log(error)
       })
+    },
+    getImgDetailList(){ // 이미지 게시물 디테일 (설명)
+      for(var i = 0 ; i < this.imgBoardList.length; i++)
+      this.$axios.get(API_BASE_URL+'/main/boards/'+this.imgBoardList[i]).then(response => {
+        console.log(response);
+      })
+      console.log(this.imgDetailList);
     }
   },
 };
