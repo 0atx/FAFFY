@@ -7,8 +7,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Header from '@/components/common/Header.vue'
 import Loading from '@/components/common/LoadingView.vue'
+const boardStore = "boardStore"
 
 export default {
   name: 'App',
@@ -52,13 +54,17 @@ export default {
     },
   },
   methods: {
+    ...mapActions(boardStore, ['fetchBoardList']),
     onLoading () {
       this.loading = true
       setTimeout(() => {
         this.loading = false
       }, 3000);
     }
-  }
+  },
+  created() {
+    this.fetchBoardList()
+  },
 }
 </script>
 
