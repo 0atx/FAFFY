@@ -1,6 +1,7 @@
 package com.faffy.web.jpa.repository;
 
 import com.faffy.web.jpa.entity.Board;
+import com.faffy.web.jpa.entity.BoardFile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,7 @@ public interface BoardRepository extends JpaRepository<Board,Integer> {
 
     @Query("select b from Board b where b.user.no = :userNo")
     List<Board> findByUserNo(int userNo);
+
+    @Query("select b from Board b join fetch BoardFile bf on bf.board = b order by b.datetime desc")
+    List<Board> findAllOrderByDateWithImage(Pageable pageable);
 }
