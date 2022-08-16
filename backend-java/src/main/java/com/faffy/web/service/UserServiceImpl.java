@@ -329,8 +329,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmailBirthday(String email, LocalDate birthday) {
-        return userRepository.findByEmailBirthday(email, birthday).orElse(null);
+    public User getUserByEmailName(String email, String name) {
+        return userRepository.findByEmailAndName(email, name).orElse(null);
     }
 
     @Override

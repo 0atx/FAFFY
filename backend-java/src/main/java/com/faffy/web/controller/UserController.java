@@ -5,6 +5,7 @@ import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.entity.UserCategory;
+import com.faffy.web.jpa.type.LoginType;
 import com.faffy.web.jpa.type.SocialLoginType;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.service.*;
@@ -211,15 +212,19 @@ public class UserController {
 
     @ApiOperation(value="비밀번호 찾기",notes="해당 유저의 이메일로 임시 비밀번호를 전송합니다.")
     @PutMapping("/findpwd")
-    public ResponseEntity<Map<String, Object>> findPwd(@RequestParam String email, @RequestParam String birthday) {
+    public ResponseEntity<Map<String, Object>> findPwd(@RequestBody Map<String, String> map) {
         HttpStatus status = null;
         Map<String, Object> resultMap = new HashMap<>();
         String pwd = "";
+        String email = map.get("email"), name = map.get("name");
 
-        LocalDate date = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyyMMdd"));
-        User user = userService.getUserByEmailBirthday(email, date);
+        User user = userService.getUserByEmailName(email, name);
         if(user == null){
-            resultMap.put("msg", "해당 이메일, 생일과 일치하는 유저가 없습니다.");
+            resultMap.put("msg", "해당 이메일, 이름과 일치하는 유저가 없습니다.");
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        if(user.getLoginType() != LoginType.SITE){
+            resultMap.put("msg", "해당 계정은 소셜 계정입니다. 구글 또는 네이버를 통해 비밀번호를 확인해주세요.");
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
         try {

@@ -26,8 +26,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<UserNoAndNicknameMask> findByEmailAndPassword(String email, String password);
 
-    @Query("select u from User u where u.email = :email and u.birthday = :birthday")
-    Optional<User> findByEmailBirthday(String email, LocalDate birthday);
+    @Query("select u from User u where u.email = :email and u.name = :name")
+    Optional<User> findByEmailAndName(String email, String name);
 
     @Query("select distinct u from User u left join fetch u.categories uc left join fetch uc.userCategoryMapper.category fc " +
             "where u.nickname like concat('%',:keyword,'%') " +

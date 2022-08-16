@@ -100,7 +100,7 @@ public interface UserService {
 
     boolean setUserPwdByUserEmail(String email, String pwd);
 
-    User getUserByEmailBirthday(String email, LocalDate birthday);
+    User getUserByEmailName(String email, String name);
 
     List<UserGetDetailDto> searchByKeyword(String keyword) throws Exception;
 }

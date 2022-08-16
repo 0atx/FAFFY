@@ -47,6 +47,12 @@ const auth = {
     .then(success)
     .catch(fail);
   },
+  findPwd: async function (email, name, success, fail) {
+    await api
+    .put(`/users/findpwd`,  JSON.stringify({email, name}) )
+    .then(success)
+    .catch(fail);
+  },
   updateProfile: async function(formData,success,fail) {
     await api
     .put(`/users`,
