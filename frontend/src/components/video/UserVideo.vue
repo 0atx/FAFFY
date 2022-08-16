@@ -1,14 +1,13 @@
 <template>
   <div>
     <div style="position:relative;" v-if="streamManager">
-      <ov-video :stream-manager="streamManager" ref="ov_video" :style="`visibility:${visibility}; position:${orgPosition}`"/>
-      <canvas :width="canvasWidth" :height="canvasHeight" style="border-radius: 5px;" ref="canvas" :style="`display:${canvasDisplay}`"/>
-      <canvas :width="canvasWidth" :height="canvasHeight" style="border-radius: 5px; display:none;" ref="canvasm" />
+      <ov-video :width="vwidth" :height="vheight" :stream-manager="streamManager" ref="ov_video" :style="`visibility:${visibility}; position:${orgPosition}`"/>
+      <canvas :width="vwidth" :height="vheight" style="border-radius: 5px;" ref="canvas" :style="`display:${canvasDisplay}`"/>
+      <canvas :width="vwidth" :height="vheight" style="border-radius: 5px; display:none" ref="canvasm" />
       <div v-if="!clientData.nickname.includes('화면')" class="nameTag" display="none">
         <p>{{ clientData.nickname }}
           <button @click="mosaic">시동</button>
 
-          <button @click="changeMosaicValue">작동</button>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn @click="capture" x-small elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="ml-2"><v-icon color="#fff">mdi-camera</v-icon></v-btn>
@@ -52,6 +51,9 @@ export default {
       console.log("user: " + user.nickname)
 			return user;
 		},
+    isHost() {
+      return this.clientData.no == this.consultingInfo.consultant_no;
+    },
     canvasWidth() {
       if (this.clientData.no == this.consultingInfo.consultant_no)
         return this.width;
@@ -60,7 +62,7 @@ export default {
     },
     canvasHeight() {
       if (this.clientData.no == this.consultingInfo.consultant_no)
-        return 350;
+        return this.height;
       else
         return this.height2
     },
@@ -75,7 +77,25 @@ export default {
       return "inline";
       else
       return "none";
-    }
+    },
+    vwidth() {
+      let v;
+      if (this.isHost)
+        v = this.width;
+      else
+        v = this.width2;
+
+      return v;
+    },
+    vheight() {
+      let v;
+      if (this.isHost)
+        v = this.height;
+      else
+        v = this.height2;
+
+      return v;
+    },
 	},
   data() {
     return {
@@ -83,10 +103,12 @@ export default {
       video:undefined,
       mosaicValue:false,
       frame:30,
-			width: 500,
-			height: 375,
-      width2:331,
-      height2:264.8,
+			width: 450,
+			height: 360,
+      width2:300,
+      height2:240,
+      hmul:0.9,
+      pmul:0.6,
       model:undefined,
       interval:undefined,
       canvas:undefined,
@@ -99,7 +121,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.video = this.$refs.ov_video.$refs.video;
-      this.height = 375;
+
     }, 1000)
   },
 	methods: {
@@ -128,6 +150,7 @@ export default {
       console.log("mosaic 시동");
 			// video,v,str
       this.video = this.$refs.ov_video.$refs.video;
+      console.log(this.video.srcObject);
       // console.log(this.streamManager);
       // console.log("비디오정보");
       // console.log(this.video);
@@ -141,8 +164,11 @@ export default {
         this.model = await blazeface.load();
       }
       this.mosaicValue = !this.mosaicValue;
+      console.log(this.video.width);
+      console.log(this.video.height);
+
       if (this.mosaicValue) {
-                this.visibility="hidden";
+        this.visibility="hidden";
         // 프레임마다 얼굴감지
         console.log("interval go");
         this.interval = setInterval(() => {
@@ -159,8 +185,6 @@ export default {
 
 		},
     async detectFaces(video) {
-
-
 			const prediction = await this.model.estimateFaces(video, false);
 			if (this.mosaicValue) {
 				// if (v.srcObject!=this.mosaicStream) {
@@ -168,22 +192,22 @@ export default {
 				// }
 
 				// draw the video first
-				this.ctx.drawImage(video, 0, 0, 500, 375);
+				this.ctx.drawImage(video, 0, 0, this.vwidth, this.vheight);
 				prediction.forEach((pred) => {
-				this.ctxm.drawImage(video, pred.topLeft[0] + 10, pred.topLeft[1] - 20, pred.bottomRight[0] - pred.topLeft[0] - 20,
-					pred.bottomRight[1] - pred.topLeft[1] + 60, 0, 0, 24, 16);
-				this.ctx.drawImage(this.canvasm, 0, 0, 24, 16, pred.topLeft[0] + 10, pred.topLeft[1] - 20,
-					pred.bottomRight[0] - pred.topLeft[0] - 20, pred.bottomRight[1] - pred.topLeft[1] + 60)
+          // 너비높이는 건드릴거 없음
+          let mul = this.isHost? this.hmul : this.pmul;
+          let w = pred.bottomRight[0]*mul - pred.topLeft[0]*mul;
+          let h = pred.bottomRight[1]*mul - pred.topLeft[1]*mul;
+          // video로부터 얻을때는 원래 사이즈로 취급
+          this.ctxm.drawImage(video, pred.topLeft[0], pred.topLeft[1], w/mul,h/mul,
+           0, 0, w/10,h/10);
+          // canvas에 그릴때는 해당 비율에 맞게
+          this.ctx.drawImage(this.canvasm, 0, 0, w/10, h/10, pred.topLeft[0]*mul, pred.topLeft[1]*mul,
+          w, h)
 
-				this.pre_tl = pred.topLeft;
-				this.pre_br = pred.bottomRight;
+          this.pre_tl = pred.topLeft;
+          this.pre_br = pred.bottomRight;
 				});
-				if (prediction.length==0) {
-				this.ctxm.drawImage(video, this.pre_tl[0] + 10, this.pre_tl[1] - 20, this.pre_br[0] - this.pre_tl[0] - 20,
-					this.pre_br[1] - this.pre_tl[1] + 60, 0, 0, 24, 16);
-				this.ctx.drawImage(this.canvasm, 0, 0, 24, 16, this.pre_tl[0] + 10, this.pre_tl[1] - 20,
-					this.pre_br[0] - this.pre_tl[0] - 20, this.pre_br[1] - this.pre_tl[1] + 60)
-				}
 			}
 		},
 
