@@ -47,7 +47,7 @@ export default {
 
 	computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["consultingInfo","participants","myMosaic"]),
+    ...mapState("consultingStore",["consultingInfo","participants","myMosaic","remoteValue"]),
 		clientData () {
 			const user = this.getConnectionData();
       console.log("user: " + user.nickname)
@@ -164,8 +164,6 @@ export default {
 			else {
         this.visibility="visible";
         this.mosaicStop();
-
-
 			}
 		},
 		getConnectionData () {
@@ -177,12 +175,7 @@ export default {
         return user;
 		},
     async mosaicStart() {
-			// video,v,str
       this.video = this.$refs.ov_video.$refs.video;
-      console.log(this.video.srcObject);
-      // console.log(this.streamManager);
-      // console.log("비디오정보");
-      // console.log(this.video);
 
       if (this.model==undefined) {
         this.canvas = this.$refs.canvas;
@@ -191,19 +184,10 @@ export default {
         this.ctxm = this.canvasm.getContext("2d");
         this.model = await blazeface.load();
       }
-      // this.mosaicValue = !this.mosaicValue;
-      // console.log(this.video.width);
-      // console.log(this.video.height);
 
-      // if (this.mosaicValue) {
         // 프레임마다 얼굴감지
         this.interval = setInterval(() => {
           this.detectFaces(this.video)}, parseInt(1000/this.frame));
-        // this.detectFaces(model,video,v,str)
-      // } else {
-      //   console.log("interval stop");
-
-      //   clearInterval(this.interval);
 		},
     async detectFaces(video) {
 			if (this.mosaicValue) {
@@ -247,18 +231,17 @@ export default {
 			// video,v,str
       if (!this.isMyVideo)
         return;
-			console.log("===============================----------========================")
+
 			this.model2= await tmImage.load(this.modelURL, this.metadataURL);
-			console.log("===============================----------========================")
-			// 프레임마다 얼굴감지
+
 			setInterval(() => {
 				this.motionRecognition(this.video)}, parseInt(1000/this.frame));
-			// this.detectFaces(model,video,v,str)
 
 		},
     async motionRecognition(video) {
+      if (!this.remoteValue)
+        return;
 			const prediction = await this.model2.predict(video, false);
-			// console.log(prediction[0].probability)
 			if (prediction[0].probability>0.9) {
         if (this.captureSignal == false) {
           this.$dialog.message.info('3초 후 스냅샷을 촬영합니다', {
@@ -293,8 +276,8 @@ div > p {
   color: white;
   font-size: 1vw;
   position: absolute;
-  top: 3%;
-  left: 7%;
+  top: 5%;
+  left: 5%;
 }
 
 .v-btn::before {
