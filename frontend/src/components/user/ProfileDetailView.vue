@@ -6,10 +6,10 @@
   <div id="profileDetail">
     <div>
       <div id="route">
-        <p class="text-h6" style="font-weight: 600">Profile</p>
+        <p class="text-h6" style="font-weight: 600"> 정보 </p>
       </div>
       <div id="content" class="mt-4">
-        <p class="text-h6" style="font-weight: 600">정보</p>
+        <p class="text-h6" style="font-weight: 600"> 자기소개 </p>
         <hr />
         <div id="info">
           {{ userProfile.introduce }}
@@ -76,7 +76,7 @@
           <v-col v-else style="height:300px; display:flex; justify-content:center; align-items:center;" cols="12">
             <div style="text-align:center;">
               <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
-              <h4>방송 이력이 없습니다.</h4>
+              <h4>방송 기록이 없습니다.</h4>
             </div>
           </v-col>
         </div>
