@@ -2,18 +2,20 @@
 <v-container class="d-flex flex-column">
     <v-row class="d-flex justify-space-between">
       <h2 class="ml-4">유저 검색 결과 </h2>
-      <v-col
-        class="d-flex"
-        cols="2"
+      <div
+        class="pt-0"
       >
         <v-select
+          style="width:50%; float:right;"
           :items="items"
           label="정렬 기준"
+          color="#0c0f66"
           dense
-          solo
+          outlined
+          hide-details
           v-model="sortBy"
         ></v-select>
-      </v-col>
+      </div>
     </v-row>
     <v-row>
       <v-col cols="12">

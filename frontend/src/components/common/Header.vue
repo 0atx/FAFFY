@@ -138,6 +138,11 @@ export default {
       await this.logout();
       if (!this.isLogin) {
         this.$router.push({name:"main"});
+        this.$dialog.message.info('로그아웃 되었습니다.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
       }
     },
   }

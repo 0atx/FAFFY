@@ -24,9 +24,7 @@
         </div>
 
         <!-- 이메일 중복 확인 -->
-        <v-btn id="checkEmailBtn" class="mt-2" icon>
-          <v-icon :color="checkEmailIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
-        </v-btn>
+        <v-icon id="checkEmailBtn" class="mt-2" :color="checkEmailIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
       </div>
 
       <!-- 비밀번호 입력 -->
@@ -87,9 +85,7 @@
         </div>
 
         <!-- 별명 중복 확인 -->
-        <v-btn id="checkNicknameBtn" class="mt-2" icon >
-          <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
-        </v-btn>
+        <v-icon id="checkNicknameBtn" class="mt-2" :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
       </div>
 
       <v-menu

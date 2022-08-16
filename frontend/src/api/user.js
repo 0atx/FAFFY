@@ -50,6 +50,11 @@ const consulting = {
     .then(success)
     .catch(fail);
   },
+  getConsultingHistoryByDate: async function (user_no, success, fail) {
+    await api.get(`/users/profile/${user_no}/history/date`)
+    .then(success)
+    .catch(fail);
+  },
 };
 const userBoard = {
   getUserBoardList: async function (user_no, success, fail) {

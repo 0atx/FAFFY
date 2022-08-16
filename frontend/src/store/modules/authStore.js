@@ -28,7 +28,11 @@ const authStore = {
   actions: {
     async logout({commit}) {
       await auth.logout((response) => {
-        alert("로그아웃 되었습니다.");
+        this.$dialog.message.info('로그아웃 되었습니다.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
         console.log("로그아웃 성공");
         console.log(response);
         commit("SET_USER_INFO",null);

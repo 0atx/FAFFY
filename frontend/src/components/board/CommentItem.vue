@@ -78,7 +78,12 @@ export default {
         });
       if (res) {
         console.log(`${commentNo}번 댓글을 삭제합니다.`)
-        this.deleteComment(commentNo)
+        await this.deleteComment(commentNo)
+        this.$dialog.message.info('댓글이 삭제되었습니다.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
       }
     },
     moveProfile(userNo) {

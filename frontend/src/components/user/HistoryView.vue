@@ -35,6 +35,7 @@
             id="table"
             :headers="headers"
             hide-default-footer
+            v-if="(selected && participatedList.length != 0) || (!selected && consultingList.length != 0)"
             :items="selected? participatedList : consultingList"
             :items-per-page="itemsPerPage"
             :page.sync="page"
@@ -42,10 +43,17 @@
             @click:row="historyDetail"
             style="cursor: pointer"
           ></v-data-table>
+          <v-col v-else style="height:600px; display:flex; justify-content:center; align-items:center;" cols="12">
+            <div style="text-align:center;">
+              <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+              <h4>{{ nodata }}</h4>
+            </div>
+          </v-col>
 
           <!-- pagination -->
           <div class="text-center pt-4">
             <v-pagination
+              v-if="(selected && participatedList.length != 0) || (!selected && consultingList.length != 0)"
               circle
               color="#0c0f66"
               v-model="page"
@@ -80,6 +88,7 @@ export default {
 
       // 참여 기록인지 진행 기록인지 판별하는 변수 참여 : true, 진행 : false
       selected: true,
+      nodata: '방송 참여 기록이 없습니다.'
     };
   },
   computed: {
@@ -94,6 +103,11 @@ export default {
   watch: {
     selected() {
       this.page = 1
+      if(this.selected) {
+        this.nodata = '방송 참여 기록이 없습니다.'
+      } else {
+        this.nodata = '방송 진행 기록이 없습니다.'
+      }
     }
   }
 };

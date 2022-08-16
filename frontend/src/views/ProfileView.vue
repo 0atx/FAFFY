@@ -1,10 +1,10 @@
 <template>
   <div id="view">
     <v-row id="ProfileView">
-      <v-col class="pl-0 pr-0" cols="6" md="4">
+      <v-col class="pl-0 pr-0 pb-0" cols="6" md="4">
         <profile-card />
       </v-col>
-      <v-col class="pl-0 pr-0" cols="12" md="8">
+      <v-col class="pl-0 pr-0 pb-0" cols="12" md="8">
         <router-view></router-view>
       </v-col>
     </v-row>
