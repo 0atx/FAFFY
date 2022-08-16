@@ -21,6 +21,7 @@ public interface ConsultingService {
     Consulting getConsulting(int consulting_no) throws Exception;
     List<ConsultingGetDto> getConsultingsByViewCount(Pageable pageable);
     List<ConsultingGetDto> getLatestConsultings(Pageable pageable);
+    List<ConsultingGetDto> getConsultingsByDate();
 
 
     ConsultingGetDto createConsulting(ConsultingCreateDto consultingCreateDto) throws Exception;

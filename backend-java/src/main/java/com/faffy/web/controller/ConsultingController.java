@@ -161,6 +161,7 @@ public class ConsultingController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+    @ApiOperation(value="스냅샷 찍기", notes="")
     @PostMapping("/snapshot")
     public ResponseEntity uploadSnapshot(@ModelAttribute ConsultingSnapshotUploadRequestDto uploadDto) {
         logger.info("file : {}",uploadDto.toString());
@@ -175,6 +176,7 @@ public class ConsultingController {
         return new ResponseEntity(status);
     }
 
+    @ApiOperation(value="조회순으로 진행 중인 방송 목록 불러오기", notes="파라미터로 목록의 크기를 지정")
     @GetMapping("/order/view")
     public ResponseEntity getConsultingsByViewCount(@RequestParam Integer size) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -188,6 +190,7 @@ public class ConsultingController {
         return new ResponseEntity(resultMap, status);
     }
 
+    @ApiOperation(value="최신순으로 진행 중인 방송 목록 불러오기 with size", notes="파라미터로 불러올 목록의 크기를 지정")
     @GetMapping("/order/latest")
     public ResponseEntity getLatestConsultings(@RequestParam Integer size) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -195,6 +198,19 @@ public class ConsultingController {
 
         PageRequest pageRequest = PageRequest.of(0,size);
         List<ConsultingGetDto> list = consultingService.getLatestConsultings(pageRequest);
+
+        resultMap.put("content", list);
+
+        return new ResponseEntity(resultMap, status);
+    }
+
+    @ApiOperation(value="최신순으로 진행 중인 방송 목록 불러오기", notes="파라미터 없음")
+    @GetMapping("/list")
+    public ResponseEntity getLatestConsultings() {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+
+        List<ConsultingGetDto> list = consultingService.getConsultingsByDate();
 
         resultMap.put("content", list);
 
