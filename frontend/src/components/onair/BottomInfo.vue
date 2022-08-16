@@ -2,7 +2,7 @@
 	<div id="bottomInfo">
     <v-card
       tile
-      outlined
+      elevation="0"
       style="padding:1%;"
     >
       <v-list-item>
