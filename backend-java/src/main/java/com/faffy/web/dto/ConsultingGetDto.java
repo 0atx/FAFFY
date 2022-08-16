@@ -24,5 +24,6 @@ public class ConsultingGetDto {
     private List<String> categories = new ArrayList<>();
     private int profileImageNo;
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
     
 }

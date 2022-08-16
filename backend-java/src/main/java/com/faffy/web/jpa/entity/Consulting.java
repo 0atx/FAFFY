@@ -59,6 +59,7 @@ public class Consulting extends BaseEntity {
                 .categories(categories)
                 .profileImageNo(consultant.getProfileImage() != null ? consultant.getProfileImage().getNo() : 0)
                 .startTime(this.startTime)
+                .endTime(this.endTime)
                 .build();
     }
 
