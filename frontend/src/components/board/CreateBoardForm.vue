@@ -137,7 +137,7 @@ export default {
       }
     },
     // 게시글 작성
-    submitBoard() {
+    async submitBoard() {
       let formData = new FormData()
       formData.append('title', this.boardForm.title)
       formData.append('category', this.boardCategory)
@@ -152,9 +152,19 @@ export default {
         // for (let v of formData.values()) {
         //   console.log(v)
         // }
-        this.updateBoard(formData)
+        await this.updateBoard(formData)
+        this.$dialog.message.info('게시글이 수정되었습니다.', {
+          position: "top",
+          timeout: 2000,
+          color: "#0c0f66",
+        });
       } else {
-        this.createBoard(formData)
+        await this.createBoard(formData)
+        this.$dialog.message.info('게시글이 등록되었습니다.', {
+          position: "top",
+          timeout: 2000,
+          color: "#0c0f66",
+        });
       }
     },
     async moveToDetail() {

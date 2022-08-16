@@ -8,8 +8,8 @@
   <v-container>
     <v-row>
       <v-col cols="3" class="pr-0" align="start">
-        <v-btn id="recentBtn" class="ml-0 pr-0" color="#0c0f66" text @click="sortByDate">최신 순</v-btn>
-        <v-btn id="commentBtn" class="ml-0" color="#0c0f66" text @click="sortByComments">답글 순</v-btn>
+        <v-btn id="recentBtn" class="ml-2 pl-2 pr-2" color="#0c0f66" text @click="sortByDate">최신 순</v-btn>
+        <v-btn id="commentBtn" class="ml-0 pl-2 pr-2" color="#0c0f66" text @click="sortByComments">답글 순</v-btn>
       </v-col>
       <v-col cols="7" class="pl-0" style="display:flex;" align="start">
         <!--검색 기준 선택(작성자 or 제목)-->
@@ -51,29 +51,36 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">
-                  카테고리
+                <th class="text-center" width="12%">
+                  분류
                 </th>
                 <th class="text-center">
                   제목
                 </th>
-                <th class="text-center">
+                <th class="text-center" width="8%">
                   댓글
                 </th>
-                <th class="text-center">
+                <th class="text-center" width="15%">
                   작성자
                 </th>
-                <th class="text-center">
+                <th class="text-center" width="10%">
                   작성일
                 </th>
-                <th class="text-center">
+                <th class="text-center" width="10%">
                   조회수
                 </th>
               </tr>
             </thead>
             <!--각각의 게시글, 클릭하면 상세조회로 이동-->
             <tbody>
+              <tr v-if="now.length == 0" id="noneTr" style="height:400px;">
+                <td colspan="6" style="text-align:center;">
+                  <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+                  <h4>작성된 게시글이 없습니다.</h4>
+                </td>
+              </tr>
               <tr
+                v-else
                 v-for="board in currentPage"
                 :key="board.content.no"
                 @click="boardDetail(board.no)"
@@ -92,7 +99,7 @@
       </v-col>
     </v-row>
     <!-- 페이지네이션 -->
-    <v-row>
+    <v-row v-if="now.length != 0">
       <v-col cols="12">
         <v-pagination
           circle
@@ -251,5 +258,9 @@ button {
 
 #table {
   height: 530px;
+}
+
+#noneTr:hover {
+  background-color: transparent;
 }
 </style>
