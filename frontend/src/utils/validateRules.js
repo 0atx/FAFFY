@@ -3,6 +3,12 @@ const rules = {
   require() {
     return v => !!v || '필수 입력 항목 입니다.';
   },
+  requirePassword() {
+    return v => !!v || '8~16자 영문 대 소문자, 숫자, 특수문자를 사용하여 입력하세요.';
+  },
+  requireNickname() {
+    return v => !!v || '2~10자 특수문자를 제외한 별명을 입력하세요.';
+  },
   min({len=8}) {
     return v => !!v ? v.length >= len || `${len}자 이상 입력하세요.`: true;
   },
@@ -45,7 +51,7 @@ const rules = {
     const opt = Object.assign(defaultOptions, options);
     const arr = [];
     if(opt.required) {
-      arr.push(rules.require(opt));
+      arr.push(rules.requirePassword(opt));
     }
     arr.push(rules.min(opt));
     arr.push(rules.maxlen(opt));
@@ -81,7 +87,7 @@ const rules = {
     const opt = Object.assign(defaultOptions, options);
     const arr = [];
     if(opt.required) {
-      arr.push(rules.require(opt));
+      arr.push(rules.requireNickname(opt));
     }
     arr.push(rules.min(opt));
     arr.push(rules.maxlen(opt));
