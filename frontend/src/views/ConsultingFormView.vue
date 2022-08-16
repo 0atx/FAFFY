@@ -115,13 +115,13 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video</v-icon></v-btn>
                 </template>
-                <span>비디오 중지</span>
+                <span>비디오 시작</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video-off</v-icon></v-btn>
                 </template>
-                <span>비디오 시작</span>
+                <span>비디오 중지</span>
               </v-tooltip>
 
               <v-tooltip bottom>
@@ -206,7 +206,7 @@
             max-height="600"
           >
             <v-card>
-              <v-card-title class="text-h5">
+              <v-card-title class="text-h5; font-weight: 600;">
                 캡쳐 완료!
               </v-card-title>
               <v-card-text>
@@ -216,18 +216,18 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="green darken-1"
-                  text
-                  @click="upload"
-                >
-                  업로드
-                </v-btn>
-                <v-btn
-                  color="green darken-1"
+                  color="#ff7451"
                   text
                   @click="snapshotDialog = false"
                 >
                   취소
+                </v-btn>
+                <v-btn
+                  color="#0c0f66"
+                  text
+                  @click="upload"
+                >
+                  업로드
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -245,7 +245,7 @@
             max-height="800"
           >
             <v-card>
-              <v-card-title class="text-h5">
+              <v-card-title class="text-h5; font-weight: 600;">
                 앨범
               </v-card-title>
               <v-card-text>
@@ -259,7 +259,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="green darken-1"
+                  color="#0c0f66"
                   text
                   @click="albumDialog = false"
                 >
@@ -507,7 +507,7 @@ export default {
           if (!this.isHost) {
             this.$dialog.message.info(data.message, {
               position: "top",
-              timeout: 2000,
+              timeout: 5000,
               color: "#ff7451",
             });
             console.log("okay bye");
@@ -886,7 +886,6 @@ export default {
 
 #topVideo {
   width:100%;
-  background-color: paleturquoise;
   text-align: center;
 }
 
