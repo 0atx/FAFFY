@@ -80,50 +80,6 @@ public class EmailServiceImpl implements EmailService{
             es.printStackTrace();
             throw new IllegalArgumentException();
         }
-//        try{
-//            emailSender.send(message);
-//        }catch(MailException es){
-//            es.printStackTrace();
-//            throw new IllegalArgumentException();
-//        }
         return ePw;
     }
-
-//        private MimeMessage createTempPwdMsg(String to)throws Exception{
-//        System.out.println("보내는 대상 : "+ to);
-//        System.out.println("임시 비밀번호 : "+ePw);
-//        MimeMessage message = emailSender.createMimeMessage();
-//
-//        message.addRecipients(RecipientType.TO, to);//보내는 대상
-//        message.setSubject("<FAFFY> 임시 비밀번호 입니다");//제목
-//
-//        String msgg="";
-//        msgg+= "<div style='margin:100px;'>";
-//        msgg+= "<img src='cid:logo-img'/><br>";
-//        msgg+= "<h1> 안녕하세요 FAFFY입니다. </h1>";
-//        msgg+= "<br>";
-//        msgg+= "<p>임시 비밀번호를 보내드립니다.<p>";
-//        msgg+= "<p>이 비밀번호로 로그인 하시기 바랍니다.<p>";
-//        msgg+= "<br>";
-//        msgg+= "<p>감사합니다!<p>";
-//        msgg+= "<br>";
-//        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-//        msgg+= "<h3 style='color:blue;'>임시 비밀번호 입니다.</h3>";
-//        msgg+= "<div style='font-size:130%'>";
-//        msgg+= "password : <strong>";
-//        msgg+= ePw+"</strong><div><br/> ";
-//        msgg+= "</div>";
-//
-//        //메일에 로고 이미지 추가
-//        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-//        File file = new ClassPathResource("static/FAFFY.png").getFile();
-//        System.out.println(file.getAbsolutePath());
-//        FileSystemResource fsr = new FileSystemResource(file);
-//        messageHelper.addInline("logo-img", fsr);
-//
-//        message.setText(msgg, "utf-8", "html");//내용
-//        message.setFrom(new InternetAddress("admin@faffy.com","FAFFY"));//보내는 사람
-//
-//        return message;
-//    }
 }

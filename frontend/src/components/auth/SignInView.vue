@@ -162,12 +162,22 @@ export default {
       this.$router.push({ name: "sign-up" });
     },
     findPassword() {
-      alert("기능 미구현");
-      // 이메일 존재하는지 확인
-      // 존재한다면 계정 정보(이름) 가져와서 폼에 입력된 이름이랑 맞는지 확인
-      // 이름도 같다면 변경된 비밀번호 이메일로 전송
-      // 존재하지 않거나 이름이 다르다면 오류 메세지
-      this.dialog = false;
+      // this.dialog = false;
+      auth.findPwd(
+        this.find.email, this.find.name,
+        (response) => {
+          console.log("임시 비밀번호 이메일 발신 성공");
+          console.log(response);
+          alert("임시 비밀번호가 발송되었습니다. 이메일을 확인해주세요.")
+        },
+        () => {
+          this.$dialog.message.info('해당 회원을 찾는데 실패했습니다. 이메일 및 이름을 확인하세요.', {
+            position: "top",
+            timeout: 2000,
+            color: "#ff7451",
+          });
+        }
+      )
     },
     async requestSignIn() {
       await auth.login(
