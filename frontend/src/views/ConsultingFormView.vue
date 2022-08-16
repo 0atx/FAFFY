@@ -115,13 +115,13 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video</v-icon></v-btn>
                 </template>
-                <span>비디오 시작</span>
+                <span>비디오 중지</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video-off</v-icon></v-btn>
                 </template>
-                <span>비디오 중지</span>
+                <span>비디오 시작</span>
               </v-tooltip>
 
               <v-tooltip bottom>
@@ -151,15 +151,15 @@
                 <span>모자이크 해제</span>
               </v-tooltip>
 
-              <v-tooltip bottom v-if="true">
+              <v-tooltip bottom v-if="!remoteValue">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
                 </template>
                 <span>모션 인식 촬영</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
                 </template>
                 <span>모션 인식 해제</span>
               </v-tooltip>
@@ -206,7 +206,7 @@
             max-height="600"
           >
             <v-card>
-              <v-card-title class="text-h5; font-weight: 600;">
+              <v-card-title class="text-h5">
                 캡쳐 완료!
               </v-card-title>
               <v-card-text>
@@ -216,18 +216,18 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="#ff7451"
-                  text
-                  @click="snapshotDialog = false"
-                >
-                  취소
-                </v-btn>
-                <v-btn
-                  color="#0c0f66"
+                  color="green darken-1"
                   text
                   @click="upload"
                 >
                   업로드
+                </v-btn>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="snapshotDialog = false"
+                >
+                  취소
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -245,7 +245,7 @@
             max-height="800"
           >
             <v-card>
-              <v-card-title class="text-h5; font-weight: 600;">
+              <v-card-title class="text-h5">
                 앨범
               </v-card-title>
               <v-card-text>
@@ -259,7 +259,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="#0c0f66"
+                  color="green darken-1"
                   text
                   @click="albumDialog = false"
                 >
@@ -313,6 +313,7 @@ export default {
 			camValue: true,
 			audioValue: true,
       mosaicValue:false,
+      remoteValue:false,
       isHost:false,
       isShare:false,
 			mySessionId: "",
@@ -362,12 +363,9 @@ export default {
     // 뒤로가기 막기
     this.preventBack();
     this.canvas = this.$refs.snapshot_canvas;
-    // this.mySessionId = this.host_no;
-    console.log("넘겨받은 값");
+
     this.nickname = this.$route.params.nickname;
     this.consulting_no = this.$route.params.consulting_no;
-    console.log(this.nickname);
-    console.log(this.consulting_no);
 
     // 비정상 접근 감지
     if (this.nickname == undefined) {
@@ -387,23 +385,32 @@ export default {
     // 방송 정보 요청 후 값 세팅
     consulting.getConsulting(this.consulting_no)
     .then((data)=> {
-      console.log("방송 정보 요청 성공");
-      console.log(data);
-      this.SET_CONSULTING_INFO(data.content);
-      console.log(this.consultingInfo.title);
+      data = data.content;
+      // 이미 종료된 방송인지 확인
+      if (data.endTime != null)
+      {
+        alert("이미 종료된 방송입니다.");
+        this.$router.push('/');
+        return;
+      } // 시청자 수 체크
+      else if (data.roomSize <= data.viewCount) {
+        alert("최대 인원수를 초과했습니다.");
+        this.$router.push('/');
+        return;
+      }
+
+      this.SET_CONSULTING_INFO(data);
       this.getSnapshotList();
     })
-    .catch((error)=> {
-      console.log("방송 정보 요청 실패");
-      console.log(error);
+    .catch(()=> {
     })
 
-    console.log("조인 전에")
-    console.log(this.mySessionId);
+
     this.INIT_CONSULTING_INFO();
     this.INIT_PARTICIPANTS();
     this.SET_CHATS([]);
     this.joinSession();
+    this.updateViewCount();
       // 방장인지 체크
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
@@ -417,7 +424,7 @@ export default {
   },
   methods: {
     ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS",
-    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST","SET_MOSAIC"]),
+    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST","SET_MOSAIC","SET_REMOTE"]),
 
     hideDrawer() {
       this.drawer = !this.drawer
@@ -462,6 +469,8 @@ export default {
 
         console.log("subscrobers stream");
         this.SET_PARTICIPANTS(this.subsNoScreen);
+        // 시청자 수 업데이트
+        this.updateViewCount();
 			});
 
 			// 끝낸 모든 스트림들에 대해서
@@ -487,6 +496,7 @@ export default {
 					this.subscribers.splice(index, 1);
 				}
         this.SET_PARTICIPANTS(this.subscribers);
+        this.updateViewCount();
 
 			});
 
@@ -505,12 +515,7 @@ export default {
         // 방송 종료 signal일 경우
         if (event.type == "signal:naga") {
           if (!this.isHost) {
-            this.$dialog.message.info(data.message, {
-              position: "top",
-              timeout: 5000,
-              color: "#ff7451",
-            });
-            console.log("okay bye");
+            confirm("방송이 종료되었습니다.");
             this.leaveSession();
           }
         // 채팅 signal일 경우
@@ -526,13 +531,10 @@ export default {
         } else if (event.type=="signal:upload") {
           this.getSnapshotList();
         } else if (event.type=="signal:mosaic") {
-          console.log("모자이크 신호 받았습니다");
-          console.log(data);
           let no = data.no;
           let mosaicValue = data.mosaicValue;
           this.participants.forEach(element => {
             if (element.no == no) {
-              console.log("찾았다");
               element.mosaicValue = mosaicValue;
             }
           });
@@ -617,6 +619,10 @@ export default {
       this.mosaicValue = !this.mosaicValue;
       this.SET_MOSAIC(this.mosaicValue);
       this.mosaicSignal();
+    },
+    toggleRemote() {
+      this.remoteValue = !this.remoteValue;
+      this.SET_REMOTE(this.remoteValue);
     },
 
     // 화면 공유 시작
@@ -873,6 +879,9 @@ export default {
             .catch(error => {
               console.error(error);
 				});
+    },
+    async updateViewCount() {
+      await consulting.setViewCount(this.participants.length+1,this.consulting_no);
     }
   }
 }
@@ -886,6 +895,7 @@ export default {
 
 #topVideo {
   width:100%;
+  background-color: paleturquoise;
   text-align: center;
 }
 
