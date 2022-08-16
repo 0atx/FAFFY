@@ -151,15 +151,15 @@
                 <span>모자이크 해제</span>
               </v-tooltip>
 
-              <v-tooltip bottom v-if="true">
+              <v-tooltip bottom v-if="!remoteValue">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
                 </template>
                 <span>모션 인식 촬영</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
                 </template>
                 <span>모션 인식 해제</span>
               </v-tooltip>
@@ -313,6 +313,7 @@ export default {
 			camValue: true,
 			audioValue: true,
       mosaicValue:false,
+      remoteValue:false,
       isHost:false,
       isShare:false,
 			mySessionId: "",
@@ -423,7 +424,7 @@ export default {
   },
   methods: {
     ...mapMutations("consultingStore",["INIT_CONSULTING_INFO","SET_CONSULTING_INFO","SET_PARTICIPANTS",
-    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST","SET_MOSAIC"]),
+    "INIT_PARTICIPANTS","SET_SHARESCREEN","SET_CHATS","SET_SNAPSHOT_LIST","SET_MOSAIC","SET_REMOTE"]),
 
     hideDrawer() {
       this.drawer = !this.drawer
@@ -514,12 +515,7 @@ export default {
         // 방송 종료 signal일 경우
         if (event.type == "signal:naga") {
           if (!this.isHost) {
-            this.$dialog.message.info(data.message, {
-              position: "top",
-              timeout: 2000,
-              color: "#ff7451",
-            });
-            console.log("okay bye");
+            confirm("방송이 종료되었습니다.");
             this.leaveSession();
           }
         // 채팅 signal일 경우
@@ -535,13 +531,10 @@ export default {
         } else if (event.type=="signal:upload") {
           this.getSnapshotList();
         } else if (event.type=="signal:mosaic") {
-          console.log("모자이크 신호 받았습니다");
-          console.log(data);
           let no = data.no;
           let mosaicValue = data.mosaicValue;
           this.participants.forEach(element => {
             if (element.no == no) {
-              console.log("찾았다");
               element.mosaicValue = mosaicValue;
             }
           });
@@ -626,6 +619,10 @@ export default {
       this.mosaicValue = !this.mosaicValue;
       this.SET_MOSAIC(this.mosaicValue);
       this.mosaicSignal();
+    },
+    toggleRemote() {
+      this.remoteValue = !this.remoteValue;
+      this.SET_REMOTE(this.remoteValue);
     },
 
     // 화면 공유 시작

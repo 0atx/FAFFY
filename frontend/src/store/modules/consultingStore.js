@@ -7,12 +7,14 @@ const consultingStore = {
     isShare:false,
     snapshotList:[],
     myMosaic:false,
+    remoteValue:false,
   },
   mutations:
   {
     INIT_CONSULTING_INFO:(state) => {
       state.consultingInfo = null;
       state.myMosaic = false;
+      state.remoteValue = false;
     },
     SET_CONSULTING_INFO:(state,consultingInfo) => {
       state.consultingInfo = consultingInfo;
@@ -50,6 +52,9 @@ const consultingStore = {
     },
     SET_MOSAIC:(state,mosaic) => {
       state.myMosaic = mosaic;
+    },
+    SET_REMOTE:(state,remote) => {
+      state.remoteValue = remote;
     }
   }
 }
