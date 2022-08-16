@@ -90,6 +90,7 @@ public interface UserService {
 
     File getProfileImg(int no) throws IllegalInputException;
 
+    List<BroadCastHistoryDto> getConsultHistoryByDate(int no);
     List<BroadCastHistoryDto> getPartiList(int no);
 
     List<BroadCastHistoryDto> getConsultList(int no);
