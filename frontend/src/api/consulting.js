@@ -71,6 +71,13 @@ const consulting = {
     //   .then(response=>resolve(response.data))
     //   .catch(error=> reject(error.response));
     // })
+  },
+  getAllLatestConsultings:async function() {
+    return new Promise((resolve,reject)=> {
+      api.get(`/consultings/list`)
+      .then(response=>resolve(response.data))
+      .catch(error=> reject(error.response));
+    })
   }
 }
 

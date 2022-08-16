@@ -89,7 +89,7 @@ export default {
     async requestDeleteBoard(boardNo) {
       console.log(`${boardNo}번 글을 삭제합니다.`)
       const res = await this.$dialog.confirm({
-          text: '<br>정말로 삭제하시겠습니까?',
+          text: '<br>해당 게시글을 정말로 삭제하시겠습니까?',
           icon: true,
           actions: {
             false : {
@@ -101,7 +101,12 @@ export default {
           }
         });
       if (res) {
-        this.deleteBoard(boardNo)
+        await this.deleteBoard(boardNo)
+        this.$dialog.message.info('게시글이 삭제되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#ff7451",
+          });
       }
     },
     requestUpdateBoard(boardNo) {
