@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from '@/router'
+import { API_BASE_URL } from "@/config";
 
 const boardStore = {
   namespaced: true,
@@ -34,7 +35,7 @@ const boardStore = {
   actions: {
     fetchBoardList({ commit }) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'get',
         headers: {
           'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
@@ -47,9 +48,9 @@ const boardStore = {
           console.log(err)
         })
     },
-    createBoard(context, board) {
+    createBoard({ dispatch }, board) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
         "Content-Type": "multipart/form-data" },
@@ -57,12 +58,17 @@ const boardStore = {
       })
         .then(res => {
           console.log(res)
-          this.$dialog.message.info('게시글이 등록되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
-          router.push({ name: 'board' })
+          // $dialog.message.info('게시글이 등록되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('게시글이 등록되었습니다.')
+          router.push({ name: 'board-detail', params: { boardNo: res.data.content.no } })
+        })
+        .then(res => {
+          console.log(res)
+          dispatch('fetchBoardList')
         })
         .catch(err => {
           console.log(err)
@@ -73,7 +79,7 @@ const boardStore = {
     },
     fetchBoard({ commit, dispatch }, boardNo) {
       axios({
-        url: `http://localhost:8082/api/boards/${boardNo}`,
+        url: API_BASE_URL + `/boards/${boardNo}`,
         method: 'get',
         headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
@@ -93,7 +99,7 @@ const boardStore = {
     },
     createComment(context, commentForm) {
       axios({
-        url: 'http://localhost:8082/api/comments',
+        url: API_BASE_URL + '/comments',
         method: 'post',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: commentForm
@@ -106,9 +112,9 @@ const boardStore = {
           console.log('실패', err)
         })
     },
-    deleteBoard({ commit }, boardNo) {
+    deleteBoard({ dispatch, commit }, boardNo) {
       axios({
-        url: 'http://localhost:8082/api/boards/',
+        url: API_BASE_URL + '/boards',
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: {
@@ -117,12 +123,20 @@ const boardStore = {
       })
         .then(res => {
           console.log('삭제 성공', res)
-          this.$dialog.message.info('게시글이 정상적으로 삭제되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
+          // this.$dialog.message.info('게시글이 정상적으로 삭제되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('게시글이 삭제되었습니다.')
           commit('SET_BOARD', {})
+        })
+        .then(() => {
+          console.log('새로 게시글 리스트 불러오기')
+          dispatch('fetchBoardList')
+        })
+        .then(() => {
+          console.log('게시판으로 이동하기')
           router.push({ name: 'board' })
         })
         .catch(err => {
@@ -131,17 +145,18 @@ const boardStore = {
     },
     deleteComment(context, commentNo) {
       axios({
-        url: `http://localhost:8082/api/comments/${commentNo}`,
+        url: API_BASE_URL + `/comments/${commentNo}`,
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
       })
         .then(res => {
           console.log('댓글 삭제', res)
-          this.$dialog.message.info('댓글이 정상적으로 삭제되었습니다.', {
-            position: "top",
-            timeout: 2000,
-            color: "#0c0f66",
-          });
+          // this.$dialog.message.info('댓글이 정상적으로 삭제되었습니다.', {
+          //   position: "top",
+          //   timeout: 2000,
+          //   color: "#0c0f66",
+          // });
+          alert('댓글이 정상적으로 삭제되었습니다.')
           router.go(router.currentRoute)
         })
         .catch(err => {
@@ -150,7 +165,7 @@ const boardStore = {
     },
     updateBoard(context, formData) {
       axios({
-        url: 'http://localhost:8082/api/boards',
+        url: API_BASE_URL + '/boards',
         method: 'put',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN'),
       "Content-Type": "multipart/form-data" },
@@ -166,7 +181,7 @@ const boardStore = {
     },
     fetchImage({ commit }, fileNo) {
       axios({
-        url: `http://localhost:8082/api/boards/file/${fileNo}`,
+        url: API_BASE_URL + `/boards/file/${fileNo}`,
         method: 'get',
         responseType: 'blob',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },

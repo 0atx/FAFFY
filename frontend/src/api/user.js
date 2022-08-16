@@ -53,7 +53,7 @@ const consulting = {
 };
 const userBoard = {
   getUserBoardList: async function (user_no, success, fail) {
-    await api.get(`/users/profile/${user_no}/board`)
+    await api.get(`/users/board/${user_no}`)
     .then(success)
     .catch(fail);
   }
