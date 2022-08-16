@@ -91,7 +91,6 @@
                 <!-- 생년월일 입력 -->
                 <v-text-field
                   v-model="form.birthday"
-                  :rules="rules.birth()"
                   label="생년월일"
                   append-icon="mdi-calendar"
                   readonly
