@@ -18,6 +18,8 @@ public interface ConsultingRepository extends JpaRepository<Consulting, Integer>
     List<Consulting> findAllOrderByViewCount(Pageable pageable);
     @Query("select c from Consulting c where c.endTime is null order by c.startTime desc")
     List<Consulting> findAllOrderByStartTime(Pageable pageable);
+    @Query("select c from Consulting c where c.endTime is null order by c.startTime desc")
+    List<Consulting> findAllLatest();
 
     @Query("select distinct c from Consulting c left join fetch c.categories cc left join fetch cc.consultingCategoryMapper.category fc " +
             "where c.title like concat('%',:keyword,'%') " +
