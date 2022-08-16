@@ -239,7 +239,7 @@
                 <div v-for="img_no in snapshotList" :key="img_no">
                   <img
                       :src="`${IMG_BASE_URL}/` + img_no"
-                      :alt="snapshot"
+                      alt="snapshot"
                   />
                 </div>
               </v-card-text>
@@ -266,6 +266,7 @@
 import BottomInfo from '@/components/onair/BottomInfo.vue'
 import ChatSubscriberTab from '@/components/onair/ChatSubscriberTab.vue'
 import UserVideo from '@/components/video/UserVideo';
+
 import axios from 'axios';
 
 import { OpenVidu } from 'openvidu-browser';
@@ -300,7 +301,7 @@ export default {
 			audioValue: true,
       mosaicValue:false,
       isHost:false,
-      //isShare:false,
+      isShare:false,
 			mySessionId: "",
 			myUserName: "",
       consulting_no:"",
