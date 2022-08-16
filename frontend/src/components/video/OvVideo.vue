@@ -13,12 +13,6 @@ export default {
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
 	},
-
-  methods: {
-    capture() {
-      alert("캡쳐");
-    }
-  }
 };
 </script>
 
