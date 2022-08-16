@@ -125,10 +125,10 @@ export default {
   methods: {
     ...mapActions(authStore,["logout"]),
     toMain() {
-      this.$router.push({ name: "main" });
+      this.$router.push({ name: "main" }).catch(()=>{});
     },
     toReady() {
-      this.$router.push({ name: "consulting-ready" });
+      this.$router.push({ name: "consulting-ready" }).catch(()=>{});
       // this.$router.push({ name: "consulting-onair" });
     },
     toMyProfile() {

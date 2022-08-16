@@ -49,7 +49,7 @@ export default {
         this.isOnAir = false;
       } else {
         this.isOnAir = true;
-        // this.onLoading();
+        this.onLoading();
       }
     },
   },
@@ -59,7 +59,7 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 3000);
+      }, 1000);
     }
   },
   created() {
