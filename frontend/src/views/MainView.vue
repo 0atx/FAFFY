@@ -181,7 +181,6 @@
           <!-- </div> -->
         </div>
       </div>
-
       <!-- 하단 부분 게시글 목록 -->
       <div class="mt-6" style="padding: 3%;">
         <!-- 좌측 -->
@@ -229,26 +228,28 @@
             </div>
           </div>
           <!-- 우측 이미지 게시글 -->
-          <div style="width: 500px; ">
-            <router-link style="font-weight:600;" class="text-h6 ml-3" to="/board">게시글3<v-icon color="black"
+          <div v-if="imgSrcList.length >=0" style="width: 500px; ">
+            <router-link style="font-weight:600;" class="text-h6 ml-3" to="/board">이미지 게시글
+            <v-icon color="black"
                 class="mb-1"> mdi-chevron-right </v-icon>
             </router-link>
             <v-row style="margin: 0px;">
               <!-- 반복문 수정 필요 -->
-              <v-col v-for="n in 4" :key="n" class="mt-2 d-flex child-flex" cols="6">
+              <v-col v-for="(imgBoard,i) in imgBoardList" :key="i" class="mt-2 d-flex child-flex" cols="6">
                 <figure class="imgBoard">
                   <!-- 게시글 이미지 -->
-                  <v-img :src= imgSrcList[n-1]
-                    :lazy-src= imgSrcList[n-1] aspect-ratio="1"
+                  <v-img :src= imgSrcList[i]
+                    :lazy-src= imgSrcList[i] aspect-ratio="1"
                     class="grey lighten-2">
                     <!-- 게시글 정보 -->
                     <figcaption>
-                      <h3>게시글 제목입니다.</h3>
-                      <p>게시글 내용 요약해서 보여줄 것 입니다. 아니면 작성자 닉네임 쓸 것 50자 내외로요...</p>
-                      <p style="margin-bottom:5px;">별명짓기귀찮다팔구십</p>
-                      <p>2022-08-01</p>
-                      <!-- 클릭 시 해당 게시글 상세정보로 넘어가게 변경 예정 -->
-                      <a href="#" class="read">Read More</a>
+                      <h3>{{imgBoard.title}}</h3>
+                      <p>{{imgBoard.content}}</p>
+                      <p style="margin-bottom:5px;">{{imgBoard.user.nickname}}</p>
+                      <p>{{imgBoard.dateTime}}</p>
+                      <router-link :to="{ name: 'board-detail', params: { boardNo: imgBoard.no } }" class="read">
+                      Read More
+                      </router-link>
                     </figcaption>
                     <template v-slot:placeholder>
                       <v-row class="fill-height ma-0" align="center" justify="center">
@@ -268,7 +269,7 @@
 
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d';
-import {consulting} from "@/api/consulting.js";
+import { consulting } from "@/api/consulting.js";
 import { API_BASE_URL } from "@/config";
 import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
 
@@ -296,8 +297,8 @@ export default {
       hitBoardList: [],
       latestBoardList: [],
       imgBoardList: [],
-      imgSrcList:[],
       imgDetailList:[],
+      imgSrcList:[],
       consults: [
         {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -366,8 +367,7 @@ export default {
   created: function () {
     this.getLatestBoardList(),
     this.getHitBoardList(),
-    this.getImgBoardList(),
-    this.getImgDetailList()
+    this.getImgBoardList()
   },
 
   mounted() {
@@ -396,6 +396,9 @@ export default {
     })
     console.log("hi");
     // 방송 목록 요청 END
+
+    this.getLatestBoardList();
+
   },
   methods: {
     replaceByDefault: defaultProfileSetter.replaceByDefault,
@@ -413,7 +416,6 @@ export default {
             this.latestBoardList[i].category = "정보"
           }
         }
-        console.log(this.latestBoardList);
       }).catch(error => {
         console.log(error)
       })
@@ -432,28 +434,31 @@ export default {
             this.hitBoardList[i].category = "정보"
           }
         }
-        console.log(this.hitBoardList);
       }).catch(error => {
         console.log(error)
       })
     }, getImgBoardList() { // 이미지 게시물 (이미지만)
       this.$axios.get(API_BASE_URL+'/main/board/image').then(response => {
         this.imgBoardList = response.data;
+        // 날짜 형식 바꾸기
         for (var i = 0; i < this.imgBoardList.length; i++) {
-          this.imgSrcList[i] = 'https://i7a802.p.ssafy.io/api/boards/file/'+this.imgBoardList[i];
+          this.imgBoardList[i].dateTime = this.imgBoardList[i].dateTime.substr(0, 10);
         }
-        console.log(this.imgBoardList);
-        console.log(this.imgSrcList);
+        this.getImgDetail();
       }).catch(error => {
         console.log(error)
       })
     },
-    getImgDetailList(){ // 이미지 게시물 디테일 (설명)
-      for(var i = 0 ; i < this.imgBoardList.length; i++)
-      this.$axios.get(API_BASE_URL+'/main/boards/'+this.imgBoardList[i]).then(response => {
-        console.log(response);
-      })
-      console.log(this.imgDetailList);
+    getImgDetail() { // 이미지 게시물 디테일 가져오기
+    console.log(this.imgBoardList.length);
+      for(var j = 0; j < this.imgBoardList.length; j++){
+        var k = j;
+        this.$axios.get(API_BASE_URL + '/boards/' + this.imgBoardList[k].no).then(response => {
+          this.imgSrcList.push('https://i7a802.p.ssafy.io/api/boards/file/' + response.data.content.board.fileNo);
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     }
   },
 };

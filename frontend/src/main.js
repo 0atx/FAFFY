@@ -9,6 +9,8 @@ import router from './router'
 import store from "./store";
 import axios from 'axios'
 
+
+Vue.prototype.$http = axios;
 Vue.use(VueMeta)
 Vue.use(Carousel3d)
 Vue.use(VuetifyDialog, {
