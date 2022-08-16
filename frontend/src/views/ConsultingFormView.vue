@@ -189,7 +189,7 @@
           <v-dialog eager
             v-model="snapshotDialog"
             persistent
-            max-width="400"
+            max-width="600"
             max-height="600"
           >
             <v-card>
@@ -197,7 +197,7 @@
                 캡쳐 완료!
               </v-card-title>
               <v-card-text>
-                <canvas id="drawCanvas" width="320" height="240" style="border:1px; solid black" ref="snapshot_canvas"/>
+                <canvas id="drawCanvas" width="500px" height="375px" style="border:1px; solid black" ref="snapshot_canvas"/>
 
               </v-card-text>
               <v-card-actions>
@@ -239,7 +239,7 @@
                 <div v-for="img_no in snapshotList" :key="img_no">
                   <img
                       :src="`${IMG_BASE_URL}/` + img_no"
-                      :alt="스냅샷"
+                      :alt="snapshot"
                   />
                 </div>
               </v-card-text>
@@ -267,6 +267,7 @@ import BottomInfo from '@/components/onair/BottomInfo.vue'
 import ChatSubscriberTab from '@/components/onair/ChatSubscriberTab.vue'
 import UserVideo from '@/components/video/UserVideo';
 import axios from 'axios';
+
 import { OpenVidu } from 'openvidu-browser';
 import {consulting} from "@/api/consulting.js";
 import { API_BASE_URL } from "@/config";
@@ -764,7 +765,7 @@ export default {
       this.snapshotDialog = true;
 			let context = this.canvas.getContext("2d");
 
-			context.drawImage(video, 0, 0, 320,240);
+			context.drawImage(video, 0, 0, 500,375);
       console.log("캡쳐 완료");
     },
     upload() {
