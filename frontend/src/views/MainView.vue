@@ -105,7 +105,7 @@
       <!-- 중단 부분 컨설팅(방송) 목록 썸네일과 함께 출력 -->
       <div style="height: 500px;padding: 3%;">
         <div class="text-h6 ml-4 mb-2" style="font-weight: 600">
-          <router-link to="/auth/sign-in">진행중인 방송<v-icon color="black" class="mb-1"> mdi-chevron-right </v-icon>
+          <router-link to="/consultings">진행중인 방송<v-icon color="black" class="mb-1"> mdi-chevron-right </v-icon>
           </router-link>
         </div>
         <div style="height: 500px; display:flex; flex-wrap:nowrap; justify-content: space-evenly;">

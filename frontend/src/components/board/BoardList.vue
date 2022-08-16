@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 const boardStore = "boardStore"
 
 export default {
@@ -143,7 +143,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(boardStore, ['fetchBoards']),
     // 상세조회 페이지 이동
     boardDetail(boardNo) {
       console.log(`${boardNo}번 글로 이동`)
@@ -182,6 +181,16 @@ export default {
     resetSearch() {
       this.keyword = ''
       this.searchCategory = ''
+      this.page = 1
+      if (this.type === '자유') {
+        this.now = this.freeBoards
+      } else if (this.type === '질문') {
+        this.now = this.qnaBoards
+      } else if (this.type === '정보') {
+        this.now = this.infoBoards
+      } else {
+        this.now = this.boardList
+      }
     },
     // 게시글 생성
     createBoard() {
