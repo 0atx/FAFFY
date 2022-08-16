@@ -49,10 +49,10 @@ public class MainController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value="메인 화면에서 최신순으로 게시물 이미지 불러오기", notes="최신순으로 게시물의 첨부 이미지를 (4개) 반환한다.")
+    @ApiOperation(value="메인 화면에서 파일이 첨부된 게시물을 최신순으로 불러오기", notes="첨부 파일이 있는 게시물 최신순으로 (4개) 반환")
     @GetMapping("/board/image")
-    public ResponseEntity<List<Integer>> getBoardsImageNoByDate() {
-        List<Integer> res = boardService.getBoardsImageNoByDate(PageRequest.of(0, 4));
+    public ResponseEntity<List<BoardGetDto>> getBoardsImageNoByDate() {
+        List<BoardGetDto> res = boardService.getBoardsWithImageByDate(PageRequest.of(0, 4));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

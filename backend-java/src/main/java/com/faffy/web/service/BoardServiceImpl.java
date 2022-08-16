@@ -184,14 +184,24 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Integer> getBoardsImageNoByDate(Pageable pageable) {
-        List<BoardFile> boardFiles = boardFileRepository.findAllOrderByDateWithImage(pageable);
-        List<Integer> res = new ArrayList<>();
-        for(BoardFile bf : boardFiles){
-            res.add(bf.getFile().getNo());
+    public List<BoardGetDto> getBoardsWithImageByDate(Pageable pageable) {
+        List<Board> boardList = boardRepository.findAllOrderByDateWithImage(pageable);
+        List<BoardGetDto> result = new ArrayList<>();
+        for(Board b : boardList){
+            result.add(b.toBoardGetDto());
         }
-        return res;
+        return result;
     }
+
+//    @Override
+//    public List<Integer> getBoardsImageNoByDate(Pageable pageable) {
+//        List<BoardFile> boardFiles = boardFileRepository.findAllOrderByDateWithImage(pageable);
+//        List<Integer> res = new ArrayList<>();
+//        for(BoardFile bf : boardFiles){
+//            res.add(bf.getFile().getNo());
+//        }
+//        return res;
+//    }
 
     @Override
     public List<BoardGetDto> searchByKeyword(String keyword) throws Exception{
