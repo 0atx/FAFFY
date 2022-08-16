@@ -3,7 +3,7 @@
     <v-card
       tile
       outlined
-      style="padding:1%"
+      style="padding:1%;"
     >
       <v-list-item>
         <v-list-item-content>
@@ -51,7 +51,7 @@
               </div>
 
               <div style="padding-bottom:10px;">
-                방송 설명
+                {{ consultingInfo.intro }}
               </div>
 
               <!-- 방송 카테고리 -->
@@ -60,7 +60,7 @@
                   small
                   :ripple="false"
                   id="categoryChips"
-                  v-for="category in consultCategorys"
+                  v-for="category in consultingInfo.categories"
                   :key="category"
                   :category="category"
                 >

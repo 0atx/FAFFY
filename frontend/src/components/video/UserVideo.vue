@@ -293,8 +293,8 @@ div > p {
   color: white;
   font-size: 1vw;
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: 3%;
+  left: 7%;
 }
 
 .v-btn::before {
