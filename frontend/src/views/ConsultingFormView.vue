@@ -151,6 +151,19 @@
                 <span>모자이크 해제</span>
               </v-tooltip>
 
+              <v-tooltip bottom v-if="true">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
+                </template>
+                <span>모션 인식 촬영</span>
+              </v-tooltip>
+              <v-tooltip bottom v-else>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
+                </template>
+                <span>모션 인식 해제</span>
+              </v-tooltip>
+
               <v-tooltip bottom v-if="!screenOV && isHost">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="startScreenShare"><v-icon size="30" color="#fff">mdi-monitor-share</v-icon></v-btn>
