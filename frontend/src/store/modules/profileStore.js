@@ -104,7 +104,7 @@ const profileStore = {
     },
     async loadConsultingList({ commit }, user_no) {
       console.log(`${user_no}번 유저의 방송 진행 기록 불러오기`);
-      consulting.getConsultingList(
+      consulting.getConsultingHistoryByDate(
         user_no,
         (response) => {
           console.log("방송 진행 기록 불러오기 성공");

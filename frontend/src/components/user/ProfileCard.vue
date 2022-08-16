@@ -190,7 +190,8 @@ export default {
   padding: 5%;
   position: sticky;
   top: 0px;
-  height: 100vh;
+
+  height:100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -198,6 +199,7 @@ export default {
 
 #profile {
   width: 80%;
+  overflow: hidden;
   margin: auto;
 }
 
