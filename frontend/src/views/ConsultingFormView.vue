@@ -299,7 +299,7 @@ export default {
 			audioValue: true,
       mosaicValue:false,
       isHost:false,
-      isShare:false,
+      //isShare:false,
 			mySessionId: "",
 			myUserName: "",
       consulting_no:"",
@@ -463,7 +463,7 @@ export default {
         if (index >= 0) {
 					this.subscribers.splice(index, 1);
 				}
-        this.SET_PARTICIPANTS(this.subsNoScreen);
+        this.SET_PARTICIPANTS(this.subscribers);
 
 			});
 

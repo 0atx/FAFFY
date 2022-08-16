@@ -1,26 +1,50 @@
 <template>
-  <div>
+  <v-container fluid>
+    <v-row style="padding-left: 14%; background-color:#0c0f66; color: #fff" class="text-left mt-5 pt-5">
+      <h1>진행 중인 방송 목록</h1>
+    </v-row>
+    <v-row style="padding-left: 14%; background-color:#0c0f66; color: #fff" class="text-left mb-5 pb-5">
+      <h4>관심 있는 방송에 참여해보세요.</h4>
+    </v-row>
     <v-container>
-      <div class="d-flex justify-space-between">
-        <h1>진행 중인 방송 목록</h1>
-        <v-col
-        class="d-flex"
-        cols="2"
-      >
-        <v-select
-          :items="items"
-          label="정렬 기준"
-          dense
-          solo
-          v-model="sortBy"
-        ></v-select>
-      </v-col>
-      </div>
-      <v-row>
-        <v-col style="height:500px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
+      <v-row style="width: 80%; margin: 0 auto;">
+        <v-col cols="7" class="pr-0" align="end">
+          <!--검색어 입력-->
+          <v-text-field
+            style="width:55%; float:right;"
+            color="#0c0f66"
+            v-model="keyword"
+            placeholder="방송 제목을 입력하세요"
+            append-icon="mdi-magnify"
+            dense
+            outlined
+            hide-details
+            @keyup.enter="search(keyword)"
+            @click:append="search(keyword)"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2" class="pl-0 pr-0" style="display:flex;">
+          <v-btn :ripple="false" elevation="0" id="searchBtn" style="width:10%;" @click="searchKeyword(keyword)">검색</v-btn>
+          <v-btn :ripple="false" elevation="0" id="resetBtn" style="width:15%;" @click="resetSearch">초기화</v-btn>
+        </v-col>
+        <v-col cols="3">
+          <v-select
+            style="width:50%; float:right;"
+            :items="items"
+            color="#0c0f66"
+            label="정렬 기준"
+            v-model="sortBy"
+            dense
+            outlined
+            hide-details
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row style="width: 80%; margin: 0 auto;">
+        <v-col style="height:480px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
           <div style="text-align:center;">
             <v-icon color="#333" large block> mdi-broadcast-off </v-icon>
-            <h2>현재 진행 중인 방송이 없습니다.</h2>
+            <h2>{{ nodata }}</h2>
           </div>
         </v-col>
         <v-col
@@ -28,29 +52,38 @@
           :key="i"
           cols="12"
           v-else
-          @click="watchConsulting(consulting.nickname, consulting.no)"
+          @click="watchConsulting(consulting.consultant, consulting.no)"
           style="cursor: pointer"
         >
-          <v-card>
+          <v-card
+            tile
+            outlined
+          >
             <div class="d-flex flex-row">
               <v-avatar
-                class="ma-3"
-                size="125"
+                class="ma-2"
+                size="200"
                 tile
               >
-              <v-img :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`"></v-img>
+                <img :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`" @error="replaceByDefault" />
               </v-avatar>
               <div class="d-flex flex-column">
                 <v-card-title
-                  class="text-h5"
+                  style="font-weight: 600; font-size:24px;"
                   v-text="consulting.title"
                 ></v-card-title>
 
-                <v-card-subtitle style="text-align:start">
-                  {{ consulting.consultant }}<br/>
-                  <v-icon small>mdi-account-multiple</v-icon>{{ consulting.viewCount }}/{{ consulting.roomSize }}<br/>
-                  {{ consulting.intro }}
+
+                <v-card-subtitle style="text-align:start; font-size:18px; padding: 0px; padding-left:16px;">
+                  {{ consulting.consultant }}
                 </v-card-subtitle>
+                <v-card-subtitle style="text-align:start; padding-top:0;">
+                  <v-icon small>mdi-account-multiple</v-icon> {{ consulting.viewCount }} / {{ consulting.roomSize }}<br>
+                </v-card-subtitle>
+
+                <v-card-text>
+                  {{ consulting.intro }}
+                </v-card-text>
 
                 <v-card-actions>
                   <v-chip-group>
@@ -71,29 +104,31 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="isResultExist">
-      <v-col cols="12">
-        <v-pagination
-          v-model="page"
-          circle
-          color="#0c0f66"
-          :length="totalPages"
-          prev-icon="mdi-menu-left"
-          next-icon="mdi-menu-right"
-          :total-visible="totalVisible">
-        </v-pagination>
-      </v-col>
-    </v-row>
+      <v-row v-if="isResultExist" style="width: 80%; margin: 0 auto;">
+        <v-col cols="12">
+          <v-pagination
+            v-model="page"
+            circle
+            color="#0c0f66"
+            :length="totalPages"
+            prev-icon="mdi-menu-left"
+            next-icon="mdi-menu-right"
+            :total-visible="totalVisible">
+          </v-pagination>
+        </v-col>
+      </v-row>
     </v-container>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import { mapActions, mapState } from 'vuex'
 import { API_BASE_URL } from "@/config";
-const searchStore = "searchStore"
+import { consulting } from "@/api/consulting.js";
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
 
+const searchStore = "searchStore"
 export default {
   name: 'ConsultingListView',
   data() {
@@ -103,8 +138,11 @@ export default {
       itemsPerPage: 4,
       totalVisible: 7,
       sortBy: '',
+      keyword: '',
+      nodata: '현재 진행 중인 방송이 없습니다.',
       items: ['제목', '현재 인원', '전체 인원'],
       type: { '제목': 'title', '현재 인원': 'viewCount', '전체 인원': 'roomSize' },
+      consultingsResult: [],
       consultings: [
         {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -279,11 +317,26 @@ export default {
   },
   methods: {
     ...mapActions(searchStore, ['searchKeyword']),
-    watchConsulting(nickname, consultingNo) {
-      this.$router.push({name:'consulting-onair', params:{ nickname: nickname, consulting_no: consultingNo }})
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
+    async watchConsulting(nickname, consultingNo) {
+      const res = await this.$dialog.confirm({
+          text: '<br>' + nickname +'님의 방송에 참여하시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+      if (res) {
+        this.$router.push({name:'consulting-onair', params:{ nickname: nickname, consulting_no: consultingNo }})
+      }
     },
     sortResult(sortBy) {
-      this.consultingResult.sort((a, b) => {
+      this.consultingsResult.sort((a, b) => {
         if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
           return 1
         } else if (b[this.type[sortBy]] < a[this.type[sortBy]]) {
@@ -292,28 +345,65 @@ export default {
           return 0
         }
       })
-    }
+    },
+    // 검색 카테고리 별 정렬
+    search(keyword) {
+      console.log(this.keyword + ",? " + keyword);
+      this.keyword = keyword
+      this.sortBy = '';
+      console.log(this.keyword + ", " + keyword);
+      this.searchKeyword(this.keyword)
+
+      this.keyword = '';
+    },
+    // 검색 결과 초기화
+    resetSearch() {
+      this.keyword = '';
+      this.sortBy = '';
+      this.nodata= '현재 진행 중인 방송이 없습니다.';
+      consulting.getAllLatestConsultings()
+      .then((data)=> {
+        console.log(data);
+        this.consultingsResult = data["content"];
+      })
+      .catch((error)=> {
+        console.log(error);
+      })
+    },
   },
   computed: {
-    ...mapGetters(searchStore, ['consultingResult']),
+    ...mapState(searchStore, ['consultingResult']),
     totalPages() {
-      return this.consultingResult.length % this.itemsPerPage > 0 ? parseInt(this.consultingResult.length/this.itemsPerPage)+1 : parseInt(this.consultingResult.length/this.itemsPerPage)
+      return this.consultingsResult.length % this.itemsPerPage > 0 ? parseInt(this.consultingResult.length/this.itemsPerPage)+1 : parseInt(this.consultingResult.length/this.itemsPerPage)
     },
     currentPage() {
       const start = (this.page-1)*this.itemsPerPage
       const end = start+this.itemsPerPage
-      return this.consultingResult.slice(start, end)
+      return this.consultingsResult.slice(start, end)
     },
     isResultExist() {
-      return !_.isEmpty(this.consultingResult)
+      return !_.isEmpty(this.consultingsResult)
     },
   },
-  created() {
-    this.searchKeyword('')
+  mounted() {
+    consulting.getAllLatestConsultings()
+    .then((data)=> {
+      console.log(data);
+      this.consultingsResult = data["content"];
+    })
+    .catch((error)=> {
+      console.log(error);
+    })
   },
   watch: {
     sortBy() {
       this.sortResult(this.sortBy)
+    },
+    consultingResult() {
+      this.consultingsResult = this.consultingResult;
+      if(this.consultingResult.length == 0) {
+        this.nodata = "검색 결과가 없습니다";
+      }
     }
   }
 }
@@ -324,5 +414,20 @@ export default {
   background-color: #0c0f66;
   color: #fff;
   pointer-events: none;
+}
+
+button {
+  margin-left: 10px;
+  height: 40px !important;
+}
+
+#searchBtn {
+  background-color: #0c0f66;
+  color: white;
+}
+
+#resetBtn {
+  background-color: #ff7451;
+  color: white;
 }
 </style>
