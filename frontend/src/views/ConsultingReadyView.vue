@@ -48,7 +48,15 @@
         </div>
         <div style="width:20%;">
           <!-- 방송 인원 -->
-          <v-text-field
+
+          <v-select
+            :items="maxCounts"
+            v-model="form.roomSize"
+            type="number"
+            label="최대 인원수"
+            outlined
+          ></v-select>
+          <!-- <v-text-field
             v-model="form.roomSize"
             type="number"
             hint="최대 참여 인원을 입력하세요."
@@ -59,7 +67,7 @@
             min=0
             color="#0c0f66"
             @keydown.enter="onInputKeyword"
-          />
+          /> -->
           <v-btn
             id="onairBtn"
             :ripple="false"
@@ -98,11 +106,9 @@ export default {
       },
 
       // 카테고리 목록
-      categoryList: [
-        { name: "캐주얼"},
-        { name: "모던"},
-        { name: "시크"},
-      ],
+      categoryList: [],
+      // 참여자 수 제한
+      maxCounts: [5, 10, 20, 100],
     }
   },
   async created() {
