@@ -29,6 +29,8 @@
 <script>
 import OvVideo from './OvVideo';
 import * as blazeface from "@tensorflow-models/blazeface"
+import * as tmImage from '@teachablemachine/image';
+
 import {mapState} from "vuex";
 import('@tensorflow/tfjs');
 
@@ -117,14 +119,15 @@ export default {
 	},
   data() {
     return {
-      visibility:"visible",
-      video:undefined,
-      mosaicValue:false,
-      frame:30,
-			width: 450,
+      width: 450,
 			height: 360,
       width2:300,
       height2:240,
+      // 모자이크
+      visibility:"visible",
+      video:undefined,
+      frame:30,
+      mosaicValue:false,
       hmul:0.9,
       pmul:0.6,
       model:undefined,
@@ -134,12 +137,20 @@ export default {
       canvasm:undefined,
       ctxm:undefined,
 
+      // 모션 인식
+      URL: "https://teachablemachine.withgoogle.com/models/85DlgcB-8/",
+			modelURL: "https://teachablemachine.withgoogle.com/models/85DlgcB-8/model.json",
+			metadataURL: "https://teachablemachine.withgoogle.com/models/85DlgcB-8/metadata.json",
+			model2: undefined,
+			captureSignal: false,
+
     }
   },
   mounted() {
     setTimeout(() => {
       // this.video = this.$refs.ov_video.$refs.video;
       this.mosaicStart();
+      this.recognition();
     }, 2000)
   },
 	methods: {
@@ -231,6 +242,41 @@ export default {
         video = this.$refs.canvas;
       this.$emit('capture-event',video);
     },
+
+    async recognition() {
+			// video,v,str
+      if (!this.isMyVideo)
+        return;
+			console.log("===============================----------========================")
+			this.model2= await tmImage.load(this.modelURL, this.metadataURL);
+			console.log("===============================----------========================")
+			// 프레임마다 얼굴감지
+			setInterval(() => {
+				this.motionRecognition(this.video)}, parseInt(1000/this.frame));
+			// this.detectFaces(model,video,v,str)
+
+		},
+    async motionRecognition(video) {
+			const prediction = await this.model2.predict(video, false);
+			// console.log(prediction[0].probability)
+			if (prediction[0].probability>0.9) {
+        if (this.captureSignal == false) {
+          this.$dialog.message.info('3초 후 스냅샷을 촬영합니다', {
+            position: "top",
+            timeout: 3000,
+            color: "#ff7451",
+          });
+          setTimeout(()=> {
+            this.capture();
+            this.captureSignal = false;
+          },3000);
+        }
+				this.captureSignal=true;
+				console.log("capture")
+			}
+
+
+		},
 	},
 };
 </script>
