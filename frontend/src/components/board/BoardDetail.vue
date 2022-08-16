@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ProfileImgAvatar from '@/components/common/ProfileImgAvatar.vue'
 const boardStore = "boardStore"
 const authStore = "authStore"
@@ -82,6 +82,7 @@ export default {
     this.date = this.currentBoard.dateTime.replaceAll('-', '.').replace('T', ' ').slice(0, 16);
   },
   methods: {
+    ...mapActions(boardStore, ['deleteBoard']),
     moveProfile(user) {
       this.$router.push({ name: 'profile', params: { no: user }})
     },
