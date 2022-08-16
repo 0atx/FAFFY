@@ -43,16 +43,16 @@
                 <thead>
                   <tr>
                     <th class="text-start">
-                      카테고리
+                      분류
                     </th>
                     <th class="text-start">
-                      제목
+                      방송 제목
                     </th>
                     <th class="text-start">
-                      진행자
+                      방송 진행자
                     </th>
                     <th class="text-start">
-                      방송일
+                      방송 일자
                     </th>
                   </tr>
                 </thead>
@@ -109,13 +109,16 @@
                 <thead>
                   <tr>
                     <th class="text-start" width="15%">
-                      카테고리
+                      분류
                     </th>
-                    <th class="text-start" width="60%">
+                    <th class="text-start" width="50%">
                       제목
                     </th>
+                    <th class="text-start" width="10%">
+                      댓글
+                    </th>
                     <th class="text-start" width="15%">
-                      작성일
+                      작성 일자
                     </th>
                     <th class="text-start" width="10%">
                       조회수
@@ -132,8 +135,9 @@
                   >
                     <td>{{ type[board.category] }}</td>
                     <td>{{ board.title }}</td>
+                    <td><v-icon small> mdi-comment-processing-outline </v-icon> {{ board.commentCount }}</td>
                     <td>{{ board.dateTime.replaceAll('-', '.').slice(0, 10) }}</td>
-                    <td>{{ board.hit }}</td>
+                    <td><v-icon small> mdi-eye </v-icon> {{ board.hit }}</td>
                   </tr>
                 </tbody>
               </template>

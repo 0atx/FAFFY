@@ -43,7 +43,7 @@
                     제목
                   </th>
                   <th class="text-start" width="10%">
-                    댓글 수
+                    댓글
                   </th>
                   <th class="text-start" width="15%">
                     작성 일자

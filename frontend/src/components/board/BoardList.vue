@@ -64,7 +64,7 @@
                   작성자
                 </th>
                 <th class="text-center" width="10%">
-                  작성일
+                  작성 일자
                 </th>
                 <th class="text-center" width="10%">
                   조회수
