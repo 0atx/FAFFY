@@ -69,7 +69,7 @@
                   v-for="(history,i) in currentPage"
                   :key="i"
                   style="cursor: pointer"
-                  @click="historyDetail(history.no)"
+                  @click="historyDetail(history.consulting_no)"
                 >
                   <td>{{ history.title }}</td>
                   <td>{{ history.intro }}</td>
