@@ -1,5 +1,6 @@
 import { follow, consulting, userBoard } from "@/api/user.js";
 import axios from "axios";
+import { API_BASE_URL } from "@/config";
 
 const profileStore = {
   namespaced: true,
@@ -136,7 +137,7 @@ const profileStore = {
       console.log("상세 히스토리 불러오기");
       console.log('paytlaod2', payload)
       axios({
-        url: `http://localhost:8082/api/users/profile/${payload.user_no}/history/${payload.consulting_no}`,
+        url: API_BASE_URL + `/users/profile/${payload.user_no}/history/${payload.consulting_no}`,
         method: 'get',
       })
         .then(res => {
@@ -158,7 +159,7 @@ const profileStore = {
     },
     loadSnapshotList({ commit }, snapshotNo) {
       axios({
-        url: `http://localhost:8082/api/consultings/snapshot/${snapshotNo}`,
+        url: API_BASE_URL + `/consultings/snapshot/${snapshotNo}`,
         method: 'get',
         responseType: 'blob',
       })

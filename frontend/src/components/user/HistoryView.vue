@@ -31,7 +31,7 @@
 
         <div>
           <!--방송 참여 또는 진행 목록 리스트 selected로 참여인지 진행인지 구분해서 출력할 것 -->
-          <v-data-table
+          <!-- <v-data-table
             id="table"
             :headers="headers"
             hide-default-footer
@@ -42,7 +42,43 @@
             @page-count="pageCount = $event"
             @click:row="historyDetail"
             style="cursor: pointer"
-          ></v-data-table>
+          ></v-data-table> -->
+
+          <v-simple-table
+            v-if="(selected && participatedList.length != 0) || (!selected && consultingList.length != 0)">
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-start" width="35%">
+                    방송 제목
+                  </th>
+                  <th class="text-start" width="35%">
+                    방송 소개
+                  </th>
+                  <th class="text-start" width="15%">
+                    방송 진행자
+                  </th>
+                  <th class="text-start" width="15%">
+                    방송 일자
+                  </th>
+                </tr>
+              </thead>
+              <!--각각의 게시글, 클릭하면 상세조회로 이동-->
+              <tbody>
+                <tr
+                  v-for="(history,i) in currentPage"
+                  :key="i"
+                  style="cursor: pointer"
+                  @click="historyDetail(history.no)"
+                >
+                  <td>{{ history.title }}</td>
+                  <td>{{ history.intro }}</td>
+                  <td>{{ history.consultant }}</td>
+                  <td>{{ history.date.replaceAll('-', '.') }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
           <v-col v-else style="height:600px; display:flex; justify-content:center; align-items:center;" cols="12">
             <div style="text-align:center;">
               <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
@@ -57,8 +93,8 @@
               circle
               color="#0c0f66"
               v-model="page"
-              :length="pageCount"
-              :total-visible="5"
+              :length="totalPages"
+              total-visible="5"
             ></v-pagination>
           </div>
         </div>
@@ -83,21 +119,38 @@ export default {
       ],
       // pagination 관련 변수
       page: 1,
-      pageCount: 0,
+      // pageCount: 0,
       itemsPerPage: 10,
 
       // 참여 기록인지 진행 기록인지 판별하는 변수 참여 : true, 진행 : false
       selected: true,
       nodata: '방송 참여 기록이 없습니다.'
+
+
     };
   },
   computed: {
-    ...mapGetters(profileStore, ['participatedList', 'consultingList'])
+    ...mapGetters(profileStore, ['participatedList', 'consultingList']),
+    historyType() {
+      if (this.selected) {
+        return this.participatedList
+      } else {
+        return this.consultingList
+      }
+    },
+    currentPage() {
+      const start = (this.page-1)*this.itemsPerPage
+      const end = start+this.itemsPerPage
+      return this.historyType.slice(start, end)
+    },
+    totalPages() {
+      return this.historyType.length % this.itemsPerPage > 0 ? parseInt(this.historyType.length/this.itemsPerPage)+1 : parseInt(this.historyType.length/this.itemsPerPage)
+    },
   },
   methods: {
-    historyDetail (e) {
-      console.log(`${e.consulting_no}번 글의 상세 history로 이동합니다.`)
-      this.$router.push({ name: 'user-history-detail', params: { consultNo: e.consulting_no } })
+    historyDetail (consultNo) {
+      console.log(`${consultNo}번 글의 상세 history로 이동합니다.`)
+      this.$router.push({ name: 'user-history-detail', params: { consultNo: consultNo } })
     }
   },
   watch: {
