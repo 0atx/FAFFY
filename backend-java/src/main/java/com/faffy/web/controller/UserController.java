@@ -337,6 +337,29 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="방송 참여/진행 기록 최신순으로 불러오기", notes="해당 유저의 방송 기록을 최신순으로 반환한다")
+    @GetMapping("/profile/{no}/history/date")
+    public ResponseEntity<Map<String, Object>> getConsultingHistoryByDate(@PathVariable int no,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size){
+        HashMap<String, Object> map = new HashMap<>();
+        List<BroadCastHistoryDto> dtoList = userService.getConsultHistoryByDate(no);
+        if(dtoList == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            Pageable paging = PageRequest.of(page, size, Sort.by("date").descending());
+            int start = (int)paging.getOffset();
+            int end = Math.min(start+paging.getPageSize(), dtoList.size());
+            Page<BroadCastHistoryDto> res = new PageImpl<>(dtoList.subList(start, end), paging, dtoList.size());
+            map.put("content", res.getContent());
+            map.put("currentPage", res.getNumber());
+            map.put("totalItems", res.getTotalElements());
+            map.put("totalPages", res.getTotalPages());
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        }
+    }
+
     @ApiOperation(value="방송 참여 기록 불러오기", notes="해당 유저의 방송 참여 기록을 반환")
     @GetMapping("/profile/{no}/history/parti")
     public ResponseEntity<Map<String, Object>> getParticipantHistory(@PathVariable int no,
