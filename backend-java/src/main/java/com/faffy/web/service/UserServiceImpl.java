@@ -4,14 +4,8 @@ import com.faffy.web.dto.*;
 import com.faffy.web.exception.DataIntegrityException;
 import com.faffy.web.exception.DataNotFoundException;
 import com.faffy.web.exception.IllegalInputException;
-import com.faffy.web.jpa.entity.Consulting;
-import com.faffy.web.jpa.entity.ConsultingLog;
-import com.faffy.web.jpa.entity.UploadFile;
-import com.faffy.web.jpa.entity.User;
-import com.faffy.web.jpa.repository.ConsultingLogRepository;
-import com.faffy.web.jpa.repository.ConsultingRepository;
-import com.faffy.web.jpa.repository.UploadFileRepository;
-import com.faffy.web.jpa.repository.UserRepository;
+import com.faffy.web.jpa.entity.*;
+import com.faffy.web.jpa.repository.*;
 import com.faffy.web.jpa.type.FileType;
 import com.faffy.web.jpa.type.UserNoAndNicknameMask;
 import com.faffy.web.jpa.type.RegularExpression;
@@ -42,6 +36,8 @@ import static com.faffy.web.exception.ExceptionMsg.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserCategoryRepository userCategoryRepository;
     @Autowired
     UploadFileRepository uploadFileRepository;
     @Autowired
@@ -342,7 +338,14 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findByKeyword(keyword);
         List<UserGetDetailDto> dtoList = new ArrayList<>();
         for(User u : users){
-            dtoList.add(u.toDetailDto());
+            List<FashionCategory> categoryList = userCategoryRepository.findCategoriesByUser(u);
+            List<String> categories = new ArrayList<>();
+            for(FashionCategory fc : categoryList){
+                categories.add(fc.getName());
+            }
+            UserGetDetailDto dto = u.toDetailDto();
+            dto.setCategories(categories);
+            dtoList.add(dto);
         }
         return dtoList;
     }

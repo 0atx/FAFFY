@@ -228,7 +228,14 @@ public class ConsultingServiceImpl implements ConsultingService {
         List<Consulting> consultings = consultingRepository.findByKeyword(keyword);
         List<ConsultingGetDto> dtoList = new ArrayList<>();
         for(Consulting c : consultings){
-            dtoList.add(c.toConsultingGetDto());
+            List<ConsultingCategory> categoryList = consultingCategoryRepository.findByConsulting(c);
+            List<String> categories = new ArrayList<>();
+            for(ConsultingCategory cc : categoryList){
+                categories.add(cc.getConsultingCategoryMapper().getCategory().getName());
+            }
+            ConsultingGetDto dto = c.toConsultingGetDto();
+            dto.setCategories(categories);
+            dtoList.add(dto);
         }
         return dtoList;
     }
