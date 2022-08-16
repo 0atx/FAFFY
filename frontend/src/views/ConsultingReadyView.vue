@@ -31,8 +31,10 @@
             counter="300"
           ></v-textarea>
           <!-- 방송 카테고리 -->
-          <v-label>카테고리</v-label>
-          <v-chip-group v-model="form.categories" column multiple>
+          <div style="display:flex; align-items:center;">
+            <v-label>카테고리</v-label><div style="color:#777; font-size:12px; padding:0px 8px; "> *최대 3개 선택 가능</div>
+          </div>
+          <v-chip-group v-model="form.categories" column multiple max="3">
             <v-chip
               v-for="(c, i) in categoryList"
               :key="i"
