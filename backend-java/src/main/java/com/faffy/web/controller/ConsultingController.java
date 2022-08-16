@@ -149,10 +149,13 @@ public class ConsultingController {
     }
 
     @ApiOperation(value="현재 방의 시청자 수를 재설정", notes="")
-    @PostMapping("/viewCount")
-    public ResponseEntity setConsultingViewCount(int consulting_no, int count) {
+    @PutMapping("/view-count")
+    public ResponseEntity setConsultingViewCount(@RequestBody Map<String,Integer> request) {
+        logger.info("request map:{}",request);
+        int consulting_no = request.get("consulting_no");
+        int viewCount = request.get("viewCount");
         try {
-            consultingService.setViewCount(consulting_no, count);
+            consultingService.setViewCount(viewCount,consulting_no);
         } catch(Exception e){
             HashMap<String, Object> result = new HashMap<>();
             result.put("msg", "유효하지 않은 방송입니다.");

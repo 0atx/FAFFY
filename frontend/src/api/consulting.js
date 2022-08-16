@@ -34,6 +34,13 @@ const consulting = {
       .catch(error=>reject(error.response));
     })
   },
+  setViewCount: async function(consulting_no,viewCount) {
+    return new Promise((resolve,reject)=> {
+      api.put(`/consultings/view-count`,JSON.stringify({consulting_no, viewCount}))
+      .then(response=>resolve(response.data))
+      .catch(error=>reject(error.response))
+    });
+  },
   uploadSnapshot : async function(formData) {
     return new Promise((resolve, reject) => {
       api.post(`/consultings/snapshot`,formData,    { headers: { 'Content-Type': 'multipart/form-data' }})
@@ -66,11 +73,6 @@ const consulting = {
       .then(response=>resolve(response.data))
       .catch(error=> reject(error.response));
     })
-    // return new Promise((resolve,reject)=> {
-    //   api.get(`/main/consulting/hit?size=${size}`)
-    //   .then(response=>resolve(response.data))
-    //   .catch(error=> reject(error.response));
-    // })
   },
   getAllLatestConsultings:async function() {
     return new Promise((resolve,reject)=> {

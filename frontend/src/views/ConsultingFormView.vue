@@ -362,12 +362,9 @@ export default {
     // 뒤로가기 막기
     this.preventBack();
     this.canvas = this.$refs.snapshot_canvas;
-    // this.mySessionId = this.host_no;
-    console.log("넘겨받은 값");
+
     this.nickname = this.$route.params.nickname;
     this.consulting_no = this.$route.params.consulting_no;
-    console.log(this.nickname);
-    console.log(this.consulting_no);
 
     // 비정상 접근 감지
     if (this.nickname == undefined) {
@@ -387,23 +384,32 @@ export default {
     // 방송 정보 요청 후 값 세팅
     consulting.getConsulting(this.consulting_no)
     .then((data)=> {
-      console.log("방송 정보 요청 성공");
-      console.log(data);
-      this.SET_CONSULTING_INFO(data.content);
-      console.log(this.consultingInfo.title);
+      data = data.content;
+      // 이미 종료된 방송인지 확인
+      if (data.endTime != null)
+      {
+        alert("이미 종료된 방송입니다.");
+        this.$router.push('/');
+        return;
+      } // 시청자 수 체크
+      else if (data.roomSize <= data.viewCount) {
+        alert("최대 인원수를 초과했습니다.");
+        this.$router.push('/');
+        return;
+      }
+
+      this.SET_CONSULTING_INFO(data);
       this.getSnapshotList();
     })
-    .catch((error)=> {
-      console.log("방송 정보 요청 실패");
-      console.log(error);
+    .catch(()=> {
     })
 
-    console.log("조인 전에")
-    console.log(this.mySessionId);
+
     this.INIT_CONSULTING_INFO();
     this.INIT_PARTICIPANTS();
     this.SET_CHATS([]);
     this.joinSession();
+    this.updateViewCount();
       // 방장인지 체크
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
@@ -462,6 +468,8 @@ export default {
 
         console.log("subscrobers stream");
         this.SET_PARTICIPANTS(this.subsNoScreen);
+        // 시청자 수 업데이트
+        this.updateViewCount();
 			});
 
 			// 끝낸 모든 스트림들에 대해서
@@ -487,6 +495,7 @@ export default {
 					this.subscribers.splice(index, 1);
 				}
         this.SET_PARTICIPANTS(this.subscribers);
+        this.updateViewCount();
 
 			});
 
@@ -873,6 +882,9 @@ export default {
             .catch(error => {
               console.error(error);
 				});
+    },
+    async updateViewCount() {
+      await consulting.setViewCount(this.participants.length+1,this.consulting_no);
     }
   }
 }
