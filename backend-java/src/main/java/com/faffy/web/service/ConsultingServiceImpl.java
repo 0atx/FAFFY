@@ -129,6 +129,16 @@ public class ConsultingServiceImpl implements ConsultingService {
     }
 
     @Override
+    public List<ConsultingGetDto> getConsultingsByDate() {
+        List<Consulting> consultings = consultingRepository.findAllLatest();
+        List<ConsultingGetDto> dtoList = new ArrayList<>();
+        for(Consulting consulting : consultings){
+            dtoList.add(consulting.toConsultingGetDto());
+        }
+        return dtoList;
+    }
+
+    @Override
     @Transactional
     public ConsultingGetDto createConsulting(ConsultingCreateDto dto) throws Exception {
         // 이미 생성된 방송이 있으면 에러 발생해야함

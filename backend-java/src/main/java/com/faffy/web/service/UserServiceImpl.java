@@ -129,6 +129,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<BroadCastHistoryDto> getConsultHistoryByDate(int no) {
+        User user = userRepository.findByNo(no).orElse(null);
+        if(user == null)
+            return null;
+
+        List<ConsultingLog> logList = consultingLogRepository.findConsultingHistoryByUserNo(no);
+        List<Consulting> consultings = new ArrayList<>();
+        List<BroadCastHistoryDto> dtoList = new ArrayList<>();
+        if(!logList.isEmpty()) {
+            for(ConsultingLog log : logList){
+                consultings.add(log.getConsulting());
+            }
+
+            for (Consulting consulting : consultings) {
+                Date date = Timestamp.valueOf(consulting.getStartTime());
+                String sdate = date.toString().split(" ")[0].replace(':', '-');
+                BroadCastHistoryDto dto = BroadCastHistoryDto.builder()
+                        .consulting_no(consulting.getNo())
+                        .consultant(consulting.getConsultant().getNickname())
+                        .title(consulting.getTitle())
+                        .date(sdate)
+                        .intro(consulting.getIntro())
+                        .build();
+                dtoList.add(dto);
+            }
+        }
+        return dtoList;
+    }
+
+    @Override
     public List<BroadCastHistoryDto> getPartiList(int no) {
         User user = userRepository.findByNo(no).orElse(null);
         if(user == null)
