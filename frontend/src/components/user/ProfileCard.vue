@@ -7,7 +7,7 @@
     <!-- 유저 프로필 정보 -->
     <div id="profile" class="ml-7">
       <!-- 프로필 이미지 -->
-      <v-avatar color="#fff" class="mt-8 mb-4" size="250" rounded>
+      <v-avatar color="#fff" class=" mb-4" size="250" rounded>
         <img
           :src="`${API_BASE_URL}/users/profile/image/${userProfile.no}`"
           @error="replaceByDefault"
@@ -74,16 +74,17 @@
       <div id="category" class="mb-2">
         <v-chip-group column>
           <category-chips
-            v-for="(category, i) in userProfile.categories"
-            :key="i"
+            v-for="category in userProfile.categories"
+            :key="category"
             :category="category"
           />
         </v-chip-group>
       </div>
 
+
       <!-- SNS 정보 -->
       <div class="btn_wrap mb-2">
-        <span>SNS</span>
+        <span class="snsSpan">SNS</span>
         <div class="btncontainer">
           <!-- 인스타그램 -->
           <v-btn
@@ -92,7 +93,7 @@
             :style="userProfile.instaLink ? '' : 'pointer-events: none;'"
             @click="openSNS(userProfile.instaLink)"
           >
-            <v-icon :style="userProfile.instaLink ? '' : 'color: #fff !important;'" class="snsIcon"> mdi-instagram </v-icon>
+            <v-icon :style="userProfile.instaLink ? '' : 'color: #0c0f6620 !important;'" class="snsIcon"> mdi-instagram </v-icon>
           </v-btn>
 
           <!-- 페이스북 -->
@@ -102,7 +103,7 @@
             :style="userProfile.facebookLink ? '' : 'pointer-events: none;'"
             @click="openSNS(userProfile.facebookLink)"
           >
-            <v-icon :style="userProfile.facebookLink ? '' : 'color: #fff !important;'" class="snsIcon"> mdi-facebook </v-icon>
+            <v-icon :style="userProfile.facebookLink ? '' : 'color: #0c0f6620 !important;'" class="snsIcon"> mdi-facebook </v-icon>
           </v-btn>
 
           <!-- 유튜브 -->
@@ -112,7 +113,7 @@
             :style="userProfile.youtubeLink ? '' : 'pointer-events: none;'"
             @click="openSNS(userProfile.youtubeLink)"
           >
-            <v-icon :style="userProfile.youtubeLink ? '' : 'color: #fff !important;'" class="snsIcon"> mdi-youtube </v-icon>
+            <v-icon :style="userProfile.youtubeLink ? '' : 'color: #0c0f6620 !important;'" class="snsIcon"> mdi-youtube </v-icon>
           </v-btn>
         </div>
       </div>
@@ -132,7 +133,7 @@ const profileStore = "profileStore";
 const authStore = "authStore";
 export default {
   name: "ProfileCard",
-  components: { CategoryChips,FollowButton   },
+  components: { CategoryChips, FollowButton },
   computed: {
     ...mapState(profileStore, ["userProfile"]),
     ...mapState(authStore, ["loginUser","isLogin","followingList"]),
@@ -164,6 +165,7 @@ export default {
     openSNS(val) {
       window.open(val);
     },
+
   },
   metaInfo() {
     return {
@@ -178,7 +180,7 @@ export default {
 
 <style scoped>
 #profileCard {
-  background-color: #8b8fda9f;
+  background-color: #0c0f6620;
   padding: 5%;
   position: sticky;
   top: 0px;
@@ -203,7 +205,14 @@ export default {
 }
 
 #category {
-  min-height: 100px;
+  height: 70px;
+  margin-left: 24%;
+}
+
+#categoryChips {
+  background-color: #0c0f66;
+  color: #fff;
+  pointer-events: none;
 }
 
 #name {
@@ -272,7 +281,7 @@ img {
     cursor: default;
     width: 240px;
     height: 72px;
-    background-color: #fff;
+    background-color: #0c0f6620;
     border-radius: 80px;
     padding: 0 18px;
     margin:0 auto;
@@ -287,7 +296,7 @@ img {
           transform: scale(1.1)
 }
 
-span {
+.snsSpan {
   position: absolute;
   z-index: 99;
   width: 240px;
