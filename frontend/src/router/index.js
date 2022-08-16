@@ -143,4 +143,20 @@ const router = new VueRouter({
   },
 });
 
+router.beforeEach(( to, from, next ) => {
+  const isLogin = !!sessionStorage.getItem('X-AUTH-TOKEN')
+
+  const authPages = [ 'follower', 'following', 'edit-profile', 'consulting-ready', 'consulting-onair', 'board-new',
+  'board-detail', 'board-update' ]
+
+  const isAuthRequired = authPages.includes(to.name)
+
+  if (isAuthRequired && !isLogin) {
+    console.log('로그인 해야해요', isLogin)
+    next({ name: 'sign-in' })
+  } else {
+    next()
+  }
+})
+
 export default router;

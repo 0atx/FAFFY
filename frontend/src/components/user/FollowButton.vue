@@ -51,6 +51,9 @@ export default {
     ...mapActions(authStore,["loadFollowing"]),
     ...mapMutations(profileStore, ["SET_USER_PROFILE_FOLLOWERCOUNT"]),
     async toggleFollow() {
+      if(!this.isLogin) {
+        this.$router.push({ name: 'sign-in' })
+      }
       if(this.isMyProfile)
         return;
       if (this.follow) {
