@@ -7,10 +7,10 @@
     <div>
       <div id="route">
         <p class="text-h6" style="font-weight: 600">
-          <router-link :to="{ name: 'profile' }"> Profile </router-link>
+          <router-link :to="{ name: 'profile' }"> 정보 </router-link>
         </p>
-        <v-icon color="black" class="mb-3"> mdi-chevron-right </v-icon>
-        <p class="text-h6" style="font-weight: 600">Following</p>
+        <v-icon color="black" class="mb-4"> mdi-chevron-right </v-icon>
+        <p class="text-h6" style="font-weight: 600"> 팔로워 </p>
       </div>
       <div id="content" class="mt-4">
         <p class="text-h6" style="font-weight: 600">팔로워 목록</p>

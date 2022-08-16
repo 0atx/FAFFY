@@ -123,7 +123,7 @@
 
             <!-- 상세 자기소개 -->
             <v-textarea v-model="form.introduce" label="상세 자기소개" rows="4" clearable no-resize
-              clear-icon="mdi-close-circle" color="#0c0f66" maxlength="300" counter="300"></v-textarea>
+              clear-icon="mdi-close-circle" color="#0c0f66" maxlength="200" counter="200"></v-textarea>
 
             <!-- 관심 카테고리 -->
             <v-label>관심 분야</v-label>
@@ -244,6 +244,9 @@ export default {
     },
     goTo() {
       this.$router.go(-1);
+    },
+    save(birth) {
+      this.$refs.menu.save(birth);
     },
     checkingNickname() {
       if (!this.$refs.nickname.validate())
