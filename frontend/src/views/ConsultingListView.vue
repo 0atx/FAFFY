@@ -38,7 +38,7 @@
                 size="125"
                 tile
               >
-                <v-img :src="consulting.src"></v-img>
+              <v-img :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`"></v-img>
               </v-avatar>
               <div class="d-flex flex-column">
                 <v-card-title
@@ -47,8 +47,8 @@
                 ></v-card-title>
 
                 <v-card-subtitle style="text-align:start">
-                  {{ consulting.nickname }}<br>
-                  {{ consulting.viewCount }}/{{ consulting.roomSize }}<br>
+                  {{ consulting.consultant }}<br/>
+                  <v-icon small>mdi-account-multiple</v-icon>{{ consulting.viewCount }}/{{ consulting.roomSize }}<br/>
                   {{ consulting.intro }}
                 </v-card-subtitle>
 
@@ -91,12 +91,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import { API_BASE_URL } from "@/config";
 const searchStore = "searchStore"
 
 export default {
   name: 'ConsultingListView',
   data() {
     return {
+      API_BASE_URL: API_BASE_URL,
       page: 1,
       itemsPerPage: 4,
       totalVisible: 7,
