@@ -74,8 +74,8 @@
       <div id="category" class="mb-2">
         <v-chip-group column>
           <category-chips
-            v-for="category in userProfile.categories"
-            :key="category"
+            v-for="(category, i) in userProfile.categories"
+            :key="i"
             :category="category"
           />
         </v-chip-group>
@@ -203,7 +203,7 @@ export default {
 }
 
 #category {
-  height: 100px;
+  min-height: 100px;
 }
 
 #name {

@@ -25,7 +25,7 @@
           <v-col class="pl-0 pr-1" cols="5">
           <v-card style="min-height:300px; margin: auto" outlined>
             <v-list-item>
-              <v-list-item-content>
+              <v-list-item-content class="pb-0">
                 <v-list-item-title
                   style="font-weight: 600"
                   class="text-h6"
@@ -64,7 +64,7 @@
 
                 <!-- 컨설턴트 관심 카테고리
                 여러 개 설정 가능하지만 여기에선 3개만 보여주게 해야 이쁨 -->
-                <v-list-item style="min-height:20px;">
+                <v-list-item style="min-height:48px;" class="pl-0 pr-0">
                   <v-chip-group column>
                     <category-chips
                       v-for="category in userCategories"
@@ -75,7 +75,7 @@
                 </v-list-item>
               </v-list-item-content>
             </v-list-item>
-            <v-card-actions>
+            <v-card-actions class="pt-1 mb-1">
               <!-- 컨설턴트 방송 알림 설정
               이지만 일단은 누르면 해당 컨설턴트의 상세 프로필 페이지로 이동 -->
 
@@ -105,7 +105,7 @@
           <v-col class="pr-0" cols="7">
           <v-card style="min-height: 300px" outlined>
             <v-list-item>
-              <v-list-item-content>
+              <v-list-item-content class="pb-0">
                 <v-list-item-title
                   style="font-weight: 600"
                   class="text-h6"
@@ -138,7 +138,7 @@
                 </v-list-item>
 
                 <!-- 방송 카테고리 -->
-                <v-list-item style="min-height:20px;">
+                <v-list-item style="min-height:48px;" class="pl-0 pr-0">
                   <v-chip-group class="mt-2" column>
                     <category-chips
                       v-for="category in historyDetail.consultingDto.categories"
@@ -149,7 +149,7 @@
                 </v-list-item>
               </v-list-item-content>
             </v-list-item>
-            <v-card-actions class="mt-2">
+            <v-card-actions class="pt-1 mb-1">
               <v-spacer></v-spacer>
 
               <!-- 임시 버튼, 방송 일자 넣어도 되고 다른 정보 넣거나 없앨 수도 있음. 이 버튼은 눌러도 아무 기능 없게 할거임 -->

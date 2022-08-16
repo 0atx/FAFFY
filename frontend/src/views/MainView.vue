@@ -51,7 +51,7 @@
                     <div style="display:flex; align-items:center">
                       <div>
                         <!-- 방송 제목 -->
-                        <v-list-item-title style="font-weight: 600; font-size:22px;" class="mt-1 mb-1">
+                        <v-list-item-title style="font-weight: 600; font-size:22px;" class="mb-1">
                           {{slide.title}}
                         </v-list-item-title>
                         <!-- 컨설턴트 닉네임 / 참여자 / 참여 인원 -->
@@ -63,8 +63,13 @@
                         </v-list-item-subtitle>
                       </div>
                     </div>
+
+                    <!-- 방송 소개 -->
+                    <div class="pt-1" v-if="slide.intro.length > 100" id="intro">{{ slide.intro.slice(0,100) }}...</div>
+                    <div class="pt-1" v-else id="intro">{{ slide.intro }}</div>
+
                     <!-- 방송 카테고리 -->
-                    <v-chip-group column>
+                    <v-chip-group class="pt-1" style="min-height: 40px;" column>
                       <v-chip
                         small
                         :ripple="false"
@@ -76,8 +81,7 @@
                         {{ category }}
                       </v-chip>
                     </v-chip-group>
-                    <!-- 방송 소개 -->
-                    <div id="intro">{{slide.intro}}</div>
+
                     <div style="text-align:right;">
                       <!-- 임시 버튼, 방송 일자 넣어도 되고 다른 정보 넣거나 없앨 수도 있음. 이 버튼은 눌러도 아무 기능 없게 할거임 -->
                       <v-btn
@@ -142,28 +146,32 @@
                       </v-list-item-title>
                       <!-- 컨설턴트 닉네임 / 참여 인원 -->
                       <v-list-item-subtitle class="mb-1">
-                        {{ consult.nickname }}
+                        {{ consult.consultant }}
                       </v-list-item-subtitle>
                       <v-list-item-subtitle style="font-size: 12px;">
                         <v-icon small>mdi-account-multiple</v-icon> {{ consult.viewCount }} / {{ consult.roomSize }}
                       </v-list-item-subtitle>
                     </div>
                   </div>
+
+                  <!-- 방송 소개 -->
+                  <div class="pt-1" style="font-size:15px;" v-if="consult.intro.length > 80" id="intro">{{ consult.intro.slice(0,80) }}...</div>
+                  <div class="pt-1" style="font-size:15px;" v-else id="intro">{{ consult.intro }}</div>
+
                   <!-- 방송 카테고리 -->
-                  <v-chip-group>
+                  <v-chip-group class="pt-1" style="min-height: 40px;" column>
                     <v-chip
                       small
                       :ripple="false"
                       id="categoryChips"
-                      v-for="(category, i) in consult.categorys"
+                      v-for="(category, i) in consult.categories"
                       :key="i"
                       :category="category"
                     >
                       {{ category }}
                     </v-chip>
                   </v-chip-group>
-                  <!-- 방송 소개 -->
-                  <div style="font-size:15px;" id="intro">{{ consult.intro }}</div>
+
                   <div style="text-align:right;">
                     <!-- 참여 버튼. 클릭 시 화상회의 방 진입 -->
                     <v-btn
@@ -559,7 +567,7 @@ a {
 }
 
 #intro {
-  height: 95px;
+  height: 65px;
   display: flex;
   padding: 0;
   justify-content: flex-start;
