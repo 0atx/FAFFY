@@ -59,8 +59,8 @@
                 <!--각각의 게시글, 클릭하면 상세조회로 이동-->
                 <tbody>
                   <tr
-                    v-for="consulting in consultingHistory.slice(0, 4)"
-                    :key="consulting.consulting_no"
+                    v-for="(consulting, i) in consultingHistory.slice(0, 4)"
+                    :key="i"
                     style="cursor: pointer"
                     @click="historyDetail(consulting.consulting_no)"
                   >
@@ -128,8 +128,8 @@
                 <!--각각의 게시글, 클릭하면 상세조회로 이동-->
                 <tbody>
                   <tr
-                    v-for="board in userBoardList.slice(0, 4)"
-                    :key="board.no"
+                    v-for="(board, i) in userBoardList.slice(0, 4)"
+                    :key="i"
                     style="cursor: pointer"
                     @click="boardDetail(board.no)"
                   >
