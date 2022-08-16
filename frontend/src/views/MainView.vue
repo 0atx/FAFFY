@@ -38,28 +38,28 @@
             <div style="display:flex">
               <!-- 방송 진행자 이미지 정보 -->
               <!-- <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="slide.src"> -->
-              <img style="width:350px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`${API_BASE_URL}/users/profile/image/${slide.consultant_no}`"
+              <img style="width:250px; height:250px;" :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`${API_BASE_URL}/users/profile/image/${slide.consultant_no}`"
               @error="replaceByDefault"
               >
               <!-- 방송 정보 -->
               <v-card
                 tile
-                style="width:250px; height:250px; background-color:white"
+                style="width:350px; height:250px; background-color:white"
               >
                 <v-list-item>
                   <v-list-item-content>
                     <div style="display:flex; align-items:center">
                       <div>
                         <!-- 방송 제목 -->
-                        <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
+                        <v-list-item-title style="font-weight: 600; font-size:22px;" class="mt-1 mb-1">
                           {{slide.title}}
                         </v-list-item-title>
                         <!-- 컨설턴트 닉네임 / 참여자 / 참여 인원 -->
-                        <v-list-item-subtitle class="mb-1">
+                        <v-list-item-subtitle style="font-size: 18px;" class="mb-1">
                           {{slide.consultant}}
                         </v-list-item-subtitle>
-                        <v-list-item-subtitle style="font-size: 12px;">
-                          참여자 {{slide.viewCount}} / 최대 인원 {{slide.roomSize}}
+                        <v-list-item-subtitle style="font-size: 14px;">
+                          <v-icon small>mdi-account-multiple</v-icon> {{slide.viewCount}} / {{slide.roomSize}}
                         </v-list-item-subtitle>
                       </div>
                     </div>
@@ -69,8 +69,8 @@
                         small
                         :ripple="false"
                         id="categoryChips"
-                        v-for="category in slide.categories"
-                        :key="category"
+                        v-for="(category, i) in slide.categories"
+                        :key="i"
                         :category="category"
                       >
                         {{ category }}
@@ -84,7 +84,6 @@
                         outlined
                         rounded
                         text
-                        class="mt-1"
                         :to="{name:'consulting-onair',params:{nickname:slide.consultant,consulting_no:slide.no}}"
                       >
                         참여
@@ -121,16 +120,18 @@
               v-else
               tile
               v-for="(consult, i) in latestConsultings"
-              :key="consult.title"
+              :key="i"
               :class="i % 2 == 0 ? 'blueCard' : 'orangeCard'"
               style="height: 460px; width: 300px;"
               outlined
             >
               <!-- 방송 진행자 이미지 정보 -->
-              <v-img
+              <img
                 height="200"
+                width="100%"
                 :src="`${API_BASE_URL}/users/profile/image/${consult.consultant_no}`"
-              ></v-img>
+                @error="replaceByDefault"
+              />
               <v-list-item>
                 <v-list-item-content>
                   <div style="display:flex; align-items:center">
@@ -154,8 +155,8 @@
                       small
                       :ripple="false"
                       id="categoryChips"
-                      v-for="category in consult.categorys"
-                      :key="category"
+                      v-for="(category, i) in consult.categorys"
+                      :key="i"
                       :category="category"
                     >
                       {{ category }}
@@ -187,11 +188,17 @@
         <div style="display: flex;padding: 2%; justify-content: space-between;">
           <div>
             <!-- 좌측 상단 인기 글 -->
-            <div class="mb-4" style="width: 900px;">
+            <div class="mb-4" style="width: 700px; min-height:250px;">
               <router-link style="font-weight:600;" class="text-h6" to="/board">인기 게시글<v-icon color="black"
                   class="mb-1"> mdi-chevron-right </v-icon>
               </router-link>
-              <v-data-table class="table" :headers="headers" hide-default-footer :items="hitBoardList"
+              <v-col style="height:250px; display:flex; justify-content:center; align-items:center;" v-if="hitBoardList.length == 0" cols="12">
+                <div style="text-align:center;">
+                  <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+                  <h4>작성된 게시글이 없습니다.</h4>
+                </div>
+              </v-col>
+              <v-data-table v-else class="table" :headers="headers" hide-default-footer :items="hitBoardList"
                 :items-per-page="5">
                 <template v-slot:[`item.title`]="{ item }">
                   <router-link :to="{ name: 'board-detail', params: { boardNo: item.no } }">
@@ -201,11 +208,17 @@
               </v-data-table>
             </div>
             <!-- 좌측 하단 최신 글 -->
-            <div class="mb-4" style="width: 900px;">
+            <div class="mb-4" style="width: 700px; min-height:250px;">
               <router-link style="font-weight:600;" class="text-h6" to="/board">최신 게시글<v-icon color="black"
                   class="mb-1"> mdi-chevron-right </v-icon>
               </router-link>
-              <v-data-table class="table" :headers="headers" hide-default-footer :items="latestBoardList"
+              <v-col style="height:250px; display:flex; justify-content:center; align-items:center;" v-if="latestBoardList.length == 0" cols="12">
+                <div style="text-align:center;">
+                  <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+                  <h4>작성된 게시글이 없습니다.</h4>
+                </div>
+              </v-col>
+              <v-data-table v-else class="table" :headers="headers" hide-default-footer :items="latestBoardList"
                 :items-per-page="5">
                 <template v-slot:[`item.title`]="{ item }">
                   <router-link :to="{ name: 'board-detail', params: { boardNo: item.no } }">
@@ -283,53 +296,6 @@ export default {
       hitBoardList: [],
       latestBoardList: [],
       imgBoardList: [],
-      // slides: [
-      //   {
-      //     consultant:"park2",
-      //     consultant_no:3,
-      //     intro:"소개",
-      //     title:"제목임",
-      //     categories:["hiphop","daily"],
-      //     no:299,
-      //     profileImageNo:3,
-      //     viewCount:1,
-      //     roomSize:10,
-      //   },
-      //   {
-      //     consultant:"park2",
-      //     consultant_no:3,
-      //     intro:"소개2",
-      //     title:"제목임2",
-      //     categories:["hiphop","daily"],
-      //     no:21,
-      //     profileImageNo:3,
-      //     viewCount:1,
-      //     roomSize:10,
-      //   },
-      //   {
-      //     consultant:"park2",
-      //     consultant_no:3,
-      //     intro:"소개3",
-      //     title:"제목임3",
-      //     categories:["hiphop"],
-      //     no:69,
-      //     profileImageNo:3,
-      //     viewCount:1,
-      //     roomSize:10,
-      //   },
-      //   // {
-      //   //   src: "https://picsum.photos/500/300?image=20"
-      //   // },
-      //   // {
-      //   //   src: "https://picsum.photos/500/300?image=25"
-      //   // },
-      //   // {
-      //   //   src: "https://picsum.photos/500/300?image=30"
-      //   // },
-      //   // {
-      //   //   src: "https://picsum.photos/500/300?image=35"
-      //   // }
-      // ],
       consults: [
         {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -387,11 +353,11 @@ export default {
         "시크",
       ],
       headers: [
-        { text: '분류', align: 'start', value: 'category', width: '8%' },
-        { text: '게시글 제목', align: 'center', value: 'title', width: '58%' },
-        { text: '작성자', align: 'end', value: 'user.nickname', width: '11%' },
-        { text: '작성 일자', align: 'end', value: 'dateTime', width: '13%' },
-        { text: '조회수', align: 'end', value: 'hit', width: '10%' },
+        { text: '분류', align: 'start', value: 'category', width: '12%' },
+        { text: '제목', align: 'start', value: 'title', width:'52%' },
+        { text: '작성자', align: 'end', value: 'user.nickname', width: '12%' },
+        { text: '작성 일자', align: 'end', value: 'dateTime', width: '12%' },
+        { text: '조회수', align: 'end', value: 'hit', width: '12%' },
       ],
     };
   },
@@ -435,7 +401,14 @@ export default {
         this.latestBoardList = response.data;
         // 날짜 형식 바꾸기
         for (var i = 0; i < this.latestBoardList.length; i++) {
-          this.latestBoardList[i].dateTime = this.latestBoardList[i].dateTime.substr(0, 10);
+          this.latestBoardList[i].dateTime = this.latestBoardList[i].dateTime.substr(0, 10).replaceAll('-','.');
+          if(this.latestBoardList[i].category === "Free") {
+            this.latestBoardList[i].category = "자유"
+          } else if(this.latestBoardList[i].category === "QnA") {
+            this.latestBoardList[i].category = "질문"
+          } else if(this.latestBoardList[i].category === "Info") {
+            this.latestBoardList[i].category = "정보"
+          }
         }
         console.log(this.latestBoardList);
       }).catch(error => {
@@ -447,7 +420,14 @@ export default {
         this.hitBoardList = response.data;
         // 날짜 형식 바꾸기
         for (var i = 0; i < this.latestBoardList.length; i++) {
-          this.hitBoardList[i].dateTime = this.hitBoardList[i].dateTime.substr(0, 10);
+          this.hitBoardList[i].dateTime = this.hitBoardList[i].dateTime.substr(0, 10).replaceAll('-','.');
+          if(this.hitBoardList[i].category === "Free") {
+            this.hitBoardList[i].category = "자유"
+          } else if(this.hitBoardList[i].category === "QnA") {
+            this.hitBoardList[i].category = "질문"
+          } else if(this.hitBoardList[i].category === "Info") {
+            this.hitBoardList[i].category = "정보"
+          }
         }
         console.log(this.hitBoardList);
       }).catch(error => {
@@ -579,7 +559,7 @@ a {
 }
 
 #intro {
-  height: 100px;
+  height: 95px;
   display: flex;
   padding: 0;
   justify-content: flex-start;

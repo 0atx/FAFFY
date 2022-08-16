@@ -9,7 +9,6 @@ import router from './router'
 import store from "./store";
 import axios from 'axios'
 
-Vue.use(axios)
 Vue.use(VueMeta)
 Vue.use(Carousel3d)
 Vue.use(VuetifyDialog, {

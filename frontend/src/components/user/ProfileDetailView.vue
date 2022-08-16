@@ -73,9 +73,12 @@
               </template>
             </v-simple-table>
           </div>
-          <div v-else>
-            방송 이력이 없습니다.
-          </div>
+          <v-col v-else style="height:300px; display:flex; justify-content:center; align-items:center;" cols="12">
+            <div style="text-align:center;">
+              <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+              <h4>방송 이력이 없습니다.</h4>
+            </div>
+          </v-col>
         </div>
       </div>
       <div id="content">
@@ -105,16 +108,16 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-start">
+                    <th class="text-start" width="15%">
                       카테고리
                     </th>
-                    <th class="text-start">
+                    <th class="text-start" width="60%">
                       제목
                     </th>
-                    <th class="text-start">
+                    <th class="text-start" width="15%">
                       작성일
                     </th>
-                    <th class="text-start">
+                    <th class="text-start" width="10%">
                       조회수
                     </th>
                   </tr>
@@ -136,9 +139,12 @@
               </template>
             </v-simple-table>
           </div>
-          <div v-else>
-            작성 게시글이 없습니다.
-          </div>
+          <v-col v-else style="height:300px; display:flex; justify-content:center; align-items:center;" cols="12">
+            <div style="text-align:center;">
+              <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+              <h4>작성한 게시글이 없습니다.</h4>
+            </div>
+          </v-col>
         </div>
       </div>
     </div>
@@ -210,7 +216,6 @@ export default {
 }
 
 #content {
-  height: 300px;
   background-color: #fff;
   padding: 2%;
 }
