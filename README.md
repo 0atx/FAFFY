@@ -1,4 +1,3 @@
-
 ![타이틀이미지](./docs/README/banner_1.png)
 # 🌊 FAFFY - 패션 컨설팅 플랫폼
 
@@ -181,7 +180,7 @@ tupli-front
 - [와이어프레임](./docs/)
 - [컨벤션](./docs/)
 - [API](./docs/)
-- [ERD](./docs/)
+- [ERD](./docs/ERD.png)
 - [회의록](./docs/)
 - [테스트케이스](./docs/)
 - [시스템기술서](./docs/)
