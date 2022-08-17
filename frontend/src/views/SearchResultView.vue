@@ -36,9 +36,6 @@ export default {
     ...mapActions(searchStore, ['searchKeyword']),
   },
   created() {
-    console.log(this.keyword+'로 방송을 검색')
-    console.log(this.keyword+'로 게시글을 검색')
-    console.log(this.keyword+'로 유저목록을 검색')
     this.searchKeyword(this.keyword)
   },
 }

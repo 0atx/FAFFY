@@ -241,7 +241,6 @@ export default {
     } else {
       this.form.gender = "0";
     }
-    console.log(this.form);
     if (this.form.categories == undefined)
       this.form.categories = [];
 
@@ -249,12 +248,9 @@ export default {
     // 카테고리 목록 불러오기
     category.getCategories(
       (response) => {
-        console.log("카테고리 요청 성공");
         this.categoryList = response.data["content"];
       },
-      (response) => {
-        console.log("요청 실패");
-        console.log(response);
+      () => {
       }
     );
   },
@@ -278,8 +274,7 @@ export default {
       ()=> {
         this.checkNicknameIcon = true;
       },
-      (response)=> {
-        console.log("결과:" + response);
+      ()=> {
         if(this.form.nickname === this.loginUser.nickname) {
           this.checkNicknameIcon = true;
         } else {
@@ -325,28 +320,23 @@ export default {
       formData.append("instaLink", this.form.instaLink);
       formData.append("facebookLink", this.form.facebookLink);
       formData.append("youtubeLink", this.form.youtubeLink);
-      console.log(this.form.categories);
+
       if (this.form.categories != undefined)
       formData.append("categories", this.form.categories);
       else {
-        console.log("unidentifed!");
         formData.append("categories", []);
       }
 
       auth.updateProfile(
         formData,
         (response) => {
-          console.log("성공");
-          console.log(response);
           this.SET_USER_INFO(response.data["content"]);
           this.$router.push({
             name: "profile",
             params: { no: this.loginUser.no },
           });
         },
-        (response) => {
-          console.log("실패");
-          console.log(response);
+        () => {
         }
       );
     },
@@ -356,9 +346,6 @@ export default {
       } else {
         this.url = null;
       }
-    },
-    show() {
-      console.log(this.selectedCategorys);
     },
     async deleteProfileImg() {
       const res = await this.$dialog.confirm({
@@ -378,13 +365,11 @@ export default {
       }
 
       auth.deleteProfileImg(this.loginUser.no,
-      (response) => {
-        console.log(response.data);
+      () => {
         this.form.file = null;
         this.url = null;
       },
-      (response)=> {
-        console.log(response.data);
+      ()=> {
       })
     }
   },

@@ -122,7 +122,6 @@ export default {
   },
   methods: {
     boardDetail(e) {
-      console.log(e)
       this.$router.push({ name: 'board-detail', params: { boardNo: e.no }})
     }
   },

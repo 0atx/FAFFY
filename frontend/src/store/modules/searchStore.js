@@ -32,13 +32,11 @@ const searchStore = {
         params: { keyword: keyword }
       })
         .then(res => {
-          console.log('검색 성공', res)
           commit('SET_CONSULTING_RESULT', res.data.consulting.content)
           commit('SET_BOARD_RESULT', res.data.board.content)
           commit('SET_USER_RESULT', res.data.user.content)
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     }
   },

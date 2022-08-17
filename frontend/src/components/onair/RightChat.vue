@@ -105,9 +105,6 @@ export default {
 
   },
   mounted() {
-    console.log("탭이에요");
-    console.log(this.session);
-    console.log("탭이에요end");
     document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
   },
   data() {
@@ -147,12 +144,10 @@ export default {
 				type: 'my-chat'             // The type of message (optional)
 			})
 				.then(() => {
-					console.log('Message successfully sent');
 					this.message = "";
           document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
 				})
-				.catch(error => {
-					console.error(error);
+				.catch(() => {
 				});
 		},
 

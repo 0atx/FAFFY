@@ -42,8 +42,6 @@ export default {
   },
   mounted() {
     this.setContent();
-    
-    console.log(this.boardNo);
   },
   methods: {
     ...mapActions(boardStore, ['fetchBoard', 'deleteBoard']),
@@ -72,7 +70,6 @@ export default {
     },
     // 게시글 삭제
     async requestDeleteBoard(boardNo) {
-      console.log(`${boardNo}번 글을 삭제합니다.`)
       const res = await this.$dialog.confirm({
           text: '<br>정말로 삭제하시겠습니까?',
           icon: true,
@@ -90,7 +87,6 @@ export default {
       }
     },
     requestUpdateBoard(boardNo) {
-      console.log(`${boardNo}번 글을 수정합니다.`)
       this.$router.push({ name: 'board-update', params: { boardNo: boardNo }})
     }
   },

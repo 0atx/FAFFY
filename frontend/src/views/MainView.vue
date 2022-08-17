@@ -396,27 +396,22 @@ export default {
     // 상단 참여자수 순 목록
     consulting.getBestConsultings(5)
     .then((data)=> {
-      console.log(data);
       this.bestConsultings = data["content"];
       this.topContentLoaded=true;
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
 
     // 중단 생성 순 목록
     consulting.getLatestConsultings(5)
     .then((data)=> {
-      console.log(data);
       this.latestConsultings = data["content"];
       this.midContentLoaded=true;
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
-    console.log("hi");
-    // 방송 목록 요청 END
 
+    // 방송 목록 요청 END
     this.getLatestBoardList();
 
   },
@@ -436,8 +431,7 @@ export default {
             this.latestBoardList[i].category = "정보"
           }
         }
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     },
     getHitBoardList() { // 인기 게시물
@@ -454,8 +448,7 @@ export default {
             this.hitBoardList[i].category = "정보"
           }
         }
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     }, getImgBoardList() { // 이미지 게시물 (이미지만)
       this.$axios.get(API_BASE_URL+'/main/board/image').then(response => {
@@ -465,18 +458,15 @@ export default {
           this.imgBoardList[i].dateTime = this.imgBoardList[i].dateTime.substr(0, 10);
         }
         this.getImgDetail();
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     },
     getImgDetail() { // 이미지 게시물 디테일 가져오기
-    console.log(this.imgBoardList.length);
       for(var j = 0; j < this.imgBoardList.length; j++){
         var k = j;
         this.$axios.get(API_BASE_URL + '/boards/' + this.imgBoardList[k].no).then(response => {
           this.imgSrcList.push('https://i7a802.p.ssafy.io/api/boards/file/' + response.data.content.board.fileNo);
-        }).catch(error => {
-          console.log(error)
+        }).catch(() => {
         })
       }
     }

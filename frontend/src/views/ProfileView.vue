@@ -48,17 +48,13 @@ export default {
     async loadUserInfo() {
       const requestUserNo = this.$route.params.no;
 
-      console.log(requestUserNo+"번 유저 정보 요청하기");
       user.getUserProfile(
         requestUserNo,
         (response) => {
-          console.log(response.data["content"]);
           this.SET_USER_PROFILE(response.data["content"]);
         },
-        (response) => {
-          console.log(response);
+        () => {
           this.SET_USER_PROFILE(null);
-          console.log("회원 정보가 없음");
           this.$router.push({ name: "main" });
         }
       );

@@ -347,10 +347,8 @@ export default {
     },
     // 검색 카테고리 별 정렬
     search(keyword) {
-      console.log(this.keyword + ",? " + keyword);
       this.keyword = keyword
       this.sortBy = '';
-      console.log(this.keyword + ", " + keyword);
       this.searchKeyword(this.keyword)
 
       this.keyword = '';
@@ -362,11 +360,9 @@ export default {
       this.nodata= '현재 진행 중인 방송이 없습니다.';
       consulting.getAllLatestConsultings()
       .then((data)=> {
-        console.log(data);
         this.consultingsResult = data["content"];
       })
-      .catch((error)=> {
-        console.log(error);
+      .catch(()=> {
       })
     },
   },
@@ -387,11 +383,9 @@ export default {
   mounted() {
     consulting.getAllLatestConsultings()
     .then((data)=> {
-      console.log(data);
       this.consultingsResult = data["content"];
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
   },
   watch: {

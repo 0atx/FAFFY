@@ -119,8 +119,8 @@ export default {
       window.stream = stream;
       document.getElementById('video').srcObject = stream;
     }
-    catch(e){
-      console.log(e)
+    catch(error){
+      console.log(error)
     }
   },
   mounted() {
@@ -131,12 +131,9 @@ export default {
     // 카테고리 요청
     category.getCategories(
       (response) => {
-        console.log("카테고리 요청 성공");
         this.categoryList = response.data["content"];
       },
-      (response) => {
-        console.log("요청 실패");
-        console.log(response);
+      () => {
       }
     );
   },
@@ -145,16 +142,12 @@ export default {
     start() {
       consulting.createConsulting(this.form)
       .then(response => {
-        console.log("생성 요청 성공");
-        console.log(response.content);
         let nickname = response.content.consultant;
         let consulting_no = response.content.no;
         consulting.createConsultingLog({ consulting_no: consulting_no, user_no: this.form.consultant_no })
         this.$router.push({name:"consulting-onair",params:{nickname,consulting_no}});
       })
-      .catch(error=> {
-        console.log("생성 실패");
-        console.log(error);
+      .catch(() => {
       })
     }
   },

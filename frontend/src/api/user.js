@@ -32,7 +32,6 @@ const follow = {
     .catch(fail);
   },
   followCancel:async function(followMapping,success,fail) {
-    console.log(followMapping)
     await api
     .delete(`/follow`,{data:followMapping})
     .then(success)
