@@ -335,6 +335,7 @@ export default {
             name: "profile",
             params: { no: this.loginUser.no },
           });
+          location.reload();
         },
         () => {
         }

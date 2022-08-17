@@ -8,6 +8,7 @@ import com.faffy.web.dto.ConsultingGetDto;
 import com.faffy.web.exception.IllegalInputException;
 import com.faffy.web.jpa.entity.Board;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.List;
@@ -63,4 +64,6 @@ public interface BoardService {
     List<BoardGetDto> searchByKeyword(String keyword) throws Exception;
 
     List<BoardGetDto> getBoardWithUserNo(int userNo);
+
+    int increaseHit(int board_no) throws Exception;
 }

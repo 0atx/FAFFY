@@ -43,8 +43,9 @@
           label="제목"
           outlined
           color="#0c0f66"
+          :rules="rules.Title()"
           v-model="boardForm.title"
-          max-lenght="100">
+          maxlength="50">
         </v-text-field>
 
         <!--본문 작성-->
@@ -54,7 +55,9 @@
           name="input-7-4"
           label="본문"
           rows="10"
+          maxlength="500"
           no-resize
+          :rules="rules.boardContent()"
           v-model="boardForm.content">
         </v-textarea>
         <!--이미지 첨부-->
@@ -78,6 +81,7 @@
 </template>
 
 <script>
+import validateRules from "@/utils/validateRules.js";
 import { mapActions, mapGetters } from 'vuex'
 const boardStore = "boardStore"
 
@@ -100,6 +104,7 @@ export default {
   },
   computed: {
     ...mapGetters(['currentImage']),
+    rules: () => validateRules,
     boardCategory() {
       if (this.boardForm.category === '자유') {
         return 'Free'
@@ -138,27 +143,37 @@ export default {
     },
     // 게시글 작성
     async submitBoard() {
-      let formData = new FormData()
-      formData.append('title', this.boardForm.title)
-      formData.append('category', this.boardCategory)
-      formData.append('content', this.boardForm.content)
-      if (this.boardForm.img != null) formData.append('file', this.boardForm.img)
+      const validate = this.$refs.form.validate();
 
-      if (this.action==='update') {
-        formData.append('no', this.$route.params.boardNo)
-        await this.updateBoard(formData)
-        this.$dialog.message.info('게시글이 수정되었습니다.', {
-          position: "top",
-          timeout: 2000,
-          color: "#0c0f66",
-        });
-      } else {
-        await this.createBoard(formData)
-        this.$dialog.message.info('게시글이 등록되었습니다.', {
-          position: "top",
-          timeout: 2000,
-          color: "#0c0f66",
-        });
+      if(validate) {
+        let formData = new FormData()
+        formData.append('title', this.boardForm.title)
+        formData.append('category', this.boardCategory)
+        formData.append('content', this.boardForm.content)
+        if (this.boardForm.img != null) formData.append('file', this.boardForm.img)
+        for (let v of formData.values()) {
+            console.log(v)
+        }
+        if (this.action==='update') {
+          console.log('수정이고 글번호는', this.$route.params.boardNo)
+          formData.append('no', this.$route.params.boardNo)
+          // for (let v of formData.values()) {
+          //   console.log(v)
+          // }
+          await this.updateBoard(formData)
+          this.$dialog.message.info('게시글이 수정되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
+        } else {
+          await this.createBoard(formData)
+          this.$dialog.message.info('게시글이 등록되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
+        }
       }
     },
     async moveToDetail() {

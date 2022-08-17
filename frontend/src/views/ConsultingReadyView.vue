@@ -16,17 +16,19 @@
             maxlength="50"
             counter="50"
             color="#0c0f66"
+            :rules="rules.Title()"
             @keydown.enter="onInputKeyword"
           />
           <!-- 상세 자기소개 -->
           <v-textarea
             v-model="form.intro"
             label="방송 소개"
-            rows="2"
+            rows="3"
             no-resize
             clearable
             clear-icon="mdi-close-circle"
             color="#0c0f66"
+            :rules="rules.consultingIntro()"
             maxlength="300"
             counter="300"
           ></v-textarea>
@@ -51,25 +53,21 @@
         <div style="width:20%;">
           <!-- 방송 인원 -->
 
-          <v-select
-            :items="maxCounts"
+          <v-text-field
             v-model="form.roomSize"
             type="number"
-            label="최대 인원수"
-            outlined
-          ></v-select>
-          <!-- <v-text-field
-            v-model="form.roomSize"
-            type="number"
-            hint="최대 참여 인원을 입력하세요."
+            hint="최대 50명까지 설정할 수 있습니다."
             persistent-hint
             label="최대 인원"
             required
             max=50
-            min=0
+            min=2
             color="#0c0f66"
+            id = "maxRoom"
+            @keyup="checkNum"
+            :rules="rules.maxRoom()"
             @keydown.enter="onInputKeyword"
-          /> -->
+          />
           <v-btn
             id="onairBtn"
             :ripple="false"
@@ -86,6 +84,7 @@
 </template>
 
 <script>
+import validateRules from "@/utils/validateRules.js";
 import {consulting} from "@/api/consulting.js"
 import {category} from "@/api/category.js"
 import {mapState} from "vuex";
@@ -95,6 +94,7 @@ export default {
   name: 'ConsultingFormView',
   computed: {
     ...mapState(authStore,["loginUser"]),
+    rules: () => validateRules,
   },
   data() {
     return {
@@ -124,8 +124,6 @@ export default {
     }
   },
   mounted() {
-    // 로그인 체크
-
     // 내정보, 방송 생성 정보
     this.form.consultant_no = this.loginUser.no;
     // 카테고리 요청
@@ -140,18 +138,38 @@ export default {
   methods: {
     // 방송 시작
     start() {
-      consulting.createConsulting(this.form)
-      .then(response => {
-        let nickname = response.content.consultant;
-        let consulting_no = response.content.no;
-        consulting.createConsultingLog({ consulting_no: consulting_no, user_no: this.form.consultant_no })
-        this.$router.push({name:"consulting-onair",params:{nickname,consulting_no}});
-      })
-      .catch(() => {
-      })
-    }
-  },
+      const validate = this.$refs.form.validate();
 
+      if(validate) {
+        consulting.createConsulting(this.form)
+        .then(response => {
+          console.log("생성 요청 성공");
+          console.log(response.content);
+          let nickname = response.content.consultant;
+          let consulting_no = response.content.no;
+          consulting.createConsultingLog({ consulting_no: consulting_no, user_no: this.form.consultant_no })
+          this.$router.push({name:"consulting-onair",params:{nickname,consulting_no}});
+        })
+        .catch(error=> {
+          console.log("생성 실패");
+          console.log(error);
+        })
+      } else {
+        this.$dialog.message.info('방송 설정 입력 형식을 맞춰주세요.', {
+          position: "top",
+          timeout: 2000,
+          color: "#ff7451",
+        });
+      }
+    },
+    checkNum: function(e) {
+      console.log("호출은 되니.." + e.witch + ", " + e.keyCode)
+        if(e.keyCode == 187 || e.keyCode == 189) {
+        e.target.value = e.target.value.substring(0, e.target.value.length -1);
+        return false;
+      }
+    },
+  },
 }
 </script>
 
