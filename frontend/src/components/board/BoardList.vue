@@ -152,7 +152,6 @@ export default {
   methods: {
     // 상세조회 페이지 이동
     boardDetail(boardNo) {
-      console.log(`${boardNo}번 글로 이동`)
       this.$router.push({ name: "board-detail", params: { boardNo: boardNo }})
     },
     // 최신순 정렬
@@ -170,7 +169,6 @@ export default {
     // 검색 카테고리 별 정렬
     searchKeyword(keyword) {
       this.keyword = keyword
-      console.log(keyword)
       if (this.searchCategory === '작성자') {
           this.now = this.now.filter(board => board.user.nickname.includes(this.keyword))
       } else if (this.searchCategory === '제목') {
@@ -182,7 +180,6 @@ export default {
           color: "#ff7451",
         });
       }
-      console.log(this.now)
     },
     // 검색 결과 초기화
     resetSearch() {

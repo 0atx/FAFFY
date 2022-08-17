@@ -34,9 +34,7 @@
         </p>
         <hr />
         <div id="history">
-          <!-- 방송 기록 리스트 부분입니다. 추후 방송 기록 리스트 컴포넌트 구현 후
-          추가할 예정입니다. <br />ex) 카테고리(참여, 진행) | 방송 제목 ㅁ사진
-          갯수 or 방송 일자 -->
+          <!-- 방송 기록 리스트 -->
           <div v-if="isHistoryExist">
             <v-simple-table>
               <template v-slot:default>
@@ -100,9 +98,7 @@
         </p>
         <hr />
         <div id="board">
-          <!-- 게시글 리스트 부분입니다. 추후 게시글 리스트 컴포넌트 구현 후 추가할
-          예정입니다. <br />ex) 카테고리(Q&A, 자유) | 게시글 제목 ㅁ댓글 갯수 or
-          작성 일자 -->
+          <!-- 게시글 리스트 -->
           <div v-if="isBoardExist">
             <v-simple-table>
               <template v-slot:default>

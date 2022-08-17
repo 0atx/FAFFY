@@ -417,7 +417,6 @@ export default {
     }
   },
   beforeRouteLeave(to,from,next) {
-    console.log("leave!!");
     this.leaveSession();
     next();
     location.reload();
@@ -454,8 +453,6 @@ export default {
 				const subscriber = this.session.subscribe(stream);
 
         let namecode = JSON.parse(stream.connection.data).clientData.split(':');
-        console.log("네임코드 확인 중!!! : ", namecode[1]);
-        console.log(this.nickname + '님의 화면');
 
         if(!(namecode[1] == this.nickname + '님의 화면')) {
           this.subscribers.push(subscriber);
@@ -464,10 +461,8 @@ export default {
           this.subscribers.push(subscriber);
           this.isShare = true;
           this.SET_SHARESCREEN(this.isShare);
-          console.log("Screen 시작 : " + this.isShare);
         }
 
-        console.log("subscrobers stream");
         this.SET_PARTICIPANTS(this.subsNoScreen);
         // 시청자 수 업데이트
         this.updateViewCount();
@@ -481,14 +476,12 @@ export default {
         if(namecode[1] == this.nickname + '님의 화면') {
           this.isShare = false;
           this.SET_SHARESCREEN(this.isShare);
-          console.log("Screen 종료 : " + this.isShare);
         }
         // 모자이크 종료시키기
         let no = namecode[0];
         let mosaicValue = false;
         this.participants.forEach(element => {
           if (element.no == no) {
-            console.log("퇴장 찾았다");
             element.mosaicValue = mosaicValue;
           }
         });
@@ -507,11 +500,6 @@ export default {
 			// 시그널 수신
 			this.session.on('signal', (event) => {
         let data = JSON.parse(event.data);
-        let type = event.type;
-				// event = JSON.parse(event.data);
-				console.log(data); // Message
-				// console.log(event.from); // Connection object of the sender
-				console.log(type); // The type of message
         // 방송 종료 signal일 경우
         if (event.type == "signal:naga") {
           if (!this.isHost) {
@@ -561,9 +549,6 @@ export default {
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
 						});
-            console.log("-----------")
-            console.log(publisher);
-            console.log("-----------")
 
 						this.mainStreamManager = publisher;
 						this.publisher = publisher;
@@ -572,29 +557,19 @@ export default {
 
 						this.session.publish(this.publisher);
 
-            console.log("방장체크"+this.nickname);
-            console.log("내닉넴:"+this.loginUser.nickname);
-            console.log("-----------")
-            console.log("subs", this.subscribers);
-            console.log("-----------")
             if (!this.isHost){
               const log = {
                 consulting_no:this.mySessionId,
                 user_no:this.loginUser.no,
               }
-              console.log(log);
               consulting.createViewLog(log)
-              .then((data)=> {
-                console.log("로그 생성");
-                console.log(data);
+              .then(()=> {
               })
-              .catch((error)=> {
-                console.log(error);
+              .catch(()=> {
               })
             }
 					})
-					.catch(error => {
-						console.log('There was an error connecting to the session:', error.code, error.message);
+					.catch(() => {
 					});
 			});
 			window.addEventListener('beforeunload', this.leaveSession)
@@ -632,24 +607,19 @@ export default {
 			this.screenShareName = this.myUserName + "님의 화면",
 
 				this.getToken(this.mySessionId).then(token => {
-					console.log(token);
 					this.screenSession.connect(token, { clientData: this.screenShareName })
 						.then(() => {
 							let publisher = this.screenOV.initPublisher("html-element-id", { videoSource: "screen", publishAudio: false });
 
 							try {
 								publisher.once('accessAllowed', () => {
-									let test = publisher.stream.getMediaStream().getVideoTracks();
-									console.log(test);
 									publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-										console.log('User pressed the "Stop sharing" button');
 										this.stopScreenShare();
 									});
 									this.screenSession.publish(publisher);
 								});
 
-								publisher.once('accessDenied', (event) => {
-									console.error(event, 'ScreenShare: Access Denied');
+								publisher.once('accessDenied', () => {
 									this.stopScreenShare();
 								});
 							} catch (error) {
@@ -657,8 +627,7 @@ export default {
 							}
 
 						})
-				}).catch(error => {
-					console.error(error);
+				}).catch(() => {
 					this.screenOV = undefined;
 					this.screenSession = undefined;
           this.screenShareName = undefined;
@@ -706,7 +675,6 @@ export default {
 						if (error.response.status === 409) {
 							resolve(sessionId);
 						} else {
-							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_URL}`);
 							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_URL}"`)) {
 								location.assign(`${OPENVIDU_URL}/accept-certificate`);
 							}
@@ -735,7 +703,6 @@ export default {
       this.albumDialog = true;
     },
     async NAGA() {
-      console.log("NAGA!");
       this.session.signal({
 				data: JSON.stringify({
 					message:"방송이 종료되었습니다."
@@ -744,11 +711,9 @@ export default {
 				type: 'naga'             // The type of message (optional)
 			})
 				.then(() => {
-					console.log('Message successfully sent');
 					this.message = "";
 				})
-				.catch(error => {
-					console.error(error);
+				.catch(() => {
 				});
     },
     // 세션 종료
@@ -757,11 +722,8 @@ export default {
       if (this.leaveTrigger) return;
       // 내가 방장일 경우 방송 종료
       if (this.isHost) {
-        console.log("방장인데 불좀 꺼줄래");
         await consulting.deleteConsulting({consulting_no:this.consulting_no,user_no:this.loginUser.no},()=> {
-          console.log("good");
         },()=> {
-          console.log("TT");
         })
         this.NAGA();
       }
@@ -808,7 +770,6 @@ export default {
 			let context = this.canvas.getContext("2d");
 
 			context.drawImage(video, 0, 0, 500,400);
-      console.log("캡쳐 완료");
     },
     upload() {
       const imgBase64 = this.canvas.toDataURL('image/jpeg','multipart/form-data');
@@ -826,11 +787,9 @@ export default {
 			let formData = new FormData();
 			formData.append('file', file, fileName);
       formData.append('consulting_no',this.consulting_no);
-      console.log(formData);
 
       consulting.uploadSnapshot(formData)
-      .then(response=> {
-        console.log(response);
+      .then(()=> {
         this.session.signal({
           data: JSON.stringify({
           message:"파일 업로드 완료"
@@ -839,28 +798,21 @@ export default {
           type: 'upload'             // The type of message (optional)
           })
             .then(() => {
-              console.log('upload Message successfully sent');
               this.message = "";
             })
-            .catch(error => {
-              console.error(error);
+            .catch(() => {
 				});
       })
-      .catch(response => {
-        console.log(response);
+      .catch(() => {
       })
       this.snapshotDialog = false;
     },
     async getSnapshotList() {
       await consulting.getConsultingSnapshots(this.consulting_no)
       .then((data)=> {
-        console.log("스냅샷 불러오기 성공");
-        console.log(data);
         this.SET_SNAPSHOT_LIST(data.content);
       })
-      .catch((error)=> {
-        console.log("스냅샷 불러오기 실패");
-        console.log(error);
+      .catch(()=> {
       })
     },
     async mosaicSignal() {
@@ -873,10 +825,8 @@ export default {
           type: 'mosaic'             // The type of message (optional)
           })
             .then(() => {
-              console.log('mosaic signal successfully sent');
             })
-            .catch(error => {
-              console.error(error);
+            .catch(() => {
 				});
     },
     async updateViewCount() {

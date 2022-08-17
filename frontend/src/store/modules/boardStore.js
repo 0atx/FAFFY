@@ -41,11 +41,9 @@ const boardStore = {
           'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
-          console.log('getallboards', res)
           commit('SET_BOARD_LIST', res.data.content)
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     createBoard({ dispatch }, board) {
@@ -57,16 +55,12 @@ const boardStore = {
         data: board
       })
         .then(res => {
-          console.log(res)
-          //alert('게시글이 등록되었습니다.')
           router.push({ name: 'board-detail', params: { boardNo: res.data.content.no } })
         })
-        .then(res => {
-          console.log(res)
+        .then(() => {
           dispatch('fetchBoardList')
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
       },
     fetchCommentList({ commit }, commentList) {
@@ -79,7 +73,6 @@ const boardStore = {
         headers: { 'X-AUTH-TOKEN': sessionStorage.getItem('X-AUTH-TOKEN') }
       })
         .then(res => {
-          console.log(res.data.content.board)
           commit('SET_BOARD', res.data.content.board)
           dispatch('fetchCommentList', res.data.content.comments)
           if (res.data.content.board.fileNo !== 0) {
@@ -88,8 +81,7 @@ const boardStore = {
             commit('SET_IMAGE', null)
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     createComment(context, commentForm) {
@@ -99,12 +91,10 @@ const boardStore = {
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
         data: commentForm
       })
-        .then(res => {
-          console.log('성공', res)
+        .then(() => {
           router.go(router.currentRoute)
         })
-        .catch(err => {
-          console.log('실패', err)
+        .catch(() => {
         })
     },
     deleteBoard({ dispatch, commit }, boardNo) {
@@ -116,22 +106,16 @@ const boardStore = {
           no: boardNo
         }
       })
-        .then(res => {
-          console.log('삭제 성공', res)
-
-          //alert('게시글이 삭제되었습니다.')
+        .then(() => {
           commit('SET_BOARD', {})
         })
         .then(() => {
-          console.log('새로 게시글 리스트 불러오기')
           dispatch('fetchBoardList')
         })
         .then(() => {
-          console.log('게시판으로 이동하기')
           router.push({ name: 'board' })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     deleteComment(context, commentNo) {
@@ -140,13 +124,10 @@ const boardStore = {
         method: 'delete',
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
       })
-        .then(res => {
-          console.log('댓글 삭제', res)
-          //alert('댓글이 정상적으로 삭제되었습니다.')
+        .then(() => {
           router.go(router.currentRoute)
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     updateBoard(context, formData) {
@@ -157,12 +138,10 @@ const boardStore = {
       "Content-Type": "multipart/form-data" },
         data: formData
       })
-        .then(res => {
-          console.log('성공', res)
+        .then(() => {
           router.push({ name: 'board-detail', params: { boardNo: formData.get('no')}})
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     fetchImage({ commit }, fileNo) {
@@ -173,12 +152,10 @@ const boardStore = {
         headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
       })
         .then(res => {
-          console.log('이미지 가져오기 성공')
           const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] } ))
           commit('SET_IMAGE', url)
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     increaseHit(context,no) {

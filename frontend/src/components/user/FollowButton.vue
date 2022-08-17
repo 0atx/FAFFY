@@ -39,7 +39,6 @@ export default {
 
       let isFollowing = false;
       this.followingList.forEach(element => {
-        console.log(element.no);
 
         if (element.no === this.user_no)
           isFollowing = true;
@@ -62,15 +61,11 @@ export default {
           from:this.loginUser.no,
           to:this.user_no
         },
-        (response)=> {
-          console.log("성공");
-          console.log(response);
+        ()=> {
           this.loadFollowing();
           this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount-1);
         },
-        (response)=> {
-          console.log("실패");
-          console.log(response);
+        ()=> {
         });
       } else {
         follow.follow(
@@ -78,15 +73,11 @@ export default {
           from:this.loginUser.no,
           to:this.user_no
         },
-        (response)=> {
-          console.log("성공");
-          console.log(response);
+        ()=> {
           this.loadFollowing();
           this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount+1);
         },
-        (response)=> {
-          console.log("실패");
-          console.log(response);
+        ()=> {
         });
       }
     }

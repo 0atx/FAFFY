@@ -18,10 +18,7 @@
       <div id="name" class="text-h6 ml-8 mb-2">
         {{ userProfile.nickname }}
 
-        <!-- 정보 수정 버튼
-          v-if로 본인일 경우에만 보여지게
-          클릭 시 정보 수정 페이지로 이동
-        -->
+        <!-- 정보 수정 버튼 -->
         <v-btn
           v-if="isMyProfile"
           id="profileBtn"
@@ -41,17 +38,6 @@
           팔로우 중이 아니라면 기본 회색 아이콘(gray),
           팔로우 중이라면 다른 색 아이콘(임시 : #ff7451)
         -->
-        <!-- <v-btn
-          v-else
-          id="profileBtn"
-          class="mx-2 pb-1"
-          elevation="0"
-          icon
-          small
-          :color="follow ? '#ff7451' : 'gray'"
-        >
-          <v-icon> mdi-heart </v-icon>
-        </v-btn> -->
         <follow-button v-else :user_no="userProfile.no"/>
       </div>
 
@@ -80,7 +66,6 @@
           />
         </v-chip-group>
       </div>
-
 
       <!-- SNS 정보 -->
       <div class="btn_wrap mb-2">

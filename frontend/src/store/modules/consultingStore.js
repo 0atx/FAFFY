@@ -20,12 +20,7 @@ const consultingStore = {
       state.consultingInfo = consultingInfo;
     },
     SET_PARTICIPANTS:(state,subscribers)=> {
-      // state.participants = subscribers.filter(sub => JSON.parse(sub.stream.connection.data));
-      // let arr = [];
       state.participants=[];
-      // subscribers.forEach(element => {
-      //   state.participants.push(JSON.parse(element.stream.connection.data));
-      // });
 
       subscribers.forEach(element => {
         let data = JSON.parse(element.stream.connection.data);

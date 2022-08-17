@@ -77,7 +77,6 @@ export default {
           }
         });
       if (res) {
-        console.log(`${commentNo}번 댓글을 삭제합니다.`)
         await this.deleteComment(commentNo)
         this.$dialog.message.info('댓글이 삭제되었습니다.', {
           position: "top",
@@ -87,7 +86,6 @@ export default {
       }
     },
     moveProfile(userNo) {
-      console.log(userNo)
       this.$router.push({ name: 'profile', params: { no: userNo }})
     }
   }

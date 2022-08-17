@@ -156,18 +156,14 @@ export default {
       this.$refs.form.validate();
       await this.$nextTick();
       if (!this.valid) return;
-      console.log(this.form);
     },
     goTo() {
       this.$router.push({ name: "sign-up" });
     },
     findPassword() {
-      // this.dialog = false;
       auth.findPwd(
         this.find.email, this.find.name,
-        (response) => {
-          console.log("임시 비밀번호 이메일 발신 성공");
-          console.log(response);
+        () => {
           alert("임시 비밀번호가 발송되었습니다. 이메일을 확인해주세요.")
         },
         () => {
@@ -183,10 +179,6 @@ export default {
       await auth.login(
         this.form,
         (response) => {
-          console.log("로그인 성공");
-          console.log(response.data.content["token"]);
-          console.log(response.data.content["user"]);
-
           const accessToken = response.data.content["token"];
           sessionStorage.setItem("X-AUTH-TOKEN", accessToken);
 
@@ -211,11 +203,9 @@ export default {
       auth.socialLogin(
         "google",
         (response) => {
-          // console.log("success:"+response.data);
           window.location.href= response.data.redirectURL;
         },
         () => {
-          console.log("구글 로그인 실패");
         }
       )
     },
@@ -227,7 +217,6 @@ export default {
           window.location.href= response.data.redirectURL;
         },
         () => {
-          console.log("네이버 로그인 실패");
         }
       )
     }

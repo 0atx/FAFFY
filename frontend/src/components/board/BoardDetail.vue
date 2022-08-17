@@ -5,16 +5,6 @@
   최종 수정자: 박윤하
 -->
 <template>
-  <!-- <v-container fluid>
-    <p class="content">제목: {{ currentBoard.title }}</p>
-    <p class="content" @click="moveProfile(currentBoard.user.no)" style="cursor: pointer">작성자: {{ currentBoard.user.nickname }}</p>
-    <p class="content">카테고리: {{ currentBoard.category }}</p>
-    <p class="content">조회수: {{ currentBoard.hit }}</p>
-    <div class="content" v-if="currentImage">
-      <v-img contain :src="currentImage" max-height="300px" alt=""></v-img>
-    </div>
-    <div class="content">내용: {{ currentBoard.content }}</div>
-  </v-container> -->
   <v-container class="ml-2">
     <div>
       <div class="mb-4">
@@ -89,7 +79,6 @@ export default {
       this.$router.push({ name: 'profile', params: { no: user }})
     },
     async requestDeleteBoard(boardNo) {
-      console.log(`${boardNo}번 글을 삭제합니다.`)
       const res = await this.$dialog.confirm({
           text: '<br>해당 게시글을 정말로 삭제하시겠습니까?',
           icon: true,
@@ -112,7 +101,6 @@ export default {
       }
     },
     requestUpdateBoard(boardNo) {
-      console.log(`${boardNo}번 글을 수정합니다.`)
       this.$router.push({ name: 'board-update', params: { boardNo: boardNo }})
     }
   }

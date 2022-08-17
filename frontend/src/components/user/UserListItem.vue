@@ -15,13 +15,7 @@
               v-html="user.info"
             ></v-list-item-subtitle>
           </div>
-          <!-- <div id="followBtn">
-            <v-btn elevation="0" class="pt-1" icon small color="#ff7451">
-              <v-icon> mdi-heart </v-icon>
-            </v-btn>
-          </div> -->
           <follow-button class="mt-2" :user_no="user.no"/>
-          <!--<dark-button class="mb-2" :btnValue="followValue" />-->
         </v-list-item-content>
       </template>
     </v-list-item>

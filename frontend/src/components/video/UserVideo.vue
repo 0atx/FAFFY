@@ -15,13 +15,6 @@
           </v-tooltip>
         </p>
       </div>
-
-        <!--
-        <div>
-          <canvas :id="`drawCanvas${clientData}`" width="320" height="240" style="border:1px solid black" :ref="{clientData}"/>
-          <button @click="upload">전송</button>
-        </div>
-        -->
     </div>
   </div>
 </template>
@@ -50,7 +43,6 @@ export default {
     ...mapState("consultingStore",["consultingInfo","participants","myMosaic","remoteValue"]),
 		clientData () {
 			const user = this.getConnectionData();
-      console.log("user: " + user.nickname)
 			return user;
 		},
     isHost() {
@@ -148,7 +140,6 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      // this.video = this.$refs.ov_video.$refs.video;
       this.mosaicStart();
       this.recognition();
     }, 2000)
@@ -192,9 +183,6 @@ export default {
     async detectFaces(video) {
 			if (this.mosaicValue) {
 			const prediction = await this.model.estimateFaces(video, false);
-				// if (v.srcObject!=this.mosaicStream) {
-				// v.srcObject = this.mosaicStream;
-				// }
 
 				// draw the video first
 				this.ctx.drawImage(video, 0, 0, this.vwidth, this.vheight);
@@ -255,7 +243,6 @@ export default {
           },3000);
         }
 				this.captureSignal=true;
-				console.log("capture")
 			}
 
 

@@ -37,16 +37,7 @@
                     <v-list-item-subtitle style="font-size:17px;">
                       {{consultingInfo.consultant}}<follow-button :user_no="consultingInfo.consultant_no"/>
                     </v-list-item-subtitle>
-
                   </div>
-                  <!-- <div style="display:flex;  width:160px;">
-                    <v-list-item-subtitle style="font-size: 13px;">
-                      팔로잉 24
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle style="font-size: 13px;">
-                      팔로워 13
-                    </v-list-item-subtitle>
-                  </div> -->
                 </div>
               </div>
 
@@ -92,12 +83,6 @@ export default {
   },
   data() {
     return {
-      // 임의로 설정한 방송 관심 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      consultCategorys: [
-        "캐주얼",
-        "모던",
-        "시크",
-      ],
       time: "",
 
       IMG_BASE_URL: API_BASE_URL + "/users/profile/image",
@@ -114,7 +99,6 @@ export default {
     replaceByDefault: defaultProfileSetter.replaceByDefault,
 
     updateTime() {
-      //19:37:00방송 시작 : 2022-08-14T19:28:19
       var startDate = this.consultingInfo.startTime.replaceAll('-', '/').replace('T', ' ');
       var sd = new Date(startDate);
       var cd = new Date();
