@@ -470,22 +470,21 @@ export default {
 			// 끝낸 모든 스트림들에 대해서
 			this.session.on('streamDestroyed', ({ stream }) => {
 				const index = this.subscribers.indexOf(stream.streamManager, 0);
+				const index2 = this.subsNoScreen.indexOf(stream.streamManager, 0);
+
 				let namecode = JSON.parse(stream.connection.data).clientData.split(':');
 
         if(namecode[1] == this.nickname + '님의 화면') {
           this.isShare = false;
           this.SET_SHARESCREEN(this.isShare);
         }
-        // 모자이크 종료시키기
-        let no = namecode[0];
-        let mosaicValue = false;
-        this.participants.forEach(element => {
-          if (element.no == no) {
-            element.mosaicValue = mosaicValue;
-          }
-        });
+
         if (index >= 0) {
 					this.subscribers.splice(index, 1);
+				}
+        this.SET_PARTICIPANTS(this.subscribers);
+        if (index2 >= 0) {
+					this.subsNoScreen.splice(index, 1);
 				}
         this.SET_PARTICIPANTS(this.subscribers);
         this.updateViewCount();
