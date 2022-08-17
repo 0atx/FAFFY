@@ -20,7 +20,7 @@
         </div>
       </v-card-subtitle>
       <!-- 댓글 내용 -->
-      <v-card-text class="ml-12" style="color:black; padding-bottom:0;">
+      <v-card-text class="ml-12" style="color:black; padding-bottom:0; white-space: pre;">
         {{ comment.content}}
       </v-card-text>
       <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
