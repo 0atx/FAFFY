@@ -40,9 +40,7 @@
               </div>
 
               <!-- 별명 중복 확인 -->
-              <v-btn id="checkNicknameBtn" class="mt-2" icon :ripple="false">
-                <v-icon :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
-              </v-btn>
+              <v-icon id="checkNicknameBtn" class="mt-2" :color="checkNicknameIcon ? '#0c0f66' : '#ff4c20'">mdi-check</v-icon>
             </div>
 
             <!-- 비밀번호 입력 -->
@@ -78,8 +76,16 @@
               @keydown.enter="onInputKeyword" readonly/>
 
             <!-- 생년월일 -->
-            <br/>
+            <v-text-field
+              v-if="form.birthday != null"
+              v-model="form.birthday"
+              label="생년월일"
+              disabled
+            ></v-text-field>
+
+            <!-- 생년월일 -->
             <v-menu
+              v-else
               ref="menu"
               v-model="menu"
               :close-on-content-click="false"
@@ -111,8 +117,16 @@
               ></v-date-picker>
             </v-menu>
 
+            <!-- 성별 -->
+            <v-text-field
+              v-if="form.gender != null"
+              :value="form.gender == 0 ? '남자' : '여자'"
+              label="성별"
+              disabled
+            ></v-text-field>
+
             <!-- 성별 입력 -->
-            <v-radio-group row v-model="form.gender" label="성별" :rules="rules.gender()">
+            <v-radio-group v-else row v-model="form.gender" label="성별" :rules="rules.gender()">
               <v-radio label="남자" value="0" color="#0c0f66"></v-radio>
               <v-radio label="여자" value="1" color="#0c0f66"></v-radio>
             </v-radio-group>
@@ -126,8 +140,10 @@
               clear-icon="mdi-close-circle" color="#0c0f66" maxlength="200" counter="200"></v-textarea>
 
             <!-- 관심 카테고리 -->
-            <v-label>관심 분야</v-label>
-            <v-chip-group v-model="form.categories" column multiple>
+            <div style="display:flex; align-items:center;">
+              <v-label>관심 분야</v-label><div style="color:#777; font-size:12px; padding:0px 8px; "> *최대 3개 선택 가능</div>
+            </div>
+            <v-chip-group v-model="form.categories" column multiple max="3">
               <v-chip v-for="(c, i) in categoryList" :key="i" class="chip" :value="c.name" filter color="#0c0f66">
                 {{ c.name }}</v-chip>
             </v-chip-group>
@@ -193,6 +209,9 @@ export default {
         youtubeLink: "",
       },
 
+      menu: false,
+      activePicker: null,
+
       // 유저가 선택한 이미지 url
       url: null,
 
@@ -207,6 +226,9 @@ export default {
   },
   watch: {
     selectedCategorys: "show",
+    menu(val) {
+      val && setTimeout(() => (this.activePicker = "YEAR"));
+    },
   },
   mounted() {
     if (!this.isLogin) {

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin:0 auto; margin-top: 13%;">
+  <div style="margin:0 auto; margin-top: 16%;">
     <div style="margin:0 auto;">
       <div class="load1">
         <div class="load2">
