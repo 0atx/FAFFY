@@ -9,6 +9,12 @@ const rules = {
   requireNickname() {
     return v => !!v || '2~10자 특수문자를 제외한 별명을 입력하세요.';
   },
+  consultMin() {
+    return v => !!v ? v >= 2 || `최대 참여 인원 설정은 최소 2명부터 가능합니다.`: true;
+  },
+  consultMax() {
+    return v => !!v ? v <= 50 || `최대 참여 인원 설정은 최대 50명까지 가능합니다.`: true;
+  },
   min({len=8}) {
     return v => !!v ? v.length >= len || `${len}자 이상 입력하세요.`: true;
   },
@@ -18,11 +24,58 @@ const rules = {
   pattern({label, pattern}) {
     return v => !!v ? pattern.test(v) || `${label} 형식에 맞게 입력하세요.` : true;
   },
+  patternNum({pattern}) {
+    return v => !!v ? pattern.test(v) || `숫자만 입력 가능합니다.` : true;
+  },
   url({label, url}) {
     return v => !!v ? v.indexOf(url) > -1 || `${label} 형식에 맞게 입력하세요.` : true;
   },
   matchValue(origin) {
     return v => origin === v || '비밀번호가 일치하지 않습니다.';
+  },
+  maxRoom(options) {
+    const defaultOptions = {
+      label: '최대 인원',
+      required: true,
+      pattern: /^[0-9]+$/,
+    };
+    const opt = Object.assign(defaultOptions, options);
+    const arr = [];
+    if(opt.required) {
+      arr.push(rules.require(opt));
+    }
+    arr.push(rules.consultMin(opt));
+    arr.push(rules.consultMax(opt));
+    arr.push(rules.patternNum(opt));
+    return arr;
+  },
+  consultingTitle(options) {
+    const defaultOptions = {
+      label: '제목',
+      required: true,
+      maxlen: 50,
+    };
+    const opt = Object.assign(defaultOptions, options);
+    const arr = [];
+    if(opt.required) {
+      arr.push(rules.require(opt));
+    }
+    arr.push(rules.maxlen(opt));
+    return arr;
+  },
+  consultingIntro(options) {
+    const defaultOptions = {
+      label: '방송 소개',
+      required: true,
+      maxlen: 300,
+    };
+    const opt = Object.assign(defaultOptions, options);
+    const arr = [];
+    if(opt.required) {
+      arr.push(rules.require(opt));
+    }
+    arr.push(rules.maxlen(opt));
+    return arr;
   },
   email(options) {
     const defaultOptions = {
