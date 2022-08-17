@@ -5,7 +5,7 @@
   최종 수정자: 박윤하
 -->
 <template>
-  <v-container style="width: 80%" class="pa-0 border border-primary rounded-4">
+  <v-container style="width: 80%; min-height:100px;" class="pa-0 border border-primary rounded-4">
     <v-card
       elevation="0"
       class="mx-auto text-left"
@@ -14,24 +14,24 @@
       <v-card-subtitle style="font-size: 14px; padding-top: 10px; padding-left: 8px; padding-bottom:0">
         <div style="display:flex; justify-content: space-between">
           <div  @click="moveProfile(comment.writer.no)" style="cursor: pointer; display:flex; align-items:center">
-          <profile-img-avatar :user_no="comment.writer.no" />
-          <div class="mr-2">{{ comment.writer.nickname }}</div> | <div class="ml-2">{{ date }}</div>
+            <profile-img-avatar :user_no="comment.writer.no" />
+            <div class="mr-2">{{ comment.writer.nickname }}</div> | <div class="ml-2">{{ date }}</div>
+          </div>
+          <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
+          <div style="text-align:right; margin:auto 0;" v-if="comment.writer.nickname === checkUserInfo.nickname">
+            <v-btn
+              text
+              color="#ff7451"
+              @click="requestDeleteComment(comment.no)"
+            >삭제
+            </v-btn>
           </div>
         </div>
       </v-card-subtitle>
       <!-- 댓글 내용 -->
-      <v-card-text class="ml-12" style="color:black; padding-bottom:0; white-space: pre;">
+      <v-card-text class="ml-12" style="color:black; padding-bottom: 18px; white-space: pre-wrap;">
         {{ comment.content}}
       </v-card-text>
-      <!-- 삭제 버튼(댓글작성자일 때만 활성화) -->
-      <div style="text-align:right;" v-if="comment.writer.nickname === checkUserInfo.nickname">
-        <v-btn
-          text
-          color="#ff7451"
-          @click="requestDeleteComment(comment.no)"
-        >삭제
-        </v-btn>
-      </div>
     </v-card>
   </v-container>
 </template>
