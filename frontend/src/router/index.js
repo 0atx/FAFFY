@@ -152,7 +152,6 @@ router.beforeEach(( to, from, next ) => {
   const isAuthRequired = authPages.includes(to.name)
 
   if (isAuthRequired && !isLogin) {
-    console.log('로그인 해야해요', isLogin)
     next({ name: 'sign-in' })
   } else {
     next()

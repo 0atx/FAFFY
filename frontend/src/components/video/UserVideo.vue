@@ -50,7 +50,6 @@ export default {
     ...mapState("consultingStore",["consultingInfo","participants","myMosaic","remoteValue"]),
 		clientData () {
 			const user = this.getConnectionData();
-      console.log("user: " + user.nickname)
 			return user;
 		},
     isHost() {
@@ -255,7 +254,6 @@ export default {
           },3000);
         }
 				this.captureSignal=true;
-				console.log("capture")
 			}
 
 

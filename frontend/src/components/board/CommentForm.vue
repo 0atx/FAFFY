@@ -65,7 +65,6 @@ export default {
           writer_no: this.checkUserInfo.no,
           content: comment,
         }
-        console.log(commentForm)
         this.createComment(commentForm)
       }
     }

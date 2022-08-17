@@ -149,7 +149,6 @@ export default {
   },
   methods: {
     historyDetail (consultNo) {
-      console.log(`${consultNo}번 글의 상세 history로 이동합니다.`)
       this.$router.push({ name: 'user-history-detail', params: { consultNo: consultNo } })
     }
   },

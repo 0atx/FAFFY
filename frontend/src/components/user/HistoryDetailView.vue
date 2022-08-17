@@ -259,7 +259,6 @@ export default {
     }
     var temp = this.historyDetail.consultingDto.duration.split(':');
     this.consultingTime = this.zeroPadding(temp[0], 2) + ':' + this.zeroPadding(temp[1], 2) + ":" + this.zeroPadding(temp[2], 2);
-    console.log(this.historyDetail)
   }
 };
 </script>
