@@ -378,8 +378,7 @@ export default {
 
       return;
     }
-
-    this.mySessionId = ""+this.consulting_no;
+    this.mySessionId = "session"+this.consulting_no.toString();
     this.myUserName=this.loginUser.no+":"+this.loginUser.nickname;
 
     // 방송 정보 요청 후 값 세팅
