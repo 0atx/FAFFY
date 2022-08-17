@@ -103,8 +103,6 @@ body{
   @include shape(100px);
   @include border(solid,3px,$background,$red,$red,$background);
   border-radius:50%;
-  // @include flex(flex,center);
-  // position:relative;
   animation:rotateCounterClockwise 2.3s linear infinite;
 }
 .loading::after {

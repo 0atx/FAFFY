@@ -151,15 +151,8 @@ export default {
         formData.append('category', this.boardCategory)
         formData.append('content', this.boardForm.content)
         if (this.boardForm.img != null) formData.append('file', this.boardForm.img)
-        for (let v of formData.values()) {
-            console.log(v)
-        }
         if (this.action==='update') {
-          console.log('수정이고 글번호는', this.$route.params.boardNo)
           formData.append('no', this.$route.params.boardNo)
-          // for (let v of formData.values()) {
-          //   console.log(v)
-          // }
           await this.updateBoard(formData)
           this.$dialog.message.info('게시글이 수정되었습니다.', {
             position: "top",

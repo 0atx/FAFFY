@@ -5,16 +5,6 @@
   최종 수정자: 박윤하
 -->
 <template>
-  <!-- <v-container fluid>
-    <p class="content">제목: {{ currentBoard.title }}</p>
-    <p class="content" @click="moveProfile(currentBoard.user.no)" style="cursor: pointer">작성자: {{ currentBoard.user.nickname }}</p>
-    <p class="content">카테고리: {{ currentBoard.category }}</p>
-    <p class="content">조회수: {{ currentBoard.hit }}</p>
-    <div class="content" v-if="currentImage">
-      <v-img contain :src="currentImage" max-height="300px" alt=""></v-img>
-    </div>
-    <div class="content">내용: {{ currentBoard.content }}</div>
-  </v-container> -->
   <v-container class="ml-2">
     <div>
       <div class="mb-4">

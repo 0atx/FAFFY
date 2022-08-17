@@ -314,67 +314,13 @@ export default {
         { name: "banner_5.png" },
         { name: "banner_6.png" },
       ],
+
       hitBoardList: [],
       latestBoardList: [],
       imgBoardList: [],
       imgDetailList:[],
       imgSrcList:[],
-      consults: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 3",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 4",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        }
-      ],
-      // 임의로 설정한 방송 관심 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      consultCategorys: [
-        "캐주얼",
-        "모던",
-        "시크",
-      ],
+
       headers: [
         { text: '분류', align: 'start', value: 'category', width: '12%' },
         { text: '제목', align: 'start', value: 'title', width:'52%' },

@@ -6,7 +6,6 @@
 -->
 <template>
   <v-container class="ml-2">
-    <!-- <h1>댓글 목록</h1> -->
     <CommentItem
       v-for="comment in commentList"
       :key="comment.no"

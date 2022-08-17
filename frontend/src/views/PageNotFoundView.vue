@@ -1,6 +1,5 @@
 <template>
   <section class="wrapper">
-
     <div class="container">
 
       <div class="faffy">
@@ -67,19 +66,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$m-01: #ff7451; //#FB8A8A;
-$m-02: #ffbead; //#FFEDC0
+$m-01: #ff7451;
+$m-02: #ffbead;
 
 $bg-01: #5c5681;
 $bg-02: #25184f;
 $bg-03: #25243e;
 
-//#695681;
-//#36184F;
-//#32243E;
-
-$g-01: linear-gradient(90deg, #ffbead 0%, #ff7451 100%); //#FF9D87
-$g-02: linear-gradient(90deg, #0c0f66 13.7%, #6d6fb1 94.65%); //#b773ff
+$g-01: linear-gradient(90deg, #ffbead 0%, #ff7451 100%);
+$g-02: linear-gradient(90deg, #0c0f66 13.7%, #6d6fb1 94.65%);
 
 $cubic: cubic-bezier(0.4, 0.35, 0, 1.53);
 $cubic2: cubic-bezier(0.18, 0.89, 0.32, 1.15);
@@ -160,7 +155,6 @@ body {
             width: 100vw;
             height: 100vh;
             vertical-align: middle;
-            //background: $bg-01;
         }
 
         // All elements' containers
@@ -410,8 +404,6 @@ body {
                 filter: blur(10px);
                 opacity: 0.8;
             }
-
-
         }
 
         // Bigger Circle
@@ -456,7 +448,6 @@ body {
                     position: absolute;
                     width: 600px;
                     height: 600px;
-                    //background-color: rgba($bg-02, 0.3);
                     background: $bg-01;
                     border-radius: 100%;
                     box-shadow: $circleShadow;
@@ -499,8 +490,6 @@ body {
                     }
 
                 }
-
-
             }
         }
 
@@ -579,8 +568,6 @@ body {
 
             }
         }
-
-
     }
 }
 </style>>
