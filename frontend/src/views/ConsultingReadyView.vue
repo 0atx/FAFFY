@@ -16,14 +16,14 @@
             maxlength="50"
             counter="50"
             color="#0c0f66"
-            :rules="rules.consultingTitle()"
+            :rules="rules.Title()"
             @keydown.enter="onInputKeyword"
           />
           <!-- 상세 자기소개 -->
           <v-textarea
             v-model="form.intro"
             label="방송 소개"
-            rows="2"
+            rows="3"
             no-resize
             clearable
             clear-icon="mdi-close-circle"
@@ -53,13 +53,6 @@
         <div style="width:20%;">
           <!-- 방송 인원 -->
 
-          <!-- <v-select
-            :items="maxCounts"
-            v-model="form.roomSize"
-            type="number"
-            label="최대 인원수"
-            outlined
-          ></v-select> -->
           <v-text-field
             v-model="form.roomSize"
             type="number"

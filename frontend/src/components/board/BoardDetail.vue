@@ -44,7 +44,7 @@
         <v-img
           v-if="currentImage" contain :src="currentImage" max-height="300px" alt="" class="grey darken-4">
         </v-img>
-        <v-card-text class="text--primary d-flex justify-start">
+        <v-card-text style="white-space: pre;" class="text--primary d-flex justify-start">
           {{ currentBoard.content }}
         </v-card-text>
         <v-card-actions class="d-flex justify-end">
