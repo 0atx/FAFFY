@@ -343,6 +343,7 @@ export default {
             name: "profile",
             params: { no: this.loginUser.no },
           });
+          location.reload();
         },
         (response) => {
           console.log("실패");
