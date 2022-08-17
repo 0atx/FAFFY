@@ -161,7 +161,6 @@ export default {
       this.$router.push({ name: "sign-up" });
     },
     findPassword() {
-      // this.dialog = false;
       auth.findPwd(
         this.find.email, this.find.name,
         () => {

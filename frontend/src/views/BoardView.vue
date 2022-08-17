@@ -39,9 +39,6 @@ export default {
       content: '회원들과 자유롭게 소통해보세요.'
     }
   },
-  // computed: {
-  //   ...mapGetters(boardStore, ['boardList'])
-  // },
   methods: {
     ...mapActions(boardStore, ['fetchBoardList']),
     // 게시판 카테고리 변경

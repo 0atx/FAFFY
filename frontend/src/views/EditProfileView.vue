@@ -191,7 +191,6 @@ export default {
   },
   data() {
     return {
-      // 임시 user 정보, 추후 DB에서 데이터 불러와서 값 넣어줘야 함
       form: {
         file: null,
         email: "",

@@ -106,7 +106,6 @@
 import SearchBar from '@/components/common/SearchBar.vue'
 import ProfileImgAvatar from '@/components/common/ProfileImgAvatar.vue'
 import { mapState, mapActions } from "vuex";
-// import { auth } from "@/api/auth.js";
 
 const authStore = "authStore";
 export default {
@@ -129,7 +128,6 @@ export default {
     },
     toReady() {
       this.$router.push({ name: "consulting-ready" }).catch(()=>{});
-      // this.$router.push({ name: "consulting-onair" });
     },
     toMyProfile() {
       this.$router.push("/profile/"+this.loginUser.no).catch(()=>{});

@@ -31,19 +31,6 @@
 
         <div>
           <!--방송 참여 또는 진행 목록 리스트 selected로 참여인지 진행인지 구분해서 출력할 것 -->
-          <!-- <v-data-table
-            id="table"
-            :headers="headers"
-            hide-default-footer
-            v-if="(selected && participatedList.length != 0) || (!selected && consultingList.length != 0)"
-            :items="selected? participatedList : consultingList"
-            :items-per-page="itemsPerPage"
-            :page.sync="page"
-            @page-count="pageCount = $event"
-            @click:row="historyDetail"
-            style="cursor: pointer"
-          ></v-data-table> -->
-
           <v-simple-table
             v-if="(selected && participatedList.length != 0) || (!selected && consultingList.length != 0)">
             <template v-slot:default>
@@ -119,7 +106,6 @@ export default {
       ],
       // pagination 관련 변수
       page: 1,
-      // pageCount: 0,
       itemsPerPage: 10,
 
       // 참여 기록인지 진행 기록인지 판별하는 변수 참여 : true, 진행 : false

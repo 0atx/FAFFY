@@ -81,16 +81,6 @@
         </template>
         <span>방송 나가기</span>
       </v-tooltip>
-    <!--
-    <div class="mafia-setting-btn" @click="clickGuide"><i class="el-icon-guide"></i></div>
-    <div v-if="state.mafiaManager.onAudio" class="mafia-setting-btn" @click="muteAudio"><i class="el-icon-microphone"></i></div>
-    <div v-if="!state.mafiaManager.onAudio" class="mafia-setting-btn" @click="muteAudio"><i class="el-icon-turn-off-microphone"></i></div>
-    <div v-if="state.onVideo" class="mafia-setting-btn" @click="muteVideo"><i class="el-icon-video-camera"></i></div>
-    <div v-if="!state.onVideo" class="mafia-setting-btn" @click="muteVideo"><i class="el-icon-video-pause"></i></div>
-    <div v-if="state.onScreen" class="mafia-setting-btn" @click="shareScreen"><i class="el-icon-video-camera"></i></div>
-    <div v-if="!state.onScreen" class="mafia-setting-btn" @click="shareScreen"><i class="el-icon-video-pause"></i></div>
-    <div class="mafia-setting-btn" @click="leaveRoom"><i class="el-icon-close"></i></div>
-    -->
     </div>
   </div>
 </template>

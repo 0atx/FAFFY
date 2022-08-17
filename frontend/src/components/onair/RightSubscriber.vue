@@ -1,18 +1,5 @@
 <template>
 	<div id="rightSub">
-    <!--<div style="height: 10vh">
-      <div id="host">
-        <span>컨설턴트: {{ host.nickname }}</span>
-      </div>
-      <div id="participantCount">
-        <div>참여 인원: {{ participants.length }} / {{ participantsLimit }}</div>
-      </div>
-    </div>
-    <v-card class="overflow-auto" height="60vh">
-      <v-card v-for="participant in participants" :key="participant.no" outlined>
-        <span @click="moveProfile(participant.no)" style="cursor: pointer">{{ participant.nickname }}</span>
-      </v-card>
-    </v-card>-->
     <v-list>
       <v-list-item>
         <v-list-item-content>
@@ -34,7 +21,6 @@
               <v-icon> mdi-chat </v-icon>
             </v-btn>
           </v-list-item-title>
-          <!-- <v-list-item-title>컨설턴트 : {{ host.nickname }}</v-list-item-title> -->
           <v-list-item-title>참여 인원 : {{ participants.length+1 }} / {{ consultingInfo.roomSize }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
