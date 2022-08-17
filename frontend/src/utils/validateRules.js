@@ -3,6 +3,9 @@ const rules = {
   require() {
     return v => !!v || '필수 입력 항목 입니다.';
   },
+  requireLabel({ label }) {
+    return v => !!v || `${label}을 입력해주세요.`;
+  },
   requirePassword() {
     return v => !!v || '8~16자 영문 대 소문자, 숫자, 특수문자를 사용하여 입력하세요.';
   },
@@ -49,7 +52,7 @@ const rules = {
     arr.push(rules.patternNum(opt));
     return arr;
   },
-  consultingTitle(options) {
+  Title(options) {
     const defaultOptions = {
       label: '제목',
       required: true,
@@ -58,7 +61,21 @@ const rules = {
     const opt = Object.assign(defaultOptions, options);
     const arr = [];
     if(opt.required) {
-      arr.push(rules.require(opt));
+      arr.push(rules.requireLabel(opt));
+    }
+    arr.push(rules.maxlen(opt));
+    return arr;
+  },
+  boardContent(options) {
+    const defaultOptions = {
+      label: '본문 내용',
+      required: true,
+      maxlen: 500,
+    };
+    const opt = Object.assign(defaultOptions, options);
+    const arr = [];
+    if(opt.required) {
+      arr.push(rules.requireLabel(opt));
     }
     arr.push(rules.maxlen(opt));
     return arr;

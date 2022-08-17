@@ -11,7 +11,7 @@
       <div id="content" class="mt-4">
         <p class="text-h6" style="font-weight: 600"> 자기소개 </p>
         <hr />
-        <div id="info">
+        <div id="info" style="white-space: pre;">
           {{ userProfile.introduce }}
         </div>
       </div>
