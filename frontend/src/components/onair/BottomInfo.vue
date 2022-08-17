@@ -41,7 +41,7 @@
                 </div>
               </div>
 
-              <div style="padding-bottom:10px;">
+              <div style="padding-bottom:10px; white-space:pre-wrap;">
                 {{ consultingInfo.intro }}
               </div>
 

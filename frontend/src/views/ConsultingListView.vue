@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row style="padding-left: 14%; background-color:#0c0f66; color: #fff" class="text-left mt-5 pt-5">
+    <v-row style="padding-left: 14%; background-color:#0c0f66; color: #fff" class="text-left pt-5">
       <h1>진행 중인 방송 목록</h1>
     </v-row>
     <v-row style="padding-left: 14%; background-color:#0c0f66; color: #fff" class="text-left mb-5 pb-5">

@@ -263,12 +263,14 @@
                     class="grey lighten-2">
                     <!-- 게시글 정보 -->
                     <figcaption>
-                      <h3>{{imgBoard.title}}</h3>
-                      <p>{{imgBoard.content}}</p>
+                      <h3 v-if="imgBoard.title.length > 10">{{imgBoard.title.slice(0, 10)}}...</h3>
+                      <h3 v-else>{{imgBoard.title.slice(0, 10)}}...</h3>
+                      <p v-if="imgBoard.content.length > 50" class="mt-2">{{imgBoard.content.slice(0, 50)}}...</p>
+                      <p v-else class="mt-2">{{imgBoard.content}}</p>
                       <p style="margin-bottom:5px;">{{imgBoard.user.nickname}}</p>
                       <p>{{imgBoard.dateTime}}</p>
                       <router-link :to="{ name: 'board-detail', params: { boardNo: imgBoard.no } }" class="read">
-                      Read More
+                        더 보기
                       </router-link>
                     </figcaption>
                     <template v-slot:placeholder>
