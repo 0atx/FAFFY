@@ -177,7 +177,7 @@ export default {
 #onairBtn {
   margin-top: 25%;
   width:200px;
-  height: 80px;
+  height: 80px !important;
   background-color: #ff7451;
   border-radius: 10px;
   color: white;
