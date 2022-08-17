@@ -109,7 +109,7 @@ faffy-backend
 ```
 ### Front
 ```
-tupli-front
+faffy-front
   ├── node_modules
   ├── public
   └── src
