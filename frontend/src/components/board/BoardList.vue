@@ -234,10 +234,6 @@ button {
   height: 40px !important;
 }
 
-#recentBtn::before, #commentBtn::before {
-  background-color: transparent;
-}
-
 #searchBtn {
   background-color: #0c0f66;
   color: white;
