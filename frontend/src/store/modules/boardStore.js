@@ -157,6 +157,21 @@ const boardStore = {
         })
         .catch(() => {
         })
+    },
+    increaseHit(context,no) {
+      console.log("조회수axios")
+      console.log(no);
+      axios({
+        url: `${API_BASE_URL}/boards/view/${no}`,
+        method: 'put',
+        headers: { "X-AUTH-TOKEN": sessionStorage.getItem('X-AUTH-TOKEN') },
+      })
+        .then(res => {
+          console.log('조회수 늘리기 성공', res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
 };

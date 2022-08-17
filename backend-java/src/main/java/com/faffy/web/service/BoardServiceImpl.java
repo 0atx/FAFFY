@@ -11,7 +11,6 @@ import com.faffy.web.jpa.entity.User;
 import com.faffy.web.jpa.repository.BoardFileRepository;
 import com.faffy.web.jpa.repository.BoardRepository;
 import com.faffy.web.jpa.repository.UploadFileRepository;
-import com.faffy.web.jpa.repository.UserRepository;
 import com.faffy.web.jpa.type.FileType;
 import com.faffy.web.service.file.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,9 +139,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Board getBoard(int boardNo) {
+    public Board getBoard(int boardNo) throws Exception {
         Board board = boardRepository.findByNoWithUser(boardNo).orElseThrow(() -> new IllegalArgumentException(BOARD_NOT_FOUND_MSG));
-        board.increaseHit();
         return board;
     }
 
@@ -223,4 +221,12 @@ public class BoardServiceImpl implements BoardService {
         return res;
     }
 
+    @Transactional
+    @Override
+    public int increaseHit(int board_no) throws Exception {
+        Board board = getBoard(board_no);
+        board.increaseHit();
+
+        return board.getHit();
+    }
 }

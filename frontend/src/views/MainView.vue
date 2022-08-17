@@ -465,8 +465,9 @@ export default {
       for(var j = 0; j < this.imgBoardList.length; j++){
         var k = j;
         this.$axios.get(API_BASE_URL + '/boards/' + this.imgBoardList[k].no).then(response => {
-          this.imgSrcList.push('https://i7a802.p.ssafy.io/api/boards/file/' + response.data.content.board.fileNo);
-        }).catch(() => {
+          this.imgSrcList.push(`${API_BASE_URL}/boards/file/` + response.data.content.board.fileNo);
+        }).catch(error => {
+          console.log(error)
         })
       }
     }

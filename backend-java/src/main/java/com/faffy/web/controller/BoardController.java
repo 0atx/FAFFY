@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -190,5 +191,22 @@ public class BoardController {
         } catch (IllegalInputException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ApiOperation(value="게시글 조회수 증가", notes="해당 게시글의 조회수를 1 증가시킵니다.")
+    @PutMapping("/view/{board_no}")
+    public ResponseEntity increaseHit(@PathVariable int board_no) {
+        Map<String,Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        try {
+            int hit = boardService.increaseHit(board_no);
+            resultMap.put("content",hit);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            resultMap.put("msg",e.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity(resultMap,status);
     }
 }
