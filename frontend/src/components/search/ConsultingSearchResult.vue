@@ -25,12 +25,14 @@
         </div>
       </v-col>
       <v-col v-else cols="3" v-for="consulting in currentPage" :key="consulting.host">
-        <v-card outlined elevation="0" class="mx-auto" max-width="344">
+        <v-card outlined elevation="0" class="mx-auto" style="height: 460px; width: 300px;">
           <!--방송화면 or 썸네일 -->
-          <v-img
+          <img
             :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`"
             height="200px"
-          ></v-img>
+            width="100%"
+            @error="replaceByDefault"
+          />
 
           <v-list-item>
             <v-list-item-content>
@@ -52,8 +54,12 @@
                 </div>
               </div>
 
+              <!-- 방송 소개 -->
+              <div class="pt-1 mb-1" style="font-size:15px;" v-if="consulting.intro.length > 80" id="intro">{{ consulting.intro.slice(0,80) }}...</div>
+              <div class="pt-1 mb-1" style="font-size:15px;" v-else id="intro">{{ consulting.intro }}</div>
+
               <!-- 방송 카테고리 -->
-              <v-chip-group>
+              <v-chip-group style="min-height: 40px;" column>
                 <v-chip
                   small
                   :ripple="false"
@@ -66,39 +72,13 @@
                 </v-chip>
               </v-chip-group>
 
-              <!--방송 내용 소개(필요 없을 경우 제거-->
-              <v-expand-transition>
-                <div>
-                  <v-card-text class="pt-0 pb-0 intro" v-show="!consulting.show">
-                    {{consulting.intro}}
-                    <v-btn
-                      icon
-                      class="iconBtn"
-                      :ripple="false"
-                      @click="consulting.show = !consulting.show"
-                    >
-                      <v-icon>{{ consulting.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                  </v-card-text>
-                  <v-card-text class="pt-0 pb-0 intro" v-show="consulting.show">
-                    2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면
-                    <v-btn
-                      icon
-                      class="iconBtn"
-                      :ripple="false"
-                      @click="consulting.show = !consulting.show"
-                    >
-                      <v-icon>{{ consulting.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                  </v-card-text>
-                </div>
-              </v-expand-transition>
               <div style="text-align:right;">
                 <!-- 참여 버튼. 클릭 시 화상회의 방 진입 -->
                 <v-btn
                   outlined
                   rounded
                   text
+                  :to="{name:'consulting-onair',params:{nickname:consulting.consultant,consulting_no:consulting.no}}"
                 >
                   참여
                 </v-btn>
@@ -131,6 +111,7 @@
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { API_BASE_URL } from "@/config";
+import defaultProfileSetter from "@/utils/defaultProfileSetter.js";
 const searchStore = "searchStore"
 
 export default {
@@ -164,6 +145,7 @@ export default {
     },
   },
   methods: {
+    replaceByDefault: defaultProfileSetter.replaceByDefault,
     sortResult(sortBy) {
       this.boardResult.sort((a, b) => {
         if (b[this.type[sortBy]] > a[this.type[sortBy]]) {
@@ -191,9 +173,13 @@ export default {
   pointer-events: none;
 }
 
-.intro {
+#intro {
+  height: 65px;
+  display: flex;
   padding: 0;
-  font-size:15px;
+  justify-content: flex-start;
+  pointer-events: none;
+  font-size: 15px;
 }
 
 .iconBtn::before {

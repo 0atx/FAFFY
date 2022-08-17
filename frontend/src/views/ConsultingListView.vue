@@ -7,7 +7,7 @@
       <h4>관심 있는 방송에 참여해보세요.</h4>
     </v-row>
     <v-container>
-      <v-row style="width: 80%; margin: 0 auto;">
+      <v-row style="width: 100%; margin: 0 auto;">
         <v-col cols="7" class="pr-0" align="end">
           <!--검색어 입력-->
           <v-text-field
@@ -40,7 +40,7 @@
           ></v-select>
         </v-col>
       </v-row>
-      <v-row style="width: 80%; margin: 0 auto;">
+      <v-row style="width: 100%; margin: 0 auto;">
         <v-col style="height:480px; display:flex; justify-content:center; align-items:center;" v-if="!isResultExist" cols="12">
           <div style="text-align:center;">
             <v-icon color="#333" large block> mdi-broadcast-off </v-icon>
@@ -62,33 +62,32 @@
             <div class="d-flex flex-row">
               <v-avatar
                 class="ma-2"
-                size="200"
+                size="300"
                 tile
               >
                 <img :src="`${API_BASE_URL}/users/profile/image/${consulting.consultant_no}`" @error="replaceByDefault" />
               </v-avatar>
               <div class="d-flex flex-column">
                 <v-card-title
-                  style="font-weight: 600; font-size:24px;"
+                  style="font-weight: 600; font-size:24px; text-align:left;"
                   v-text="consulting.title"
                 ></v-card-title>
 
 
-                <v-card-subtitle style="text-align:start; font-size:18px; padding: 0px; padding-left:16px;">
+                <v-card-subtitle class="pt-1 mb-1" style="text-align:start; font-size:20px; padding: 0px; padding-left:16px;">
                   {{ consulting.consultant }}
                 </v-card-subtitle>
-                <v-card-subtitle style="text-align:start; padding-top:0;">
+                <v-card-subtitle style="font-size:16px; text-align:start; padding-top:0;">
                   <v-icon small>mdi-account-multiple</v-icon> {{ consulting.viewCount }} / {{ consulting.roomSize }}<br>
                 </v-card-subtitle>
 
-                <v-card-text>
+                <v-card-text style="text-align: left; min-height:100px;">
                   {{ consulting.intro }}
                 </v-card-text>
 
-                <v-card-actions>
+                <v-card-actions class="pt-0">
                   <v-chip-group>
                     <v-chip
-                      small
                       :ripple="false"
                       id="consultingCategory"
                       v-for="category in consulting.categories"
@@ -104,7 +103,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="isResultExist" style="width: 80%; margin: 0 auto;">
+      <v-row v-if="isResultExist" style="width: 100%; margin: 0 auto;">
         <v-col cols="12">
           <v-pagination
             v-model="page"
