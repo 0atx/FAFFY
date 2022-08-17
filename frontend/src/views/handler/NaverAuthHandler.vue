@@ -30,9 +30,6 @@ export default {
         }
       )
     }
-    else{
-      console.log("code is null");
-    }
   },
   computed: {
     ...mapState("authStore" ,["loginUser"]),

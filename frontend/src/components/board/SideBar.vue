@@ -52,7 +52,6 @@ export default {
   methods: {
     // 세부 게시판 글 조회
     boardType(type) {
-      console.log(`${type} 게시판 보기`)
       this.$emit('changeBoardType', type)
     },
     moveBoard() {

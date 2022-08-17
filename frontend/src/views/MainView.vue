@@ -314,67 +314,13 @@ export default {
         { name: "banner_5.png" },
         { name: "banner_6.png" },
       ],
+
       hitBoardList: [],
       latestBoardList: [],
       imgBoardList: [],
       imgDetailList:[],
       imgSrcList:[],
-      consults: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 3",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 4",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categorys: [
-            "캐주얼",
-            "모던",
-          ],
-        }
-      ],
-      // 임의로 설정한 방송 관심 카테고리, 나중에 DB에서 받아온거로 대체 예정
-      consultCategorys: [
-        "캐주얼",
-        "모던",
-        "시크",
-      ],
+
       headers: [
         { text: '분류', align: 'start', value: 'category', width: '12%' },
         { text: '제목', align: 'start', value: 'title', width:'52%' },
@@ -396,27 +342,22 @@ export default {
     // 상단 참여자수 순 목록
     consulting.getBestConsultings(5)
     .then((data)=> {
-      console.log(data);
       this.bestConsultings = data["content"];
       this.topContentLoaded=true;
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
 
     // 중단 생성 순 목록
     consulting.getLatestConsultings(5)
     .then((data)=> {
-      console.log(data);
       this.latestConsultings = data["content"];
       this.midContentLoaded=true;
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
-    console.log("hi");
-    // 방송 목록 요청 END
 
+    // 방송 목록 요청 END
     this.getLatestBoardList();
 
   },
@@ -436,8 +377,7 @@ export default {
             this.latestBoardList[i].category = "정보"
           }
         }
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     },
     getHitBoardList() { // 인기 게시물
@@ -454,8 +394,7 @@ export default {
             this.hitBoardList[i].category = "정보"
           }
         }
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     }, getImgBoardList() { // 이미지 게시물 (이미지만)
       this.$axios.get(API_BASE_URL+'/main/board/image').then(response => {
@@ -465,12 +404,10 @@ export default {
           this.imgBoardList[i].dateTime = this.imgBoardList[i].dateTime.substr(0, 10);
         }
         this.getImgDetail();
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
       })
     },
     getImgDetail() { // 이미지 게시물 디테일 가져오기
-    console.log(this.imgBoardList.length);
       for(var j = 0; j < this.imgBoardList.length; j++){
         var k = j;
         this.$axios.get(API_BASE_URL + '/boards/' + this.imgBoardList[k].no).then(response => {

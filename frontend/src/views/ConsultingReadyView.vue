@@ -119,8 +119,8 @@ export default {
       window.stream = stream;
       document.getElementById('video').srcObject = stream;
     }
-    catch(e){
-      console.log(e)
+    catch(error){
+      console.log(error)
     }
   },
   mounted() {
@@ -129,12 +129,9 @@ export default {
     // 카테고리 요청
     category.getCategories(
       (response) => {
-        console.log("카테고리 요청 성공");
         this.categoryList = response.data["content"];
       },
-      (response) => {
-        console.log("요청 실패");
-        console.log(response);
+      () => {
       }
     );
   },

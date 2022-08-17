@@ -62,8 +62,7 @@
                   {{ consultantIntro }}
                 </v-list-item>
 
-                <!-- 컨설턴트 관심 카테고리
-                여러 개 설정 가능하지만 여기에선 3개만 보여주게 해야 이쁨 -->
+                <!-- 컨설턴트 관심 카테고리 -->
                 <v-list-item style="min-height:48px;" class="pl-0 pr-0">
                   <v-chip-group column>
                     <category-chips
@@ -95,7 +94,6 @@
               1. 컨설턴트가 본인이라면 아무것도 안 보임
               2. 본인이 아니고 팔로우를 하지 않았다면 팔로우 버튼
               3. 본인이 아니고 팔로우를 한 상태라면 팔로잉 버튼(누르면 팔로우 취소) -->
-              <!-- <v-btn class="mr-2" outlined rounded text v-if="checkUserInfo.no !== historyDetail.userInfoDto.no"> 팔로우 </v-btn> -->
               <follow-button class="mr-3" v-if="checkUserInfo.no !== historyDetail.userInfoDto.no" :user_no="historyDetail.userInfoDto.no"></follow-button>
             </v-card-actions>
           </v-card>
@@ -259,7 +257,6 @@ export default {
     }
     var temp = this.historyDetail.consultingDto.duration.split(':');
     this.consultingTime = this.zeroPadding(temp[0], 2) + ':' + this.zeroPadding(temp[1], 2) + ":" + this.zeroPadding(temp[2], 2);
-    console.log(this.historyDetail)
   }
 };
 </script>

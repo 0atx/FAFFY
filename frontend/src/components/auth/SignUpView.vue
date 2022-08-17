@@ -272,8 +272,7 @@ export default {
       ()=> {
         this.checkEmailIcon =true;
       },
-      (response)=> {
-        console.log(response);
+      ()=> {
        this.checkEmailIcon =false;
       })
 
@@ -286,9 +285,7 @@ export default {
       ()=> {
         this.checkNicknameIcon =true;
       },
-      (response)=> {
-        console.log(response);
-
+      ()=> {
        this.checkNicknameIcon =false;
       })
     },
@@ -299,7 +296,6 @@ export default {
         auth.signUp(
           this.form,
           (response) => {
-            console.log("요청 성공");
             this.$dialog.message.info(`${response.data["content"].nickname}님, 환영합니다!`, {
               position: "top",
               timeout: 2000,
@@ -307,9 +303,7 @@ export default {
             });
             this.$router.push("/auth/sign-in");
           },
-          (response) => {
-            console.log("요청 실패");
-            console.log(response);
+          () => {
           }
         );
       } else {

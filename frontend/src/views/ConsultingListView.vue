@@ -142,176 +142,6 @@ export default {
       items: ['제목', '현재 인원', '전체 인원'],
       type: { '제목': 'title', '현재 인원': 'viewCount', '전체 인원': 'roomSize' },
       consultingsResult: [],
-      consultings: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 3",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 4",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 3",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 4",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 3",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "3",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 4",
-          intro: "방송 정보",
-          nickname: "별명짓기귀찮다",
-          viewCount: "33",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 1",
-          intro: "정렬할 요소에 position 값을 absolute 로 설정하여 중앙정렬 하는 것에는 두가지 방법이 있다. 부모 요소(라기보단 기준이 될 요소)에 position:relative를",
-          nickname: "별명짓기귀찮다",
-          viewCount: "213123",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-          title: "방송 2",
-          intro: "2014년 응용수학을 바탕으로 최적화 의사 결정을 연구하던 과학자가 난제에 가까운 산학 협력 프로젝트를 만났다. 한 부동산개발 업체가 캐나다 토론토의 한 고층 콘도미니엄을 분양하면",
-          nickname: "별명짓기귀찮다",
-          viewCount: "33333",
-          roomSize: "10",
-          categories: [
-            "캐주얼",
-            "모던",
-          ],
-        },
-      ],
     }
   },
   methods: {
@@ -347,10 +177,8 @@ export default {
     },
     // 검색 카테고리 별 정렬
     search(keyword) {
-      console.log(this.keyword + ",? " + keyword);
       this.keyword = keyword
       this.sortBy = '';
-      console.log(this.keyword + ", " + keyword);
       this.searchKeyword(this.keyword)
 
       this.keyword = '';
@@ -362,11 +190,9 @@ export default {
       this.nodata= '현재 진행 중인 방송이 없습니다.';
       consulting.getAllLatestConsultings()
       .then((data)=> {
-        console.log(data);
         this.consultingsResult = data["content"];
       })
-      .catch((error)=> {
-        console.log(error);
+      .catch(()=> {
       })
     },
   },
@@ -387,11 +213,9 @@ export default {
   mounted() {
     consulting.getAllLatestConsultings()
     .then((data)=> {
-      console.log(data);
       this.consultingsResult = data["content"];
     })
-    .catch((error)=> {
-      console.log(error);
+    .catch(()=> {
     })
   },
   watch: {

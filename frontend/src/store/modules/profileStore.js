@@ -59,102 +59,74 @@ const profileStore = {
   },
   actions: {
     async loadFollower({ commit }, user_no) {
-      console.log("팔로워 리스트 불러오기");
       follow.getFollowerList(
         user_no,
         (response) => {
-          console.log("팔로워 목록 불러오기 성공");
           commit("SET_FOLLOWER_LIST", response.data["content"]);
         },
-        (response) => {
-          console.log("팔로워 목록 불러오기 실패");
-          console.log(response);
+        () => {
           commit("SET_FOLLOWER_LIST", []);
         }
       );
     },
     async loadFollowing({ commit }, user_no) {
-      console.log("팔로잉 리스트 불러오기");
       follow.getFollowingList(
         user_no,
         (response) => {
-          console.log("팔로잉 목록 불러오기 성공");
           commit("SET_FOLLOWING_LIST", response.data["content"]);
         },
-        (response) => {
-          console.log("팔로잉 목록 불러오기 실패");
-          console.log(response);
+        () => {
           commit("SET_FOLLOWING_LIST", []);
         }
       );
     },
     async loadParticipatedList({ commit }, user_no) {
-      console.log("방송 참가 기록 불러오기");
       consulting.getParticipatedList(
         user_no,
         (response) => {
-          console.log("방송 참가 기록 불러오기 성공");
           commit("SET_PARTICIPATED_LIST", response.data["content"]);
         },
-        (response) => {
-          console.log("방송 참가 기록 불러오기 실패");
-          console.log(response);
+        () => {
           commit("SET_PARTICIPATED_LIST", []);
         }
       );
     },
     async loadConsultingList({ commit }, user_no) {
-      console.log(`${user_no}번 유저의 방송 진행 기록 불러오기`);
       consulting.getConsultingHistoryByDate(
         user_no,
         (response) => {
-          console.log("방송 진행 기록 불러오기 성공");
-          console.log(response)
           commit("SET_CONSULTING_LIST", response.data["content"]);
         },
-        (response) => {
-          console.log("방송 진행 기록 실패");
-          console.log(response);
+        () => {
           commit("SET_CONSULTING_LIST", []);
         }
       );
     },
     async loadBoardList({ commit }, user_no) {
-      console.log("작성 게시글 불러오기");
       userBoard.getUserBoardList(
         user_no,
         (response) => {
-          console.log("작성 게시글 불러오기 성공");
           commit("SET_USER_BOARD_LIST", response.data["content"]);
         },
-        (response) => {
-          console.log("작성 게시글 불러오기 실패");
-          console.log(response);
+        () => {
         }
       );
     },
     loadHistoryDetail({ commit, dispatch, state }, payload) {
-      console.log("상세 히스토리 불러오기");
-      console.log('paytlaod2', payload)
       axios({
         url: API_BASE_URL + `/users/profile/${payload.user_no}/history/${payload.consulting_no}`,
         method: 'get',
       })
         .then(res => {
-          console.log("상세 히스토리 조회 성공")
-          console.log(res)
           commit("SET_HISTORY_DETAIL", res.data)
           dispatch('resetSnapshotList')
         })
         .then(() => {
-          console.log('기존 스냅샷 리스트 초기화 성공')
           state.historyDetail.consultingDto.snapshotNoList.forEach((snapshotNo) => {
-            console.log(`${snapshotNo}번 스냅샷 불러오기`)
             dispatch('loadSnapshotList', snapshotNo)
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
         })
     },
     loadSnapshotList({ commit }, snapshotNo) {
@@ -164,12 +136,10 @@ const profileStore = {
         responseType: 'blob',
       })
         .then(res => {
-          console.log(`${snapshotNo}번 스냅샷 불러오기 성공`, res)
           const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] } ))
           commit('PUSH_SNAPSHOT', url)
         })
-        .catch(err => {
-          console.log('스냅샷 불러오기 실패', err)
+        .catch(() => {
         })
     },
     resetSnapshotList({ commit }) {
