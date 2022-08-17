@@ -51,8 +51,11 @@
                     <div style="display:flex; align-items:center">
                       <div>
                         <!-- 방송 제목 -->
-                        <v-list-item-title style="font-weight: 600; font-size:22px;" class="mb-1">
-                          {{slide.title}}
+                        <v-list-item-title v-if="slide.title.length > 15" style="font-weight: 600; font-size:22px;" class="mb-1">
+                          {{ slide.title.slice(0,15) }}...
+                        </v-list-item-title>
+                        <v-list-item-title v-else style="font-weight: 600; font-size:22px;" class="mb-1">
+                          {{ slide.title }}
                         </v-list-item-title>
                         <!-- 컨설턴트 닉네임 / 참여자 / 참여 인원 -->
                         <v-list-item-subtitle style="font-size: 18px;" class="mb-1">
@@ -141,7 +144,10 @@
                   <div style="display:flex; align-items:center">
                     <div>
                       <!-- 방송 제목 -->
-                      <v-list-item-title style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
+                      <v-list-item-title v-if="consult.title.length > 15" style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
+                        {{ consult.title.slice(0,15) }}...
+                      </v-list-item-title>
+                      <v-list-item-title v-else style="font-weight: 600; font-size:18px;" class="mt-1 mb-1">
                         {{ consult.title }}
                       </v-list-item-title>
                       <!-- 컨설턴트 닉네임 / 참여 인원 -->
@@ -155,11 +161,11 @@
                   </div>
 
                   <!-- 방송 소개 -->
-                  <div class="pt-1" style="font-size:15px;" v-if="consult.intro.length > 80" id="intro">{{ consult.intro.slice(0,80) }}...</div>
-                  <div class="pt-1" style="font-size:15px;" v-else id="intro">{{ consult.intro }}</div>
+                  <div class="pt-1 mb-1" style="font-size:15px;" v-if="consult.intro.length > 80" id="intro">{{ consult.intro.slice(0,80) }}...</div>
+                  <div class="pt-1 mb-1" style="font-size:15px;" v-else id="intro">{{ consult.intro }}</div>
 
                   <!-- 방송 카테고리 -->
-                  <v-chip-group class="pt-1" style="min-height: 40px;" column>
+                  <v-chip-group style="min-height: 40px;" column>
                     <v-chip
                       small
                       :ripple="false"
@@ -242,6 +248,12 @@
                 class="mb-1"> mdi-chevron-right </v-icon>
             </router-link>
             <v-row style="margin: 0px;">
+              <v-col v-if="imgSrcList.length ==0" style="height: 450px; width:500px; display:flex; justify-content:center; align-items:center;" cols="12">
+                <div style="text-align:center;">
+                  <v-icon color="#333" large block> mdi-clipboard-text-off-outline </v-icon>
+                  <h4>작성된 게시글이 없습니다.</h4>
+                </div>
+              </v-col>
               <!-- 반복문 수정 필요 -->
               <v-col v-for="(imgBoard,i) in imgBoardList" :key="i" class="mt-2 d-flex child-flex" cols="6">
                 <figure class="imgBoard">
