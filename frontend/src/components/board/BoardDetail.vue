@@ -35,7 +35,7 @@
             <div class="mr-2">{{ currentBoard.user.nickname }}</div> | <div class="ml-2">{{ date }}</div>
             </div>
             <div style="display:flex; align-items:center">
-              <div class="mr-2"><v-icon small>mdi-eye</v-icon> {{ currentBoard.hit }}</div>
+              <div class="mr-2"><v-icon small>mdi-eye</v-icon> {{ currentBoard.hit+1 }}</div>
               <div><v-icon small> mdi-comment-processing-outline </v-icon> {{ currentBoard.commentCount }}</div>
             </div>
           </div>
@@ -80,9 +80,11 @@ export default {
   },
   mounted() {
     this.date = this.currentBoard.dateTime.replaceAll('-', '.').replace('T', ' ').slice(0, 16);
+    console.log(this.currentBoard.no);
+    this.increaseHit(this.currentBoard.no);
   },
   methods: {
-    ...mapActions(boardStore, ['deleteBoard']),
+    ...mapActions(boardStore, ['deleteBoard','increaseHit']),
     moveProfile(user) {
       this.$router.push({ name: 'profile', params: { no: user }})
     },
