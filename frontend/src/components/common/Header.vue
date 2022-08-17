@@ -17,6 +17,18 @@
         @click="toMain"
       >
 
+      <v-btn
+          v-if="!isOnAir"
+          class="ml-1"
+          id="consultBtn"
+          rounded
+          elevation="0"
+          :ripple="false"
+          @click="toBoard"
+        >
+          게시판
+        </v-btn>
+
       <v-spacer></v-spacer>
 
       <!-- 검색 바 -->
@@ -130,6 +142,9 @@ export default {
     toReady() {
       this.$router.push({ name: "consulting-ready" }).catch(()=>{});
       // this.$router.push({ name: "consulting-onair" });
+    },
+    toBoard() {
+      this.$router.push({ name: "board" }).catch(()=>{});
     },
     toMyProfile() {
       this.$router.push("/profile/"+this.loginUser.no).catch(()=>{});
