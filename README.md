@@ -60,7 +60,7 @@
 
 ---
 
-## ✔ 주요 기술
+## 🛠️ 주요 기술
 
 **Backend - Spring**
 - IntelliJ IDE 2022.1.3****
@@ -71,23 +71,25 @@
 - Spring Web
 - Redis 3.0.504
 - Swagger 2.0.0
-- Firebase 8.1.0
 - MySQL 8.0.29
-- OpenVidu 2.22.0
+- Hibernate 5.6.9 Final
+- Swagger 2.9.2
 
 **Frontend**
 - Visual Studio Code IDE
 - Node.Js 16.16.0 LTS
-- Vue 2.6.14
-- Vuetify 2.4.0
+- Vue 2.7.7
+- Vuetify 2.6.7
 - Vuex 3.6.2
-- FireBase
+- OpenVidu 2.22.0
 
 **CI/CD**
-- AWS EC2
-- Jenkins
-- NGINX
-- SSL
+- AWS EC2 Ubuntu 20.04 LTS
+- NGINX 1.18.0
+- SSL 
+
+## 🗂️ 시스템 아키텍처
+![서비스_아키텍처](/uploads/d52d304a20bd2aab15db8aff502c9c48/서비스_아키텍처.png)
 
 ## ✔ 프로젝트 파일 구조
 ---
@@ -187,7 +189,7 @@ faffy-front
 - [명세기술서](./docs/)
 
 ## ✔ 프로젝트 결과물
-- [포팅메뉴얼](./exec/)
+- [포팅메뉴얼](./exec/FAFFY_포팅메뉴얼.docx)
 - [중간발표자료](./ppt/PJT1중간발표/PJT1중간발표.pptx)
 - [최종발표자료](./ppt/PJT1최종발표/PJT1최종발표.pptx)
 
