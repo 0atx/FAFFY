@@ -123,8 +123,9 @@
                     <!-- 방송 시간 및 시청자 수..넣고 싶었는데 팀장이 몽둥이 들었음 눈물난다 그래서 방송일자랑 시간으로 바꿈ㅜ -->
                     <div style="display: flex; justify-content: space-around">
                       <v-list-item-subtitle> {{  historyDetail.consultingDto.date.replaceAll('-','.') }} </v-list-item-subtitle>
-                      <v-list-item-subtitle style="text-align: right">
-                        {{ historyDetail.consultingDto.startTime.slice(0, 8) }} ~ {{ historyDetail.consultingDto.endTime.slice(0, 8) }}
+                      <v-list-item-subtitle style="text-align: right" v-if="endTime != null">
+                        {{startTime}} ~ {{endTime}}
+                        <!-- {{ historyDetail.consultingDto.startTime.slice(0, 8) }} ~ {{ historyDetail.consultingDto.endTime.slice(0, 8) }} -->
                       </v-list-item-subtitle>
                     </div>
                   </div>
@@ -217,6 +218,8 @@ export default {
       consultantIntro: '',
       consultingIntro: '',
       consultingTime: '',
+      startTime: null,
+      endTime: null,
       dataReady: false,
     };
   },
@@ -249,40 +252,30 @@ export default {
     if(this.historyDetail.userInfoDto.introduce != null){
       if(this.historyDetail.userInfoDto.introduce.length > 100) {
         this.consultantIntro = this.historyDetail.userInfoDto.introduce.slice(0,100) + "...";
+      }else {
+        this.consultantIntro = this.historyDetail.userInfoDto.introduce;
       }
-    }else {
-      this.consultantIntro = this.historyDetail.userInfoDto.introduce;
     }
+    this.consultingIntro = '';
     if(this.historyDetail.consultingDto.introduce != null){
       if(this.historyDetail.consultingDto.introduce.length > 100) {
         this.consultingIntro = this.historyDetail.consultingDto.introduce.slice(0, 100) + "...";
-      }
-    } else {
+      }else {
       this.consultingIntro = this.historyDetail.consultingDto.introduce;
+      }
     }
-    var temp = this.historyDetail.consultingDto.duration.split(':');
-    this.consultingTime = this.zeroPadding(temp[0], 2) + ':' + this.zeroPadding(temp[1], 2) + ":" + this.zeroPadding(temp[2], 2);
+    var temp;
+    this.consultingTime = '';
+    if(this.historyDetail.consultingDto.duration != null){
+      temp = this.historyDetail.consultingDto.duration.split(':');
+      this.consultingTime = this.zeroPadding(temp[0], 2) + ':' + this.zeroPadding(temp[1], 2) + ":" + this.zeroPadding(temp[2], 2);
+    }
+    this.startTime = this.historyDetail.consultingDto.startTime.slice(0, 8);
+    if(this.historyDetail.consultingDto.endTime != null)
+      this.endTime = this.historyDetail.consultingDto.endTime.slice(0, 8);
+
     this.dataReady = true;
   },
-  // async created() {
-  //   const payload = {
-  //     user_no: Number(this.$route.params.no),
-  //     consulting_no: Number(this.$route.params.consultNo),
-  //   }
-  //   await this.loadHistoryDetail(payload)
-  //   if(this.historyDetail.userInfoDto.introduce.length > 100) {
-  //     this.consultantIntro = this.historyDetail.userInfoDto.introduce.slice(0,100) + "...";
-  //   } else {
-  //     this.consultantIntro = this.historyDetail.userInfoDto.introduce;
-  //   }
-  //   if(this.historyDetail.consultingDto.introduce.length > 100) {
-  //     this.consultingIntro = this.historyDetail.consultingDto.introduce.slice(0, 100) + "...";
-  //   } else {
-  //     this.consultingIntro = this.historyDetail.consultingDto.introduce;
-  //   }
-  //   var temp = this.historyDetail.consultingDto.duration.split(':');
-  //   this.consultingTime = this.zeroPadding(temp[0], 2) + ':' + this.zeroPadding(temp[1], 2) + ":" + this.zeroPadding(temp[2], 2);
-  // }
 };
 </script>
 
