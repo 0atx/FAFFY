@@ -7,7 +7,7 @@
 
 </br>
 
-## 📹 시연 및 소개 영상 보기 : [UCC 링크](https://youtu.be/)
+## 📹 시연 및 소개 영상 보기 : [UCC 링크](https://youtu.be/qcSYZu7wvzU)
 
 </br>
 
