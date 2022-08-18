@@ -216,6 +216,7 @@ export default {
       } else {
         this.now = this.boardList
       }
+      this.sortByDate();
     },
   },
   created() {
