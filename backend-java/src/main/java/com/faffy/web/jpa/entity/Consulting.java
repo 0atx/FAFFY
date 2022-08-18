@@ -17,6 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Consulting extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "consultant_no")
