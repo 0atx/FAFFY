@@ -176,7 +176,7 @@ public class BoardController {
 
     @ApiOperation(value="게시판 첨부 파일 조회", notes="해당 게시판 첨부 파일의 이미지 파일을 반환")
     @GetMapping("/file/{no}")
-    public ResponseEntity<byte[]> getConsultingSnapshot(@PathVariable int no) {
+    public ResponseEntity<byte[]> getBoardFile(@PathVariable int no) {
 
         try {
             File file = boardService.getFile(no);

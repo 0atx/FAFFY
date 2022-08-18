@@ -353,7 +353,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else{
-            Pageable paging = PageRequest.of(page, size, Sort.by("date").descending());
+            Pageable paging = PageRequest.of(page, size);
             int start = (int)paging.getOffset();
             int end = Math.min(start+paging.getPageSize(), dtoList.size());
             Page<BroadCastHistoryDto> res = new PageImpl<>(dtoList.subList(start, end), paging, dtoList.size());
