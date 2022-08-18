@@ -420,6 +420,7 @@ public class UserController {
             HistoryUserInfoDto userInfoDto = userService.getHistoryUserInfo(consulting_no);
             HistoryConsultingDto consultingDto = consultingService.getHistoryConsulting(consulting_no);
             HistoryDetailDto dto = new HistoryDetailDto(userInfoDto, consultingDto);
+            System.out.println("userInfoDto: "+userInfoDto);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }catch (IllegalInputException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

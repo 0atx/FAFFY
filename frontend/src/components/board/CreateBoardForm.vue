@@ -188,6 +188,115 @@ export default {
   },
 }
 </script>
+<!-- <script>
+import validateRules from "@/utils/validateRules.js";
+import { mapActions, mapGetters } from 'vuex'
+const boardStore = "boardStore"
+
+export default {
+  name: 'CreateBoardForm',
+  props: {
+    board: Object,
+    action: String,
+  },
+  data() {
+    return {
+      categories: ['자유', '질문', '정보'],
+      boardForm: {
+        title: this.board.title,
+        content: this.board.content,
+        category: '자유',
+        img: this.currentImage
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(boardStore, ['currentImage']),
+    rules: () => validateRules,
+    boardCategory() {
+      if (this.boardForm.category === '자유') {
+        return 'Free'
+      } else if (this.boardForm.category === '질문') {
+        return 'QnA'
+      } else if (this.boardForm.category === '정보') {
+        return 'Info'
+      } else {
+        return ''
+      }
+    },
+  },
+  methods: {
+    ...mapActions(boardStore, ['createBoard', 'updateBoard']),
+    // 게시글 작성 초기화
+    async resetForm() {
+      if (this.boardForm.title || this.boardForm.content || this.boardForm.img) {
+        const res = await this.$dialog.confirm({
+          text: '<br>작성 중이던 내용을 잃게 됩니다.<br> 정말 초기화 하시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+        if (res) {
+          this.$refs.form.reset()
+        }
+      } else {
+        this.boardForm.category = '자유'
+      }
+    },
+    // 게시글 작성
+    async submitBoard() {
+      const validate = this.$refs.form.validate();
+
+      if(validate) {
+        let formData = new FormData()
+        formData.append('title', this.boardForm.title)
+        formData.append('category', this.boardCategory)
+        formData.append('content', this.boardForm.content)
+        if (this.boardForm.img != null) formData.append('file', this.boardForm.img)
+        else formData.append('file', this.currentImage)
+        if (this.action==='update') {
+          formData.append('no', this.$route.params.boardNo)
+          await this.updateBoard(formData)
+          this.$dialog.message.info('게시글이 수정되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
+        } else {
+          await this.createBoard(formData)
+          this.$dialog.message.info('게시글이 등록되었습니다.', {
+            position: "top",
+            timeout: 2000,
+            color: "#0c0f66",
+          });
+        }
+      }
+    },
+    async moveToDetail() {
+      const res = await this.$dialog.confirm({
+          text: '<br>작업 중인 내용을 중단하고 글로 돌아가시겠습니까?',
+          icon: true,
+          actions: {
+            false : {
+              text: '취소', color: '#ff7451'
+            },
+            true : {
+              text: '확인', color: '#0c0f66'
+            },
+          }
+        });
+      if (res) {
+      this.$router.push({ name: 'board-detail', params: { boardNo: this.$route.params.boardNo }})
+    }}
+  },
+}
+</script> -->
 
 <style scoped>
 .container {
