@@ -60,7 +60,7 @@
 
 ---
 
-## ✔ 주요 기술
+## 🛠️ 주요 기술
 
 **Backend - Spring**
 - IntelliJ IDE 2022.1.3****
@@ -87,6 +87,9 @@
 - AWS EC2 Ubuntu 20.04 LTS
 - NGINX 1.18.0
 - SSL 
+
+## 🗂️ 시스템 아키텍처
+![서비스_아키텍처](/uploads/d52d304a20bd2aab15db8aff502c9c48/서비스_아키텍처.png)
 
 ## ✔ 프로젝트 파일 구조
 ---
