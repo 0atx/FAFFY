@@ -220,7 +220,10 @@ export default {
   },
   created() {
     this.now = this.boardList
-  }
+  },
+  mounted() {
+    this.sortByDate();
+  },
 }
 </script>
 
