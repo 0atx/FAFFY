@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
         if(user == null)
             return null;
 
-        List<ConsultingLog> logList = consultingLogRepository.findConsultingLogsByUserNo(no).orElse(null);
+        List<ConsultingLog> logList = consultingLogRepository.findConsultingHistoryByUserNo(no);
         List<Consulting> consultings = new ArrayList<>();
         List<BroadCastHistoryDto> dtoList = new ArrayList<>();
         if(!logList.isEmpty()){
@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService {
         if(user == null)
             return null;
 
-        List<ConsultingLog> logList = consultingLogRepository.findConsultingLogsByUserNo(no).orElse(null);
+        List<ConsultingLog> logList = consultingLogRepository.findConsultingHistoryByUserNo(no);
         List<Consulting> consultings = new ArrayList<>();
         List<BroadCastHistoryDto> dtoList = new ArrayList<>();
         if(!logList.isEmpty()){

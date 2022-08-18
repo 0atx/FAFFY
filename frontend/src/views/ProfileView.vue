@@ -35,7 +35,8 @@ export default {
       this.loadProfile();
   },
   methods: {
-    ...mapActions(profileStore, ["loadFollower", "loadFollowing", "loadParticipatedList", "loadConsultingList", "loadBoardList"]),
+    ...mapActions(profileStore, ["loadFollower", "loadFollowing", "loadParticipatedList",
+    "loadConsultingList", "loadConsultingListByDate", "loadBoardList"]),
     ...mapMutations(profileStore, ["SET_USER_PROFILE"]),
     loadProfile() {
       this.loadUserInfo();
@@ -43,6 +44,7 @@ export default {
       this.loadFollowing(this.$route.params.no);
       this.loadParticipatedList(this.$route.params.no);
       this.loadConsultingList(this.$route.params.no);
+      this.loadConsultingListByDate(this.$route.params.no);
       this.loadBoardList(this.$route.params.no);
     },
     async loadUserInfo() {

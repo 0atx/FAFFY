@@ -10,6 +10,7 @@ const profileStore = {
     followingList: [],
     participatedList: [],
     consultingList: [],
+    consultingHistoryList: [],
     userBoardList: [],
     historyDetail: {},
     snapshotList: [],
@@ -18,8 +19,9 @@ const profileStore = {
     return state.userProfile;
   },
   getters: {
-    participatedList: state => state.participatedList.reverse(),
-    consultingList: state => state.consultingList.reverse(),
+    participatedList: state => state.participatedList,
+    consultingList: state => state.consultingList,
+    consultingHistoryList: state => state.consultingHistoryList,
     userBoardList: state => state.userBoardList.reverse(),
     historyDetail: state => state.historyDetail,
     snapshotList: state => state.snapshotList,
@@ -39,6 +41,9 @@ const profileStore = {
     },
     SET_CONSULTING_LIST: (state, consultingList) => {
       state.consultingList = consultingList;
+    },
+    SET_CONSULTING_HISTORY_LIST: (state, consultingHistoryList) => {
+      state.consultingHistoryList = consultingHistoryList;
     },
     SET_USER_BOARD_LIST: (state, userBoardList) => {
       state.userBoardList = userBoardList;
@@ -92,10 +97,21 @@ const profileStore = {
       );
     },
     async loadConsultingList({ commit }, user_no) {
-      consulting.getConsultingHistoryByDate(
+      consulting.getConsultingList(
         user_no,
         (response) => {
           commit("SET_CONSULTING_LIST", response.data["content"]);
+        },
+        () => {
+          commit("SET_CONSULTING_LIST", []);
+        }
+      );
+    },
+    async loadConsultingListByDate({ commit }, user_no) {
+      consulting.getConsultingHistoryByDate(
+        user_no,
+        (response) => {
+          commit("SET_CONSULTING_HISTORY_LIST", response.data["content"]);
         },
         () => {
           commit("SET_CONSULTING_LIST", []);

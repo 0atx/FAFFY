@@ -166,11 +166,14 @@ export default {
   },
   computed: {
     ...mapState(profileStore, ["userProfile"]),
-    ...mapGetters(profileStore, ["userBoardList", "participatedList","consultingList"]),
+    ...mapGetters(profileStore, ["userBoardList", "participatedList", "consultingList", "consultingHistoryList"]),
     ...mapGetters(authStore, ['checkUserInfo']),
     consultingHistory() {
-      return [...this.participatedList, ...this.consultingList].sort((a, b) => {
-        return b.date - a.date
+      // return [...this.participatedList, ...this.consultingList].sort((a, b) => {
+      //   return b.date - a.date
+      // })
+      return [...this.consultingHistoryList].sort((a,b) => {
+        return b.date - a.date;
       })
     },
     isHistoryExist() {
