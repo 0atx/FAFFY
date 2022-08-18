@@ -130,6 +130,13 @@
                 </template>
                 <span>앨범</span>
               </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="showLab"><v-icon size="30" color="#fff">mdi-flask-outline</v-icon></v-btn>
+                </template>
+                <span>실험실</span>
+              </v-tooltip>
 <!--
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -255,6 +262,37 @@
                       alt="snapshot"
                   />
                 </div>
+
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="#0c0f66"
+                  text
+                  @click="albumDialog = false"
+                >
+                  닫기
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 실험실 -->
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="labDialog"
+            persistent
+            max-width="1000"
+            max-height="800"
+          >
+            <v-card>
+              <v-card-title class="text-h5; font-weight: 600;">
+                가상 시착
+              </v-card-title>
+              <v-card-text>
                 <img id="in" src="@/assets/images/pose18.jpg"/>
                 <img id="po" src="@/assets/images/pose16.jpg"/>
                 <img id="gan" src=""/>
@@ -272,7 +310,7 @@
                 <v-btn
                   color="#0c0f66"
                   text
-                  @click="albumDialog = false"
+                  @click="labDialog = false"
                 >
                   닫기
                 </v-btn>
@@ -350,10 +388,11 @@ export default {
       // 앨범
       albumDialog:false,
       IMG_BASE_URL: API_BASE_URL + "/consultings/snapshot",
-
+      // 실험실
+      labDialog:false,
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
-      
+
       ganCount:0,
     }
   },
@@ -747,6 +786,9 @@ export default {
     showAlbum() {
       this.albumDialog = true;
     },
+    showLab() {
+      this.labDialog = true;
+    },
     async NAGA() {
       console.log("NAGA!");
       this.session.signal({
@@ -900,7 +942,7 @@ export default {
       console.log(this.ganCount)
       console.log("===============")
       if (this.ganCount==0) {
-        axios.post('http://localhost:8083/gan',{
+        axios.post('https://i7a802.p.ssafy.io/gan',{
         "input":18,
         "pose":16
       })
@@ -926,7 +968,7 @@ export default {
         let img = document.getElementById("gan");
         inp.src = require("@/assets/images/pose19.jpg");
         img.src="";
-        axios.post('http://localhost:8083/gan',{
+        axios.post('https://i7a802.p.ssafy.io/gan',{
         "input":19,
         "pose":16
         })
@@ -953,7 +995,7 @@ export default {
       let img = document.getElementById("gan");
       inp.src = require("@/assets/images/pose12.jpg");
       img.src="";
-      axios.post('http://localhost:8083/gan',{
+      axios.post('https://i7a802.p.ssafy.io/gan',{
       "input":12,
       "pose":16
       })
