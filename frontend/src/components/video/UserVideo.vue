@@ -24,7 +24,7 @@ import OvVideo from './OvVideo';
 import * as blazeface from "@tensorflow-models/blazeface"
 import * as tmImage from '@teachablemachine/image';
 
-import {mapState} from "vuex";
+import {mapState,mapMutations} from "vuex";
 import('@tensorflow/tfjs');
 
 export default {
@@ -124,6 +124,8 @@ export default {
       pmul:0.6,
       model:undefined,
       interval:undefined,
+      interval2:undefined,
+
       canvas:undefined,
       ctx:undefined,
       canvasm:undefined,
@@ -145,6 +147,7 @@ export default {
     }, 2000)
   },
 	methods: {
+    ...mapMutations("consultingStore",["SET_REMOTE"]),
     // Mosaic On / Off
 		changeMosaicValue(v) {
 			this.mosaicValue = v;
@@ -223,20 +226,22 @@ export default {
 			this.model2= await tmImage.load(this.modelURL, this.metadataURL);
 
 			setInterval(() => {
-				this.motionRecognition(this.video)}, parseInt(1000/this.frame));
+				this.interval2 = this.motionRecognition(this.video)}, parseInt(1000/this.frame));
 
 		},
     async motionRecognition(video) {
       if (!this.remoteValue)
         return;
 			const prediction = await this.model2.predict(video, false);
-			if (prediction[0].probability>0.9) {
+			if (prediction[0].probability>0.98) {
         if (this.captureSignal == false) {
           this.$dialog.message.info('3초 후 스냅샷을 촬영합니다', {
             position: "top",
             timeout: 3000,
             color: "#ff7451",
           });
+          clearInterval(this.interval2);
+          this.SET_REMOTE(false);
           setTimeout(()=> {
             this.capture();
             this.captureSignal = false;

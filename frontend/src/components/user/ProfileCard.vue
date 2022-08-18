@@ -191,7 +191,7 @@ export default {
 
 #category {
   height: 70px;
-  margin-left: 24%;
+  margin-left: 23%;
 }
 
 #categoryChips {
@@ -222,7 +222,7 @@ export default {
 }
 
 a {
-  color: black;
+  color: black !important;
   margin: 30px;
   text-decoration: none;
 }

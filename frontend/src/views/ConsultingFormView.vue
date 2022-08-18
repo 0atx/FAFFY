@@ -313,7 +313,6 @@ export default {
 			camValue: true,
 			audioValue: false,
       mosaicValue:false,
-      remoteValue:false,
       isHost:false,
       isShare:false,
 			mySessionId: "",
@@ -346,7 +345,7 @@ export default {
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo","snapshotList"]),
+    ...mapState("consultingStore",["participants","consultingInfo","snapshotList","remoteValue"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -378,7 +377,7 @@ export default {
 
       return;
     }
-    this.mySessionId = "session"+this.consulting_no.toString();
+    this.mySessionId = ""+this.consulting_no;
     this.myUserName=this.loginUser.no+":"+this.loginUser.nickname;
 
     // 방송 정보 요청 후 값 세팅
@@ -414,6 +413,9 @@ export default {
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
     }
+
+
+
   },
   beforeRouteLeave(to,from,next) {
     this.leaveSession();
@@ -594,8 +596,7 @@ export default {
       this.mosaicSignal();
     },
     toggleRemote() {
-      this.remoteValue = !this.remoteValue;
-      this.SET_REMOTE(this.remoteValue);
+      this.SET_REMOTE(!this.remoteValue);
     },
 
     // 화면 공유 시작
@@ -673,9 +674,11 @@ export default {
 						if (error.response.status === 409) {
 							resolve(sessionId);
 						} else {
+
 							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_URL}"`)) {
 								location.assign(`${OPENVIDU_URL}/accept-certificate`);
 							}
+
 							reject(error.response);
 						}
 					});
