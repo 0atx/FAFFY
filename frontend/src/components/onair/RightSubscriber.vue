@@ -21,7 +21,7 @@
               <v-icon> mdi-chat </v-icon>
             </v-btn>
           </v-list-item-title>
-          <v-list-item-title>참여 인원 : {{ participants.length+1 }} / {{ consultingInfo.roomSize }}</v-list-item-title>
+          <v-list-item-title v-if="consultingInfo">참여 인원 : {{ participants.length+1 }} / {{ consultingInfo.roomSize }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>

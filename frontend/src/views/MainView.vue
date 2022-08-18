@@ -333,12 +333,13 @@ export default {
     };
   },
   created: function () {
-    this.getLatestBoardList(),
-    this.getHitBoardList(),
-    this.getImgBoardList()
+
   },
 
   mounted() {
+    this.getLatestBoardList();
+    this.getHitBoardList();
+    this.getImgBoardList();
     window.scrollTo(0, 0);
     // 방송 목록 요청-----
     // 상단 참여자수 순 목록
