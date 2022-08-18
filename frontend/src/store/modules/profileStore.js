@@ -49,7 +49,8 @@ const profileStore = {
       state.userBoardList = userBoardList;
     },
     SET_HISTORY_DETAIL: (state, historyDetail) => {
-      state.historyDetail = historyDetail
+      state.historyDetail = historyDetail;
+      console.log(state.historyDetail);
     },
     PUSH_SNAPSHOT: (state, snapshot) => {
       state.snapshotList.push(snapshot)
@@ -128,8 +129,8 @@ const profileStore = {
         }
       );
     },
-    loadHistoryDetail({ commit, dispatch, state }, payload) {
-      axios({
+    async loadHistoryDetail({ commit, dispatch, state }, payload) {
+      await axios({
         url: API_BASE_URL + `/users/profile/${payload.user_no}/history/${payload.consulting_no}`,
         method: 'get',
       })

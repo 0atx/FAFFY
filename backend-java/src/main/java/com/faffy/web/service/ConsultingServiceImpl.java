@@ -53,8 +53,10 @@ public class ConsultingServiceImpl implements ConsultingService {
 
 
     private String getDuration(String startTime, String endTime) {
-        System.out.println("startTime:" + startTime);
-        System.out.println("endTime:" + endTime);
+//        System.out.println("startTime:" + startTime);
+//        System.out.println("endTime:" + endTime);
+        if(endTime == null)
+            return null;
         String[] sTime = startTime.substring(0, startTime.length() - 2).split(":");
         String[] eTime = endTime.substring(0, startTime.length() - 2).split(":");
         int stotal = 60 * 60 * Integer.parseInt(sTime[0]) + 60 * Integer.parseInt(sTime[1]) + Integer.parseInt(sTime[2]);
@@ -68,15 +70,20 @@ public class ConsultingServiceImpl implements ConsultingService {
     @Override
     public HistoryConsultingDto getHistoryConsulting(int no) throws IllegalInputException {
         Consulting consulting = consultingRepository.findById(no).orElse(null);
+//        System.out.println("consulting:"+consulting);
         if (consulting == null)
             throw new IllegalInputException();
 
         Timestamp startTimestamp = Timestamp.valueOf(consulting.getStartTime());
-        Timestamp endTimestamp = Timestamp.valueOf(consulting.getEndTime());
+        Timestamp endTimestamp = null;
+        if(consulting.getEndTime() != null)
+            endTimestamp = Timestamp.valueOf(consulting.getEndTime());
         String sdate = startTimestamp.toString().split(" ")[0].replace(':', '-');
 
         String startTime = startTimestamp.toString().split(" ")[1];
-        String endTime = endTimestamp.toString().split(" ")[1];
+        String endTime = null;
+        if(consulting.getEndTime() != null)
+            endTime = endTimestamp.toString().split(" ")[1];
         String duration = getDuration(startTime, endTime);
 
         return HistoryConsultingDto.builder()
