@@ -62,7 +62,7 @@
                     style="cursor: pointer"
                     @click="historyDetail(consulting.consulting_no)"
                   >
-                    <td>{{ checkUserInfo.nickname === consulting.consultant ? "진행" : "참여" }}</td>
+                    <td>{{ userProfile.nickname === consulting.consultant ? "진행" : "참여" }}</td>
                     <td>{{ consulting.title }}</td>
                     <td>{{ consulting.consultant }}</td>
                     <td>{{ consulting.date.replaceAll('-', '.').slice(0, 10) }}</td>
