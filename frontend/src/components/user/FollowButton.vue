@@ -63,7 +63,7 @@ export default {
         },
         ()=> {
           this.loadFollowing();
-          this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount-1);
+          // this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount-1);
         },
         ()=> {
         });
@@ -75,7 +75,7 @@ export default {
         },
         ()=> {
           this.loadFollowing();
-          this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount+1);
+          // this.SET_USER_PROFILE_FOLLOWERCOUNT(this.userProfile.followerCount+1);
         },
         ()=> {
         });
