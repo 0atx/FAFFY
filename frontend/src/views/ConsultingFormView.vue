@@ -130,6 +130,13 @@
                 </template>
                 <span>앨범</span>
               </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="showLab"><v-icon size="30" color="#fff">mdi-flask-outline</v-icon></v-btn>
+                </template>
+                <span>실험실</span>
+              </v-tooltip>
 <!--
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -255,6 +262,7 @@
                       alt="snapshot"
                   />
                 </div>
+
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -262,6 +270,47 @@
                   color="#0c0f66"
                   text
                   @click="albumDialog = false"
+                >
+                  닫기
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 실험실 -->
+      <template>
+        <v-row justify="center">
+          <v-dialog eager
+            v-model="labDialog"
+            persistent
+            max-width="1000"
+            max-height="800"
+          >
+            <v-card>
+              <v-card-title class="text-h5; font-weight: 600;">
+                가상 시착
+              </v-card-title>
+              <v-card-text>
+                <img id="in" src="@/assets/images/pose18.jpg"/>
+                <img id="po" src="@/assets/images/pose16.jpg"/>
+                <img id="gan" src=""/>
+
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="#0c0f66"
+                  text
+                  @click="postGAN"
+                >
+                  gan실험
+                </v-btn>
+                <v-btn
+                  color="#0c0f66"
+                  text
+                  @click="labDialog = false"
                 >
                   닫기
                 </v-btn>
@@ -313,6 +362,7 @@ export default {
 			camValue: true,
 			audioValue: false,
       mosaicValue:false,
+      remoteValue:false,
       isHost:false,
       isShare:false,
 			mySessionId: "",
@@ -338,14 +388,17 @@ export default {
       // 앨범
       albumDialog:false,
       IMG_BASE_URL: API_BASE_URL + "/consultings/snapshot",
-
+      // 실험실
+      labDialog:false,
       // 방송 퇴장 시 무한루프 방지용
       leaveTrigger:false,
+
+      ganCount:0,
     }
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo","snapshotList","remoteValue"]),
+    ...mapState("consultingStore",["participants","consultingInfo","snapshotList"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -377,6 +430,7 @@ export default {
 
       return;
     }
+
     this.mySessionId = ""+this.consulting_no;
     this.myUserName=this.loginUser.no+":"+this.loginUser.nickname;
 
@@ -413,11 +467,9 @@ export default {
     if (this.nickname==this.loginUser.nickname) {
       this.isHost = true;
     }
-
-
-
   },
   beforeRouteLeave(to,from,next) {
+    console.log("leave!!");
     this.leaveSession();
     next();
     location.reload();
@@ -454,6 +506,8 @@ export default {
 				const subscriber = this.session.subscribe(stream);
 
         let namecode = JSON.parse(stream.connection.data).clientData.split(':');
+        console.log("네임코드 확인 중!!! : ", namecode[1]);
+        console.log(this.nickname + '님의 화면');
 
         if(!(namecode[1] == this.nickname + '님의 화면')) {
           this.subscribers.push(subscriber);
@@ -462,8 +516,10 @@ export default {
           this.subscribers.push(subscriber);
           this.isShare = true;
           this.SET_SHARESCREEN(this.isShare);
+          console.log("Screen 시작 : " + this.isShare);
         }
 
+        console.log("subscrobers stream");
         this.SET_PARTICIPANTS(this.subsNoScreen);
         // 시청자 수 업데이트
         this.updateViewCount();
@@ -472,21 +528,24 @@ export default {
 			// 끝낸 모든 스트림들에 대해서
 			this.session.on('streamDestroyed', ({ stream }) => {
 				const index = this.subscribers.indexOf(stream.streamManager, 0);
-				const index2 = this.subsNoScreen.indexOf(stream.streamManager, 0);
-
 				let namecode = JSON.parse(stream.connection.data).clientData.split(':');
 
         if(namecode[1] == this.nickname + '님의 화면') {
           this.isShare = false;
           this.SET_SHARESCREEN(this.isShare);
+          console.log("Screen 종료 : " + this.isShare);
         }
-
+        // 모자이크 종료시키기
+        let no = namecode[0];
+        let mosaicValue = false;
+        this.participants.forEach(element => {
+          if (element.no == no) {
+            console.log("퇴장 찾았다");
+            element.mosaicValue = mosaicValue;
+          }
+        });
         if (index >= 0) {
 					this.subscribers.splice(index, 1);
-				}
-        this.SET_PARTICIPANTS(this.subscribers);
-        if (index2 >= 0) {
-					this.subsNoScreen.splice(index, 1);
 				}
         this.SET_PARTICIPANTS(this.subscribers);
         this.updateViewCount();
@@ -500,6 +559,11 @@ export default {
 			// 시그널 수신
 			this.session.on('signal', (event) => {
         let data = JSON.parse(event.data);
+        let type = event.type;
+				// event = JSON.parse(event.data);
+				console.log(data); // Message
+				// console.log(event.from); // Connection object of the sender
+				console.log(type); // The type of message
         // 방송 종료 signal일 경우
         if (event.type == "signal:naga") {
           if (!this.isHost) {
@@ -549,6 +613,9 @@ export default {
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
 						});
+            console.log("-----------")
+            console.log(publisher);
+            console.log("-----------")
 
 						this.mainStreamManager = publisher;
 						this.publisher = publisher;
@@ -557,19 +624,29 @@ export default {
 
 						this.session.publish(this.publisher);
 
+            console.log("방장체크"+this.nickname);
+            console.log("내닉넴:"+this.loginUser.nickname);
+            console.log("-----------")
+            console.log("subs", this.subscribers);
+            console.log("-----------")
             if (!this.isHost){
               const log = {
                 consulting_no:this.mySessionId,
                 user_no:this.loginUser.no,
               }
+              console.log(log);
               consulting.createViewLog(log)
-              .then(()=> {
+              .then((data)=> {
+                console.log("로그 생성");
+                console.log(data);
               })
-              .catch(()=> {
+              .catch((error)=> {
+                console.log(error);
               })
             }
 					})
-					.catch(() => {
+					.catch(error => {
+						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
 			window.addEventListener('beforeunload', this.leaveSession)
@@ -596,7 +673,8 @@ export default {
       this.mosaicSignal();
     },
     toggleRemote() {
-      this.SET_REMOTE(!this.remoteValue);
+      this.remoteValue = !this.remoteValue;
+      this.SET_REMOTE(this.remoteValue);
     },
 
     // 화면 공유 시작
@@ -606,19 +684,24 @@ export default {
 			this.screenShareName = this.myUserName + "님의 화면",
 
 				this.getToken(this.mySessionId).then(token => {
+					console.log(token);
 					this.screenSession.connect(token, { clientData: this.screenShareName })
 						.then(() => {
 							let publisher = this.screenOV.initPublisher("html-element-id", { videoSource: "screen", publishAudio: false });
 
 							try {
 								publisher.once('accessAllowed', () => {
+									let test = publisher.stream.getMediaStream().getVideoTracks();
+									console.log(test);
 									publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+										console.log('User pressed the "Stop sharing" button');
 										this.stopScreenShare();
 									});
 									this.screenSession.publish(publisher);
 								});
 
-								publisher.once('accessDenied', () => {
+								publisher.once('accessDenied', (event) => {
+									console.error(event, 'ScreenShare: Access Denied');
 									this.stopScreenShare();
 								});
 							} catch (error) {
@@ -626,7 +709,8 @@ export default {
 							}
 
 						})
-				}).catch(() => {
+				}).catch(error => {
+					console.error(error);
 					this.screenOV = undefined;
 					this.screenSession = undefined;
           this.screenShareName = undefined;
@@ -674,11 +758,10 @@ export default {
 						if (error.response.status === 409) {
 							resolve(sessionId);
 						} else {
-
+							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_URL}`);
 							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_URL}"`)) {
 								location.assign(`${OPENVIDU_URL}/accept-certificate`);
 							}
-
 							reject(error.response);
 						}
 					});
@@ -703,7 +786,11 @@ export default {
     showAlbum() {
       this.albumDialog = true;
     },
+    showLab() {
+      this.labDialog = true;
+    },
     async NAGA() {
+      console.log("NAGA!");
       this.session.signal({
 				data: JSON.stringify({
 					message:"방송이 종료되었습니다."
@@ -712,9 +799,11 @@ export default {
 				type: 'naga'             // The type of message (optional)
 			})
 				.then(() => {
+					console.log('Message successfully sent');
 					this.message = "";
 				})
-				.catch(() => {
+				.catch(error => {
+					console.error(error);
 				});
     },
     // 세션 종료
@@ -723,8 +812,11 @@ export default {
       if (this.leaveTrigger) return;
       // 내가 방장일 경우 방송 종료
       if (this.isHost) {
+        console.log("방장인데 불좀 꺼줄래");
         await consulting.deleteConsulting({consulting_no:this.consulting_no,user_no:this.loginUser.no},()=> {
+          console.log("good");
         },()=> {
+          console.log("TT");
         })
         this.NAGA();
       }
@@ -771,6 +863,7 @@ export default {
 			let context = this.canvas.getContext("2d");
 
 			context.drawImage(video, 0, 0, 500,400);
+      console.log("캡쳐 완료");
     },
     upload() {
       const imgBase64 = this.canvas.toDataURL('image/jpeg','multipart/form-data');
@@ -788,9 +881,11 @@ export default {
 			let formData = new FormData();
 			formData.append('file', file, fileName);
       formData.append('consulting_no',this.consulting_no);
+      console.log(formData);
 
       consulting.uploadSnapshot(formData)
-      .then(()=> {
+      .then(response=> {
+        console.log(response);
         this.session.signal({
           data: JSON.stringify({
           message:"파일 업로드 완료"
@@ -799,21 +894,28 @@ export default {
           type: 'upload'             // The type of message (optional)
           })
             .then(() => {
+              console.log('upload Message successfully sent');
               this.message = "";
             })
-            .catch(() => {
+            .catch(error => {
+              console.error(error);
 				});
       })
-      .catch(() => {
+      .catch(response => {
+        console.log(response);
       })
       this.snapshotDialog = false;
     },
     async getSnapshotList() {
       await consulting.getConsultingSnapshots(this.consulting_no)
       .then((data)=> {
+        console.log("스냅샷 불러오기 성공");
+        console.log(data);
         this.SET_SNAPSHOT_LIST(data.content);
       })
-      .catch(()=> {
+      .catch((error)=> {
+        console.log("스냅샷 불러오기 실패");
+        console.log(error);
       })
     },
     async mosaicSignal() {
@@ -826,12 +928,95 @@ export default {
           type: 'mosaic'             // The type of message (optional)
           })
             .then(() => {
+              console.log('mosaic signal successfully sent');
             })
-            .catch(() => {
+            .catch(error => {
+              console.error(error);
 				});
     },
     async updateViewCount() {
       await consulting.setViewCount(this.participants.length+1,this.consulting_no);
+    },
+    postGAN() {
+      console.log("===============")
+      console.log(this.ganCount)
+      console.log("===============")
+      if (this.ganCount==0) {
+        axios.post('https://i7a802.p.ssafy.io/gan',{
+        "input":18,
+        "pose":16
+      })
+        .then(res => {
+          // var canvas = document.getElementById("canvas");
+          // var ctx = canvas.getContext("2d");
+          var img = document.getElementById("gan");
+          img.src = "data:image/;base64,"+res.data.img;
+          // ctx.drawImage(img, 0, 0, 200, 300);
+          console.log("--------------------")
+        })
+        .catch(erro => {
+          // handle error
+          console.log(erro);
+        })
+        .then(() => {
+          // always executed
+        });
+        this.ganCount+=1;
+      }
+      else if (this.ganCount==1) {
+        let inp = document.getElementById("in");
+        let img = document.getElementById("gan");
+        inp.src = require("@/assets/images/pose19.jpg");
+        img.src="";
+        axios.post('https://i7a802.p.ssafy.io/gan',{
+        "input":19,
+        "pose":16
+        })
+        .then(res => {
+          // var canvas = document.getElementById("canvas");
+          // var ctx = canvas.getContext("2d");
+          // var ctx = canvas.getContext("2d");
+
+          img.src = "data:image/;base64,"+res.data.img;
+          // ctx.drawImage(img, 0, 0, 200, 300);
+          console.log("--------------------")
+        })
+        .catch(erro => {
+          // handle error
+          console.log(erro);
+        })
+        .then(() => {
+          // always executed
+        });
+        this.ganCount+=1;
+    }
+    else if (this.ganCount==2) {
+      let inp = document.getElementById("in");
+      let img = document.getElementById("gan");
+      inp.src = require("@/assets/images/pose12.jpg");
+      img.src="";
+      axios.post('https://i7a802.p.ssafy.io/gan',{
+      "input":12,
+      "pose":16
+      })
+      .then(res => {
+        // var canvas = document.getElementById("canvas");
+        // var ctx = canvas.getContext("2d");
+        // var ctx = canvas.getContext("2d");
+
+        img.src = "data:image/;base64,"+res.data.img;
+        // ctx.drawImage(img, 0, 0, 200, 300);
+        console.log("--------------------")
+      })
+      .catch(erro => {
+        // handle error
+        console.log(erro);
+      })
+      .then(() => {
+        // always executed
+      });
+      this.ganCount+=1;
+    }
     }
   }
 }
