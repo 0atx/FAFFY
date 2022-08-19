@@ -97,7 +97,7 @@
         <!-- 중단 옵션 영역 -->
         <div id="centerOption" class="grey lighten-2">
             <div id="optionButton" class="grey lighten-1">
-              <v-tooltip bottom v-if="!audioValue">
+              <v-tooltip bottom v-if="audioValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleAudio">mdi-microphone</v-icon></v-btn>
                 </template>
@@ -111,17 +111,17 @@
               <span>음소거 해제</span>
               </v-tooltip>
 
-              <v-tooltip bottom v-if="!camValue">
+              <v-tooltip bottom v-if="camValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video</v-icon></v-btn>
                 </template>
-                <span>비디오 시작</span>
+                <span>비디오 중지</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton"><v-icon size="30" color="#fff" @click="toggleCam">mdi-video-off</v-icon></v-btn>
                 </template>
-                <span>비디오 중지</span>
+                <span>비디오 시작</span>
               </v-tooltip>
 
               <v-tooltip bottom>
@@ -145,30 +145,30 @@
                 <span>좌우 반전</span>
               </v-tooltip> -->
 
-              <v-tooltip bottom v-if="!mosaicValue">
+              <v-tooltip bottom v-if="mosaicValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleMosaic"><v-icon size="30" color="#fff">mdi-blur</v-icon></v-btn>
                 </template>
-                <span>모자이크</span>
+                <span>모자이크 해제</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleMosaic"><v-icon size="30" color="#fff" >mdi-blur-off</v-icon></v-btn>
                 </template>
-                <span>모자이크 해제</span>
+                <span>모자이크 사용</span>
               </v-tooltip>
 
-              <v-tooltip bottom v-if="!remoteValue">
+              <v-tooltip bottom v-if="remoteValue">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="onButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor</v-icon></v-btn>
                 </template>
-                <span>모션 인식 촬영</span>
+                <span>모션 인식 해제</span>
               </v-tooltip>
               <v-tooltip bottom v-else>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn elevation="0" v-bind="attrs" v-on="on" :ripple="false" icon class="offButton" @click="toggleRemote"><v-icon size="30" color="#fff">mdi-motion-sensor-off</v-icon></v-btn>
                 </template>
-                <span>모션 인식 해제</span>
+                <span>모션 인식 촬영</span>
               </v-tooltip>
 
               <v-tooltip bottom v-if="!screenOV && isHost">
@@ -362,7 +362,6 @@ export default {
 			camValue: true,
 			audioValue: false,
       mosaicValue:false,
-      remoteValue:false,
       isHost:false,
       isShare:false,
 			mySessionId: "",
@@ -398,7 +397,7 @@ export default {
   },
   computed: {
     ...mapState("authStore",["loginUser"]),
-    ...mapState("consultingStore",["participants","consultingInfo","snapshotList"]),
+    ...mapState("consultingStore",["participants","consultingInfo","snapshotList","remoteValue"]),
 
     // 페이지네이션 - 전체 페이지
     totalPages() {
@@ -673,8 +672,7 @@ export default {
       this.mosaicSignal();
     },
     toggleRemote() {
-      this.remoteValue = !this.remoteValue;
-      this.SET_REMOTE(this.remoteValue);
+      this.SET_REMOTE(!this.remoteValue);
     },
 
     // 화면 공유 시작
