@@ -184,7 +184,7 @@ faffy-front
 ---
 
 ## ✔ 프로젝트 결과물
-- [포팅메뉴얼](./exec/FAFFY_포팅메뉴얼.docx)
+- [포팅메뉴얼](./exec/포팅메뉴얼_FAFFY.pdf)
 - [중간발표자료](./ppt/PJT1중간발표/PJT1중간발표.pptx)
 - [최종발표자료](./ppt/PJT1최종발표/PJT1최종발표.pptx)
 
