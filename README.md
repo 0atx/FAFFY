@@ -1,14 +1,13 @@
-![타이틀이미지](./docs/README/banner_1.png)
+
+
 # 🌊 FAFFY - 패션 컨설팅 플랫폼
-
-
-
+![타이틀이미지](./docs/READMEIMG/banner_1.png)
 
 ## 👉 [FAFFY Link Here!](https://i7a802.p.ssafy.io)
 
 </br>
 
-## 📹 시연 및 소개 영상 보기 : [UCC 링크](https://youtu.be/)
+## 📹 시연 및 소개 영상 보기 : [UCC 링크](https://youtu.be/qcSYZu7wvzU)
 
 </br>
 
@@ -26,7 +25,7 @@
 </br>
 
 ## 🔎 FAFFY - 개요
-- ### **Find All Fashions For You 당신을 위한 모든 패션을 찾아드립니다**  
+- ### **Find All Fashions For You 당신을 위한 모든 패션을 찾아드립니다!**  
   - FAFFY는 <span style="color:skyblue">F</span>ind <span style="color:skyblue">A</span>ll <span style="color:skyblue">F</span>ashions <span style="color:skyblue">F</span>or <span style="color:skyblue">Y</span>ou의 약자입니다.  
   FAFFY는 **패션 / 뷰티**에 능력 있는 사람들과, 이를 배우고 싶어하거나 관심있는 사람들을 위한 웹 화상 커뮤니티 플랫폼입니다.
 
@@ -89,7 +88,7 @@
 - SSL 
 
 ## 🗂️ 시스템 아키텍처
-![서비스_아키텍처](/uploads/d52d304a20bd2aab15db8aff502c9c48/서비스_아키텍처.png)
+![서비스_아키텍처]()
 
 ## ✔ 프로젝트 파일 구조
 ---
@@ -164,29 +163,25 @@ faffy-front
 
 ## ✔ 팀원 역할 분배
 ---
-![역할 배분](.\docs\README\역할분배.jpg)
+![역할 분배](./docs/READMEIMG/role.jpg)
 - 팀장 : [이준성](https://github.com/js727r)
 - 팀원 : [박윤하](https://github.com/0atx)
 - 팀원 : [류경하](https://github.com/ryu4949)
 - 팀원 : [김명석](https://github.com/audtjr9514)
 - 팀원 : [김수만](https://github.com/SumanKim)
-- 팀원 : [이용우]()
+- 팀원 : [이용우](https://github.com/woojaang)
 
 ## ✔ 프로젝트 산출물
+
 ---
-- [기능명세서](./docs/)
-- [디자인&컨셉기획](./docs/)
-- [스토리보드](./docs/)
-- [시퀀스다이어그램](./docs/)
+- [기능명세서](./docs/FunctionaSspecification/FunctionaSspecification.png)
+- [와이어프레임](./docs/WIREFRAME/WIREFRAME.png)
 - [아키텍처](./docs/)
-- [와이어프레임](./docs/)
 - [컨벤션](./docs/)
 - [API](./docs/)
-- [ERD](./docs/ERD.png)
-- [회의록](./docs/)
-- [테스트케이스](./docs/)
-- [시스템기술서](./docs/)
-- [명세기술서](./docs/)
+- [ERD](./docs/ERD/ERD.jpg)
+- [회의록](https://www.notion.so/5cab1f06588249b5b678d84724763349)
+---
 
 ## ✔ 프로젝트 결과물
 - [포팅메뉴얼](./exec/FAFFY_포팅메뉴얼.docx)
